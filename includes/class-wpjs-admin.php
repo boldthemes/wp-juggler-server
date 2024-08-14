@@ -94,7 +94,7 @@ class WPJS_Admin
 			__('WP Juggler', 'wp-juggler-server'),
 			$cap,
 			"wp-juggler-server",
-			[$this, 'wpjs_menu_pages_callback'],
+			"",
 			"",
 			30
 		);
@@ -104,7 +104,8 @@ class WPJS_Admin
 			__('Settings', 'wp-juggler-server'),
 			__('Settings', 'wp-juggler-server'),
 			$cap,
-			"wp-juggler-server-settings"
+			"wp-juggler-server-settings",
+			[$this, 'wpjs_menu_pages_callback']
 		);
 
 		add_submenu_page(

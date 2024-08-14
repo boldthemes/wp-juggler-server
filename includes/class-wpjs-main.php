@@ -78,6 +78,7 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-loader.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-i18n.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-admin.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-front-end.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-ajax.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-db.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-compatibility.php';
@@ -112,6 +113,7 @@ class WP_Juggler_Server {
 
 		// Initialize the admin class.
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
 		$plugin_footer = new WPJS_Plugin_Footer();
 
 		/// Register the admin pages and scripts.
@@ -133,6 +135,10 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'admin_post_wpjs_view_details', $plugin_admin, 'load_details' );
 		$this->loader->add_action( 'admin_post_wpjs_download_sysinfo', $plugin_admin, 'download_sysinfo' );
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'meta_upgrade_link', 10, 2 );
+
+		//FE actions
+		$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
+		//$this->loader->add_filter( 'pre_handle_404', $plugin_admin, 'wpjs_pre_404_filter', 5, 2 );
 
 		// Footer Actions
 		$this->loader->add_filter( 'update_footer', $plugin_footer, 'update_footer', 20);
