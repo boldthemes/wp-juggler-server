@@ -57,32 +57,29 @@ if ( PHP_VERSION_ID < 70000 ) {
 function run_wp_juggler_server()
 {
     // Allows for overriding the capability required to run the plugin.
-    $cap = apply_filters('wpjs_capability', 'manage_options');
+    
+    
+    // Defines the path to the main plugin file.
+    define('WPJS_FILE', __FILE__);
 
-    // Only load for admins.
-    if (current_user_can($cap)) {
-        // Defines the path to the main plugin file.
-        define('WPJS_FILE', __FILE__);
+    // Defines the path to be used for includes.
+    define('WPJS_PATH', plugin_dir_path(WPJS_FILE));
 
-        // Defines the path to be used for includes.
-        define('WPJS_PATH', plugin_dir_path(WPJS_FILE));
+    // Defines the URL to the plugin.
+    define('WPJS_URL', plugin_dir_url(WPJS_FILE));
 
-        // Defines the URL to the plugin.
-        define('WPJS_URL', plugin_dir_url(WPJS_FILE));
+    // Defines the current version of the plugin.
+    define('WPJS_VERSION', '1.0.0');
 
-        // Defines the current version of the plugin.
-        define('WPJS_VERSION', '1.0.0');
+    // Defines the name of the plugin.
+    define('WPJS_NAME', 'WP Juggler Server');
 
-        // Defines the name of the plugin.
-        define('WPJS_NAME', 'WP Juggler Server');
-
-        /**
-         * The core plugin class that is used to define internationalization,
-         * dashboard-specific hooks, and public-facing site hooks.
-         */
-        require WPJS_PATH . 'includes/class-wpjs-main.php';
-        $plugin = new WP_Juggler_Server();
-        $plugin->run();
-    }
+    /**
+     * The core plugin class that is used to define internationalization,
+     * dashboard-specific hooks, and public-facing site hooks.
+     */
+    require WPJS_PATH . 'includes/class-wpjs-main.php';
+    $plugin = new WP_Juggler_Server();
+    $plugin->run();
 }
-add_action('after_setup_theme', 'run_wp_juggler_server');
+run_wp_juggler_server();

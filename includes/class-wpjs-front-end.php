@@ -63,13 +63,14 @@ class WPJS_Front_End
 	
 	public function wpjs_empty_template()
 	{
-		if ($_SERVER['REQUEST_URI'] === '/wp-juggler/') {
-			if (is_admin() || !current_user_can('administrator')) {
-				return;
+		if ($_SERVER['REQUEST_URI'] === '/wpjuggler/') {
+			if (! is_admin() || !current_user_can('administrator')) {
+				exit;
 			}
 
 			add_filter('template_include', function( $template ) {
-				return WPJS_PATH . 'templates/wpjs-empty-template.php';
+				//return WPJS_PATH . 'templates/wpjs-empty-template.php';
+				return $template;
 			});
 
 			/*add_filter('pre_handle_404', function($preempt, $wp_query) {
