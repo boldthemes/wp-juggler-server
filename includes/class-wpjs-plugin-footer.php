@@ -8,40 +8,40 @@
 * @subpackage Better_Search_Replace/includes
 */
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
 class WPJS_Plugin_Footer {
 
     /**
-     * Filter admin footer text for BSR pages
+     * Filter admin footer text for WPJS pages
      *
      * @param string $text
      * @return string
      * @handles admin_footer_text
      **/
     public function admin_footer_text( $text ) {
-        if ( ! BSR_Utils::is_bsr_screen() ) {
+        if ( ! WPJS_Utils::is_WPJS_screen() ) {
             return $text;
         }
 
-        $product_link = BSR_Utils::external_link(
-			BSR_Utils::bsr_url(
+        $product_link = WPJS_Utils::external_link(
+			WPJS_Utils::WPJS_url(
 				'',
 				[
-                    'utm_source'   => 'bsr_free',
+                    'utm_source'   => 'WPJS_free',
                     'utm_medium'   => 'insideplugin',
                     'utm_campaign' => 'plugin_footer',
                     'utm_content'  => 'footer_colophon'
                 ]
 			),
-			BSR_NAME
+			WPJS_NAME
 		);
-        $wpe_link = BSR_Utils::external_link(
-            BSR_Utils::wpe_url(
+        $wpe_link = WPJS_Utils::external_link(
+            WPJS_Utils::wpe_url(
                 '',
                 [
-                    'utm_source'  => 'bsr_plugin',
-                    'utm_content' => 'bsr_free_plugin_footer_text'
+                    'utm_source'  => 'WPJS_plugin',
+                    'utm_content' => 'WPJS_free_plugin_footer_text'
                 ]
             ), 
             'WP Engine'
@@ -62,34 +62,34 @@ class WPJS_Plugin_Footer {
      * @handles update_footer
      **/
     public function update_footer( $content ) {
-        if ( ! BSR_Utils::is_bsr_screen() ) {
+        if ( ! WPJS_Utils::is_WPJS_screen() ) {
             return $content;
         }
         $utm_params = [
-            'utm_source'   => 'bsr_free',
+            'utm_source'   => 'WPJS_free',
             'utm_campaign' => 'plugin_footer',
             'utm_content'  => 'footer_navigation'
         ];
 
-        $links[] = BSR_Utils::external_link(
-			BSR_Utils::bsr_url(
+        $links[] = WPJS_Utils::external_link(
+			WPJS_Utils::WPJS_url(
 				'/docs/',
 				$utm_params
 			),
 			__( 'Documentation', 'better-search-replace' )
 		);
 
-		$links[] = '<a href="' . BSR_Utils::plugin_page_url() . '&tab=bsr_help">' . __( 'Support', 'better-search-replace' ) . '</a>';
+		$links[] = '<a href="' . WPJS_Utils::plugin_page_url() . '&tab=WPJS_help">' . __( 'Support', 'better-search-replace' ) . '</a>';
 
-		$links[] = BSR_Utils::external_link(
-			BSR_Utils::bsr_url(
+		$links[] = WPJS_Utils::external_link(
+			WPJS_Utils::WPJS_url(
 				'/feedback/',
 				$utm_params
 			),
 			__( 'Feedback', 'better-search-replace' )
 		);
-        if ( defined( 'BSR_NAME' ) && defined( 'BSR_VERSION' ) ) {
-            $links[] = BSR_NAME . ' ' . BSR_VERSION;
+        if ( defined( 'WPJS_NAME' ) && defined( 'WPJS_VERSION' ) ) {
+            $links[] = WPJS_NAME . ' ' . WPJS_VERSION;
         }
 		
         return join( ' &#8729; ', $links );

@@ -11,9 +11,9 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
-class BSR_AJAX {
+class WPJS_AJAX {
 
 	/**
 	 * Initiate our custom ajax handlers.
@@ -21,7 +21,7 @@ class BSR_AJAX {
 	 */
 	public function init() {
 		add_action( 'init', array( $this, 'define_ajax' ), 1 );
-		add_action( 'init', array( $this, 'do_bsr_ajax' ), 2 );
+		add_action( 'init', array( $this, 'do_wpjs_ajax' ), 2 );
 		$this->add_ajax_actions();
 	}
 
@@ -31,7 +31,7 @@ class BSR_AJAX {
 	 * @return string
 	 */
 	public static function get_endpoint() {
-		return esc_url_raw( get_admin_url() . 'tools.php?page=better-search-replace&bsr-ajax=' );
+		return esc_url_raw( get_admin_url() . 'tools.php?page=wordpress-search-replace&bsr-ajax=' );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class BSR_AJAX {
 	 * Check if we're doing AJAX and fire the related action.
 	 * @access public
 	 */
-	public function do_bsr_ajax() {
+	public function do_wpjs_ajax() {
 		global $wp_query;
 
 		if ( isset( $_GET['bsr-ajax'] ) && ! empty( $_GET['bsr-ajax'] ) ) {
@@ -75,7 +75,7 @@ class BSR_AJAX {
 		}
 
 		if ( $action = $wp_query->get( 'bsr-ajax' ) ) {
-			do_action( 'bsr_ajax_' . sanitize_text_field( $action ) );
+			do_action( 'WPJS_ajax_' . sanitize_text_field( $action ) );
 			die();
 		}
 	}
@@ -90,7 +90,7 @@ class BSR_AJAX {
 		);
 
 		foreach ( $actions as $action ) {
-			add_action( 'bsr_ajax_' . $action, array( $this, $action ) );
+			add_action( 'WPJS_ajax_' . $action, array( $this, $action ) );
 		}
 	}
 
@@ -100,19 +100,19 @@ class BSR_AJAX {
 	 */
 	public function process_search_replace() {
 		// Bail if not authorized.
-		if ( ! check_admin_referer( 'bsr_ajax_nonce', 'bsr_ajax_nonce' ) ) {
+		if ( ! check_admin_referer( 'WPJS_ajax_nonce', 'WPJS_ajax_nonce' ) ) {
 			return;
 		}
 
 		// Initialize the DB class.
-		$db   = new BSR_DB();
-		$step = isset( $_POST['bsr_step' ] ) ? absint( $_POST['bsr_step'] ) : 0;
-		$page = isset( $_POST['bsr_page'] ) ? absint( $_POST['bsr_page'] ) : 0;
+		$db   = new WPJS_DB();
+		$step = isset( $_POST['WPJS_step' ] ) ? absint( $_POST['WPJS_step'] ) : 0;
+		$page = isset( $_POST['WPJS_page'] ) ? absint( $_POST['WPJS_page'] ) : 0;
 
 		// Any operations that should only be performed at the beginning.
 		if ( $step === 0 && $page === 0 ) {
 			$args = array();
-			parse_str( $_POST['bsr_data'], $args );
+			parse_str( $_POST['WPJS_data'], $args );
 
 			// Build the arguments for this run.
 			if ( ! isset( $args['select_tables'] ) || ! is_array( $args['select_tables'] ) ) {
@@ -132,10 +132,10 @@ class BSR_AJAX {
 			$args['total_pages'] = isset( $args['total_pages'] ) ? absint( $args['total_pages'] ) : $db->get_total_pages( $args['select_tables'] );
 
 			// Clear the results of the last run.
-			delete_transient( 'bsr_results' );
-			delete_option( 'bsr_data' );
+			delete_transient( 'WPJS_results' );
+			delete_option( 'WPJS_data' );
 		} else {
-			$args = get_option( 'bsr_data' );
+			$args = get_option( 'WPJS_data' );
 		}
 
 		// Start processing data.
@@ -170,15 +170,15 @@ class BSR_AJAX {
 			$percentage = '100%';
 		}
 
-		update_option( 'bsr_data', $args );
+		update_option( 'WPJS_data', $args );
 
 		// Store results in an array.
 		$result = array(
 			'step' 				=> $step,
 			'page' 				=> $page,
 			'percentage'		=> $percentage,
-			'url' 				=> get_admin_url() . 'tools.php?page=better-search-replace&tab=bsr_search_replace&result=true',
-			'bsr_data' 			=> build_query( $args )
+			'url' 				=> get_admin_url() . 'tools.php?page=better-search-replace&tab=WPJS_search_replace&result=true',
+			'WPJS_data' 			=> build_query( $args )
 		);
 
 		if ( isset( $message ) ) {
@@ -202,12 +202,12 @@ class BSR_AJAX {
 	public function append_report( $table, $report, $args ) {
 
 		// Bail if not authorized.
-		if ( ! check_admin_referer( 'bsr_ajax_nonce', 'bsr_ajax_nonce' ) ) {
+		if ( ! check_admin_referer( 'WPJS_ajax_nonce', 'WPJS_ajax_nonce' ) ) {
 			return;
 		}
 
 		// Retrieve the existing transient.
-		$results = get_transient( 'bsr_results' ) ? get_transient( 'bsr_results') : array();
+		$results = get_transient( 'WPJS_results' ) ? get_transient( 'WPJS_results') : array();
 
 		// Grab any values from the run args.
 		$results['search_for'] 			= isset( $args['search_for'] ) ? $args['search_for'] : '';
@@ -233,7 +233,7 @@ class BSR_AJAX {
 		$results['tables'] = count( $results['table_reports'] );
 
 		// Update the transient.
-		if ( ! set_transient( 'bsr_results', $results, DAY_IN_SECONDS ) ) {
+		if ( ! set_transient( 'WPJS_results', $results, DAY_IN_SECONDS ) ) {
 			return false;
 		}
 
@@ -243,5 +243,5 @@ class BSR_AJAX {
 
 }
 
-$bsr_ajax = new BSR_AJAX;
-$bsr_ajax->init();
+$WPJS_ajax = new WPJS_AJAX;
+$WPJS_ajax->init();

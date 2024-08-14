@@ -9,9 +9,9 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
-class BSR_DB {
+class WPJS_DB {
 
 	/**
 	 * The page size used throughout the plugin.
@@ -96,7 +96,7 @@ class BSR_DB {
 	 * @return int
 	 */
 	public function get_page_size() {
-		$page_size = get_option( 'bsr_page_size' ) ? get_option( 'bsr_page_size' ) : 20000;
+		$page_size = get_option( 'WPJS_page_size' ) ? get_option( 'WPJS_page_size' ) : 20000;
 		return absint( $page_size );
 	}
 
@@ -191,8 +191,8 @@ class BSR_DB {
 		$pages 			= $this->get_pages_in_table( $table );
 		$done 			= false;
 
-		$args['search_for'] 	= str_replace( '#BSR_BACKSLASH#', '\\', $args['search_for'] );
-		$args['replace_with'] 	= str_replace( '#BSR_BACKSLASH#', '\\', $args['replace_with'] );
+		$args['search_for'] 	= str_replace( '#WPJS_BACKSLASH#', '\\', $args['search_for'] );
+		$args['replace_with'] 	= str_replace( '#WPJS_BACKSLASH#', '\\', $args['replace_with'] );
 
 		$table_report = array(
 			'change' 	=> 0,
@@ -256,12 +256,12 @@ class BSR_DB {
 						if ( $edited_data != $data_to_fix ) {
 							$table_report['change']++;
 							$table_report['updates']++;
-							update_option( 'bsr_update_site_url', $edited_data );
+							update_option( 'WPJS_update_site_url', $edited_data );
 							continue;
 						}
 					}
 
-					if ( '_transient_bsr_results' === $data_to_fix || 'bsr_profiles' === $data_to_fix || 'bsr_update_site_url' === $data_to_fix || 'bsr_data' === $data_to_fix ) {
+					if ( '_transient_WPJS_results' === $data_to_fix || 'WPJS_profiles' === $data_to_fix || 'WPJS_update_site_url' === $data_to_fix || 'WPJS_data' === $data_to_fix ) {
 						$should_skip = true;
 					}
 
@@ -409,11 +409,11 @@ class BSR_DB {
 	 * @return boolean
 	 */
 	public function maybe_update_site_url() {
-		$option = get_option( 'bsr_update_site_url' );
+		$option = get_option( 'WPJS_update_site_url' );
 
 		if ( $option ) {
 			update_option( 'siteurl', $option );
-			delete_option( 'bsr_update_site_url' );
+			delete_option( 'WPJS_update_site_url' );
 			return true;
 		}
 

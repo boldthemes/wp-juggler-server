@@ -157,7 +157,7 @@ More information on moving WordPress can be found [here](http://codex.wordpress.
 
 = 1.2.7 - November 24, 2015 =
 * Fix: Untranslateable string
-* Tweak: Check BSR_PATH instead of ABSPATH to be consistent
+* Tweak: Check WPJS_PATH instead of ABSPATH to be consistent
 * Tested with 4.4
 
 = 1.2.6 =

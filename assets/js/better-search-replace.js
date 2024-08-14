@@ -4,25 +4,25 @@
 	/**
 	 * Initializes our event handlers.
 	 */
-	function bsr_init() {
-		bsr_search_replace();
-		bsr_update_sliders();
+	function WPJS_init() {
+		WPJS_search_replace();
+		WPJS_update_sliders();
 	}
 
 	/**
 	 * Recursive function for performing batch operations.
 	 */
-	function bsr_process_step( action, step, page, data ) {
+	function WPJS_process_step( action, step, page, data ) {
 
 		$.ajax({
 			type: 'POST',
-			url: bsr_object_vars.endpoint + action,
+			url: WPJS_object_vars.endpoint + action,
 			data: {
-				bsr_ajax_nonce : bsr_object_vars.ajax_nonce,
+				WPJS_ajax_nonce : WPJS_object_vars.ajax_nonce,
 				action: action,
-				bsr_step: step,
-				bsr_page: page,
-				bsr_data: data
+				WPJS_step: step,
+				WPJS_page: page,
+				WPJS_data: data
 			},
 			dataType: 'json',
 			success: function( response ) {
@@ -35,12 +35,12 @@
 
 				if ( 'done' == response.step ) {
 
-					bsr_update_progress_bar( '100%' );
+					WPJS_update_progress_bar( '100%' );
 
 					// Maybe run another action.
 					if ( typeof response.next_action != 'undefined' ) {
-						bsr_update_progress_bar( '0%', 0 );
-						bsr_process_step( response.next_action, 0, 0, response.bsr_data );
+						WPJS_update_progress_bar( '0%', 0 );
+						WPJS_process_step( response.next_action, 0, 0, response.WPJS_data );
 					} else {
 						$('.bsr-processing-wrap').remove();
 						$('.bsr-disabled').removeClass('bsr-disabled button-disabled' );
@@ -48,15 +48,15 @@
 					}
 
 				} else {
-					bsr_update_progress_bar( response.percentage );
-					bsr_process_step( action, response.step, response.page, response.bsr_data );
+					WPJS_update_progress_bar( response.percentage );
+					WPJS_process_step( action, response.step, response.page, response.WPJS_data );
 				}
 
 			}
 		}).fail(function (response) {
 			$('.bsr-processing-wrap').remove();
 			$('.bsr-disabled').removeClass('bsr-disabled button-disabled' );
-			$('#bsr-error-wrap').html( '<div class="error"><p>' + bsr_object_vars.unknown + '</p></div>' ).show();
+			$('#bsr-error-wrap').html( '<div class="error"><p>' + WPJS_object_vars.unknown + '</p></div>' ).show();
 			if ( window.console && window.console.log ) {
 				console.log(response);
 			}
@@ -67,10 +67,10 @@
 	/**
 	 * Initializes a search/replace.
 	 */
-	function bsr_search_replace() {
+	function WPJS_search_replace() {
 
 		var search_replace_submit = $( '#bsr-submit' );
-		var bsr_error_wrap = $( '#bsr-error-wrap' );
+		var WPJS_error_wrap = $( '#bsr-error-wrap' );
 		search_replace_submit.on( 'click', function( e ) {
 
 			e.preventDefault();
@@ -78,18 +78,18 @@
 			if ( ! search_replace_submit.hasClass( 'button-disabled' ) ) {
 
 				if ( ! $( '#search_for' ).val() ) {
-					bsr_error_wrap.html( '<div class="error"><p>' + bsr_object_vars.no_search + '</p></div>' ).show();
+					WPJS_error_wrap.html( '<div class="error"><p>' + WPJS_object_vars.no_search + '</p></div>' ).show();
 				} else if ( ! $( '#bsr-table-select' ).val() ) {
-					bsr_error_wrap.html( '<div class="error"><p>' + bsr_object_vars.no_tables + '</p></div>' ).show();
+					WPJS_error_wrap.html( '<div class="error"><p>' + WPJS_object_vars.no_tables + '</p></div>' ).show();
 				} else {
 					var str 	= $( '.bsr-action-form' ).serialize();
-					var data 	= str.replace(/%5C/g, "#BSR_BACKSLASH#" );
+					var data 	= str.replace(/%5C/g, "#WPJS_BACKSLASH#" );
 
-					bsr_error_wrap.html('').hide();
+					WPJS_error_wrap.html('').hide();
 					search_replace_submit.addClass( 'bsr-disabled button-disabled' );
 					$( '#bsr-submit-wrap' ).before('<div class="bsr-processing-wrap"><div class="spinner is-active bsr-spinner"></div><div class="bsr-progress-wrap"><div class="bsr-progress"></div></div></div>');
-					$('.bsr-progress-wrap').append( '<p class="description bsr-description">' + bsr_object_vars.processing + '</p>' );
-					bsr_process_step( 'process_search_replace', 0, 0, data );
+					$('.bsr-progress-wrap').append( '<p class="description bsr-description">' + WPJS_object_vars.processing + '</p>' );
+					WPJS_process_step( 'process_search_replace', 0, 0, data );
 				}
 
 			}
@@ -101,7 +101,7 @@
 	/**
 	 * Updates the progress bar for AJAX bulk actions.
 	 */
-	function bsr_update_progress_bar( percentage, speed ) {
+	function WPJS_update_progress_bar( percentage, speed ) {
 		if ( typeof speed == 'undefined' ) {
 			speed = 150;
 		}
@@ -113,21 +113,21 @@
 	/**
 	 * Updates the "Max Page Size" slider.
 	 */
-	function bsr_update_sliders( percentage ) {
+	function WPJS_update_sliders( percentage ) {
 		$('#bsr-page-size-slider').slider({
-			value: bsr_object_vars.page_size,
+			value: WPJS_object_vars.page_size,
 			range: "min",
 			min: 1000,
 			max: 50000,
 			step: 1000,
 			slide: function( event, ui ) {
 				$('#bsr-page-size-value').text( ui.value );
-				$('#bsr_page_size').val( ui.value );
+				$('#WPJS_page_size').val( ui.value );
 			}
 		});
 	}
 
-	bsr_init();
+	WPJS_init();
 
 	function toggle_tooltip( icon ) {
 		var icon = $( icon );
@@ -191,16 +191,16 @@
 
 	setTimeout(function() {
 		const $settings_saved_notice = $( '#setting-error-settings_updated' );
-		const $bsr_notices = $( '.bsr-updated' );
+		const $WPJS_notices = $( '.bsr-updated' );
 
-		if ( $settings_saved_notice.length || $bsr_notices.length ) {
+		if ( $settings_saved_notice.length || $WPJS_notices.length ) {
 			$( '<div class="bsr-inner-notice-container"></div>' ).prependTo( '.inside' );
 			$settings_saved_notice.prependTo( '.bsr-inner-notice-container' ).css( 'display', 'block' );
-			$bsr_notices.prependTo( '.bsr-inner-notice-container' ).css( 'display', 'block' );
+			$WPJS_notices.prependTo( '.bsr-inner-notice-container' ).css( 'display', 'block' );
 		}
 
 		$( '.bsr-inner-notice-container .notice-dismiss' ).on( 'click', function ( e ) {
-			if ( ! $bsr_notices.length ) {
+			if ( ! $WPJS_notices.length ) {
 				$( '.bsr-inner-notice-container' ).remove();
 			}
 		});

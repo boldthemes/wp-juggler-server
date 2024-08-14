@@ -851,7 +851,7 @@ select option {
 /*BREAKPOINT STYLING----------------------------*/
 
 @media only screen and (max-width: 800px) {
-  #bsr_license_key {
+  #WPJS_license_key {
     width: 100%;
   }
   .license-field {

@@ -8,11 +8,11 @@
 * @subpackage Better_Search_Replace/includes
 */
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
-class BSR_Utils {
+class WPJS_Utils {
 
-    const BSR_URL = 'https://bettersearchreplace.com';
+    const WPJS_URL = 'https://bettersearchreplace.com';
     const WPE_URL = 'https://wpengine.com';
 
     /**
@@ -36,12 +36,12 @@ class BSR_Utils {
 	 *
 	 * @return string
 	 */
-	public static function bsr_url( $path, $args = array(), $hash = '' ) {
+	public static function WPJS_url( $path, $args = array(), $hash = '' ) {
 		$args = wp_parse_args( $args, array(
 			'utm_medium' => 'insideplugin'
 		) );
 		$args = array_map( 'urlencode', $args );
-		$url  = trailingslashit( self::BSR_URL ) . ltrim( $path, '/' );
+		$url  = trailingslashit( self::WPJS_URL ) . ltrim( $path, '/' );
 		$url  = add_query_arg( $args, $url );
 		if ( $hash ) {
 			$url .= '#' . $hash;
@@ -90,7 +90,7 @@ class BSR_Utils {
      *
      * @return bool
      */
-    public static function is_bsr_screen() {
+    public static function is_WPJS_screen() {
         $screen = get_current_screen();
         return $screen->base === 'tools_page_better-search-replace';
     }

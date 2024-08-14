@@ -90,7 +90,7 @@ class WP_Juggler_Server {
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the BSR_i18n class in order to set the domain and to register the hook
+	 * Uses the WPJS_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0
@@ -116,12 +116,12 @@ class WP_Juggler_Server {
 
 		/// Register the admin pages and scripts.
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'bsr_menu_pages' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wpjs_menu_pages' );
 
 		// Other admin actions.
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_option' );
-		$this->loader->add_action( 'admin_post_bsr_view_details', $plugin_admin, 'load_details' );
-		$this->loader->add_action( 'admin_post_bsr_download_sysinfo', $plugin_admin, 'download_sysinfo' );
+		$this->loader->add_action( 'admin_post_wpjs_view_details', $plugin_admin, 'load_details' );
+		$this->loader->add_action( 'admin_post_wpjs_download_sysinfo', $plugin_admin, 'download_sysinfo' );
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'meta_upgrade_link', 10, 2 );
 
 		// Footer Actions

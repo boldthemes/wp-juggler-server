@@ -10,7 +10,7 @@
  */
 
 // Prevent direct/unauthorized access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
 ?>
 
@@ -44,12 +44,12 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 					<div class="row search-replace">
 						<div class="input-text full-width">
 							<label for="search_for"><strong><?php _e( 'Search for', 'better-search-replace' ); ?></strong></label>
-							<input id="search_for" class="regular-text" type="text" name="search_for" value="<?php BSR_Admin::prefill_value( 'search_for' ); ?>" />
+							<input id="search_for" class="regular-text" type="text" name="search_for" value="<?php WPJS_Admin::prefill_value( 'search_for' ); ?>" />
 						</div>
 
 						<div class="input-text full-width">
 							<label for="replace_with"><strong><?php _e( 'Replace with', 'better-search-replace' ); ?></strong></label>
-							<input id="replace_with" class="regular-text" type="text" name="replace_with" value="<?php BSR_Admin::prefill_value( 'replace_with' ); ?>" />
+							<input id="replace_with" class="regular-text" type="text" name="replace_with" value="<?php WPJS_Admin::prefill_value( 'replace_with' ); ?>" />
 						</div>
 					</div>
 
@@ -57,7 +57,7 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 					<div class="row">
 						<div class="col full-width tables">
 							<label for="select_tables"><strong><?php _e( 'Select tables', 'better-search-replace' ); ?></strong></label>
-								<?php BSR_Admin::load_tables(); ?>
+								<?php WPJS_Admin::load_tables(); ?>
 								<p class="description"><?php _e( 'Select multiple tables with Ctrl-Click for Windows or Cmd-Click for Mac.', 'better-search-replace' ); ?></p>
 							</div>
 					</div>
@@ -78,7 +78,7 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 				<!--Case Sensitive-->
 				<label for="case_insensitive" class="row">
 					<div class="col">
-						<input id="case_insensitive" type="checkbox" name="case_insensitive" <?php BSR_Admin::prefill_value( 'case_insensitive', 'checkbox' ); ?> />
+						<input id="case_insensitive" type="checkbox" name="case_insensitive" <?php WPJS_Admin::prefill_value( 'case_insensitive', 'checkbox' ); ?> />
 					</div>
 					<div class="col">
 						<label for="case_insensitive"><strong><?php _e( 'Case-Insensitive', 'better-search-replace' ); ?></strong></label>
@@ -89,7 +89,7 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 	            <!--Replace GUIDs-->
 				 <label for="replace_guids" class="row">
 					<div class="col">
-						<input id="replace_guids" type="checkbox" name="replace_guids" <?php BSR_Admin::prefill_value( 'replace_guids', 'checkbox' ); ?> />
+						<input id="replace_guids" type="checkbox" name="replace_guids" <?php WPJS_Admin::prefill_value( 'replace_guids', 'checkbox' ); ?> />
 					</div>
 					<div class="col">
 					  <label for="replace_guids" class="replace_guids"><strong><?php _e( 'Replace GUIDs', 'better-search-replace' ); ?></strong><a href="https://wordpress.org/support/article/changing-the-site-url/#important-guid-note" target="_blank"><img src="<?php echo plugin_dir_url( __FILE__ ) . '../assets/svg/icon-help.svg'; ?>"></a></label>
@@ -113,8 +113,8 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 	        <div id="bsr-error-wrap"></div>
 			<!--Submit Button-->
 			<div id="bsr-submit-wrap">
-				<?php wp_nonce_field( 'process_search_replace', 'bsr_nonce' ); ?>
-				<input type="hidden" name="action" value="bsr_process_search_replace" />
+				<?php wp_nonce_field( 'process_search_replace', 'wpjs_nonce' ); ?>
+				<input type="hidden" name="action" value="wpjs_process_search_replace" />
 				<button id="bsr-submit" type="submit" class="button button-primary button-lg"><?php _e( 'Run Search/Replace', 'better-search-replace' ); ?>
 					<img src="<?php echo plugin_dir_url( __FILE__ ) . '../assets/svg/icon-arrow.svg'; ?>">
 				</button>
@@ -124,8 +124,8 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
 	</div><!-- /.inside -->
 
 	<?php
-	if ( file_exists( BSR_PATH . 'templates/sidebar.php' ) ) {
-		include_once BSR_PATH . 'templates/sidebar.php';
+	if ( file_exists( WPJS_PATH . 'templates/sidebar.php' ) ) {
+		include_once WPJS_PATH . 'templates/sidebar.php';
 	}
 	?>
 

@@ -55,24 +55,24 @@ class WPJS_Admin {
 	 * @param    string $hook Used for determining which page(s) to load our scripts.
 	 */
 	public function enqueue_scripts( $hook ) {
-		if ( 'tools_page_better-search-replace' === $hook ) {
+		if ( 'tools_page_wp-juggler-server' === $hook ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-			wp_enqueue_style( 'better-search-replace', BSR_URL . "assets/css/better-search-replace$min.css", array(), $this->version, 'all' );
-			wp_enqueue_style( 'jquery-style', BSR_URL . 'assets/css/jquery-ui.min.css', array(), $this->version, 'all' );
+			wp_enqueue_style( 'wp-juggler-server', WPJS_URL . "assets/css/wp-juggler-server$min.css", array(), $this->version, 'all' );
+			wp_enqueue_style( 'jquery-style', WPJS_URL . 'assets/css/jquery-ui.min.css', array(), $this->version, 'all' );
 			wp_enqueue_script( 'jquery-ui-slider' );
-			wp_enqueue_script( 'better-search-replace', BSR_URL . "assets/js/better-search-replace$min.js", array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( 'wp-juggler-server', WPJS_URL . "assets/js/wp-juggler-server$min.js", array( 'jquery' ), $this->version, true );
 			wp_enqueue_style( 'thickbox' );
 			wp_enqueue_script( 'thickbox' );
 
-			wp_localize_script( 'better-search-replace', 'bsr_object_vars', array(
-				'page_size' 	=> get_option( 'bsr_page_size' ) ? absint( get_option( 'bsr_page_size' ) ) : 20000,
-				'endpoint' 		=> BSR_AJAX::get_endpoint(),
-				'ajax_nonce' 	=> wp_create_nonce( 'bsr_ajax_nonce' ),
-				'no_search' 	=> __( 'No search string was defined, please enter a URL or string to search for.', 'better-search-replace' ),
-				'no_tables' 	=> __( 'Please select the tables that you want to update.', 'better-search-replace' ),
-				'unknown' 		=> __( 'An error occurred processing your request. Try decreasing the "Max Page Size", or contact support.', 'better-search-replace' ),
-				'processing'	=> __( 'Processing...', 'better-search-replace' )
+			wp_localize_script( 'wp-juggler-server', 'wpjs_object_vars', array(
+				'page_size' 	=> get_option( 'wpjs_page_size' ) ? absint( get_option( 'wpjs_page_size' ) ) : 20000,
+				'endpoint' 		=> WPJS_AJAX::get_endpoint(),
+				'ajax_nonce' 	=> wp_create_nonce( 'wpjs_ajax_nonce' ),
+				'no_search' 	=> __( 'No search string was defined, please enter a URL or string to search for.', 'wp-juggler-server' ),
+				'no_tables' 	=> __( 'Please select the tables that you want to update.', 'wp-juggler-server' ),
+				'unknown' 		=> __( 'An error occurred processing your request. Try decreasing the "Max Page Size", or contact support.', 'wp-juggler-server' ),
+				'processing'	=> __( 'Processing...', 'wp-juggler-server' )
 			) );
 		}
 	}
@@ -82,41 +82,41 @@ class WPJS_Admin {
 	 * @since  1.0.0
 	 * @access public
 	 */
-	public function bsr_menu_pages() {
-		$cap = apply_filters( 'bsr_capability', 'manage_options' );
-		add_submenu_page( 'tools.php', __( 'Better Search Replace', 'better-search-replace' ), __( 'Better Search Replace', 'better-search-replace' ), $cap, 'better-search-replace', array( $this, 'bsr_menu_pages_callback' ) );
+	public function wpjs_menu_pages() {
+		$cap = apply_filters( 'wpjs_capability', 'manage_options' );
+		add_submenu_page( 'tools.php', __( 'Better Search Replace', 'wp-juggler-server' ), __( 'Better Search Replace', 'wp-juggler-server' ), $cap, 'wp-juggler-server', array( $this, 'wpjs_menu_pages_callback' ) );
 	}
 
 	/**
 	 * The callback for creating a new submenu page under the "Tools" menu.
 	 * @access public
 	 */
-	public function bsr_menu_pages_callback() {
-		require_once BSR_PATH . 'includes/class-bsr-templates-helper.php';
-		require_once BSR_PATH . 'templates/bsr-dashboard.php';
+	public function wpjs_menu_pages_callback() {
+		require_once WPJS_PATH . 'includes/class-wpjs-templates-helper.php';
+		require_once WPJS_PATH . 'templates/wpjs-dashboard.php';
 	}
 
 	/**
-	 * Renders the result or error onto the better-search-replace admin page.
+	 * Renders the result or error onto the wp-juggler-server admin page.
 	 * @access public
 	 */
 	public static function render_result() {
 
-		if ( isset( $_GET['result'] ) && $result = get_transient( 'bsr_results' ) ) {
+		if ( isset( $_GET['result'] ) && $result = get_transient( 'wpjs_results' ) ) {
 
 			if ( isset( $result['dry_run'] ) && $result['dry_run'] === 'on' ) {
-				$msg = sprintf( __( '<p><strong>DRY RUN:</strong> <strong>%d</strong> tables were searched, <strong>%d</strong> cells were found that need to be updated, and <strong>%d</strong> changes were made.</p><p><a href="%s" class="thickbox" title="Dry Run Details">Click here</a> for more details, or use the form below to run the search/replace.</p>', 'better-search-replace' ),
+				$msg = sprintf( __( '<p><strong>DRY RUN:</strong> <strong>%d</strong> tables were searched, <strong>%d</strong> cells were found that need to be updated, and <strong>%d</strong> changes were made.</p><p><a href="%s" class="thickbox" title="Dry Run Details">Click here</a> for more details, or use the form below to run the search/replace.</p>', 'wp-juggler-server' ),
 					$result['tables'],
 					$result['change'],
 					$result['updates'],
-					get_admin_url() . 'admin-post.php?action=bsr_view_details&TB_iframe=true&width=800&height=500'
+					get_admin_url() . 'admin-post.php?action=wpjs_view_details&TB_iframe=true&width=800&height=500'
 				);
 			} else {
-				$msg = sprintf( __( '<p>During the search/replace, <strong>%d</strong> tables were searched, with <strong>%d</strong> cells changed in <strong>%d</strong> updates.</p><p><a href="%s" class="thickbox" title="Search/Replace Details">Click here</a> for more details.</p>', 'better-search-replace' ),
+				$msg = sprintf( __( '<p>During the search/replace, <strong>%d</strong> tables were searched, with <strong>%d</strong> cells changed in <strong>%d</strong> updates.</p><p><a href="%s" class="thickbox" title="Search/Replace Details">Click here</a> for more details.</p>', 'wp-juggler-server' ),
 					$result['tables'],
 					$result['change'],
 					$result['updates'],
-					get_admin_url() . 'admin-post.php?action=bsr_view_details&TB_iframe=true&width=800&height=500'
+					get_admin_url() . 'admin-post.php?action=wpjs_view_details&TB_iframe=true&width=800&height=500'
 				);
 			}
 
@@ -135,8 +135,8 @@ class WPJS_Admin {
 	public static function prefill_value( $value, $type = 'text' ) {
 
 		// Grab the correct data to prefill.
-		if ( isset( $_GET['result'] ) && get_transient( 'bsr_results' ) ) {
-			$values = get_transient( 'bsr_results' );
+		if ( isset( $_GET['result'] ) && get_transient( 'wpjs_results' ) ) {
+			$values = get_transient( 'wpjs_results' );
 		} else {
 			$values = array();
 		}
@@ -147,7 +147,7 @@ class WPJS_Admin {
 			if ( 'checkbox' === $type && 'on' === $values[$value] ) {
 				echo 'checked';
 			} else {
-				echo str_replace( '#BSR_BACKSLASH#', '\\', esc_attr( htmlentities( $values[$value] ) ) );
+				echo str_replace( '#WPJS_BACKSLASH#', '\\', esc_attr( htmlentities( $values[$value] ) ) );
 			}
 
 		}
@@ -162,8 +162,8 @@ class WPJS_Admin {
 	public static function load_tables() {
 
 		// Get the tables and their sizes.
-		$tables 	= BSR_DB::get_tables();
-		$sizes 		= BSR_DB::get_sizes();
+		$tables 	= WPJS_DB::get_tables();
+		$sizes 		= WPJS_DB::get_sizes();
 
 		echo '<select id="bsr-table-select" name="select_tables[]" multiple="multiple" style="">';
 
@@ -172,9 +172,9 @@ class WPJS_Admin {
 			// Try to get the size for this specific table.
 			$table_size = isset( $sizes[$table] ) ? $sizes[$table] : '';
 
-			if ( isset( $_GET['result'] ) && get_transient( 'bsr_results' ) ) {
+			if ( isset( $_GET['result'] ) && get_transient( 'wpjs_results' ) ) {
 
-				$result = get_transient( 'bsr_results' );
+				$result = get_transient( 'wpjs_results' );
 
 				if ( isset( $result['table_reports'][$table] ) ) {
 					echo "<option value='$table' selected>$table $table_size</option>";
@@ -198,19 +198,19 @@ class WPJS_Admin {
 	 */
 	public function load_details() {
 
-		if ( get_transient( 'bsr_results' ) ) {
-			$results 		= get_transient( 'bsr_results' );
+		if ( get_transient( 'wpjs_results' ) ) {
+			$results 		= get_transient( 'wpjs_results' );
 			$min 			= ( defined( 'SCRIPT_DEBUG' ) && true === SCRIPT_DEBUG ) ? '' : '.min';
-			$bsr_styles 	= BSR_URL . 'assets/css/better-search-replace.css?v=' . BSR_VERSION;
+			$wpjs_styles 	= WPJS_URL . 'assets/css/wp-juggler-server.css?v=' . WPJS_VERSION;
 
 			?>
 			<link href="<?php echo esc_url( get_admin_url( null, '/css/common' . $min . '.css' ) ); ?>" rel="stylesheet" type="text/css" />
-			<link href="<?php echo esc_url( $bsr_styles ); ?>" rel="stylesheet" type="text/css">
+			<link href="<?php echo esc_url( $wpjs_styles ); ?>" rel="stylesheet" type="text/css">
 
 			<div style="padding: 32px; background-color: var(--color-white); min-height: 100%;">
 				<table id="bsr-results-table" class="widefat">
 					<thead>
-						<tr><th class="bsr-first"><?php _e( 'Table', 'better-search-replace' ); ?></th><th class="bsr-second"><?php _e( 'Changes Found', 'better-search-replace' ); ?></th><th class="bsr-third"><?php _e( 'Rows Updated', 'better-search-replace' ); ?></th><th class="bsr-fourth"><?php _e( 'Time', 'better-search-replace' ); ?></th></tr>
+						<tr><th class="bsr-first"><?php _e( 'Table', 'wp-juggler-server' ); ?></th><th class="bsr-second"><?php _e( 'Changes Found', 'wp-juggler-server' ); ?></th><th class="bsr-third"><?php _e( 'Rows Updated', 'wp-juggler-server' ); ?></th><th class="bsr-fourth"><?php _e( 'Time', 'wp-juggler-server' ); ?></th></tr>
 					</thead>
 					<tbody>
 					<?php
@@ -221,8 +221,8 @@ class WPJS_Admin {
 								$report['change'] = '<a class="tooltip">' . esc_html( $report['change'] ). '</a>';
 
 								$upgrade_link = sprintf(
-									__( '<a href="%s" target="_blank">UPGRADE</a> to view details on the exact changes that will be made.', 'better-search-replace'),
-									'https://deliciousbrains.com/better-search-replace/upgrade/?utm_source=insideplugin&utm_medium=web&utm_content=tooltip&utm_campaign=bsr-to-migrate'
+									__( '<a href="%s" target="_blank">UPGRADE</a> to view details on the exact changes that will be made.', 'wp-juggler-server'),
+									'https://deliciousbrains.com/wp-juggler-server/upgrade/?utm_source=insideplugin&utm_medium=web&utm_content=tooltip&utm_campaign=bsr-to-migrate'
 								);
 
 								$report['change'] .= '<span class="helper-message right">' . $upgrade_link . '</span>';
@@ -232,7 +232,7 @@ class WPJS_Admin {
 								$report['updates'] = '<strong>' . esc_html( $report['updates'] ) . '</strong>';
 							}
 
-							echo '<tr><td class="bsr-first">' . esc_html( $table_name ) . '</td><td class="bsr-second">' . $report['change'] . '</td><td class="bsr-third">' . $report['updates'] . '</td><td class="bsr-fourth">' . round( $time, 3 ) . __( ' seconds', 'better-search-replace' ) . '</td></tr>';
+							echo '<tr><td class="bsr-first">' . esc_html( $table_name ) . '</td><td class="bsr-second">' . $report['change'] . '</td><td class="bsr-third">' . $report['updates'] . '</td><td class="bsr-fourth">' . round( $time, 3 ) . __( ' seconds', 'wp-juggler-server' ) . '</td></tr>';
 						}
 					?>
 					</tbody>
@@ -247,7 +247,7 @@ class WPJS_Admin {
 	 * @access public
 	 */
 	public function register_option() {
-		register_setting( 'bsr_settings_fields', 'bsr_page_size', 'absint' );
+		register_setting( 'wpjs_settings_fields', 'wpjs_page_size', 'absint' );
 	}
 
 	/**
@@ -255,9 +255,9 @@ class WPJS_Admin {
 	 * @access public
 	 */
 	public function download_sysinfo() {
-		check_admin_referer( 'bsr_download_sysinfo', 'bsr_sysinfo_nonce' );
+		check_admin_referer( 'wpjs_download_sysinfo', 'wpjs_sysinfo_nonce' );
 
-		$cap = apply_filters( 'bsr_capability', 'manage_options' );
+		$cap = apply_filters( 'wpjs_capability', 'manage_options' );
 		if ( ! current_user_can( $cap ) ) {
 			return;
 		}
@@ -277,12 +277,12 @@ class WPJS_Admin {
 	 * @param array $links The links assigned to the plugin.
 	 */
 	public function meta_upgrade_link( $links, $file ) {
-		$plugin = plugin_basename( BSR_FILE );
+		$plugin = plugin_basename( WPJS_FILE );
 
 		if ( $file == $plugin ) {
 			return array_merge(
 				$links,
-				array( '<a href="https://bettersearchreplace.com/?utm_source=insideplugin&utm_medium=web&utm_content=plugins-page&utm_campaign=pro-upsell">' . __( 'Upgrade to Pro', 'better-search-replace' ) . '</a>' )
+				array( '<a href="https://bettersearchreplace.com/?utm_source=insideplugin&utm_medium=web&utm_content=plugins-page&utm_campaign=pro-upsell">' . __( 'Upgrade to Pro', 'wp-juggler-server' ) . '</a>' )
 			);
 		}
 
