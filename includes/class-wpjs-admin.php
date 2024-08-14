@@ -104,7 +104,7 @@ class WPJS_Admin
 			__('Settings', 'wp-juggler-server'),
 			__('Settings', 'wp-juggler-server'),
 			$cap,
-			"wp-juggler-server"
+			"wp-juggler-server-settings"
 		);
 
 		add_submenu_page(
@@ -112,7 +112,7 @@ class WPJS_Admin
 			__('Control Panel', 'wp-juggler-server'),
 			__('Control Panel', 'wp-juggler-server'),
 			$cap,
-			'wp-juggler-server-settings',
+			'wp-juggler-server-panel',
 			[$this, 'render_admin_page']
 		);
 
@@ -123,25 +123,25 @@ class WPJS_Admin
 	{
 
 		$labels = array(
-			'name'                => __('WP Sites', 'direktt'),
-			'singular_name'       => __('WP Site',  'direktt'),
-			'menu_name'           => __('WP Juggler', 'direktt'),
-			'all_items'           => __('WP Sites', 'direktt'),
-			'view_item'           => __('View WP Site', 'direktt'),
-			'add_new_item'        => __('Add New WP Site', 'direktt'),
-			'add_new'             => __('Add New', 'direktt'),
-			'edit_item'           => __('Edit WP Site', 'direktt'),
-			'update_item'         => __('Update WP Site', 'direktt'),
-			'search_items'        => __('Search WP Sites', 'direktt'),
-			'not_found'           => __('Not Found', 'direktt'),
-			'not_found_in_trash'  => __('Not found in Trash', 'direktt'),
+			'name'                => __('Sites', 'wp-juggler-server'),
+			'singular_name'       => __('Site',  'wp-juggler-server'),
+			'menu_name'           => __('WP Juggler', 'wp-juggler-server'),
+			'all_items'           => __('Sites', 'wp-juggler-server'),
+			'view_item'           => __('View Site', 'wp-juggler-server'),
+			'add_new_item'        => __('Add New Site', 'wp-juggler-server'),
+			'add_new'             => __('Add New', 'wp-juggler-server'),
+			'edit_item'           => __('Edit Site', 'wp-juggler-server'),
+			'update_item'         => __('Update Site', 'wp-juggler-server'),
+			'search_items'        => __('Search Sites', 'wp-juggler-server'),
+			'not_found'           => __('Not Found', 'wp-juggler-server'),
+			'not_found_in_trash'  => __('Not found in Trash', 'wp-juggler-server'),
 		);
 
 		$args = array(
-			'label'               => __('sites', 'direktt'),
-			'description'         => __('WP Sites', 'direktt'),
+			'label'               => __('sites', 'wp-juggler-server'),
+			'description'         => __('Sites', 'wp-juggler-server'),
 			'labels'              => $labels,
-			'supports'            => array('title', 'editor'),
+			'supports'            => array('title'),
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,
@@ -163,6 +163,278 @@ class WPJS_Admin
 		);
 
 		register_post_type('wpjugglersites', $args);
+	}
+
+	public function wpjs_sites_metaboxes()
+	{
+		add_meta_box(
+			'wpjs_site_details',
+			__('Site Details', 'wp-juggler-server'),
+			array($this, 'render_juggler_sites_meta_box'),
+			'wpjugglersites',
+			'normal',
+			'high'
+		);
+
+		remove_meta_box('submitdiv', 'wpjugglersites', 'side');
+
+		add_meta_box(
+			'submitdiv',
+			__('Save', 'wp-juggler-server'),
+			array($this, 'render_juggler_sites_publish_meta_box'),
+			'wpjugglersites',
+			'side',
+			'high'
+		);
+
+		add_meta_box(
+			'wpjs_users', // ID
+			__('Assign Users', 'wp-juggler-server'), // Title
+			array($this, 'render_juggler_users_meta_box'),
+			'wpjugglersites', // Post type
+			'normal', // Context
+			'low' // Priority
+		);
+	}
+
+	public function render_juggler_sites_meta_box($post)
+	{
+		wp_nonce_field(basename(__FILE__), 'wp_juggler_server_nonce');
+		$site_url = get_post_meta($post->ID, 'wp_juggler_server_site_url', true);
+		$api_key = get_post_meta($post->ID, 'wp_juggler_api_key', true);
+		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
+		$login_username = get_post_meta($post->ID, 'wp_juggler_login_username', true);
+
+?>
+
+		<p>
+			<label for="wp_juggler_server_site_url">Site Url</label><br>
+			<input type="text" name="wp_juggler_server_site_url" id="wp_juggler_server_site_url" value="<?php echo esc_attr($site_url); ?>" size="60" />
+		</p>
+		<p>
+			<label for="wp_juggler_api_key">API Key</label><br>
+			<?php if (!empty($api_key)): ?>
+				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo esc_attr($api_key); ?>" size="60" readonly />
+			<?php else: ?>
+				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo wp_generate_uuid4(); ?>" size="60" readonly />
+			<?php endif; ?>
+		</p>
+		<p>
+			<label for="wp_juggler_automatic_login">Automatic Login</label><br>
+			<input type="checkbox" name="wp_juggler_automatic_login" id="wp_juggler_automatic_login" <?php checked($automatic_login, 'on'); ?> />
+		</p>
+		<p id="wp_juggler_login_username_paragraph">
+			<label for="wp_juggler_login_username">Remote Login Username</label><br>
+			<input type="text" name="wp_juggler_login_username" id="wp_juggler_login_username" value="<?php echo esc_attr($login_username); ?>" size="60" />
+		</p>
+
+		<style>
+			#wp_juggler_login_username_paragraph {
+				display: <?php echo $automatic_login === 'on' ? 'block' : 'none'; ?>;
+			}
+		</style>
+		<script>
+			document.getElementById('wp_juggler_automatic_login').addEventListener('change', function() {
+				document.getElementById('wp_juggler_login_username_paragraph').style.display = this.checked ? 'block' : 'none';
+			});
+		</script>
+
+	<?php
+	}
+
+	public function render_juggler_users_meta_box($post)
+	{
+		$saved_users = get_post_meta($post->ID, 'wp_juggler_login_users', true);
+
+	?>
+		<div id="juggler-users-container">
+			<?php
+			if (is_array($saved_users) && !empty($saved_users)) {
+				foreach ($saved_users as $user_id) {
+					$user = get_userdata($user_id);
+					echo '<div class="juggler-user-field">';
+					echo '<input type="text" class="regular-text juggler-user-autocomplete" name="juggler_users[]" value="' . esc_attr($user->user_login) . '" />';
+					echo '<button type="button" class="button juggler-remove-user">Remove</button>';
+					echo '</div>';
+				}
+			}
+			?>
+		</div>
+		<button type="button" class="button" id="juggler-add-user">Add User</button>
+
+		<script>
+			jQuery(document).ready(function($) {
+				function bindAutocomplete() {
+					$('.juggler-user-autocomplete').autocomplete({
+						source: function(request, response) {
+							var chosenValues = [];
+							$('.juggler-user-autocomplete').each(function() {
+								chosenValues.push($(this).val());
+							});
+							chosenValues.pop();
+							$.ajax({
+								url: ajaxurl,
+								data: {
+									action: 'juggler_user_search',
+									term: request.term,
+									wp_juggler_server_nonce: $('#wp_juggler_server_nonce').val()
+								},
+								success: function(data) {
+									var filteredData = $.grep(data, function(item) {
+										return $.inArray(item.value, chosenValues) === -1;
+									});
+									response(filteredData);
+								}
+							});
+						},
+						minLength: 2
+					});
+				}
+				bindAutocomplete();
+
+				$('#juggler-add-user').click(function() {
+					$('#juggler-users-container').append(
+						'<div class="juggler-user-field">' +
+						'<input type="text" class="regular-text juggler-user-autocomplete" name="juggler_users[]" value="" />' +
+						'<button type="button" class="button juggler-remove-user">Remove</button>' +
+						'</div>'
+					);
+					bindAutocomplete();
+				});
+
+				$(document).on('click', '.juggler-remove-user', function() {
+					$(this).closest('.juggler-user-field').remove();
+				});
+			});
+		</script>
+	<?php
+	}
+
+	public function render_juggler_sites_publish_meta_box($post)
+	{
+		global $action;
+
+	?>
+		<div class="submitbox" id="submitpost">
+			<div id="minor-publishing">
+				<div id="misc-publishing-actions">
+
+
+					<div class="misc-pub-section curtime misc-pub-curtime">
+						<span id="timestamp">
+							Publish on:
+							<b><?php echo get_the_date(); ?> at <?php echo get_the_time(); ?></b>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="major-publishing-actions">
+				<?php
+				if (current_user_can("delete_post", $post->ID)) {
+					if (!EMPTY_TRASH_DAYS) : ?>
+						<div id="delete-action">
+							<a class="submitdelete deletion" href="<?php echo get_delete_post_link($post->ID); ?>">Move to Trash</a>
+						</div>
+					<?php else : ?>
+						<div id="delete-action">
+							<a class="submitdelete deletion" href="<?php echo get_delete_post_link($post->ID); ?>">Move to Trash</a>
+						</div>
+				<?php endif;
+				} ?>
+				<div id="publishing-action">
+					<span class="spinner"></span>
+					<input name="original_publish" type="hidden" id="original_publish" value="Publish">
+					<?php submit_button(__('Save'), 'primary', 'publish', false); ?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<?php
+	}
+
+	public function wpjs_user_search()
+	{
+
+		check_ajax_referer(basename(__FILE__), 'wp_juggler_server_nonce');
+
+		// Check for user capabilities
+		if (!current_user_can('edit_posts')) {
+			wp_send_json_error('You do not have permission to perform this action.');
+			wp_die();
+		}
+
+		$term = sanitize_text_field($_GET['term']);
+
+		$user_query = new WP_User_Query(array(
+			'search' => '*' . esc_attr($term) . '*',
+			'search_columns' => array('user_login', 'user_nicename', 'user_email', 'display_name'),
+		));
+
+		$users = $user_query->get_results();
+		$results = array();
+		foreach ($users as $user) {
+			$results[] = array(
+				'label' => $user->user_login,
+				'value' => $user->user_login,
+			);
+		}
+		wp_send_json($results);
+	}
+
+	public function wpjs_save_sites_meta_boxes($post_id)
+	{
+		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], basename(__FILE__))) {
+			return;
+		}
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+			return;
+		}
+		if (!current_user_can('edit_post', $post_id)) {
+			return;
+		}
+
+		if (isset($_POST['wp_juggler_server_site_url'])) {
+			update_post_meta($post_id, 'wp_juggler_server_site_url', sanitize_text_field($_POST['wp_juggler_server_site_url']));
+		}
+		if (isset($_POST['wp_juggler_api_key']) && !empty($_POST['wp_juggler_api_key'])) {
+			update_post_meta($post_id, 'wp_juggler_api_key', sanitize_text_field($_POST['wp_juggler_api_key']));
+		} else {
+			update_post_meta($post_id, 'wp_juggler_api_key', wp_generate_uuid4());
+		}
+
+		$automatic_login = isset($_POST['wp_juggler_automatic_login']) ? 'on' : 'off';
+		update_post_meta($post_id, 'wp_juggler_automatic_login', $automatic_login);
+
+		if (isset($_POST['wp_juggler_login_username'])) {
+			update_post_meta($post_id, 'wp_juggler_login_username', sanitize_text_field($_POST['wp_juggler_login_username']));
+		}
+
+		$users = array();
+		if (isset($_POST['juggler_users'])) {
+			foreach ($_POST['juggler_users'] as $user_login) {
+				$user = get_user_by('login', sanitize_text_field($user_login));
+				if ($user) {
+					$users[] = $user->ID;
+				}
+			}
+		}
+
+		update_post_meta($post_id, 'wp_juggler_login_users', $users);
+	}
+
+	public function wpjs_add_custom_column($columns) {
+		return array_merge(
+			array_slice($columns, 0, 2, true),
+			array('server_site_url' => 'Site URL'),
+			array_slice($columns, 2, null, true)
+		);
+	}
+
+	function wpjs_display_custom_column($column, $post_id) {
+		if ($column == 'server_site_url') {
+			echo esc_html(get_post_meta($post_id, 'wp_juggler_server_site_url', true));
+		}
 	}
 
 	/**
@@ -281,7 +553,7 @@ class WPJS_Admin
 			$min 			= (defined('SCRIPT_DEBUG') && true === SCRIPT_DEBUG) ? '' : '.min';
 			$wpjs_styles 	= WPJS_URL . 'assets/css/wp-juggler-server.css?v=' . WPJS_VERSION;
 
-?>
+		?>
 			<link href="<?php echo esc_url(get_admin_url(null, '/css/common' . $min . '.css')); ?>" rel="stylesheet" type="text/css" />
 			<link href="<?php echo esc_url($wpjs_styles); ?>" rel="stylesheet" type="text/css">
 

@@ -117,7 +117,16 @@ class WP_Juggler_Server {
 		/// Register the admin pages and scripts.
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wpjs_menu_pages' );
+		
+		
 		$this->loader->add_action( 'init', $plugin_admin, 'wpjs_cpt' );
+		$this->loader->add_action( 'add_meta_boxes_wpjugglersites', $plugin_admin, 'wpjs_sites_metaboxes' );
+		$this->loader->add_action( 'save_post_wpjugglersites', $plugin_admin, 'wpjs_save_sites_meta_boxes' );
+
+		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_admin, 'wpjs_user_search' );
+
+		$this->loader->add_filter( 'manage_wpjugglersites_posts_columns', $plugin_admin, 'wpjs_add_custom_column' );
+		$this->loader->add_action( 'manage_wpjugglersites_posts_custom_column', $plugin_admin, 'wpjs_display_custom_column', 10, 2);
 
 		// Other admin actions.
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_option' );
