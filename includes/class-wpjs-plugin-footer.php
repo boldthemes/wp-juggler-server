@@ -10,7 +10,7 @@
 // Prevent direct access.
 if ( ! defined( 'BSR_PATH' ) ) exit;
 
-class BSR_Plugin_Footer {
+class WPJS_Plugin_Footer {
 
     /**
      * Filter admin footer text for BSR pages

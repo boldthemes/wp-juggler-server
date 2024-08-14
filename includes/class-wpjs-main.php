@@ -74,6 +74,7 @@ class WP_Juggler_Server {
 	 * @access   private
 	 */
 	private function load_dependencies() {
+
 		require_once WPJS_PATH . 'includes/class-wpjs-loader.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-i18n.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-admin.php';
@@ -82,13 +83,8 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-compatibility.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-plugin-footer.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-utils.php';
-
-		if ( PHP_VERSION_ID < 70000 ) {
-			require_once WPJS_PATH . 'vendor/brumann/polyfill-unserialize/src/Unserialize.php';
-			require_once WPJS_PATH . 'vendor/brumann/polyfill-unserialize/src/DisallowedClassesSubstitutor.php';
-		}
 		
-		$this->loader = new BSR_Loader();
+		$this->loader = new WPJS_Loader();
 	}
 
 	/**
@@ -101,7 +97,7 @@ class WP_Juggler_Server {
 	 * @access   private
 	 */
 	private function set_locale() {
-		$plugin_i18n = new BSR_i18n();
+		$plugin_i18n = new WPJS_i18n();
 		$plugin_i18n->set_domain( $this->get_plugin_name() );
 	}
 
@@ -116,7 +112,7 @@ class WP_Juggler_Server {
 
 		// Initialize the admin class.
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_footer = new BSR_Plugin_Footer();
+		$plugin_footer = new WPJS_Plugin_Footer();
 
 		/// Register the admin pages and scripts.
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

@@ -12,9 +12,9 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
-class BSR_i18n {
+class WPJS_i18n {
 
 	/**
 	 * The domain specified for this plugin.

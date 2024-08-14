@@ -14,7 +14,7 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
 class WPJS_Admin {
 

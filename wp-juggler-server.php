@@ -41,6 +41,10 @@ if (! defined('WPINC')) {
     die;
 }
 
+if ( PHP_VERSION_ID < 70000 ) {
+	exit;
+}
+
 /**
  * Begins execution of the plugin.
  *

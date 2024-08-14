@@ -11,7 +11,7 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'BSR_PATH' ) ) exit;
+if ( ! defined( 'WPJS_PATH' ) ) exit;
 
 /**
  * Register all actions and filters for the plugin.
@@ -23,7 +23,7 @@ if ( ! defined( 'BSR_PATH' ) ) exit;
  * @package    Better_Search_Replace
  * @subpackage Better_Search_Replace/includes
  */
-class BSR_Loader {
+class WPJS_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.
