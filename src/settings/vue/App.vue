@@ -1,18 +1,16 @@
 <script setup>
 
-import { useDirekttStore } from './store.js'
+import { useWpjsStore } from './store.js'
 import { onMounted, computed, ref } from 'vue'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
 
-const store = useDirekttStore()
+const store = useWpjsStore()
 
 const nonce = ref(wpjs_settings_object.nonce)
 
-const api_key = ref('')
-const redirect_url = ref('')
-const activation_status = ref(false)
+const wpjs_cp_slug = ref('')
 const save_loading = ref(false)
 
 const snackbar = ref(false)
@@ -22,7 +20,7 @@ const snack_succ_text = 'WP Juggler Settings Saved'
 
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
-  queryKey: ['direktt-settings'],
+  queryKey: ['wpjs-settings'],
   queryFn: getSettings
 })
 
@@ -30,7 +28,7 @@ const mutation = useMutation({
   mutationFn: saveSettings,
   onSuccess: async () => {
     // Invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: ['direktt-settings'] })
+    queryClient.invalidateQueries({ queryKey: ['wpjs-settings'] })
     save_loading.value = false
 
     snackbar_color.value = 'success'
@@ -38,7 +36,7 @@ const mutation = useMutation({
     snackbar.value = true
   },
   onError: (error, variables, context) => {
-    queryClient.invalidateQueries({ queryKey: ['direktt-settings'] })
+    queryClient.invalidateQueries({ queryKey: ['wpjs-settings'] })
     save_loading.value = false
 
     snackbar_color.value = 'error'
@@ -71,9 +69,7 @@ async function getSettings() {
   )
   ret = response.data
 
-  api_key.value = response.data.api_key
-  activation_status.value = (response.data.activation_status === 'true')
-  redirect_url.value = response.data.redirect_url
+  wpjs_cp_slug.value = response.data.wpjs_cp_slug
 
   return ret
 }
@@ -81,8 +77,7 @@ async function getSettings() {
 function clickSaveSettings() {
   save_loading.value = true
   mutation.mutate({
-    api_key: api_key.value,
-    redirect_url: redirect_url.value
+    wpjs_cp_slug: wpjs_cp_slug.value,
   })
 }
 
@@ -94,19 +89,11 @@ async function saveSettings(obj) {
   const response = await doAjax(obj)
 }
 
-const openInNewTab = (url) => {
-  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-  if (newWindow) newWindow.opener = null
-}
-
-onMounted(() => {
-})
-
 </script>
 
 <template>
 
-  <h1>Direktt Settings</h1>
+  <h1>WP Juggler Server Settings</h1>
 
   <v-card class="pa-4 mr-4">
 
@@ -114,48 +101,9 @@ onMounted(() => {
 
       <tbody v-if="data">
         <tr>
-          <th scope="row"><label for="blogname">Direktt API Key</label></th>
+          <th scope="row"><label for="blogname">Page Slug of Control Panel</label></th>
           <td>
-            <input type="text" name="direkttapikey" id="direkttapikey" size="50" placeholder="" v-model="api_key">
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row"><label for="blogname">Activation status:</label></th>
-          <td>
-            <div v-if="!activation_status">
-              <v-icon color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
-              Not activated
-            </div>
-            <div v-if="activation_status">
-              <v-icon color="success" icon="mdi-check-bold" size="large" class='rm-4'></v-icon>
-              Activated
-            </div>
-          </td>
-        </tr>
-
-        <tr v-if="activation_status">
-          <th scope="row"><label for="blogname">Registered domain:</label></th>
-          <td>
-            <div v-if="activation_status">
-              {{ data.direktt_registered_domain }}
-            </div>
-          </td>
-        </tr>
-        <tr v-if="activation_status">
-          <th scope="row"><label for="blogname">Channel Id:</label></th>
-          <td>
-            <div v-if="activation_status">
-              {{ data.direktt_channel_id }}
-            </div>
-          </td>
-        </tr>
-        <tr v-if="activation_status">
-          <th scope="row"><label for="blogname">Channel title:</label></th>
-          <td>
-            <div v-if="activation_status">
-              {{ data.direktt_channel_title }}
-            </div>
+            <input type="text" name="wpjscpslug" id="wpjscpslug" size="50" placeholder="" v-model="wpjs_cp_slug">
           </td>
         </tr>
 
@@ -163,24 +111,12 @@ onMounted(() => {
     </table>
     <p></p>
     <v-divider class="border-opacity-100"></v-divider>
-    <p></p>
-    <table class="form-table" role="presentation">
-
-      <tbody v-if="data">
-        <tr>
-          <th scope="row"><label for="blogname">Optional redirect url upon unaturhorized access</label></th>
-          <td>
-            <input type="text" name="unauthorized_redirect_url" id="unauthorized_redirect_url" size="50" placeholder="" v-model="redirect_url">
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
     <p></p>
 
     <v-btn variant="flat" class="text-none text-caption" color="#2271b1" @click="clickSaveSettings"
       :loading="save_loading">
-      Save Direktt Settings
+      Save Settings
     </v-btn>
 
     <v-snackbar v-model="snackbar" :timeout="3000" :color="snackbar_color">

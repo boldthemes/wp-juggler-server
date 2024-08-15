@@ -94,7 +94,7 @@ class WPJS_Admin
 		if (str_ends_with($suffix, 'wpjs-settings')) {
 			wp_enqueue_script(
 				$this->plugin_name . '-settings',
-				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-settings.js',
+				plugin_dir_url(__DIR__) . 'assets/settings/wpjs-settings.js',
 				array('jquery'),
 				'',
 				[
@@ -104,7 +104,7 @@ class WPJS_Admin
 
 			wp_enqueue_style(
 				$this->plugin_name . '-settings',
-				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-settings.css',
+				plugin_dir_url(__DIR__) . 'assets/settings/wpjs-settings.css',
 				[],
 				''
 			);

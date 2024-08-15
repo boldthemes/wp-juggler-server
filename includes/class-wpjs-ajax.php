@@ -76,6 +76,46 @@ class WPJS_AJAX {
 		wp_send_json_success($data, 200);
 	}
 
+	public function ajax_get_settings()
+	{
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$wpjs_cp_slug = get_option('wpjs_cp_slug');
+
+		$data = array(
+			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr( $wpjs_cp_slug ) : '',
+		);
+
+		wp_send_json_success($data, 200);
+	}
+
+	public function ajax_save_settings()
+	{
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$wpjs_cp_slug = (isset($_POST['wpjs_cp_slug'])) ? sanitize_text_field($_POST['wpjs_cp_slug']) : false;
+
+		if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], $this->plugin_name . '-settings')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Nonce is not valid'), 401);
+			exit;
+		}
+
+		if ( $wpjs_cp_slug ) {
+			update_option('wpjs_cp_slug',  $wpjs_cp_slug);
+		} else {
+			delete_option('wpjs_cp_slug');
+		}
+
+		$data = array();
+		wp_send_json_success($data, 200);
+	}
+
 	public function wpjs_user_search()
 	{	
 		$nonce = sanitize_text_field($_GET['wp_juggler_server_nonce']);

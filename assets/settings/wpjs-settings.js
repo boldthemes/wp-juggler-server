@@ -9097,18 +9097,16 @@ exports.default = {
     setup (__props, { expose: __expose }) {
         __expose();
         const queryClient = (0, _vueQuery.useQueryClient)();
-        const store = (0, _storeJs.useDirekttStore)();
+        const store = (0, _storeJs.useWpjsStore)();
         const nonce = (0, _vue.ref)(wpjs_settings_object.nonce);
-        const api_key = (0, _vue.ref)("");
-        const redirect_url = (0, _vue.ref)("");
-        const activation_status = (0, _vue.ref)(false);
+        const wpjs_cp_slug = (0, _vue.ref)("");
         const save_loading = (0, _vue.ref)(false);
         const snackbar = (0, _vue.ref)(false);
         const snackbar_color = (0, _vue.ref)("success");
         const snackbar_text = (0, _vue.ref)(snack_succ_text);
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
-                "direktt-settings"
+                "wpjs-settings"
             ],
             queryFn: getSettings
         });
@@ -9118,7 +9116,7 @@ exports.default = {
                 // Invalidate and refetch
                 queryClient.invalidateQueries({
                     queryKey: [
-                        "direktt-settings"
+                        "wpjs-settings"
                     ]
                 });
                 save_loading.value = false;
@@ -9129,7 +9127,7 @@ exports.default = {
             onError: (error, variables, context)=>{
                 queryClient.invalidateQueries({
                     queryKey: [
-                        "direktt-settings"
+                        "wpjs-settings"
                     ]
                 });
                 save_loading.value = false;
@@ -9157,16 +9155,13 @@ exports.default = {
                 action: "wpjs_get_settings"
             });
             ret = response.data;
-            api_key.value = response.data.api_key;
-            activation_status.value = response.data.activation_status === "true";
-            redirect_url.value = response.data.redirect_url;
+            wpjs_cp_slug.value = response.data.wpjs_cp_slug;
             return ret;
         }
         function clickSaveSettings() {
             save_loading.value = true;
             mutation.mutate({
-                api_key: api_key.value,
-                redirect_url: redirect_url.value
+                wpjs_cp_slug: wpjs_cp_slug.value
             });
         }
         async function saveSettings(obj) {
@@ -9174,18 +9169,11 @@ exports.default = {
             obj.nonce = nonce.value;
             const response = await doAjax(obj);
         }
-        const openInNewTab = (url)=>{
-            const newWindow = window.open(url, "_blank", "noopener,noreferrer");
-            if (newWindow) newWindow.opener = null;
-        };
-        (0, _vue.onMounted)(()=>{});
         const __returned__ = {
             queryClient,
             store,
             nonce,
-            api_key,
-            redirect_url,
-            activation_status,
+            wpjs_cp_slug,
             save_loading,
             snackbar,
             snackbar_color,
@@ -9202,9 +9190,8 @@ exports.default = {
             getSettings,
             clickSaveSettings,
             saveSettings,
-            openInNewTab,
-            get useDirekttStore () {
-                return 0, _storeJs.useDirekttStore;
+            get useWpjsStore () {
+                return 0, _storeJs.useWpjsStore;
             },
             onMounted: (0, _vue.onMounted),
             computed: (0, _vue.computed),
@@ -9230,10 +9217,10 @@ exports.default = {
 },{"./store.js":"lVIbe","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"lVIbe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "useDirekttStore", ()=>useDirekttStore);
+parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
 var _pinia = require("pinia");
 var _vue = require("vue");
-const useDirekttStore = (0, _pinia.defineStore)("direkttstore", ()=>{
+const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
     const initial = (0, _vue.ref)("Settings");
     /* watch(activetab, (newactivetab, prevactivetab) => {
       
@@ -14659,7 +14646,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "render", ()=>render);
 var _vue = require("vue");
-const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "Direktt Settings", -1 /* HOISTED */ );
+const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "WP Juggler Server Settings", -1 /* HOISTED */ );
 const _hoisted_2 = {
     class: "form-table",
     role: "presentation"
@@ -14672,79 +14659,11 @@ const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "blogname"
-    }, "Direktt API Key")
+    }, "Page Slug of Control Panel")
 ], -1 /* HOISTED */ );
-const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-    scope: "row"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "blogname"
-    }, "Activation status:")
-], -1 /* HOISTED */ );
-const _hoisted_6 = {
-    key: 0
-};
-const _hoisted_7 = {
-    key: 1
-};
-const _hoisted_8 = {
-    key: 0
-};
-const _hoisted_9 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-    scope: "row"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "blogname"
-    }, "Registered domain:")
-], -1 /* HOISTED */ );
-const _hoisted_10 = {
-    key: 0
-};
-const _hoisted_11 = {
-    key: 1
-};
-const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-    scope: "row"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "blogname"
-    }, "Channel Id:")
-], -1 /* HOISTED */ );
-const _hoisted_13 = {
-    key: 0
-};
-const _hoisted_14 = {
-    key: 2
-};
-const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-    scope: "row"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "blogname"
-    }, "Channel title:")
-], -1 /* HOISTED */ );
-const _hoisted_16 = {
-    key: 0
-};
-const _hoisted_17 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
-const _hoisted_18 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
-const _hoisted_19 = {
-    class: "form-table",
-    role: "presentation"
-};
-const _hoisted_20 = {
-    key: 0
-};
-const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-    scope: "row"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "blogname"
-    }, "Optional redirect url upon unaturhorized access")
-], -1 /* HOISTED */ );
-const _hoisted_22 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
+const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
+const _hoisted_6 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
@@ -14762,90 +14681,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("input", {
                                         type: "text",
-                                        name: "direkttapikey",
-                                        id: "direkttapikey",
+                                        name: "wpjscpslug",
+                                        id: "wpjscpslug",
                                         size: "50",
                                         placeholder: "",
-                                        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.api_key = $event)
+                                        "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.wpjs_cp_slug = $event)
                                     }, null, 512 /* NEED_PATCH */ ), [
                                         [
                                             (0, _vue.vModelText),
-                                            $setup.api_key
-                                        ]
-                                    ])
-                                ])
-                            ]),
-                            (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_5,
-                                (0, _vue.createElementVNode)("td", null, [
-                                    !$setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
-                                        (0, _vue.createVNode)(_component_v_icon, {
-                                            color: "error",
-                                            icon: "mdi-alert-outline",
-                                            size: "large",
-                                            class: "rm-4"
-                                        }),
-                                        (0, _vue.createTextVNode)(" Not activated ")
-                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
-                                        (0, _vue.createVNode)(_component_v_icon, {
-                                            color: "success",
-                                            icon: "mdi-check-bold",
-                                            size: "large",
-                                            class: "rm-4"
-                                        }),
-                                        (0, _vue.createTextVNode)(" Activated ")
-                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                ])
-                            ]),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_8, [
-                                _hoisted_9,
-                                (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, (0, _vue.toDisplayString)($setup.data.direktt_registered_domain), 1 /* TEXT */ )) : (0, _vue.createCommentVNode)("v-if", true)
-                                ])
-                            ])) : (0, _vue.createCommentVNode)("v-if", true),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_11, [
-                                _hoisted_12,
-                                (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, (0, _vue.toDisplayString)($setup.data.direktt_channel_id), 1 /* TEXT */ )) : (0, _vue.createCommentVNode)("v-if", true)
-                                ])
-                            ])) : (0, _vue.createCommentVNode)("v-if", true),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_14, [
-                                _hoisted_15,
-                                (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, (0, _vue.toDisplayString)($setup.data.direktt_channel_title), 1 /* TEXT */ )) : (0, _vue.createCommentVNode)("v-if", true)
-                                ])
-                            ])) : (0, _vue.createCommentVNode)("v-if", true)
-                        ])) : (0, _vue.createCommentVNode)("v-if", true)
-                    ]),
-                    _hoisted_17,
-                    (0, _vue.createVNode)(_component_v_divider, {
-                        class: "border-opacity-100"
-                    }),
-                    _hoisted_18,
-                    (0, _vue.createElementVNode)("table", _hoisted_19, [
-                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tbody", _hoisted_20, [
-                            (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_21,
-                                (0, _vue.createElementVNode)("td", null, [
-                                    (0, _vue.withDirectives)((0, _vue.createElementVNode)("input", {
-                                        type: "text",
-                                        name: "unauthorized_redirect_url",
-                                        id: "unauthorized_redirect_url",
-                                        size: "50",
-                                        placeholder: "",
-                                        "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.redirect_url = $event)
-                                    }, null, 512 /* NEED_PATCH */ ), [
-                                        [
-                                            (0, _vue.vModelText),
-                                            $setup.redirect_url
+                                            $setup.wpjs_cp_slug
                                         ]
                                     ])
                                 ])
                             ])
                         ])) : (0, _vue.createCommentVNode)("v-if", true)
                     ]),
-                    _hoisted_22,
+                    _hoisted_5,
+                    (0, _vue.createVNode)(_component_v_divider, {
+                        class: "border-opacity-100"
+                    }),
+                    _hoisted_6,
                     (0, _vue.createVNode)(_component_v_btn, {
                         variant: "flat",
                         class: "text-none text-caption",
@@ -14854,7 +14709,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         loading: $setup.save_loading
                     }, {
                         default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createTextVNode)(" Save Direktt Settings ")
+                                (0, _vue.createTextVNode)(" Save Settings ")
                             ]),
                         _: 1 /* STABLE */ 
                     }, 8 /* PROPS */ , [
@@ -14862,14 +14717,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ]),
                     (0, _vue.createVNode)(_component_v_snackbar, {
                         modelValue: $setup.snackbar,
-                        "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.snackbar = $event),
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.snackbar = $event),
                         timeout: 3000,
                         color: $setup.snackbar_color
                     }, {
                         actions: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createVNode)(_component_v_btn, {
                                     variant: "text",
-                                    onClick: _cache[2] || (_cache[2] = ($event)=>$setup.snackbar = false)
+                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.snackbar = false)
                                 }, {
                                     default: (0, _vue.withCtx)(()=>[
                                             (0, _vue.createTextVNode)(" X ")

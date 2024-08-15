@@ -139,6 +139,8 @@ class WP_Juggler_Server {
 		//Ajax actions
 		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_ajax, 'wpjs_user_search' );
 		$this->loader->add_action( 'wp_ajax_wpjs_get_dashboard', $plugin_ajax, 'ajax_get_dashboard' );
+		$this->loader->add_action( 'wp_ajax_wpjs_get_settings', $plugin_ajax, 'ajax_get_settings' );
+		$this->loader->add_action( 'wp_ajax_wpjs_save_settings', $plugin_ajax, 'ajax_save_settings' );
 
 		//FE actions
 		//$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
