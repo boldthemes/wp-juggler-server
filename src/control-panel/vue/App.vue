@@ -49,9 +49,8 @@ async function getDashboard() {
   return ret
 }
 
-const openInNewTab = (url) => {
-  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-  if (newWindow) newWindow.opener = null
+function backToDashboard() {
+  window.location.href = wpjs_control_panel_object.adminurl
 }
 
 onMounted(() => {
@@ -62,10 +61,14 @@ onMounted(() => {
 
 <template>
 
-<v-card class="pa-4 mr-4">
+<v-btn color="#2271b1" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to Dashboard</v-btn>
+<v-spacer></v-spacer>
 
+<v-card class="pa-4 mr-4 mt-5 mb-5">
+  
   <v-card flat>
-    <v-card-title class="d-flex align-center pe-2">
+    
+    <v-card-title class="d-flex align-center pe-2 mb-6">
       <v-icon icon="mdi-video-input-component"></v-icon> &nbsp;
       WP Juggler Control Panel
 
@@ -102,6 +105,7 @@ onMounted(() => {
   </v-card>
 
 </v-card>
+<v-btn color="#2271b1" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to Dashboard</v-btn>
 </template>
 
 <style>

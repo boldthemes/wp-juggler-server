@@ -86,7 +86,8 @@ class WPJS_Admin
 				$this->plugin_name . '_dashboard_object',
 				array(
 					'ajaxurl' => admin_url('admin-ajax.php'),
-					'nonce' => $nonce
+					'nonce' => $nonce,
+					'adminurl' => admin_url()
 				)
 			);
 		}
@@ -116,7 +117,8 @@ class WPJS_Admin
 				$this->plugin_name . '_settings_object',
 				array(
 					'ajaxurl' => admin_url('admin-ajax.php'),
-					'nonce' => $nonce
+					'nonce' => $nonce,
+					'adminurl' => admin_url()
 				)
 			);
 		}
@@ -146,7 +148,8 @@ class WPJS_Admin
 				$this->plugin_name . '_control_panel_object',
 				array(
 					'ajaxurl' => admin_url('admin-ajax.php'),
-					'nonce' => $nonce
+					'nonce' => $nonce,
+					'adminurl' => admin_url()
 				)
 			);
 		}

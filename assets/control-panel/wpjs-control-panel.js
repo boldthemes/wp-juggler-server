@@ -9142,10 +9142,9 @@ exports.default = {
             ret = response.data;
             return ret;
         }
-        const openInNewTab = (url)=>{
-            const newWindow = window.open(url, "_blank", "noopener,noreferrer");
-            if (newWindow) newWindow.opener = null;
-        };
+        function backToDashboard() {
+            window.location.href = wpjs_control_panel_object.adminurl;
+        }
         (0, _vue.onMounted)(()=>{});
         const __returned__ = {
             queryClient,
@@ -9161,7 +9160,7 @@ exports.default = {
             refetch,
             doAjax,
             getDashboard,
-            openInNewTab,
+            backToDashboard,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -14625,86 +14624,112 @@ const _hoisted_2 = {
     key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
     const _component_v_card_title = (0, _vue.resolveComponent)("v-card-title");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
-    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
-        class: "pa-4 mr-4"
-    }, {
-        default: (0, _vue.withCtx)(()=>[
-                (0, _vue.createVNode)(_component_v_card, {
-                    flat: ""
-                }, {
-                    default: (0, _vue.withCtx)(()=>[
-                            (0, _vue.createVNode)(_component_v_card_title, {
-                                class: "d-flex align-center pe-2"
-                            }, {
-                                default: (0, _vue.withCtx)(()=>[
-                                        (0, _vue.createVNode)(_component_v_icon, {
-                                            icon: "mdi-video-input-component"
-                                        }),
-                                        (0, _vue.createTextVNode)(" \xa0 WP Juggler Control Panel "),
-                                        (0, _vue.createVNode)(_component_v_spacer),
-                                        (0, _vue.createVNode)(_component_v_text_field, {
-                                            modelValue: $setup.search,
-                                            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.search = $event),
-                                            density: "compact",
-                                            label: "Search",
-                                            "prepend-inner-icon": "mdi-magnify",
-                                            variant: "solo-filled",
-                                            flat: "",
-                                            "hide-details": "",
-                                            "single-line": ""
-                                        }, null, 8 /* PROPS */ , [
-                                            "modelValue"
-                                        ])
-                                    ]),
-                                _: 1 /* STABLE */ 
-                            }),
-                            (0, _vue.createVNode)(_component_v_divider),
-                            (0, _vue.createVNode)(_component_v_data_table, {
-                                search: $setup.search,
-                                "onUpdate:search": _cache[1] || (_cache[1] = ($event)=>$setup.search = $event),
-                                items: $setup.data,
-                                headers: $setup.headers,
-                                "item-key": "id",
-                                "show-select": ""
-                            }, {
-                                "item.activation": (0, _vue.withCtx)(({ item })=>[
-                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createVNode)(_component_v_btn, {
+            color: "#2271b1",
+            variant: "flat",
+            class: "text-none text-caption",
+            onClick: $setup.backToDashboard
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)("Back to Dashboard")
+                ]),
+            _: 1 /* STABLE */ 
+        }),
+        (0, _vue.createVNode)(_component_v_spacer),
+        (0, _vue.createVNode)(_component_v_card, {
+            class: "pa-4 mr-4 mt-5 mb-5"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, {
+                        flat: ""
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_card_title, {
+                                    class: "d-flex align-center pe-2 mb-6"
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
                                             (0, _vue.createVNode)(_component_v_icon, {
-                                                color: "error",
-                                                icon: "mdi-alert-outline",
-                                                size: "large",
-                                                class: "rm-4"
+                                                icon: "mdi-video-input-component"
                                             }),
-                                            (0, _vue.createTextVNode)(" Not activated ")
-                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
-                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                color: "success",
-                                                icon: "mdi-check-bold",
-                                                size: "large",
-                                                class: "rm-4"
-                                            }),
-                                            (0, _vue.createTextVNode)(" Activated ")
-                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                    ]),
-                                _: 1 /* STABLE */ 
-                            }, 8 /* PROPS */ , [
-                                "search",
-                                "items"
-                            ])
-                        ]),
-                    _: 1 /* STABLE */ 
-                })
-            ]),
-        _: 1 /* STABLE */ 
-    });
+                                            (0, _vue.createTextVNode)(" \xa0 WP Juggler Control Panel "),
+                                            (0, _vue.createVNode)(_component_v_spacer),
+                                            (0, _vue.createVNode)(_component_v_text_field, {
+                                                modelValue: $setup.search,
+                                                "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.search = $event),
+                                                density: "compact",
+                                                label: "Search",
+                                                "prepend-inner-icon": "mdi-magnify",
+                                                variant: "solo-filled",
+                                                flat: "",
+                                                "hide-details": "",
+                                                "single-line": ""
+                                            }, null, 8 /* PROPS */ , [
+                                                "modelValue"
+                                            ])
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_divider),
+                                (0, _vue.createVNode)(_component_v_data_table, {
+                                    search: $setup.search,
+                                    "onUpdate:search": _cache[1] || (_cache[1] = ($event)=>$setup.search = $event),
+                                    items: $setup.data,
+                                    headers: $setup.headers,
+                                    "item-key": "id",
+                                    "show-select": ""
+                                }, {
+                                    "item.activation": (0, _vue.withCtx)(({ item })=>[
+                                            !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
+                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                    color: "error",
+                                                    icon: "mdi-alert-outline",
+                                                    size: "large",
+                                                    class: "rm-4"
+                                                }),
+                                                (0, _vue.createTextVNode)(" Not activated ")
+                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                            item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                    color: "success",
+                                                    icon: "mdi-check-bold",
+                                                    size: "large",
+                                                    class: "rm-4"
+                                                }),
+                                                (0, _vue.createTextVNode)(" Activated ")
+                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }, 8 /* PROPS */ , [
+                                    "search",
+                                    "items"
+                                ])
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }),
+        (0, _vue.createVNode)(_component_v_btn, {
+            color: "#2271b1",
+            variant: "flat",
+            class: "text-none text-caption",
+            onClick: $setup.backToDashboard
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)("Back to Dashboard")
+                ]),
+            _: 1 /* STABLE */ 
+        })
+    ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("a77703-hmr", render);
