@@ -10,6 +10,14 @@ const store = useWpjsStore()
 
 const nonce = ref(wpjs_control_panel_object.nonce)
 
+const search = ref("")
+
+const headers = [
+  { title: 'Title', value: 'title' },
+  { title: 'Site URL', key: 'wp_juggler_server_site_url' },
+  { title: 'Activation Status', key: 'activation' }
+]
+
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ['wpjs-control-panel'],
   queryFn: getDashboard
@@ -53,45 +61,33 @@ onMounted(() => {
 </script>
 
 <template>
-   <h1>WP Juggler Control Panel</h1>
 
 <v-card class="pa-4 mr-4">
 
-  <table class="form-table wpjs-cp-table" role="presentation">
+  <v-card flat>
+    <v-card-title class="d-flex align-center pe-2">
+      <v-icon icon="mdi-video-input-component"></v-icon> &nbsp;
+      WP Juggler Control Panel
 
-    <tbody v-if="data">
+      <v-spacer></v-spacer>
 
-      <tr>
-        <th>
-          <div>
-            Title
-          </div>
-        </th>
-        <th>
-          <div>
-            Url
-          </div>
-        </th>
-        <th>
-          <div>
-            Activation Status
-          </div>
-        </th>
-      </tr>
+      <v-text-field
+        v-model="search"
+        density="compact"
+        label="Search"
+        prepend-inner-icon="mdi-magnify"
+        variant="solo-filled"
+        flat
+        hide-details
+        single-line
+      ></v-text-field>
 
-      <tr v-for="item in data">
-        <td>
-          <div>
-            {{ item.title }}
-          </div>
-        </td>
-        <td>
-          <div>
-            {{ item.wp_juggler_server_site_url }}
-          </div>
-        </td>
-        <td>
-          <div v-if="!item.wp_juggler_site_activation">
+    </v-card-title>
+
+    <v-divider></v-divider>
+    <v-data-table v-model:search="search" :items="data" :headers="headers" item-key="id" show-select>
+      <template v-slot:item.activation="{ item }">
+        <div v-if="!item.wp_juggler_site_activation">
             <v-icon color="error" icon="mdi-alert-outline" size="large"class='rm-4'></v-icon>
             Not activated
           </div>
@@ -99,10 +95,11 @@ onMounted(() => {
             <v-icon color="success" icon="mdi-check-bold" size="large"class='rm-4'></v-icon>
             Activated
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      </template>
+
+     
+    </v-data-table>
+  </v-card>
 
 </v-card>
 </template>

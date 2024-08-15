@@ -154,6 +154,7 @@ class WPJS_AJAX
 		foreach ($wpjuggler_sites as $site) {
 			if (can_user_access_post($site)) {
 				$data[] = array(
+					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
 					'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false,
 					'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),

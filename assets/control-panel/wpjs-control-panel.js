@@ -9100,6 +9100,21 @@ exports.default = {
         const queryClient = (0, _vueQuery.useQueryClient)();
         const store = (0, _storeJs.useWpjsStore)();
         const nonce = (0, _vue.ref)(wpjs_control_panel_object.nonce);
+        const search = (0, _vue.ref)("");
+        const headers = [
+            {
+                title: "Title",
+                value: "title"
+            },
+            {
+                title: "Site URL",
+                key: "wp_juggler_server_site_url"
+            },
+            {
+                title: "Activation Status",
+                key: "activation"
+            }
+        ];
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
                 "wpjs-control-panel"
@@ -9136,6 +9151,8 @@ exports.default = {
             queryClient,
             store,
             nonce,
+            search,
+            headers,
             isLoading,
             isError,
             isFetching,
@@ -14601,53 +14618,64 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "render", ()=>render);
 var _vue = require("vue");
-const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "WP Juggler Control Panel", -1 /* HOISTED */ );
+const _hoisted_1 = {
+    key: 0
+};
 const _hoisted_2 = {
-    class: "form-table wpjs-cp-table",
-    role: "presentation"
-};
-const _hoisted_3 = {
-    key: 0
-};
-const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("tr", null, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
-        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Title ")
-    ]),
-    /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
-        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Url ")
-    ]),
-    /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
-        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Activation Status ")
-    ])
-], -1 /* HOISTED */ );
-const _hoisted_5 = {
-    key: 0
-};
-const _hoisted_6 = {
     key: 1
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
+    const _component_v_card_title = (0, _vue.resolveComponent)("v-card-title");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
-    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
-        _hoisted_1,
-        (0, _vue.createVNode)(_component_v_card, {
-            class: "pa-4 mr-4"
-        }, {
-            default: (0, _vue.withCtx)(()=>[
-                    (0, _vue.createElementVNode)("table", _hoisted_2, [
-                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tbody", _hoisted_3, [
-                            _hoisted_4,
-                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data, (item)=>{
-                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", null, [
-                                    (0, _vue.createElementVNode)("td", null, [
-                                        (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+        class: "pa-4 mr-4"
+    }, {
+        default: (0, _vue.withCtx)(()=>[
+                (0, _vue.createVNode)(_component_v_card, {
+                    flat: ""
+                }, {
+                    default: (0, _vue.withCtx)(()=>[
+                            (0, _vue.createVNode)(_component_v_card_title, {
+                                class: "d-flex align-center pe-2"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_icon, {
+                                            icon: "mdi-video-input-component"
+                                        }),
+                                        (0, _vue.createTextVNode)(" \xa0 WP Juggler Control Panel "),
+                                        (0, _vue.createVNode)(_component_v_spacer),
+                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                            modelValue: $setup.search,
+                                            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.search = $event),
+                                            density: "compact",
+                                            label: "Search",
+                                            "prepend-inner-icon": "mdi-magnify",
+                                            variant: "solo-filled",
+                                            flat: "",
+                                            "hide-details": "",
+                                            "single-line": ""
+                                        }, null, 8 /* PROPS */ , [
+                                            "modelValue"
+                                        ])
                                     ]),
-                                    (0, _vue.createElementVNode)("td", null, [
-                                        (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.wp_juggler_server_site_url), 1 /* TEXT */ )
-                                    ]),
-                                    (0, _vue.createElementVNode)("td", null, [
-                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                _: 1 /* STABLE */ 
+                            }),
+                            (0, _vue.createVNode)(_component_v_divider),
+                            (0, _vue.createVNode)(_component_v_data_table, {
+                                search: $setup.search,
+                                "onUpdate:search": _cache[1] || (_cache[1] = ($event)=>$setup.search = $event),
+                                items: $setup.data,
+                                headers: $setup.headers,
+                                "item-key": "id",
+                                "show-select": ""
+                            }, {
+                                "item.activation": (0, _vue.withCtx)(({ item })=>[
+                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
                                             (0, _vue.createVNode)(_component_v_icon, {
                                                 color: "error",
                                                 icon: "mdi-alert-outline",
@@ -14656,7 +14684,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             }),
                                             (0, _vue.createTextVNode)(" Not activated ")
                                         ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
                                             (0, _vue.createVNode)(_component_v_icon, {
                                                 color: "success",
                                                 icon: "mdi-check-bold",
@@ -14665,15 +14693,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             }),
                                             (0, _vue.createTextVNode)(" Activated ")
                                         ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                    ])
-                                ]);
-                            }), 256 /* UNKEYED_FRAGMENT */ ))
-                        ])) : (0, _vue.createCommentVNode)("v-if", true)
-                    ])
-                ]),
-            _: 1 /* STABLE */ 
-        })
-    ], 64 /* STABLE_FRAGMENT */ );
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }, 8 /* PROPS */ , [
+                                "search",
+                                "items"
+                            ])
+                        ]),
+                    _: 1 /* STABLE */ 
+                })
+            ]),
+        _: 1 /* STABLE */ 
+    });
 }
 if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("a77703-hmr", render);
