@@ -12,12 +12,12 @@
   },
   "targets": {
     "settings": {
-      "source": "./src/settings/js/direktt-settings.js",
-      "distDir": "./js/settings"
+      "source": "./src/settings/js/wpjs-settings.js",
+      "distDir": "./assets/settings"
     },
     "dashboard": {
-      "source": "./src/dashboard/js/direktt-dashboard.js",
-      "distDir": "./js/dashboard"
+      "source": "./src/dashboard/js/wpjs-dashboard.js",
+      "distDir": "./assets/dashboard"
     }
   },
   "dependencies": {

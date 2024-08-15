@@ -64,7 +64,7 @@ class WPJS_Admin
 		if (str_ends_with($suffix, 'wpjs-dashboard')) {
 			wp_enqueue_script(
 				$this->plugin_name . '-dashboard',
-				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-dashboard.js',
+				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-dashboard.js',
 				array('jquery'),
 				'',
 				[
@@ -74,7 +74,7 @@ class WPJS_Admin
 
 			wp_enqueue_style(
 				$this->plugin_name . '-dashboard',
-				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-dashboard.css',
+				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-dashboard.css',
 				[],
 				''
 			);
@@ -94,7 +94,7 @@ class WPJS_Admin
 		if (str_ends_with($suffix, 'wpjs-settings')) {
 			wp_enqueue_script(
 				$this->plugin_name . '-settings',
-				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-settings.js',
+				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-settings.js',
 				array('jquery'),
 				'',
 				[
@@ -104,7 +104,7 @@ class WPJS_Admin
 
 			wp_enqueue_style(
 				$this->plugin_name . '-settings',
-				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-settings.css',
+				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-settings.css',
 				[],
 				''
 			);

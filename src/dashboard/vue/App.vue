@@ -1,19 +1,19 @@
 <script setup>
 
-import { useDirekttStore } from './store.js'
+import { useWpjsStore } from './store.js'
 import { onMounted, computed, ref } from 'vue'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
 
-const store = useDirekttStore()
+const store = useWpjsStore()
 
-const nonce = ref(direktt_dashboard_object.nonce)
+const nonce = ref(wpjs_dashboard_object.nonce)
 
 const activation_status = ref(false)
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
-  queryKey: ['direktt-dashboard'],
+  queryKey: ['wpjs-dashboard'],
   queryFn: getDashboard
 })
 
@@ -21,7 +21,7 @@ async function doAjax(args) {
   let result;
   try {
     result = await jQuery.ajax({
-      url: direktt_dashboard_object.ajaxurl,
+      url: wpjs_dashboard_object.ajaxurl,
       type: 'POST',
       data: args
     });
@@ -36,7 +36,7 @@ async function getDashboard() {
   let ret = {}
   const response = await doAjax(
     {
-      action: "direktt_get_dashboard",  // the action to fire in the server
+      action: "wpjs_get_dashboard",  // the action to fire in the server
     }
   )
   ret = response.data
@@ -69,7 +69,7 @@ onMounted(() => {
         <th scope="row"><label for="blogname">QR Code for subscription:</label></th>
         <td>
           <div>
-            <vue-qrcode :value="'https://direktt.io/?site=' + data.direktt_channel_id + '&name=' + encodeURIComponent(data.direktt_channel_title)" :options="{ width: 300 }"></vue-qrcode>
+            dsda
           </div>
         </td>
       </tr>
@@ -93,7 +93,7 @@ onMounted(() => {
         <th scope="row"><label for="blogname">Registered domain:</label></th>
         <td>
           <div v-if="activation_status">
-            {{ data.direktt_registered_domain }}
+            dsadasdas
           </div>
         </td>
       </tr>
@@ -101,7 +101,7 @@ onMounted(() => {
         <th scope="row"><label for="blogname">Channel Id:</label></th>
         <td>
           <div v-if="activation_status">
-            {{ data.direktt_channel_id }}
+            dasdasdas
           </div>
         </td>
       </tr>
@@ -109,7 +109,7 @@ onMounted(() => {
         <th scope="row"><label for="blogname">Channel title:</label></th>
         <td>
           <div v-if="activation_status">
-            {{ data.direktt_channel_title }}
+           dsadsadasadsa
           </div>
         </td>
       </tr>
