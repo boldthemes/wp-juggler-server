@@ -18,6 +18,10 @@
     "dashboard": {
       "source": "./src/dashboard/js/wpjs-dashboard.js",
       "distDir": "./assets/dashboard"
+    },
+    "control-panel": {
+      "source": "./src/control-panel/js/wpjs-control-panel.js",
+      "distDir": "./assets/control-panel"
     }
   },
   "dependencies": {

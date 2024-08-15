@@ -120,6 +120,36 @@ class WPJS_Admin
 				)
 			);
 		}
+
+		if (str_ends_with($suffix, 'wpjs-control-panel')) {
+			wp_enqueue_script(
+				$this->plugin_name . '-control-panel',
+				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.js',
+				array('jquery'),
+				'',
+				[
+					'in_footer' => true,
+				]
+			);
+
+			wp_enqueue_style(
+				$this->plugin_name . '-control-panel',
+				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.css',
+				[],
+				''
+			);
+
+			$nonce = wp_create_nonce($this->plugin_name . '-control-panel');
+
+			wp_localize_script(
+				$this->plugin_name . '-control-panel',
+				$this->plugin_name . '_control_panel_object',
+				array(
+					'ajaxurl' => admin_url('admin-ajax.php'),
+					'nonce' => $nonce
+				)
+			);
+		}
 	}
 
 	public function register_menu_page()
@@ -160,45 +190,17 @@ class WPJS_Admin
 			'wpjs-settings',
 			[$this, 'render_admin_page']
 		);
-	}
-
-	/**
-	 * Register any menu pages used by the plugin.
-	 * @since  1.0.0
-	 * @access public
-	 */
-	public function wpjs_menu_pages()
-	{
-		$cap = apply_filters('wpjs_capability', 'manage_options');
-
-		add_menu_page(
-			__('WP Juggler', 'wp-juggler-server'),
-			__('WP Juggler', 'wp-juggler-server'),
-			$cap,
-			"wp-juggler-server",
-			[$this, 'render_admin_page']
-		);
 
 		add_submenu_page(
-			'wp-juggler-server',
-			__('Settings', 'wp-juggler-server'),
-			__('Settings', 'wp-juggler-server'),
-			$cap,
-			"wp-juggler-server-settings",
-			[$this, 'wpjs_menu_pages_callback']
-		);
-
-		add_submenu_page(
-			'wp-juggler-server',
+			'wpjs-dashboard',
 			__('Control Panel', 'wp-juggler-server'),
 			__('Control Panel', 'wp-juggler-server'),
 			$cap,
-			'wp-juggler-server-panel',
+			'wpjs-control-panel',
 			[$this, 'render_admin_page']
 		);
-
-		//add_submenu_page('tools.php', __('Better Search Replace', 'wp-juggler-server'), __('Better Search Replace', 'wp-juggler-server'), $cap, 'wp-juggler-server', array($this, 'wpjs_menu_pages_callback'));
 	}
+
 
 	public function wpjs_cpt()
 	{
@@ -285,13 +287,36 @@ class WPJS_Admin
 		);
 	}
 
+	function cp_hide_admin_menus($context)
+	{
+
+		global $pagenow;
+		$current_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+
+		if ($pagenow == 'admin.php' && $current_page == 'wpjs-control-panel') {
+
+			echo '<style>
+			#adminmenumain, #wpadminbar, #wpfooter {
+				display: none;
+			}
+			#wpcontent, #wpfooter  {
+				margin-left: 0px !important;
+			}
+			</style>';
+			
+			global $menu;
+			$menu = array();
+		}
+	}
+
 	public function render_juggler_sites_meta_box($post)
 	{
-		wp_nonce_field( $this->plugin_name . '-user', 'wp_juggler_server_nonce');
+		wp_nonce_field($this->plugin_name . '-user', 'wp_juggler_server_nonce');
 		$site_url = get_post_meta($post->ID, 'wp_juggler_server_site_url', true);
 		$api_key = get_post_meta($post->ID, 'wp_juggler_api_key', true);
 		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
 		$login_username = get_post_meta($post->ID, 'wp_juggler_login_username', true);
+		$activation_status = get_post_meta($post->ID, 'wp_juggler_site_activation', true);
 
 	?>
 
@@ -314,6 +339,10 @@ class WPJS_Admin
 		<p id="wp_juggler_login_username_paragraph">
 			<label for="wp_juggler_login_username">Remote Login Username</label><br>
 			<input type="text" name="wp_juggler_login_username" id="wp_juggler_login_username" value="<?php echo esc_attr($login_username); ?>" size="60" />
+		</p>
+		<p>
+			<label for="wp_juggler_site_activation">Activation Status</label><br>
+			<input type="checkbox" name="wp_juggler_site_activation" id="wp_juggler_site_activation" <?php checked($activation_status, 'on'); ?> />
 		</p>
 
 		<style>
@@ -443,7 +472,7 @@ class WPJS_Admin
 
 	public function wpjs_save_sites_meta_boxes($post_id)
 	{
-		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-user' )) {
+		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-user')) {
 			return;
 		}
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -468,6 +497,9 @@ class WPJS_Admin
 		if (isset($_POST['wp_juggler_login_username'])) {
 			update_post_meta($post_id, 'wp_juggler_login_username', sanitize_text_field($_POST['wp_juggler_login_username']));
 		}
+
+		$activation_status = isset($_POST['wp_juggler_site_activation']) ? 'on' : 'off';
+		update_post_meta($post_id, 'wp_juggler_site_activation', $activation_status);
 
 		$users = array();
 		if (isset($_POST['juggler_users'])) {

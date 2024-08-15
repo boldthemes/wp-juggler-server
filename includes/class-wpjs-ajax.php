@@ -116,6 +116,34 @@ class WPJS_AJAX {
 		wp_send_json_success($data, 200);
 	}
 
+	public function ajax_get_control_panel()
+	{
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$args = array(
+			'post_type' => 'wpjugglersites',
+			'post_status' => 'publish',
+			'numberposts' => -1
+		);
+		
+		$wpjuggler_sites = get_posts($args);
+		$data = array();
+		
+		foreach ($wpjuggler_sites as $site) {
+			$data[] = array(
+				'title' => get_the_title($site->ID),
+				'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false,
+				'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),
+				'wp_juggler_site_activation' => get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false
+			);
+		}
+
+		wp_send_json_success($data, 200);
+	}
+
 	public function wpjs_user_search()
 	{	
 		$nonce = sanitize_text_field($_GET['wp_juggler_server_nonce']);

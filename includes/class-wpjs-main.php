@@ -127,6 +127,9 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'add_meta_boxes_wpjugglersites', $plugin_admin, 'wpjs_sites_metaboxes' );
 		$this->loader->add_action( 'save_post_wpjugglersites', $plugin_admin, 'wpjs_save_sites_meta_boxes' );
 
+		$this->loader->add_filter( 'admin_menu', $plugin_admin, 'cp_hide_admin_menus', 9999 );
+		//$this->loader->add_filter( 'wp_before_admin_bar_render', $plugin_admin, 'cp_hide_admin_menus');
+
 		$this->loader->add_filter( 'manage_wpjugglersites_posts_columns', $plugin_admin, 'wpjs_add_custom_column' );
 		$this->loader->add_action( 'manage_wpjugglersites_posts_custom_column', $plugin_admin, 'wpjs_display_custom_column', 10, 2);
 
@@ -138,9 +141,13 @@ class WP_Juggler_Server {
 
 		//Ajax actions
 		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_ajax, 'wpjs_user_search' );
+
 		$this->loader->add_action( 'wp_ajax_wpjs_get_dashboard', $plugin_ajax, 'ajax_get_dashboard' );
+
 		$this->loader->add_action( 'wp_ajax_wpjs_get_settings', $plugin_ajax, 'ajax_get_settings' );
 		$this->loader->add_action( 'wp_ajax_wpjs_save_settings', $plugin_ajax, 'ajax_save_settings' );
+
+		$this->loader->add_action( 'wp_ajax_wpjs_get_control_panel', $plugin_ajax, 'ajax_get_control_panel' );
 
 		//FE actions
 		//$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
