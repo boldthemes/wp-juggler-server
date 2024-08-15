@@ -6,9 +6,11 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
+ * @link       https://wpjuggler.com
  * @since      1.0.0
- * @package    Better_Search_Replace
- * @subpackage Better_Search_Replace/includes
+ *
+ * @package    WP_Juggler_Server
+ * @subpackage WP_Juggler_Server/includes
  */
 
 // Prevent direct access.

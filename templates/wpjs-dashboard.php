@@ -3,11 +3,11 @@
 /**
  * Displays the main Better Search Replace page under Tools -> Better Search Replace.
  *
- * @link       https://bettersearchreplace.com
+* @link       https://wpjuggler.com
  * @since      1.0.0
  *
- * @package    Better_Search_Replace
- * @subpackage Better_Search_Replace/templates
+ * @package    WP_Juggler_Server
+ * @subpackage WP_Juggler_Server/includes
  */
 
 // Prevent direct access.

@@ -2,10 +2,11 @@
 /**
 * Utility functionality for the plugin
 *
-* @since      1.4.3
-*
-* @package    Better_Search_Replace
-* @subpackage Better_Search_Replace/includes
+ * @link       https://wpjuggler.com
+ * @since      1.0.0
+ *
+ * @package    WP_Juggler_Server
+ * @subpackage WP_Juggler_Server/includes
 */
 // Prevent direct access.
 if ( ! defined( 'WPJS_PATH' ) ) exit;
