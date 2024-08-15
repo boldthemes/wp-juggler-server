@@ -74,10 +74,6 @@ function run_wp_juggler_server()
     // Defines the name of the plugin.
     define('WPJS_NAME', 'WP Juggler Server');
 
-    /**
-     * The core plugin class that is used to define internationalization,
-     * dashboard-specific hooks, and public-facing site hooks.
-     */
     require WPJS_PATH . 'includes/class-wpjs-main.php';
     $plugin = new WP_Juggler_Server();
     $plugin->run();

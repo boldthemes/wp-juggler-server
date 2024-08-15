@@ -82,7 +82,6 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-ajax.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-db.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-compatibility.php';
-		require_once WPJS_PATH . 'includes/class-wpjs-plugin-footer.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-utils.php';
 		
 		$this->loader = new WPJS_Loader();
@@ -114,14 +113,17 @@ class WP_Juggler_Server {
 		// Initialize the admin class.
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
-		$plugin_footer = new WPJS_Plugin_Footer();
 
 		/// Register the admin pages and scripts.
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'wpjs_menu_pages' );
+
 		
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menu_page', 9 );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menu_page_end' );
 		
-		$this->loader->add_action( 'init', $plugin_admin, 'wpjs_cpt' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_plugin_assets' );
+		
+		$this->loader->add_action( 'init', $plugin_admin, 'wpjs_cpt', 5 );
+
 		$this->loader->add_action( 'add_meta_boxes_wpjugglersites', $plugin_admin, 'wpjs_sites_metaboxes' );
 		$this->loader->add_action( 'save_post_wpjugglersites', $plugin_admin, 'wpjs_save_sites_meta_boxes' );
 
@@ -137,12 +139,9 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'meta_upgrade_link', 10, 2 );
 
 		//FE actions
-		$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
+		//$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
 		//$this->loader->add_filter( 'pre_handle_404', $plugin_admin, 'wpjs_pre_404_filter', 5, 2 );
 
-		// Footer Actions
-		$this->loader->add_filter( 'update_footer', $plugin_footer, 'update_footer', 20);
-		$this->loader->add_filter( 'admin_footer_text', $plugin_footer, 'admin_footer_text', 20);
 	}
 
 	/**

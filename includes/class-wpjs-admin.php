@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The dashboard-specific functionality of the plugin.
+ * wp-admin specific functionality of the plugin.
  *
  * Registers styles and scripts, adds the custom administration page,
  * and processes user input on the "search/replace" form.
@@ -37,6 +37,8 @@ class WPJS_Admin
 	 */
 	private $version;
 
+	private $plugin_name;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -48,6 +50,7 @@ class WPJS_Admin
 	{
 		$this->wp_juggler_server = $wp_juggler_server;
 		$this->version = $version;
+		$this->plugin_name = 'wpjs';
 	}
 
 	/**
@@ -56,28 +59,107 @@ class WPJS_Admin
 	 * @access 	 public
 	 * @param    string $hook Used for determining which page(s) to load our scripts.
 	 */
-	public function enqueue_scripts($hook)
+	public function enqueue_plugin_assets($suffix)
 	{
-		if ('tools_page_wp-juggler-server' === $hook) {
-			$min = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+		if (str_ends_with($suffix, 'wpjs-dashboard')) {
+			wp_enqueue_script(
+				$this->plugin_name . '-dashboard',
+				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-dashboard.js',
+				array('jquery'),
+				'',
+				[
+					'in_footer' => true,
+				]
+			);
 
-			wp_enqueue_style('wp-juggler-server', WPJS_URL . "assets/css/wp-juggler-server$min.css", array(), $this->version, 'all');
-			wp_enqueue_style('jquery-style', WPJS_URL . 'assets/css/jquery-ui.min.css', array(), $this->version, 'all');
-			wp_enqueue_script('jquery-ui-slider');
-			wp_enqueue_script('wp-juggler-server', WPJS_URL . "assets/js/wp-juggler-server$min.js", array('jquery'), $this->version, true);
-			wp_enqueue_style('thickbox');
-			wp_enqueue_script('thickbox');
+			wp_enqueue_style(
+				$this->plugin_name . '-dashboard',
+				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-dashboard.css',
+				[],
+				''
+			);
 
-			wp_localize_script('wp-juggler-server', 'wpjs_object_vars', array(
-				'page_size' 	=> get_option('wpjs_page_size') ? absint(get_option('wpjs_page_size')) : 20000,
-				'endpoint' 		=> WPJS_AJAX::get_endpoint(),
-				'ajax_nonce' 	=> wp_create_nonce('wpjs_ajax_nonce'),
-				'no_search' 	=> __('No search string was defined, please enter a URL or string to search for.', 'wp-juggler-server'),
-				'no_tables' 	=> __('Please select the tables that you want to update.', 'wp-juggler-server'),
-				'unknown' 		=> __('An error occurred processing your request. Try decreasing the "Max Page Size", or contact support.', 'wp-juggler-server'),
-				'processing'	=> __('Processing...', 'wp-juggler-server')
-			));
+			$nonce = wp_create_nonce($this->plugin_name . '-dashboard');
+
+			wp_localize_script(
+				$this->plugin_name . '-dashboard',
+				$this->plugin_name . '_dashboard_object',
+				array(
+					'ajaxurl' => admin_url('admin-ajax.php'),
+					'nonce' => $nonce
+				)
+			);
 		}
+
+		if (str_ends_with($suffix, 'wpjs-settings')) {
+			wp_enqueue_script(
+				$this->plugin_name . '-settings',
+				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-settings.js',
+				array('jquery'),
+				'',
+				[
+					'in_footer' => true,
+				]
+			);
+
+			wp_enqueue_style(
+				$this->plugin_name . '-settings',
+				plugin_dir_url(__DIR__) . 'js/dashboard/wpjs-settings.css',
+				[],
+				''
+			);
+
+			$nonce = wp_create_nonce($this->plugin_name . '-settings');
+
+			wp_localize_script(
+				$this->plugin_name . '-settings',
+				$this->plugin_name . '_settings_object',
+				array(
+					'ajaxurl' => admin_url('admin-ajax.php'),
+					'nonce' => $nonce
+				)
+			);
+		}
+	}
+
+	public function register_menu_page()
+	{
+
+		$cap = apply_filters('wpjs_capability', 'manage_options');
+
+		add_menu_page(
+			__('WP Juggler', 'wp-juggler-server'),
+			__('WP Juggler', 'wp-juggler-server'),
+			$cap,
+			"wpjs-dashboard",
+			[$this, 'render_admin_page'],
+			"",
+			30
+		);
+
+
+		add_submenu_page(
+			'wpjs-dashboard',
+			__('Dashboard', 'wp-juggler-server'),
+			__('Dashboard', 'wp-juggler-server'),
+			$cap,
+			"wpjs-dashboard"
+		);
+	}
+
+	public function register_menu_page_end()
+	{
+
+		$cap = apply_filters('wpjs_capability', 'manage_options');
+
+		add_submenu_page(
+			'wpjs-dashboard',
+			__('Settings', 'wp-juggler-server'),
+			__('Settings', 'wp-juggler-server'),
+			$cap,
+			'wpjs-settings',
+			[$this, 'render_admin_page']
+		);
 	}
 
 	/**
@@ -94,9 +176,7 @@ class WPJS_Admin
 			__('WP Juggler', 'wp-juggler-server'),
 			$cap,
 			"wp-juggler-server",
-			"",
-			"",
-			30
+			[$this, 'render_admin_page']
 		);
 
 		add_submenu_page(
@@ -146,7 +226,7 @@ class WPJS_Admin
 			'hierarchical'        => false,
 			'public'              => false,
 			'show_ui'             => true,
-			'show_in_menu'        => 'wp-juggler-server',
+			'show_in_menu'        => 'wpjs-dashboard',
 			'show_in_nav_menus'   => true,
 			'show_in_admin_bar'   => true,
 			'menu_position'       => 5,
@@ -164,6 +244,13 @@ class WPJS_Admin
 		);
 
 		register_post_type('wpjugglersites', $args);
+	}
+
+	public function render_admin_page()
+	{
+?>
+		<div id="app"></div>
+	<?php
 	}
 
 	public function wpjs_sites_metaboxes()
@@ -206,7 +293,7 @@ class WPJS_Admin
 		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
 		$login_username = get_post_meta($post->ID, 'wp_juggler_login_username', true);
 
-?>
+	?>
 
 		<p>
 			<label for="wp_juggler_server_site_url">Site Url</label><br>
@@ -424,7 +511,8 @@ class WPJS_Admin
 		update_post_meta($post_id, 'wp_juggler_login_users', $users);
 	}
 
-	public function wpjs_add_custom_column($columns) {
+	public function wpjs_add_custom_column($columns)
+	{
 		return array_merge(
 			array_slice($columns, 0, 2, true),
 			array('server_site_url' => 'Site URL'),
@@ -432,20 +520,11 @@ class WPJS_Admin
 		);
 	}
 
-	function wpjs_display_custom_column($column, $post_id) {
+	function wpjs_display_custom_column($column, $post_id)
+	{
 		if ($column == 'server_site_url') {
 			echo esc_html(get_post_meta($post_id, 'wp_juggler_server_site_url', true));
 		}
-	}
-
-	/**
-	 * The callback for creating a new submenu page under the "Tools" menu.
-	 * @access public
-	 */
-	public function wpjs_menu_pages_callback()
-	{
-		require_once WPJS_PATH . 'includes/class-wpjs-templates-helper.php';
-		require_once WPJS_PATH . 'templates/wpjs-dashboard.php';
 	}
 
 	/**
