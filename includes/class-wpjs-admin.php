@@ -287,7 +287,7 @@ class WPJS_Admin
 
 	public function render_juggler_sites_meta_box($post)
 	{
-		wp_nonce_field(basename(__FILE__), 'wp_juggler_server_nonce');
+		wp_nonce_field( $this->plugin_name . '-user', 'wp_juggler_server_nonce');
 		$site_url = get_post_meta($post->ID, 'wp_juggler_server_site_url', true);
 		$api_key = get_post_meta($post->ID, 'wp_juggler_api_key', true);
 		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
@@ -441,38 +441,9 @@ class WPJS_Admin
 		<?php
 	}
 
-	public function wpjs_user_search()
-	{
-
-		check_ajax_referer(basename(__FILE__), 'wp_juggler_server_nonce');
-
-		// Check for user capabilities
-		if (!current_user_can('edit_posts')) {
-			wp_send_json_error('You do not have permission to perform this action.');
-			wp_die();
-		}
-
-		$term = sanitize_text_field($_GET['term']);
-
-		$user_query = new WP_User_Query(array(
-			'search' => '*' . esc_attr($term) . '*',
-			'search_columns' => array('user_login', 'user_nicename', 'user_email', 'display_name'),
-		));
-
-		$users = $user_query->get_results();
-		$results = array();
-		foreach ($users as $user) {
-			$results[] = array(
-				'label' => $user->user_login,
-				'value' => $user->user_login,
-			);
-		}
-		wp_send_json($results);
-	}
-
 	public function wpjs_save_sites_meta_boxes($post_id)
 	{
-		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], basename(__FILE__))) {
+		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-user' )) {
 			return;
 		}
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

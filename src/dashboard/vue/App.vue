@@ -57,7 +57,7 @@ onMounted(() => {
 </script>
 
 <template>
-   <h1>Direktt Dashboard</h1>
+   <h1>WP Juggler Server Dashboard</h1>
 
 <v-card class="pa-4 mr-4">
 
@@ -66,10 +66,27 @@ onMounted(() => {
     <tbody v-if="data">
 
       <tr>
-        <th scope="row"><label for="blogname">QR Code for subscription:</label></th>
+        <th>
+          <div>
+            Title
+          </div>
+        </th>
+        <th>
+          <div>
+            Url
+          </div>
+        </th>
+      </tr>
+
+      <tr v-for="item in data">
         <td>
           <div>
-            dsda
+            {{ item.title }}
+          </div>
+        </td>
+        <td>
+          <div>
+            {{ item.wp_juggler_server_site_url }}
           </div>
         </td>
       </tr>

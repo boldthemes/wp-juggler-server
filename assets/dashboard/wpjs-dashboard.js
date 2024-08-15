@@ -14604,7 +14604,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "render", ()=>render);
 var _vue = require("vue");
-const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "Direktt Dashboard", -1 /* HOISTED */ );
+const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "WP Juggler Server Dashboard", -1 /* HOISTED */ );
 const _hoisted_2 = {
     class: "form-table",
     role: "presentation"
@@ -14613,15 +14613,11 @@ const _hoisted_3 = {
     key: 0
 };
 const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("tr", null, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
-        scope: "row"
-    }, [
-        /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-            for: "blogname"
-        }, "QR Code for subscription:")
+    /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
+        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Title ")
     ]),
-    /*#__PURE__*/ (0, _vue.createElementVNode)("td", null, [
-        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " dsda ")
+    /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
+        /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Url ")
     ])
 ], -1 /* HOISTED */ );
 const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
@@ -14688,6 +14684,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     (0, _vue.createElementVNode)("table", _hoisted_2, [
                         $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tbody", _hoisted_3, [
                             _hoisted_4,
+                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data, (item)=>{
+                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", null, [
+                                    (0, _vue.createElementVNode)("td", null, [
+                                        (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+                                    ]),
+                                    (0, _vue.createElementVNode)("td", null, [
+                                        (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.wp_juggler_server_site_url), 1 /* TEXT */ )
+                                    ])
+                                ]);
+                            }), 256 /* UNKEYED_FRAGMENT */ )),
                             (0, _vue.createElementVNode)("tr", null, [
                                 _hoisted_5,
                                 (0, _vue.createElementVNode)("td", null, [

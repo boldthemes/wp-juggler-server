@@ -16,232 +16,94 @@ if ( ! defined( 'WPJS_PATH' ) ) exit;
 class WPJS_AJAX {
 
 	/**
-	 * Initiate our custom ajax handlers.
-	 * @access public
+	 * The ID of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $wp_juggler_server    The ID of this plugin.
 	 */
-	public function init() {
-		add_action( 'init', array( $this, 'define_ajax' ), 1 );
-		add_action( 'init', array( $this, 'do_wpjs_ajax' ), 2 );
-		$this->add_ajax_actions();
-	}
+	private $wp_juggler_server;
 
 	/**
-	 * Gets our custom endpoint.
-	 * @access public
-	 * @return string
+	 * The version of this plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $version    The current version of this plugin.
 	 */
-	public static function get_endpoint() {
-		return esc_url_raw( get_admin_url() . 'tools.php?page=wordpress-search-replace&bsr-ajax=' );
-	}
+	private $version;
+
+	private $plugin_name;
 
 	/**
-	 * Set BSR AJAX constant and headers.
-	 * @access public
+	 * Initialize the class and set its properties.
+	 *
+	 * @since    1.0.0
+	 * @var      string    $wp_juggler_server       The name of this plugin.
+	 * @var      string    $version    The version of this plugin.
 	 */
-	public function define_ajax() {
-
-		if ( isset( $_GET['bsr-ajax'] ) && ! empty( $_GET['bsr-ajax'] ) ) {
-
-			// Define the WordPress "DOING_AJAX" constant.
-			if ( ! defined( 'DOING_AJAX' ) ) {
-				define( 'DOING_AJAX', true );
-			}
-
-			// Prevent notices from breaking AJAX functionality.
-			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
-				@ini_set( 'display_errors', 0 );
-			}
-
-			// Send the headers.
-			send_origin_headers();
-			@header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
-			@header( 'X-Robots-Tag: noindex' );
-			send_nosniff_header();
-			nocache_headers();
-
-		}
-
+	public function __construct($wp_juggler_server, $version)
+	{
+		$this->wp_juggler_server = $wp_juggler_server;
+		$this->version = $version;
+		$this->plugin_name = 'wpjs';
 	}
 
-	/**
-	 * Check if we're doing AJAX and fire the related action.
-	 * @access public
-	 */
-	public function do_wpjs_ajax() {
-		global $wp_query;
-
-		if ( isset( $_GET['bsr-ajax'] ) && ! empty( $_GET['bsr-ajax'] ) ) {
-			$wp_query->set( 'bsr-ajax', sanitize_text_field( $_GET['bsr-ajax'] ) );
-		}
-
-		if ( $action = $wp_query->get( 'bsr-ajax' ) ) {
-			do_action( 'WPJS_ajax_' . sanitize_text_field( $action ) );
-			die();
-		}
-	}
-
-	/**
-	 * Adds any AJAX-related actions.
-	 * @access public
-	 */
-	public function add_ajax_actions() {
-		$actions = array(
-			'process_search_replace',
-		);
-
-		foreach ( $actions as $action ) {
-			add_action( 'WPJS_ajax_' . $action, array( $this, $action ) );
-		}
-	}
-
-	/**
-	 * Processes the search/replace form submitted by the user.
-	 * @access public
-	 */
-	public function process_search_replace() {
-		// Bail if not authorized.
-		if ( ! check_admin_referer( 'WPJS_ajax_nonce', 'WPJS_ajax_nonce' ) ) {
+	public function ajax_get_dashboard()
+	{
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
 			return;
 		}
 
-		// Initialize the DB class.
-		$db   = new WPJS_DB();
-		$step = isset( $_POST['WPJS_step' ] ) ? absint( $_POST['WPJS_step'] ) : 0;
-		$page = isset( $_POST['WPJS_page'] ) ? absint( $_POST['WPJS_page'] ) : 0;
-
-		// Any operations that should only be performed at the beginning.
-		if ( $step === 0 && $page === 0 ) {
-			$args = array();
-			parse_str( $_POST['WPJS_data'], $args );
-
-			// Build the arguments for this run.
-			if ( ! isset( $args['select_tables'] ) || ! is_array( $args['select_tables'] ) ) {
-				$args['select_tables'] = array();
-			}
-
-			$args = array(
-				'select_tables'    => array_map( 'trim', $args['select_tables'] ),
-				'case_insensitive' => isset( $args['case_insensitive'] ) ? $args['case_insensitive'] : 'off',
-				'replace_guids'    => isset( $args['replace_guids'] ) ? $args['replace_guids'] : 'off',
-				'dry_run'          => isset( $args['dry_run'] ) ? $args['dry_run'] : 'off',
-				'search_for'       => isset( $args['search_for'] ) ? stripslashes( $args['search_for'] ) : '',
-				'replace_with'     => isset( $args['replace_with'] ) ? stripslashes( $args['replace_with'] ) : '',
-				'completed_pages'  => isset( $args['completed_pages'] ) ? absint( $args['completed_pages'] ) : 0,
+		$args = array(
+			'post_type' => 'wpjugglersites',
+			'post_status' => 'publish',
+			'numberposts' => -1
+		);
+		
+		$wpjuggler_sites = get_posts($args);
+		$data = array();
+		
+		foreach ($wpjuggler_sites as $site) {
+			$data[] = array(
+				'title' => get_the_title($site->ID),
+				'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true),
+				'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true)
 			);
-
-			$args['total_pages'] = isset( $args['total_pages'] ) ? absint( $args['total_pages'] ) : $db->get_total_pages( $args['select_tables'] );
-
-			// Clear the results of the last run.
-			delete_transient( 'WPJS_results' );
-			delete_option( 'WPJS_data' );
-		} else {
-			$args = get_option( 'WPJS_data' );
 		}
 
-		// Start processing data.
-		if ( isset( $args['select_tables'][$step] ) ) {
-
-			$result = $db->srdb( $args['select_tables'][$step], $page, $args );
-			$this->append_report( $args['select_tables'][$step], $result['table_report'], $args );
-
-			if ( false === $result['table_complete'] ) {
-				$page++;
-			} else {
-				$step++;
-				$page = 0;
-			}
-
-			// Check if isset() again as the step may have changed since last check.
-			if ( isset( $args['select_tables'][$step] ) ) {
-				$message = sprintf(
-					__( 'Processing table %d of %d: %s', 'better-search-replace' ),
-					$step + 1,
-					count( $args['select_tables'] ),
-					esc_html( $args['select_tables'][$step] )
-				);
-			}
-
-			$args['completed_pages']++;
-			$percentage = $args['completed_pages'] / $args['total_pages'] * 100 . '%';
-
-		} else {
-			$db->maybe_update_site_url();
-			$step 		= 'done';
-			$percentage = '100%';
-		}
-
-		update_option( 'WPJS_data', $args );
-
-		// Store results in an array.
-		$result = array(
-			'step' 				=> $step,
-			'page' 				=> $page,
-			'percentage'		=> $percentage,
-			'url' 				=> get_admin_url() . 'tools.php?page=better-search-replace&tab=WPJS_search_replace&result=true',
-			'WPJS_data' 			=> build_query( $args )
-		);
-
-		if ( isset( $message ) ) {
-			$result['message'] = $message;
-		}
-
-		// Send output as JSON for processing via AJAX.
-		echo json_encode( $result );
-		exit;
-
+		wp_send_json_success($data, 200);
 	}
 
-	/**
-	 * Helper function for assembling the BSR Results.
-	 * @access public
-	 * @param  string 	$table 	The name of the table to append to.
-	 * @param  array  	$report The report for that table.
-	 * @param  array 	$args 	An array of arguements used for this run.
-	 * @return boolean
-	 */
-	public function append_report( $table, $report, $args ) {
+	public function wpjs_user_search()
+	{	
+		$nonce = sanitize_text_field($_GET['wp_juggler_server_nonce']);
 
-		// Bail if not authorized.
-		if ( ! check_admin_referer( 'WPJS_ajax_nonce', 'WPJS_ajax_nonce' ) ) {
-			return;
+		wp_verify_nonce( $this->plugin_name , '-user', $nonce);
+
+		// Check for user capabilities
+		if (!current_user_can('edit_posts')) {
+			wp_send_json_error('You do not have permission to perform this action.');
+			wp_die();
 		}
 
-		// Retrieve the existing transient.
-		$results = get_transient( 'WPJS_results' ) ? get_transient( 'WPJS_results') : array();
+		$term = sanitize_text_field($_GET['term']);
 
-		// Grab any values from the run args.
-		$results['search_for'] 			= isset( $args['search_for'] ) ? $args['search_for'] : '';
-		$results['replace_with'] 		= isset( $args['replace_with'] ) ? $args['replace_with'] : '';
-		$results['dry_run'] 			= isset( $args['dry_run'] ) ? $args['dry_run'] : 'off';
-		$results['case_insensitive'] 	= isset( $args['case_insensitive'] ) ? $args['case_insensitive'] : 'off';
-		$results['replace_guids'] 		= isset( $args['replace_guids'] ) ? $args['replace_guids'] : 'off';
+		$user_query = new WP_User_Query(array(
+			'search' => '*' . esc_attr($term) . '*',
+			'search_columns' => array('user_login', 'user_nicename', 'user_email', 'display_name'),
+		));
 
-		// Sum the values of the new and existing reports.
-		$results['change'] 	= isset( $results['change'] ) ? $results['change'] + $report['change'] : $report['change'];
-		$results['updates'] = isset( $results['updates'] ) ? $results['updates'] + $report['updates'] : $report['updates'];
-
-		// Append the table report, or create a new one if necessary.
-		if ( isset( $results['table_reports'] ) && isset( $results['table_reports'][$table] ) ) {
-			$results['table_reports'][$table]['change'] 	= $results['table_reports'][$table]['change'] + $report['change'];
-			$results['table_reports'][$table]['updates'] 	= $results['table_reports'][$table]['updates'] + $report['updates'];
-			$results['table_reports'][$table]['end'] 		= $report['end'];
-		} else {
-			$results['table_reports'][$table] = $report;
+		$users = $user_query->get_results();
+		$results = array();
+		foreach ($users as $user) {
+			$results[] = array(
+				'label' => $user->user_login,
+				'value' => $user->user_login,
+			);
 		}
-
-		// Count the number of tables.
-		$results['tables'] = count( $results['table_reports'] );
-
-		// Update the transient.
-		if ( ! set_transient( 'WPJS_results', $results, DAY_IN_SECONDS ) ) {
-			return false;
-		}
-
-		return true;
-
+		wp_send_json($results);
 	}
 
 }
-
-$WPJS_ajax = new WPJS_AJAX;
-$WPJS_ajax->init();

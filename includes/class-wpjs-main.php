@@ -112,10 +112,10 @@ class WP_Juggler_Server {
 
 		// Initialize the admin class.
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version() );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
-
+		
 		/// Register the admin pages and scripts.
-
 		
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menu_page', 9 );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menu_page_end' );
@@ -127,8 +127,6 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'add_meta_boxes_wpjugglersites', $plugin_admin, 'wpjs_sites_metaboxes' );
 		$this->loader->add_action( 'save_post_wpjugglersites', $plugin_admin, 'wpjs_save_sites_meta_boxes' );
 
-		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_admin, 'wpjs_user_search' );
-
 		$this->loader->add_filter( 'manage_wpjugglersites_posts_columns', $plugin_admin, 'wpjs_add_custom_column' );
 		$this->loader->add_action( 'manage_wpjugglersites_posts_custom_column', $plugin_admin, 'wpjs_display_custom_column', 10, 2);
 
@@ -137,6 +135,10 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'admin_post_wpjs_view_details', $plugin_admin, 'load_details' );
 		$this->loader->add_action( 'admin_post_wpjs_download_sysinfo', $plugin_admin, 'download_sysinfo' );
 		$this->loader->add_action( 'plugin_row_meta', $plugin_admin, 'meta_upgrade_link', 10, 2 );
+
+		//Ajax actions
+		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_ajax, 'wpjs_user_search' );
+		$this->loader->add_action( 'wp_ajax_wpjs_get_dashboard', $plugin_ajax, 'ajax_get_dashboard' );
 
 		//FE actions
 		//$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
