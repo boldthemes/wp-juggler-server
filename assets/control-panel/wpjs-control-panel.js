@@ -9070,6 +9070,7 @@ let initialize = ()=>{
     script = require("5569a091f3c24165");
     if (script.__esModule) script = script.default;
     script.render = require("a1a1a23e097e248d").render;
+    script.__cssModules = require("f4c8e73db5a92829").default;
     require("b93ef45881d45a45").default(script);
     script.__scopeId = "data-v-a77703";
     script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\App.vue";
@@ -9086,7 +9087,7 @@ if (module.hot) {
 }
 exports.default = script;
 
-},{"5569a091f3c24165":"1vnZW","a1a1a23e097e248d":"e7mfF","b93ef45881d45a45":"cwDHb","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"1vnZW":[function(require,module,exports) {
+},{"5569a091f3c24165":"1vnZW","a1a1a23e097e248d":"e7mfF","b93ef45881d45a45":"cwDHb","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","f4c8e73db5a92829":"jvxye"}],"1vnZW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _storeJs = require("./store.js");
@@ -14602,7 +14603,7 @@ parcelHelpers.export(exports, "render", ()=>render);
 var _vue = require("vue");
 const _hoisted_1 = /*#__PURE__*/ (0, _vue.createElementVNode)("h1", null, "WP Juggler Control Panel", -1 /* HOISTED */ );
 const _hoisted_2 = {
-    class: "form-table",
+    class: "form-table wpjs-cp-table",
     role: "presentation"
 };
 const _hoisted_3 = {
@@ -14684,7 +14685,7 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"gcA1H":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jvxye":[function() {},{}],"gcA1H":[function(require,module,exports) {
 // Composables
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);

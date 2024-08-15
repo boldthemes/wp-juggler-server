@@ -1,3 +1,7 @@
+.wpjs-cp-table td {
+  padding: 15px 0;
+}
+
 .v-application {
   background: rgb(var(--v-theme-background));
   color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));

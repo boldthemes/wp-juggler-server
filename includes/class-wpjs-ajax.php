@@ -11,9 +11,10 @@
  */
 
 // Prevent direct access.
-if ( ! defined( 'WPJS_PATH' ) ) exit;
+if (! defined('WPJS_PATH')) exit;
 
-class WPJS_AJAX {
+class WPJS_AJAX
+{
 
 	/**
 	 * The ID of this plugin.
@@ -61,10 +62,10 @@ class WPJS_AJAX {
 			'post_status' => 'publish',
 			'numberposts' => -1
 		);
-		
+
 		$wpjuggler_sites = get_posts($args);
 		$data = array();
-		
+
 		foreach ($wpjuggler_sites as $site) {
 			$data[] = array(
 				'title' => get_the_title($site->ID),
@@ -86,7 +87,7 @@ class WPJS_AJAX {
 		$wpjs_cp_slug = get_option('wpjs_cp_slug');
 
 		$data = array(
-			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr( $wpjs_cp_slug ) : '',
+			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr($wpjs_cp_slug) : '',
 		);
 
 		wp_send_json_success($data, 200);
@@ -106,7 +107,7 @@ class WPJS_AJAX {
 			exit;
 		}
 
-		if ( $wpjs_cp_slug ) {
+		if ($wpjs_cp_slug) {
 			update_option('wpjs_cp_slug',  $wpjs_cp_slug);
 		} else {
 			delete_option('wpjs_cp_slug');
@@ -118,6 +119,24 @@ class WPJS_AJAX {
 
 	public function ajax_get_control_panel()
 	{
+		function can_user_access_post($post)
+		{
+			$allowed_users = get_post_meta($post->ID, 'wp_juggler_login_users', true); // Retrieve allowed user usernames
+
+			$current_user = wp_get_current_user()->user_login; // Get current user username
+			
+			$allowed_usernames = array_map(function($user_id) {
+				$user_info = get_userdata($user_id);
+				return $user_info ? $user_info->user_login : null;
+			}, $allowed_users);
+
+			if (!is_array($allowed_usernames)) {
+				$allowed_usernames = array(); 
+			}
+
+			return in_array($current_user, $allowed_usernames); // Check if current user is in allowed users
+		}
+
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
 			return;
@@ -128,27 +147,29 @@ class WPJS_AJAX {
 			'post_status' => 'publish',
 			'numberposts' => -1
 		);
-		
+
 		$wpjuggler_sites = get_posts($args);
 		$data = array();
-		
+
 		foreach ($wpjuggler_sites as $site) {
-			$data[] = array(
-				'title' => get_the_title($site->ID),
-				'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false,
-				'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),
-				'wp_juggler_site_activation' => get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false
-			);
+			if (can_user_access_post($site)) {
+				$data[] = array(
+					'title' => get_the_title($site->ID),
+					'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false,
+					'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),
+					'wp_juggler_site_activation' => get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false
+				);
+			}
 		}
 
 		wp_send_json_success($data, 200);
 	}
 
 	public function wpjs_user_search()
-	{	
+	{
 		$nonce = sanitize_text_field($_GET['wp_juggler_server_nonce']);
 
-		wp_verify_nonce( $this->plugin_name , '-user', $nonce);
+		wp_verify_nonce($this->plugin_name, '-user', $nonce);
 
 		// Check for user capabilities
 		if (!current_user_can('edit_posts')) {
@@ -173,5 +194,4 @@ class WPJS_AJAX {
 		}
 		wp_send_json($results);
 	}
-
 }

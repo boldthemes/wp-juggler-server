@@ -57,7 +57,7 @@ onMounted(() => {
 
 <v-card class="pa-4 mr-4">
 
-  <table class="form-table" role="presentation">
+  <table class="form-table wpjs-cp-table" role="presentation">
 
     <tbody v-if="data">
 
@@ -107,4 +107,8 @@ onMounted(() => {
 </v-card>
 </template>
 
-<style></style>
+<style>
+.wpjs-cp-table td{
+   padding: 15px 0px;
+}
+</style>
