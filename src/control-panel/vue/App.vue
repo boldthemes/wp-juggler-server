@@ -15,7 +15,8 @@ const search = ref("")
 const headers = [
   { title: 'Title', value: 'title' },
   { title: 'Site URL', key: 'wp_juggler_server_site_url' },
-  { title: 'Activation Status', key: 'activation' }
+  { title: 'Activation Status', key: 'activation' },
+  { title: 'Actions', key: 'action' }
 ]
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
@@ -51,6 +52,11 @@ async function getDashboard() {
 
 function backToDashboard() {
   window.location.href = wpjs_control_panel_object.adminurl
+}
+
+const gotoLogin = (url) => {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+  if (newWindow) newWindow.opener = null
 }
 
 onMounted(() => {
@@ -89,6 +95,7 @@ onMounted(() => {
 
     <v-divider></v-divider>
     <v-data-table v-model:search="search" :items="data" :headers="headers" item-key="id" show-select>
+
       <template v-slot:item.activation="{ item }">
         <div v-if="!item.wp_juggler_site_activation">
             <v-icon color="error" icon="mdi-alert-outline" size="large"class='rm-4'></v-icon>
@@ -98,6 +105,12 @@ onMounted(() => {
             <v-icon color="success" icon="mdi-check-bold" size="large"class='rm-4'></v-icon>
             Activated
           </div>
+      </template>
+
+      <template v-slot:item.action="{ item }">
+        <div v-if="item.wp_juggler_automatic_login">
+          <v-btn color="#2271b1" variant="flat" class="text-none text-caption" @click="gotoLogin(item.wp_juggler_login_url)">Login</v-btn>
+        </div>
       </template>
 
      

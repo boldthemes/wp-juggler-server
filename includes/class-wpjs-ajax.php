@@ -158,17 +158,19 @@ class WPJS_AJAX
 
 				$automatic_logon = get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 
+				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
+
 				$newsite = array(
 					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
 					'wp_juggler_automatic_login' => $automatic_logon,
-					'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),
+					'wp_juggler_server_site_url' => $site_url,
 					'wp_juggler_site_activation' => $site_activation,
 					'wp_juggler_automatic_login' => false
 				);
 
 				if ($site_activation) {
-					
+
 					$access_token = false;
 					$access_user = get_post_meta($site->ID, 'wp_juggler_login_username', true);
 
@@ -179,7 +181,7 @@ class WPJS_AJAX
 						if ($api_key) {
 							$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
 							$newsite['wp_juggler_automatic_login'] = true;
-							$newsite['wp_juggler_access_token'] = $access_token;
+							$newsite['wp_juggler_login_url'] = WPJS_Service::add_query_var_to_url($site_url, 'wpjs_token', $access_token);
 						}
 					}
 				}

@@ -83,6 +83,16 @@ class WPJS_Service
 		return $token;
 	}
 
+	public static function add_query_var_to_url($url, $key, $value) {
+		$parsed_url = wp_parse_url($url);
+		$query_args = isset($parsed_url['query']) ? wp_parse_args($parsed_url['query']) : array();
+		$query_args[$key] = $value;
+		
+		$new_query_string = build_query($query_args);
+		
+		return untrailingslashit($parsed_url['scheme'] . '://' . $parsed_url['host']) . (isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '') . $parsed_url['path'] . '?' . $new_query_string;
+	}
+
 	static private function get_algorithm()
 	{
 		$supported_algorithms = [

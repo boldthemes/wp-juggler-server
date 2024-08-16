@@ -9113,6 +9113,10 @@ exports.default = {
             {
                 title: "Activation Status",
                 key: "activation"
+            },
+            {
+                title: "Actions",
+                key: "action"
             }
         ];
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
@@ -9145,6 +9149,10 @@ exports.default = {
         function backToDashboard() {
             window.location.href = wpjs_control_panel_object.adminurl;
         }
+        const gotoLogin = (url)=>{
+            const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+            if (newWindow) newWindow.opener = null;
+        };
         (0, _vue.onMounted)(()=>{});
         const __returned__ = {
             queryClient,
@@ -9161,6 +9169,7 @@ exports.default = {
             doAjax,
             getDashboard,
             backToDashboard,
+            gotoLogin,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -14623,6 +14632,9 @@ const _hoisted_1 = {
 const _hoisted_2 = {
     key: 1
 };
+const _hoisted_3 = {
+    key: 0
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
@@ -14705,6 +14717,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     class: "rm-4"
                                                 }),
                                                 (0, _vue.createTextVNode)(" Activated ")
+                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    "item.action": (0, _vue.withCtx)(({ item })=>[
+                                            item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    color: "#2271b1",
+                                                    variant: "flat",
+                                                    class: "text-none text-caption",
+                                                    onClick: ($event)=>$setup.gotoLogin(item.wp_juggler_login_url)
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("Login")
+                                                        ]),
+                                                    _: 2 /* DYNAMIC */ 
+                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                    "onClick"
+                                                ])
                                             ])) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     _: 1 /* STABLE */ 
