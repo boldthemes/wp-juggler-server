@@ -181,7 +181,7 @@ class WPJS_AJAX
 						if ($api_key) {
 							$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
 							$newsite['wp_juggler_automatic_login'] = true;
-							$newsite['wp_juggler_login_url'] = WPJS_Service::add_query_var_to_url($site_url, 'wpjs_token', $access_token);
+							$newsite['wp_juggler_login_url'] = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/' , 'wpjs_token', $access_token);
 						}
 					}
 				}

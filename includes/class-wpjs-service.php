@@ -53,7 +53,7 @@ class WPJS_Service
 		$this->plugin_name = 'wpjs';
 	}
 
-	public static function wpjs_generate_login_token($username, $wpjs_api_key)
+	public static function wpjs_generate_login_token($username, $wpjs_api_key) 
 	{
 
 		$algorithm = WPJS_Service::get_algorithm();
