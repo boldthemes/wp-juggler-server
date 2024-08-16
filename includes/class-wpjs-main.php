@@ -75,11 +75,14 @@ class WP_Juggler_Server {
 	 */
 	private function load_dependencies() {
 
+		require_once WPJS_PATH . 'vendor/autoload.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-wrapper.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-loader.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-i18n.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-admin.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-front-end.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-ajax.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-service.php';
 		
 		$this->loader = new WPJS_Loader();
 	}
@@ -111,6 +114,7 @@ class WP_Juggler_Server {
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
 		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version() );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
+		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
 		
 		/// Register the admin pages and scripts.
 		

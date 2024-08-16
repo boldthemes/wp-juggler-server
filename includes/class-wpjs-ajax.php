@@ -124,14 +124,14 @@ class WPJS_AJAX
 			$allowed_users = get_post_meta($post->ID, 'wp_juggler_login_users', true); // Retrieve allowed user usernames
 
 			$current_user = wp_get_current_user()->user_login; // Get current user username
-			
-			$allowed_usernames = array_map(function($user_id) {
+
+			$allowed_usernames = array_map(function ($user_id) {
 				$user_info = get_userdata($user_id);
 				return $user_info ? $user_info->user_login : null;
 			}, $allowed_users);
 
 			if (!is_array($allowed_usernames)) {
-				$allowed_usernames = array(); 
+				$allowed_usernames = array();
 			}
 
 			return in_array($current_user, $allowed_usernames); // Check if current user is in allowed users
@@ -153,13 +153,38 @@ class WPJS_AJAX
 
 		foreach ($wpjuggler_sites as $site) {
 			if (can_user_access_post($site)) {
-				$data[] = array(
+
+				$site_activation = get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false;
+
+				$automatic_logon = get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false;
+
+				$newsite = array(
 					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
-					'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false,
+					'wp_juggler_automatic_login' => $automatic_logon,
 					'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true),
-					'wp_juggler_site_activation' => get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false
+					'wp_juggler_site_activation' => $site_activation,
+					'wp_juggler_automatic_login' => false
 				);
+
+				if ($site_activation) {
+					
+					$access_token = false;
+					$access_user = get_post_meta($site->ID, 'wp_juggler_login_username', true);
+
+					if ($automatic_logon && $access_user) {
+
+						$api_key = get_post_meta($site->ID, 'wp_juggler_api_key', true);
+
+						if ($api_key) {
+							$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+							$newsite['wp_juggler_automatic_login'] = true;
+							$newsite['wp_juggler_access_token'] = $access_token;
+						}
+					}
+				}
+
+				$data[] = $newsite;
 			}
 		}
 
