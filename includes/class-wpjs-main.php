@@ -83,6 +83,7 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-front-end.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-ajax.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-service.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-cron.php';
 		
 		$this->loader = new WPJS_Loader();
 	}
@@ -115,6 +116,7 @@ class WP_Juggler_Server {
 		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version() );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
 		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
+		$plugin_cron  = new WPJS_Cron( $this->get_plugin_name(), $this->get_version() );
 		
 		/// Register the admin pages and scripts.
 		
@@ -142,6 +144,10 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs_save_settings', $plugin_ajax, 'ajax_save_settings' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs_get_control_panel', $plugin_ajax, 'ajax_get_control_panel' );
+
+		//Cron actions
+		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array('WPJS_Cron_Log', 'create_database_table') );
+		$this->loader->add_filter( 'cron_schedules', $plugin_cron, 'wpjs_add_schedules' );
 
 		//FE actions
 		//$this->loader->add_action( 'init', $plugin_fe, 'wpjs_empty_template' );
