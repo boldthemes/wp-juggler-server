@@ -1,8 +1,5 @@
 <?php
 
-use Tmeister\Firebase\JWT\JWT;
-use Tmeister\Firebase\JWT\Key;
-
 /**
  * AJAX-specific functionality for the plugin.
  *
@@ -39,6 +36,8 @@ class WPJS_Cron
 
 	private $plugin_name;
 
+	private $bg_process;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -51,6 +50,18 @@ class WPJS_Cron
 		$this->wp_juggler_server = $wp_juggler_server;
 		$this->version = $version;
 		$this->plugin_name = 'wpjs';
+		$this->bg_process = new WPJS_Background_Process();
+	
+	}
+
+	public function wpjs_init_scheduler(){
+		add_filter( 'cron_schedules', [$this, 'wpjs_add_schedules'] );
+
+		add_action( 'wpjs_check_client_api', [$this, 'check_client_api'] );
+
+		if ( !wp_next_scheduled( 'wpjs_check_client_api' )) {
+			wp_schedule_event( time(), '5min', 'wpjs_check_client_api' );
+		}
 	}
 
 	public function wpjs_add_schedules($schedules){
@@ -67,87 +78,30 @@ class WPJS_Cron
 			return $schedules;
 	}
 
-	public static function check_client_api( $site_id )
+	public function check_client_api()
 	{
 
-		$response = WPJS_Service::call_client_api( $site_id, 'confirmClientApi', [] );
-
-		if ( is_wp_error($response) ) {
-
-			$log_entry = array(
-				'wpjugglersites_id' => $site_id,
-				'log_type' => 'check_client_api',
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
-			);
+		$args = array(
+			'post_type'  => 'wpjugglersites',
+			'post_status'=> 'publish',
+			'meta_key'   => 'wp_juggler_site_activation',
+			'meta_value' => 'on',
+			'fields'     => 'ids',
+			'numberposts'=> -1
+		);
 		
-		} else {
+		$site_ids = get_posts($args);
 
-			$response_code = wp_remote_retrieve_response_code($response);
-		
-			switch ($response_code) {
-				case 0:
-					
-					$log_entry = array(
-						'wpjugglersites_id' => $site_id,
-						'log_type' => 'check_client_api',
-						'log_result' => 'error',
-						'log_value' =>  'Remote client is unresponsive'
-					);
-
-					break;
-				case 401:
-					
-					$log_entry = array(
-						'wpjugglersites_id' => $site_id,
-						'log_type' => 'check_client_api',
-						'log_result' => 'error',
-						'log_value' =>  '401 - You should check API key'
-					);
-
-					break;
-				case 500:
-
-					$log_entry = array(
-						'wpjugglersites_id' => $site_id,
-						'log_type' => 'check_client_api',
-						'log_result' => 'error',
-						'log_value' =>  '500 - Internal Server Error on remote client'
-					);
-
-					break;
-				default:
-					if ($response_code >= 400) {
-
-						$log_entry = array(
-							'wpjugglersites_id' => $site_id,
-							'log_type' => 'check_client_api',
-							'log_result' => 'error',
-							'log_value' =>  $response_code . ' - Client error occurred'
-						);
-			
-					} elseif ($response_code >= 500) {
-
-						$log_entry = array(
-							'wpjugglersites_id' => $site_id,
-							'log_type' => 'check_client_api',
-							'log_result' => 'error',
-							'log_value' =>  $response_code . ' - Server error occurred'
-						);
-
-					} else {
-
-						$log_entry = array(
-							'wpjugglersites_id' => $site_id,
-							'log_type' => 'check_client_api',
-							'log_result' => 'succ', 
-						);
-					}
-					break;
-			}
+		foreach ( $site_ids as $site_id ) {
+			$this->bg_process->push_to_queue( array(
+				'site_id' => $site_id,
+				'endpoint' => 'confirmClientApi',
+				'data' => []
+			));
 		}
 
-		WPJS_Cron_Log::insert_log($log_entry);
+		$this->bg_process->save()->dispatch();
+
 	}
 }
 

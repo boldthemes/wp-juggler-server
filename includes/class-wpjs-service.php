@@ -122,9 +122,6 @@ class WPJS_Service
 	static function call_client_api( $site_id, $endpoint, $data )
     {
 
-		// wp-json/juggler/v1/
-		// https://wp-juggler-client-ss.local/wp-json/juggler/v1/confirmClientApi
-
 		$api_key = get_post_meta( $site_id, 'wp_juggler_api_key', true );
 		$site_url = get_post_meta( $site_id, 'wp_juggler_server_site_url', true );
 
