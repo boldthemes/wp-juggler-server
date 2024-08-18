@@ -118,5 +118,31 @@ class WPJS_Service
 
 		return $algorithm;
 	}
+
+	static function call_client_api( $site_id, $endpoint, $data )
+    {
+
+		// wp-json/juggler/v1/
+		// https://wp-juggler-client-ss.local/wp-json/juggler/v1/confirmClientApi
+
+		$api_key = get_post_meta( $site_id, 'wp_juggler_api_key', true );
+		$site_url = get_post_meta( $site_id, 'wp_juggler_server_site_url', true );
+
+		if (!$site_url){
+			return false;
+		}
+        
+		$url = rtrim($site_url, '/') . '/wp-json/juggler/v1/' . $endpoint;
+
+        $response = wp_remote_post($url, array(
+            'body'    => json_encode($data),
+            'headers' => array(
+                'Authorization' => 'Bearer ' . $api_key,
+                'Content-type' => 'application/json',
+            ),
+        ));
+
+		return $response;
+    }
 	
 }

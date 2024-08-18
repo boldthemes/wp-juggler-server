@@ -134,11 +134,15 @@ class WPJS_Api
 	{
 
 		$api_key = $this->get_api_key();
+
+		$site_id = $this->get_site_id_by_api_key($api_key);
+
+		WPJS_Cron::check_client_api( $site_id );
 		
 		$data = array( 
-			'user_id' => $this->get_site_id_by_api_key($api_key)
+			'user_id' => $site_id
 		);
-		
+
 		wp_send_json_success($data, 200);
 
 	}

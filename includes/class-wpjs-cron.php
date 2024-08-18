@@ -67,7 +67,88 @@ class WPJS_Cron
 			return $schedules;
 	}
 
-	
+	public static function check_client_api( $site_id )
+	{
+
+		$response = WPJS_Service::call_client_api( $site_id, 'confirmClientApi', [] );
+
+		if ( is_wp_error($response) ) {
+
+			$log_entry = array(
+				'wpjugglersites_id' => $site_id,
+				'log_type' => 'check_client_api',
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+		
+		} else {
+
+			$response_code = wp_remote_retrieve_response_code($response);
+		
+			switch ($response_code) {
+				case 0:
+					
+					$log_entry = array(
+						'wpjugglersites_id' => $site_id,
+						'log_type' => 'check_client_api',
+						'log_result' => 'error',
+						'log_value' =>  'Remote client is unresponsive'
+					);
+
+					break;
+				case 401:
+					
+					$log_entry = array(
+						'wpjugglersites_id' => $site_id,
+						'log_type' => 'check_client_api',
+						'log_result' => 'error',
+						'log_value' =>  '401 - You should check API key'
+					);
+
+					break;
+				case 500:
+
+					$log_entry = array(
+						'wpjugglersites_id' => $site_id,
+						'log_type' => 'check_client_api',
+						'log_result' => 'error',
+						'log_value' =>  '500 - Internal Server Error on remote client'
+					);
+
+					break;
+				default:
+					if ($response_code >= 400) {
+
+						$log_entry = array(
+							'wpjugglersites_id' => $site_id,
+							'log_type' => 'check_client_api',
+							'log_result' => 'error',
+							'log_value' =>  $response_code . ' - Client error occurred'
+						);
+			
+					} elseif ($response_code >= 500) {
+
+						$log_entry = array(
+							'wpjugglersites_id' => $site_id,
+							'log_type' => 'check_client_api',
+							'log_result' => 'error',
+							'log_value' =>  $response_code . ' - Server error occurred'
+						);
+
+					} else {
+
+						$log_entry = array(
+							'wpjugglersites_id' => $site_id,
+							'log_type' => 'check_client_api',
+							'log_result' => 'succ', 
+						);
+					}
+					break;
+			}
+		}
+
+		WPJS_Cron_Log::insert_log($log_entry);
+	}
 }
 
 class WPJS_Cron_Log
@@ -149,7 +230,7 @@ class WPJS_Cron_Log
 			do_action("wpjs/cron_log/" . $event["log_type"], $event);
 		}
 
-		$event_fil = apply_filters("direktt/cron_log/insert", $event);
+		$event_fil = apply_filters("wpjs/cron_log/insert", $event);
 
 		if (array_key_exists('log_data', $event_fil)) {
 			$log_data = json_decode($event_fil["log_data"]);
@@ -160,6 +241,7 @@ class WPJS_Cron_Log
 
 				$log_data = json_encode($log_data_array);
 				$event_fil["log_data"] = $log_data;
+			}
 		}
 
 		$wpdb->insert(
@@ -171,5 +253,5 @@ class WPJS_Cron_Log
 			$wpdb->print_error();
 		endif;
 	}
-	}
+
 }
