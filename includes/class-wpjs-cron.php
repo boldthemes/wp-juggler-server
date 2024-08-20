@@ -70,6 +70,11 @@ class WPJS_Cron
 					'interval' => 5*60,
 					'display' => __('Once every 5 minutes'));
 			}
+			if(!isset($schedules["10min"])){
+				$schedules["10min"] = array(
+					'interval' => 10*60,
+					'display' => __('Once every 10 minutes'));
+			}
 			if(!isset($schedules["30min"])){
 				$schedules["30min"] = array(
 					'interval' => 30*60,

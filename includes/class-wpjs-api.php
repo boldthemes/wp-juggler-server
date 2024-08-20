@@ -61,6 +61,13 @@ class WPJS_Api
 			'args' => array(),
 			'permission_callback' => array($this, 'api_validate_api_key')
 		));
+
+		register_rest_route('juggler/v1', '/activateSite/', array(
+			'methods' => 'POST',
+			'callback' => array($this, 'api_activate_site'),
+			'args' => array(),
+			'permission_callback' => array($this, 'api_validate_api_key')
+		));
 	}
 
 
@@ -140,10 +147,53 @@ class WPJS_Api
 		$this->cron->check_client_api();
 		
 		$data = array( 
-			'user_id' => $site_id
+			'site_id' => $site_id
 		);
 
 		wp_send_json_success($data, 200);
+
+	}
+
+	public function api_activate_site(WP_REST_Request $request)
+	{
+
+		$api_key = $this->get_api_key();
+
+		$site_id = $this->get_site_id_by_api_key($api_key);
+
+		if($site_id){
+			delete_post_meta($site_id, 'wp_juggler_site_activation');
+		}
+
+		$parameters = json_decode($request->get_body(), true);
+
+		if (array_key_exists('site_url', $parameters)) {
+			$site_url = sanitize_text_field($parameters['site_url']);
+		} else {
+			wp_send_json_error(new WP_Error('Missing param', 'Site url is not correct'), 400);
+		}
+
+		$recorded_site_url = get_post_meta($site_id, 'wp_juggler_server_site_url', true);
+
+		if( untrailingslashit($site_url) == untrailingslashit($recorded_site_url) ) {
+
+			$response = WPJS_Service::call_client_api( $site_id, 'confirmClientApi', [] );
+
+			if ( ! is_wp_error($response) ) {
+
+				update_post_meta($site_id, 'wp_juggler_site_activation', 'on');
+				
+				$data = array( 
+					'site_id' => $site_id
+				);
+				wp_send_json_success($data, 200);
+			} else {
+				wp_send_json_error(new WP_Error('No loopback response', 'Something went wrong during callback'), 400);
+			}
+			
+		} else {
+			wp_send_json_error(new WP_Error('Missing param', 'Site url is not correct '), 400);
+		}
 
 	}
 

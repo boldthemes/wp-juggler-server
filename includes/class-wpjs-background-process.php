@@ -34,7 +34,7 @@ class WPJS_Background_Process extends WP_Background_Process
 		
 		$response = WPJS_Service::call_client_api( $site_id, $endpoint, $data );
 
-		if ( is_wp_error($response) ) {
+		if ( is_wp_error( $response ) ) {
 
 			$log_entry = array(
 				'wpjugglersites_id' => $site_id,
@@ -44,6 +44,8 @@ class WPJS_Background_Process extends WP_Background_Process
 			);
 		
 		} else {
+
+			// TODO Will never be called because it gets converted to WP Error in WPJS Service Class
 
 			$response_code = wp_remote_retrieve_response_code($response);
 		
