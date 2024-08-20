@@ -9101,6 +9101,20 @@ exports.default = {
         const store = (0, _storeJs.useWpjsStore)();
         const nonce = (0, _vue.ref)(wpjs_control_panel_object.nonce);
         const search = (0, _vue.ref)("");
+        const menu_items = [
+            {
+                title: "Click Me"
+            },
+            {
+                title: "Click Me"
+            },
+            {
+                title: "Click Me"
+            },
+            {
+                title: "Click Me 2"
+            }
+        ];
         const expanded = (0, _vue.ref)([]);
         const headers = [
             {
@@ -9198,6 +9212,7 @@ exports.default = {
             store,
             nonce,
             search,
+            menu_items,
             expanded,
             headers,
             isLoading,
@@ -14700,22 +14715,48 @@ const _hoisted_11 = [
     "colspan"
 ];
 const _hoisted_12 = {
-    class: "text-h5 font-weight-bold"
+    class: "text-h5 font-weight-bold mt-5 mb-3"
 };
 const _hoisted_13 = {
-    class: "text-h6 text-medium-emphasis font-weight-regular"
+    class: "text-h6 text-medium-emphasis font-weight-regular mb-5"
 };
-const _hoisted_14 = /*#__PURE__*/ (0, _vue.createElementVNode)("br", null, null, -1 /* HOISTED */ );
-const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "d-flex justify-space-between py-3"
-}, [
-    /*#__PURE__*/ (0, _vue.createElementVNode)("span", {
-        class: "text-green-darken-3 font-weight-medium"
-    }, " $26,442.00 remitted "),
-    /*#__PURE__*/ (0, _vue.createElementVNode)("span", {
-        class: "text-medium-emphasis"
-    }, " $29,380.00 total ")
-], -1 /* HOISTED */ );
+const _hoisted_14 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of recommended improvements", -1 /* HOISTED */ );
+const _hoisted_15 = {
+    class: "d-flex py-3 justify-space-between"
+};
+const _hoisted_16 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "WordPress version: 6.31", -1 /* HOISTED */ );
+const _hoisted_17 = {
+    class: "d-flex py-3 justify-space-between pb-0"
+};
+const _hoisted_18 = {
+    class: "mr-5"
+};
+const _hoisted_19 = {
+    class: "d-flex py-3 justify-space-between"
+};
+const _hoisted_20 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed frontend checks", -1 /* HOISTED */ );
+const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed API checks", -1 /* HOISTED */ );
+const _hoisted_22 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Uptime percetige: 99.54%", -1 /* HOISTED */ );
+const _hoisted_23 = {
+    class: "d-flex py-3 justify-space-between pt-0"
+};
+const _hoisted_24 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Theme updates available", -1 /* HOISTED */ );
+const _hoisted_25 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Plugin updates available", -1 /* HOISTED */ );
+const _hoisted_26 = {
+    class: "d-flex py-3 justify-space-between pt-0"
+};
+const _hoisted_27 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Recorded vulnerabilities: No", -1 /* HOISTED */ );
+const _hoisted_28 = {
+    class: "d-flex py-3 justify-space-between pb-0"
+};
+const _hoisted_29 = {
+    class: "mr-5"
+};
+const _hoisted_30 = {
+    class: "d-flex py-3 justify-space-between"
+};
+const _hoisted_31 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of messages", -1 /* HOISTED */ );
+const _hoisted_32 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Last message: 9 hours ago", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
@@ -14723,11 +14764,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
     const _component_v_card_title = (0, _vue.resolveComponent)("v-card-title");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
-    const _component_v_badge = (0, _vue.resolveComponent)("v-badge");
-    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    const _component_v_card_item = (0, _vue.resolveComponent)("v-card-item");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
-    const _component_v_list_item = (0, _vue.resolveComponent)("v-list-item");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_list_item_title = (0, _vue.resolveComponent)("v-list-item-title");
+    const _component_v_list_item = (0, _vue.resolveComponent)("v-list-item");
+    const _component_v_list = (0, _vue.resolveComponent)("v-list");
+    const _component_v_menu = (0, _vue.resolveComponent)("v-menu");
     const _component_v_container = (0, _vue.resolveComponent)("v-container");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
@@ -14934,62 +14979,390 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 }, [
                                                     (0, _vue.createVNode)(_component_v_container, null, {
                                                         default: (0, _vue.withCtx)(()=>[
-                                                                (0, _vue.createVNode)(_component_v_card, null, {
+                                                                (0, _vue.createElementVNode)("div", _hoisted_12, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ ),
+                                                                (0, _vue.createElementVNode)("div", _hoisted_13, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        color: "#2196f3",
+                                                                        icon: "mdi-checkbox-multiple-blank-outline",
+                                                                        size: "large",
+                                                                        class: "rm-4 mr-4"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.wp_juggler_server_site_url), 1 /* TEXT */ )
+                                                                ]),
+                                                                (0, _vue.createVNode)(_component_v_row, {
+                                                                    class: "mb-4"
+                                                                }, {
                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                            (0, _vue.createVNode)(_component_v_card_title, {
-                                                                                class: "text-overline"
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                cols: "12",
+                                                                                md: "3"
                                                                             }, {
                                                                                 default: (0, _vue.withCtx)(()=>[
-                                                                                        (0, _vue.createElementVNode)("div", _hoisted_12, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ ),
-                                                                                        (0, _vue.createElementVNode)("div", _hoisted_13, [
-                                                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                color: "#2196f3",
-                                                                                                icon: "mdi-checkbox-multiple-blank-outline",
-                                                                                                size: "large",
-                                                                                                class: "rm-4 mr-4"
-                                                                                            }),
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.wp_juggler_server_site_url), 1 /* TEXT */ )
-                                                                                        ])
-                                                                                    ]),
-                                                                                _: 2 /* DYNAMIC */ 
-                                                                            }, 1024 /* DYNAMIC_SLOTS */ ),
-                                                                            _hoisted_14,
-                                                                            (0, _vue.createVNode)(_component_v_card_text, null, {
-                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                        (0, _vue.createElementVNode)("div", {
-                                                                                            style: (0, _vue.normalizeStyle)(`right: calc(${_ctx.review} - 32px)`),
-                                                                                            class: "position-absolute mt-n8 text-caption text-green-darken-3"
-                                                                                        }, " Eligibility review ", 4 /* STYLE */ ),
-                                                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
-                                                                                            color: "green-darken-3",
-                                                                                            height: "22",
-                                                                                            "model-value": "90",
-                                                                                            rounded: "lg"
-                                                                                        }, {
+                                                                                        (0, _vue.createVNode)(_component_v_card, null, {
                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                    (0, _vue.createVNode)(_component_v_badge, {
-                                                                                                        style: (0, _vue.normalizeStyle)(`right: ${_ctx.review}`),
-                                                                                                        class: "position-absolute",
-                                                                                                        color: "white",
-                                                                                                        dot: "",
-                                                                                                        inline: ""
-                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                        "style"
-                                                                                                    ])
+                                                                                                    (0, _vue.createVNode)(_component_v_card_item, {
+                                                                                                        title: "Site Health"
+                                                                                                    }, {
+                                                                                                        subtitle: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                    class: "me-1 pb-1",
+                                                                                                                    icon: "mdi-refresh",
+                                                                                                                    size: "18"
+                                                                                                                }),
+                                                                                                                (0, _vue.createTextVNode)(" 12 hours ago ")
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                                                                        class: "text-medium-emphasis"
+                                                                                                    }, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                _hoisted_14,
+                                                                                                                (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                    align: "center",
+                                                                                                                    "no-gutters": ""
+                                                                                                                }, {
+                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                class: "text-h2",
+                                                                                                                                cols: "12"
+                                                                                                                            }, {
+                                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                                        (0, _vue.createTextVNode)(" 0 ")
+                                                                                                                                    ]),
+                                                                                                                                _: 1 /* STABLE */ 
+                                                                                                                            })
+                                                                                                                        ]),
+                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                }),
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_15, [
+                                                                                                                    _hoisted_16,
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        (0, _vue.createTextVNode)("Checksum "),
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                            size: "large",
+                                                                                                                            class: "rm-4"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" 12 hours ago")
+                                                                                                                    ])
+                                                                                                                ])
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                        text: "Full Report",
+                                                                                                        "append-icon": "mdi-chevron-right",
+                                                                                                        class: "mb-5 ml-5"
+                                                                                                    })
                                                                                                 ]),
                                                                                             _: 1 /* STABLE */ 
-                                                                                        }),
-                                                                                        _hoisted_15
+                                                                                        })
                                                                                     ]),
                                                                                 _: 1 /* STABLE */ 
                                                                             }),
-                                                                            (0, _vue.createVNode)(_component_v_divider),
-                                                                            (0, _vue.createVNode)(_component_v_list_item, {
-                                                                                "append-icon": "mdi-chevron-right",
-                                                                                lines: "two",
-                                                                                subtitle: "Details and agreement",
-                                                                                link: ""
-                                                                            })
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                cols: "12",
+                                                                                md: "3"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_17, [
+                                                                                                        (0, _vue.createVNode)(_component_v_card_item, {
+                                                                                                            title: "Uptime Cron"
+                                                                                                        }),
+                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_18, [
+                                                                                                            (0, _vue.createVNode)(_component_v_menu, {
+                                                                                                                "open-on-hover": ""
+                                                                                                            }, {
+                                                                                                                activator: (0, _vue.withCtx)(({ props })=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, (0, _vue.mergeProps)(props, {
+                                                                                                                            class: "text-none text-caption"
+                                                                                                                        }), {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)(" Last 24 hours ")
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1040 /* FULL_PROPS, DYNAMIC_SLOTS */ )
+                                                                                                                    ]),
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_list, null, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.menu_items, (item, index)=>{
+                                                                                                                                        return (0, _vue.createVNode)(_component_v_list_item, {
+                                                                                                                                            key: index
+                                                                                                                                        }, {
+                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                    (0, _vue.createVNode)(_component_v_list_item_title, null, {
+                                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+                                                                                                                                                            ]),
+                                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                                ]),
+                                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                    }), 64 /* STABLE_FRAGMENT */ ))
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                    ]),
+                                                                                                                _: 2 /* DYNAMIC */ 
+                                                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                        ])
+                                                                                                    ]),
+                                                                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                                                                        class: "text-medium-emphasis pt-0"
+                                                                                                    }, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_19, [
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        _hoisted_20,
+                                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                            align: "center",
+                                                                                                                            "no-gutters": ""
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                        class: "text-h2",
+                                                                                                                                        cols: "12"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)(" 12 ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                                    })
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        })
+                                                                                                                    ]),
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        _hoisted_21,
+                                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                            align: "center",
+                                                                                                                            "no-gutters": ""
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                        class: "text-h2",
+                                                                                                                                        cols: "12"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)(" 21 ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                                    })
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        })
+                                                                                                                    ])
+                                                                                                                ]),
+                                                                                                                _hoisted_22
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                        text: "Full Report",
+                                                                                                        "append-icon": "mdi-chevron-right",
+                                                                                                        class: "mb-5 ml-5 mt-4"
+                                                                                                    })
+                                                                                                ]),
+                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                cols: "12",
+                                                                                md: "3"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createVNode)(_component_v_card_item, {
+                                                                                                        title: "Themes & Plugins"
+                                                                                                    }, {
+                                                                                                        subtitle: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                    class: "me-1 pb-1",
+                                                                                                                    icon: "mdi-refresh",
+                                                                                                                    size: "18"
+                                                                                                                }),
+                                                                                                                (0, _vue.createTextVNode)(" 12 hours ago ")
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                                                                        class: "text-medium-emphasis"
+                                                                                                    }, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_23, [
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        _hoisted_24,
+                                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                            align: "center",
+                                                                                                                            "no-gutters": ""
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                        class: "text-h2",
+                                                                                                                                        cols: "12"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)(" 3 ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                                    })
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        })
+                                                                                                                    ]),
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        _hoisted_25,
+                                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                            align: "center",
+                                                                                                                            "no-gutters": ""
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                        class: "text-h2",
+                                                                                                                                        cols: "12"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)(" 21 ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                                    })
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        })
+                                                                                                                    ])
+                                                                                                                ]),
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_26, [
+                                                                                                                    _hoisted_27,
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        (0, _vue.createTextVNode)("Checksum "),
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                            size: "large",
+                                                                                                                            class: "rm-4"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" 12 hours ago")
+                                                                                                                    ])
+                                                                                                                ])
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                        text: "Manage Themes & Plugins",
+                                                                                                        "append-icon": "mdi-chevron-right",
+                                                                                                        class: "mb-5 ml-5"
+                                                                                                    })
+                                                                                                ]),
+                                                                                            _: 1 /* STABLE */ 
+                                                                                        })
+                                                                                    ]),
+                                                                                _: 1 /* STABLE */ 
+                                                                            }),
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                cols: "12",
+                                                                                md: "3"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_28, [
+                                                                                                        (0, _vue.createVNode)(_component_v_card_item, {
+                                                                                                            title: "Messages"
+                                                                                                        }),
+                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_29, [
+                                                                                                            (0, _vue.createVNode)(_component_v_menu, {
+                                                                                                                "open-on-hover": ""
+                                                                                                            }, {
+                                                                                                                activator: (0, _vue.withCtx)(({ props })=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, (0, _vue.mergeProps)(props, {
+                                                                                                                            class: "text-none text-caption"
+                                                                                                                        }), {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)(" Last 24 hours ")
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1040 /* FULL_PROPS, DYNAMIC_SLOTS */ )
+                                                                                                                    ]),
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_list, null, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.menu_items, (item, index)=>{
+                                                                                                                                        return (0, _vue.createVNode)(_component_v_list_item, {
+                                                                                                                                            key: index
+                                                                                                                                        }, {
+                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                    (0, _vue.createVNode)(_component_v_list_item_title, null, {
+                                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+                                                                                                                                                            ]),
+                                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                                ]),
+                                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                    }), 64 /* STABLE_FRAGMENT */ ))
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                    ]),
+                                                                                                                _: 2 /* DYNAMIC */ 
+                                                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                        ])
+                                                                                                    ]),
+                                                                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                                                                        class: "text-medium-emphasis pt-0"
+                                                                                                    }, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_30, [
+                                                                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                                                                        _hoisted_31,
+                                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                            align: "center",
+                                                                                                                            "no-gutters": ""
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                        class: "text-h2",
+                                                                                                                                        cols: "12"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)(" 12 ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                                    })
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        })
+                                                                                                                    ])
+                                                                                                                ]),
+                                                                                                                _hoisted_32
+                                                                                                            ]),
+                                                                                                        _: 1 /* STABLE */ 
+                                                                                                    }),
+                                                                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                        text: "All Messages",
+                                                                                                        "append-icon": "mdi-chevron-right",
+                                                                                                        class: "mb-5 ml-5 mt-4"
+                                                                                                    })
+                                                                                                ]),
+                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
                                                                         ]),
                                                                     _: 2 /* DYNAMIC */ 
                                                                 }, 1024 /* DYNAMIC_SLOTS */ )
