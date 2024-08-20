@@ -59,24 +59,51 @@ class WPJS_Cron
 
 		add_action( 'wpjs_check_client_api', [$this, 'check_client_api'] );
 
+		//uptime scheduler
+
+		$wpjs_uptime_cron_interval = get_option('wpjs_uptime_cron_interval');
+		$wpjs_uptime_cron_interval_chk = $wpjs_uptime_cron_interval ? esc_attr($wpjs_uptime_cron_interval) : 'wpjs_5min';
+
+		$this->unschedule_specific_cron_events('wpjs_check_client_api', $wpjs_uptime_cron_interval_chk );
+
 		if ( !wp_next_scheduled( 'wpjs_check_client_api' )) {
-			wp_schedule_event( time(), '5min', 'wpjs_check_client_api' );
+			wp_schedule_event( time(), $wpjs_uptime_cron_interval_chk, 'wpjs_check_client_api' );
+		}
+	}
+
+	private function unschedule_specific_cron_events($hook_name, $interval) {
+		$crons = _get_cron_array();
+		if ( empty( $crons ) ) {
+			return;
+		}
+	
+		$timestamp = time();
+		
+		foreach ( $crons as $time => $cron ) {
+			if ( isset( $cron[$hook_name] ) && is_array( $cron[$hook_name] ) ) {
+				foreach ( $cron[$hook_name] as $hook => $event_data ) {
+					if ( isset( $event_data['schedule'] ) && $event_data['schedule'] !== $interval ) {
+						$tr = 5;
+						wp_unschedule_event( $time, $hook_name, $event_data['args'] );
+					}
+				}
+			}
 		}
 	}
 
 	public function wpjs_add_schedules($schedules){
-			if(!isset($schedules["5min"])){
-				$schedules["5min"] = array(
+			if(!isset($schedules["wpjs_5min"])){
+				$schedules["wpjs_5min"] = array(
 					'interval' => 5*60,
 					'display' => __('Once every 5 minutes'));
 			}
-			if(!isset($schedules["10min"])){
-				$schedules["10min"] = array(
+			if(!isset($schedules["wpjs_10min"])){
+				$schedules["wpjs_10min"] = array(
 					'interval' => 10*60,
 					'display' => __('Once every 10 minutes'));
 			}
-			if(!isset($schedules["30min"])){
-				$schedules["30min"] = array(
+			if(!isset($schedules["wpjs_30min"])){
+				$schedules["wpjs_30min"] = array(
 					'interval' => 30*60,
 					'display' => __('Once every 30 minutes'));
 			}

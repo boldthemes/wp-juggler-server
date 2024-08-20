@@ -11,6 +11,11 @@ const store = useWpjsStore()
 const nonce = ref(wpjs_settings_object.nonce)
 
 const wpjs_cp_slug = ref('')
+const wpjs_uptime_cron_interval = ref('')
+const wpjs_health_cron_interval = ref('')
+const wpjs_plugins_cron_interval = ref('')
+const wpjs_checksum_cron_interval = ref('')
+
 const save_loading = ref(false)
 
 const snackbar = ref(false)
@@ -70,6 +75,10 @@ async function getSettings() {
   ret = response.data
 
   wpjs_cp_slug.value = response.data.wpjs_cp_slug
+  wpjs_uptime_cron_interval.value = response.data.wpjs_uptime_cron_interval
+  wpjs_health_cron_interval.value = response.data.wpjs_health_cron_interval
+  wpjs_plugins_cron_interval.value = response.data.wpjs_plugins_cron_interval
+  wpjs_checksum_cron_interval.value = response.data.wpjs_checksum_cron_interval
 
   return ret
 }
@@ -78,7 +87,12 @@ function clickSaveSettings() {
   save_loading.value = true
   mutation.mutate({
     wpjs_cp_slug: wpjs_cp_slug.value,
+    wpjs_uptime_cron_interval: wpjs_uptime_cron_interval.value,
+    wpjs_health_cron_interval: wpjs_health_cron_interval.value,
+    wpjs_plugins_cron_interval: wpjs_plugins_cron_interval.value,
+    wpjs_checksum_cron_interval: wpjs_checksum_cron_interval.value
   })
+
 }
 
 async function saveSettings(obj) {
@@ -101,9 +115,53 @@ async function saveSettings(obj) {
 
       <tbody v-if="data">
         <tr>
-          <th scope="row"><label for="blogname">Page Slug of Control Panel</label></th>
+          <th scope="row"><label for="wpjscpslug">Page Slug of Control Panel</label></th>
           <td>
             <input type="text" name="wpjscpslug" id="wpjscpslug" size="50" placeholder="" v-model="wpjs_cp_slug">
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><label for="wpjs_uptime_cron_interval">Uptime Cron Interval</label></th>
+          <td>
+            <select name="wpjs_uptime_cron_interval" id="wpjs_uptime_cron_interval" v-model="wpjs_uptime_cron_interval" >
+              <option value="wpjs_5min">Once every 5 minutes</option>
+              <option value="wpjs_10min">Once every 10 minutes</option>
+              <option value="wpjs_30min">Once every 30 minutes</option>
+              <option value="hourly">Once Hourly</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row"><label for="wpjs_health_cron_interval">Site Health Cron Interval</label></th>
+          <td>
+            <select name="wpjs_health_cron_interval" id="wpjs_health_cron_interval" v-model="wpjs_health_cron_interval" >
+              <option value="twicedaily">Twice Daily</option>
+              <option value="daily">Once Daily</option>
+              <option value="weekly">Once Weekly</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row"><label for="wpjs_plugins_cron_interval">Plugins and Themes Cron Interval</label></th>
+          <td>
+            <select name="wpjs_plugins_cron_interval" id="wpjs_plugins_cron_interval" v-model="wpjs_plugins_cron_interval" >
+              <option value="twicedaily">Twice Daily</option>
+              <option value="daily">Once Daily</option>
+              <option value="weekly">Once Weekly</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row"><label for="wpjs_checksum_cron_interval">Checksum Cron Interval</label></th>
+          <td>
+            <select name="wpjs_checksum_cron_interval" id="wpjs_checksum_cron_interval" v-model="wpjs_checksum_cron_interval" >
+              <option value="twicedaily">Twice Daily</option>
+              <option value="daily">Once Daily</option>
+              <option value="weekly">Once Weekly</option>
+            </select>
           </td>
         </tr>
 
@@ -131,4 +189,10 @@ async function saveSettings(obj) {
   </v-card>
 </template>
 
-<style></style>
+<style>
+
+select {
+  border-style: solid !important;
+}
+
+</style>
