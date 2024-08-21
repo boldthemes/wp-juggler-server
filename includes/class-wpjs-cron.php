@@ -125,11 +125,24 @@ class WPJS_Cron
 		$site_ids = get_posts($args);
 
 		foreach ( $site_ids as $site_id ) {
+			
 			$this->bg_process->push_to_queue( array(
 				'site_id' => $site_id,
 				'endpoint' => 'confirmClientApi',
 				'data' => []
 			));
+
+			$data = [
+				'frontend_ping_url' => get_post_meta($site_id, 'wp_juggler_frontend_ping_url', true),
+				'frontend_ping_string' => get_post_meta($site_id, 'wp_juggler_frontend_ping_string', true)
+			];
+
+			$this->bg_process->push_to_queue( array(
+				'site_id' => $site_id,
+				'endpoint' => 'confirmFrontEnd',
+				'data' => $data
+			));
+
 		}
 
 		$this->bg_process->save()->dispatch();

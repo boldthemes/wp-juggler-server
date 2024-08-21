@@ -320,7 +320,8 @@ class WPJS_Admin
 		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
 		$login_username = get_post_meta($post->ID, 'wp_juggler_login_username', true);
 		$activation_status = get_post_meta($post->ID, 'wp_juggler_site_activation', true);
-
+		$frontend_ping_url = get_post_meta($post->ID, 'wp_juggler_frontend_ping_url', true);
+		$frontend_ping_string = get_post_meta($post->ID, 'wp_juggler_frontend_ping_string', true);
 	?>
 
 		<p>
@@ -346,6 +347,14 @@ class WPJS_Admin
 		<p>
 			<label for="wp_juggler_site_activation">Activation Status</label><br>
 			<input type="checkbox" name="wp_juggler_site_activation" id="wp_juggler_site_activation" <?php checked($activation_status, 'on'); ?> />
+		</p>
+		<p>
+			<label for="wp_juggler_frontend_ping_url">Frontend url to ping (if any) - by default frontpage will be used</label><br>
+			<input type="text" name="wp_juggler_frontend_ping_url" id="wp_juggler_frontend_ping_url" value="<?php echo esc_attr($frontend_ping_url); ?>" size="60" />
+		</p>
+		<p>
+			<label for="wp_juggler_frontend_ping_string">String to look for on the page(if any) - by default only response code will be checked (200 or 201)</label><br>
+			<input type="text" name="wp_juggler_frontend_ping_string" id="wp_juggler_frontend_ping_string" value="<?php echo esc_attr($frontend_ping_string); ?>" size="60" />
 		</p>
 
 		<style>
@@ -503,6 +512,14 @@ class WPJS_Admin
 
 		$activation_status = isset($_POST['wp_juggler_site_activation']) ? 'on' : 'off';
 		update_post_meta($post_id, 'wp_juggler_site_activation', $activation_status);
+
+		if (isset($_POST['wp_juggler_frontend_ping_url'])) {
+			update_post_meta($post_id, 'wp_juggler_frontend_ping_url', sanitize_text_field($_POST['wp_juggler_frontend_ping_url']));
+		}
+
+		if (isset($_POST['wp_juggler_frontend_ping_string'])) {
+			update_post_meta($post_id, 'wp_juggler_frontend_ping_string', sanitize_text_field($_POST['wp_juggler_frontend_ping_string']));
+		}
 
 		$users = array();
 		if (isset($_POST['juggler_users'])) {
