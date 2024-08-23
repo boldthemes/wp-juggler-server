@@ -603,14 +603,14 @@ jQuery(document).ready(function($) {
             var attachment = file_frame.state().get("selection").first().toJSON();
             console.log(attachment);
             $("#wp_juggler_plugin_download_file").val(attachment.id);
-            $("#wp_juggler_plugin_download_file-preview").text(attachment.url);
+            $("#wp_juggler_plugin_download_file-preview").val(attachment.url);
         });
         file_frame.open();
     });
     $("#remove-wp_juggler_plugin_download_file-button").on("click", function(e) {
         e.preventDefault();
         $("#wp_juggler_plugin_download_file").val("");
-        $("#wp_juggler_plugin_download_file-preview").text("");
+        $("#wp_juggler_plugin_download_file-preview").val("");
     });
 });
 

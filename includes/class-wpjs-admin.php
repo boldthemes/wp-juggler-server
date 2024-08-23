@@ -484,7 +484,7 @@ class WPJS_Admin
 	<p>
 		<input type="hidden" id="wp_juggler_plugin_download_file" name="cwp_juggler_plugin_download_file" value="<?php echo esc_attr($wp_juggler_plugin_download_file); ?>" />
 		<label for="wp_juggler_plugin_download_file-preview">Plugin Package Url:</label><br>
-		<label id="wp_juggler_plugin_download_file-preview"><?php echo esc_attr($image_url); ?></label>
+		<input type="text" id="wp_juggler_plugin_download_file-preview" value="<?php echo esc_attr($image_url); ?>" size="120" readonly/>
 		<br>
 		<p>
 			<button type="button" class="button" id="upload-wp_juggler_plugin_download_file-button"><?php _e('Choose Plugin Package'); ?></button>
