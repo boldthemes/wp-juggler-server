@@ -31,7 +31,7 @@ class WPJS_Background_Process extends WP_Background_Process
 	protected function task($item)
 	{
 
-		$site_id = $item['site_id'];
+		$site_id = $item['siteId'];
 		$endpoint = $item['endpoint'];
 		$data = $item['data'];
 
@@ -116,7 +116,7 @@ class WPJS_Background_Process extends WP_Background_Process
 			WPJS_Cron_Log::insert_log($log_entry);
 		}
 
-		if ( $endpoint == 'confirmFrontEnd' ) {
+		if ($endpoint == 'confirmFrontEnd') {
 
 			$frontend_ping_url = get_post_meta($site_id, 'wp_juggler_frontend_ping_url', true);
 			$frontend_ping_string = get_post_meta($site_id, 'wp_juggler_frontend_ping_string', true);
@@ -124,20 +124,19 @@ class WPJS_Background_Process extends WP_Background_Process
 
 			$url_final = $frontend_ping_string ? $frontend_ping_url : $site_url;
 
-			if( $frontend_ping_string && preg_replace('/\s+/', ' ', $frontend_ping_string) == '') {
+			if ($frontend_ping_string && preg_replace('/\s+/', ' ', $frontend_ping_string) == '') {
 				$frontend_ping_string = false;
 			}
 
 			$front_end_check = WPJS_Service::check_front_end($url_final, $site_url, $frontend_ping_string);
 
-			if (!is_wp_error($front_end_check)){
+			if (!is_wp_error($front_end_check)) {
 
 				$log_entry = array(
 					'wpjugglersites_id' => $site_id,
 					'log_type' => $endpoint,
 					'log_result' => 'succ',
 				);
-
 			} else {
 
 				$log_entry = array(
@@ -146,10 +145,85 @@ class WPJS_Background_Process extends WP_Background_Process
 					'log_result' => 'error',
 					'log_value' =>  $front_end_check->get_error_message()
 				);
-
 			}
 
 			WPJS_Cron_Log::insert_log($log_entry);
+		}
+
+		if ($endpoint == 'initiateTask') {
+
+			$log_entry = array(
+				'wpjugglersites_id' => $site_id,
+				'log_type' => $data['taskType'],
+				'log_result' => 'init'
+			);
+
+			$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+			$data['taskId'] = $task_id;
+
+			$response = WPJS_Service::call_client_api($site_id, $endpoint, $data);
+
+			if (is_wp_error($response)) {
+
+				$log_entry = array(
+					'ID' => $task_id,
+					'log_result' => 'fail',
+					'log_value' =>  $response->get_error_message()
+				);
+
+				$task_id = WPJS_Cron_Log::update_log($log_entry);
+			} else {
+
+				$body = json_decode(wp_remote_retrieve_body($response), true);
+
+				$log_entry = array(
+					'ID' => $task_id,
+					'log_result' => 'succ',
+					'log_value' =>  null,
+					'log_data' => json_encode($body['data'])
+				);
+
+				WPJS_Cron_Log::update_log($log_entry);
+			}
+		}
+
+		if ($endpoint == 'checkNotices') {
+
+			$log_entry = array(
+				'wpjugglersites_id' => $site_id,
+				'log_type' => $data['taskType'],
+				'log_result' => 'init'
+			);
+
+			$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+			$data['taskId'] = $task_id;
+
+			$response = WPJS_Service::call_client_api($site_id, $endpoint, $data);
+
+			if (is_wp_error($response)) {
+
+				$log_entry = array(
+					'ID' => $task_id,
+					'log_result' => 'fail',
+					'log_value' =>  $response->get_error_message()
+				);
+
+				$task_id = WPJS_Cron_Log::update_log($log_entry);
+			} else {
+
+				$body = json_decode(wp_remote_retrieve_body($response), true);
+
+				$log_entry = array(
+					'ID' => $task_id,
+					'log_result' => 'succ',
+					'log_value' =>  null,
+					'log_data' => json_encode($body['data'])
+				);
+
+				WPJS_Cron_Log::update_log($log_entry);
+			}
 		}
 
 		return false;
