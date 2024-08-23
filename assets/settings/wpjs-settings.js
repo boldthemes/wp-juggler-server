@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"39gkB":[function(require,module,exports) {
+})({"evAhb":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = 64402;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 var HMR_USE_SSE = false;
@@ -9086,7 +9086,7 @@ if (module.hot) {
 }
 exports.default = script;
 
-},{"fef1edb44e9bef6e":"9yRQ2","d67781b899302b52":"cEn5A","3235f48c4ee83f84":"h0ZYD","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","11bfba56d589d64e":"05bpx"}],"9yRQ2":[function(require,module,exports) {
+},{"fef1edb44e9bef6e":"9yRQ2","d67781b899302b52":"cEn5A","11bfba56d589d64e":"05bpx","3235f48c4ee83f84":"h0ZYD","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9yRQ2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _storeJs = require("./store.js");
@@ -14923,13 +14923,13 @@ if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("33a54c-hmr", render);
 });
 
-},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"h0ZYD":[function(require,module,exports) {
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"05bpx":[function() {},{}],"h0ZYD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"05bpx":[function() {},{}],"gcA1H":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"gcA1H":[function(require,module,exports) {
 // Composables
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -47592,6 +47592,6 @@ function findComponentParent(vnode, root) {
     return root;
 }
 
-},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["39gkB","8mXeq"], "8mXeq", "parcelRequire94c2")
+},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["evAhb","8mXeq"], "8mXeq", "parcelRequire94c2")
 
 //# sourceMappingURL=wpjs-settings.js.map

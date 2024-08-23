@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"g69iU":[function(require,module,exports) {
+})({"1H7xV":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = 64402;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 var HMR_USE_SSE = false;
@@ -48071,6 +48071,6 @@ function findComponentParent(vnode, root) {
     return root;
 }
 
-},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["g69iU","4XJl0"], "4XJl0", "parcelRequire94c2")
+},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["1H7xV","4XJl0"], "4XJl0", "parcelRequire94c2")
 
 //# sourceMappingURL=wpjs-control-panel.js.map

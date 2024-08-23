@@ -61,6 +61,9 @@ class WPJS_Admin
 	 */
 	public function enqueue_plugin_assets($suffix)
 	{
+		global $pagenow;
+		global $typenow;
+
 		if (str_ends_with($suffix, 'wpjs-dashboard')) {
 			wp_enqueue_script(
 				$this->plugin_name . '-dashboard',
@@ -153,6 +156,18 @@ class WPJS_Admin
 				)
 			);
 		}
+
+		if (in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) && 'wpjugglerplugins' == $typenow){
+			wp_enqueue_media();
+			wp_enqueue_script(
+				$this->plugin_name . '-cpt',
+				plugin_dir_url(__DIR__) . 'assets/cpt/wpjs-cpt.js',
+				array('jquery'),
+				null,
+				true
+			);
+		}
+
 	}
 
 	public function register_menu_page()
@@ -249,6 +264,48 @@ class WPJS_Admin
 		);
 
 		register_post_type('wpjugglersites', $args);
+
+		$labels = array(
+			'name'                => __('Plugins', 'wp-juggler-server'),
+			'singular_name'       => __('Plugin',  'wp-juggler-server'),
+			'menu_name'           => __('WP Juggler', 'wp-juggler-server'),
+			'all_items'           => __('Plugins', 'wp-juggler-server'),
+			'view_item'           => __('View Plugin', 'wp-juggler-server'),
+			'add_new_item'        => __('Add New Plugin', 'wp-juggler-server'),
+			'add_new'             => __('Add New', 'wp-juggler-server'),
+			'edit_item'           => __('Edit Plugin', 'wp-juggler-server'),
+			'update_item'         => __('Update Plugin', 'wp-juggler-server'),
+			'search_items'        => __('Search Plugins', 'wp-juggler-server'),
+			'not_found'           => __('Not Found', 'wp-juggler-server'),
+			'not_found_in_trash'  => __('Not found in Trash', 'wp-juggler-server'),
+		);
+
+		$args = array(
+			'label'               => __('plugins', 'wp-juggler-server'),
+			'description'         => __('Plugins', 'wp-juggler-server'),
+			'labels'              => $labels,
+			'supports'            => array('title'),
+			'hierarchical'        => false,
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => 'wpjs-dashboard',
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'menu_position'       => 5,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => false,
+			'publicly_queryable'  => false,
+			'capability_type'     => 'post',
+			'capabilities'          => array(
+				// todo Srediti prava za new i edit ako ikako moze, ako ne, ostaviti new
+				//'create_posts' => 'do_not_allow', 
+				//'edit_posts' => 'allow' 
+			),
+			'show_in_rest'	=> false,
+		);
+
+		register_post_type('wpjugglerplugins', $args);
 	}
 
 	public function render_admin_page()
@@ -290,6 +347,40 @@ class WPJS_Admin
 		);
 	}
 
+	public function wpjs_plugins_metaboxes()
+	{
+		add_meta_box(
+			'wpjs_plugin_details',
+			__('Plugin Details', 'wp-juggler-server'),
+			array($this, 'render_juggler_plugins_meta_box'),
+			'wpjugglerplugins',
+			'normal',
+			'high'
+		);
+
+		remove_meta_box('submitdiv', 'wpjugglerplugins', 'side');
+
+		add_meta_box(
+			'submitdiv',
+			__('Save', 'wp-juggler-server'),
+			array($this, 'render_juggler_sites_publish_meta_box'),
+			'wpjugglerplugins',
+			'side',
+			'high'
+		);
+
+
+
+		/* add_meta_box(
+			'wpjs_users', // ID
+			__('Assign Users', 'wp-juggler-server'), // Title
+			array($this, 'render_juggler_users_meta_box'),
+			'wpjugglersites', // Post type
+			'normal', // Context
+			'low' // Priority
+		); */
+	}
+
 	function cp_hide_admin_menus($context)
 	{
 
@@ -314,7 +405,7 @@ class WPJS_Admin
 
 	public function render_juggler_sites_meta_box($post)
 	{
-		wp_nonce_field($this->plugin_name . '-user', 'wp_juggler_server_nonce');
+		wp_nonce_field($this->plugin_name . '-site', 'wp_juggler_server_nonce');
 		$site_url = get_post_meta($post->ID, 'wp_juggler_server_site_url', true);
 		$api_key = get_post_meta($post->ID, 'wp_juggler_api_key', true);
 		$automatic_login = get_post_meta($post->ID, 'wp_juggler_automatic_login', true);
@@ -367,6 +458,54 @@ class WPJS_Admin
 				document.getElementById('wp_juggler_login_username_paragraph').style.display = this.checked ? 'block' : 'none';
 			});
 		</script>
+
+	<?php
+	}
+
+	public function render_juggler_plugins_meta_box($post)
+	{
+		wp_nonce_field($this->plugin_name . '-plugin', 'wp_juggler_server_nonce');
+		$wp_juggler_plugin_version = get_post_meta($post->ID, 'wp_juggler_plugin_version', true);
+		$wp_juggler_plugin_slug = get_post_meta($post->ID, 'wp_juggler_plugin_slug', true);
+		$wp_juggler_plugin_author = get_post_meta($post->ID, 'wp_juggler_plugin_author', true);
+		$wp_juggler_plugin_author_profile = get_post_meta($post->ID, 'wp_juggler_plugin_author_profile', true);
+		$wp_juggler_plugin_download_file = get_post_meta($post->ID, 'wp_juggler_plugin_download_file', true);
+	?>
+
+		<p>
+			<label for="wp_juggler_plugin_version">Plugin Version</label><br>
+			<input type="text" name="wp_juggler_plugin_version" id="wp_juggler_plugin_version" value="<?php echo esc_attr($wp_juggler_plugin_version); ?>" size="60" />
+		</p>
+	
+	<?php
+    	$image_url = $wp_juggler_plugin_download_file ? wp_get_attachment_image_src($wp_juggler_plugin_download_file, 'thumbnail')[0] : '';
+    ?>
+
+	<p>
+		<input type="hidden" id="wp_juggler_plugin_download_file" name="cwp_juggler_plugin_download_file" value="<?php echo esc_attr($wp_juggler_plugin_download_file); ?>" />
+		<label for="wp_juggler_plugin_download_file-preview">Plugin Package Url:</label><br>
+		<label id="wp_juggler_plugin_download_file-preview"><?php echo esc_attr($image_url); ?></label>
+		<br>
+		<p>
+			<button type="button" class="button" id="upload-wp_juggler_plugin_download_file-button"><?php _e('Choose Plugin Package'); ?></button>
+			<button type="button" class="button" id="remove-wp_juggler_plugin_download_file-button"><?php _e('Remove Plugin Package'); ?></button>
+		</p>
+	</p>
+		<p>
+			<label for="wp_juggler_plugin_slug">Plugin Slug</label><br>
+			<input type="text" name="wp_juggler_plugin_slug" id="wp_juggler_plugin_slug" value="<?php echo esc_attr($wp_juggler_plugin_slug); ?>" size="60" />
+		</p>
+
+		<p>
+			<label for="wp_juggler_plugin_author">Plugin Author</label><br>
+			<input type="text" name="wp_juggler_plugin_author" id="wp_juggler_plugin_author" value="<?php echo esc_attr($wp_juggler_plugin_author); ?>" size="60" />
+		</p>
+
+		<p>
+			<label for="wp_juggler_plugin_author_profile">Plugin Author Profile</label><br>
+			<input type="text" name="wp_juggler_plugin_author_profile" id="wp_juggler_plugin_author_profile" value="<?php echo esc_attr($wp_juggler_plugin_author_profile); ?>" size="60" />
+		</p>
+		
 
 	<?php
 	}
@@ -484,7 +623,7 @@ class WPJS_Admin
 
 	public function wpjs_save_sites_meta_boxes($post_id)
 	{
-		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-user')) {
+		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-site')) {
 			return;
 		}
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {

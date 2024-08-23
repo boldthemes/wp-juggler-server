@@ -22,6 +22,10 @@
     "control-panel": {
       "source": "./src/control-panel/js/wpjs-control-panel.js",
       "distDir": "./assets/control-panel"
+    },
+    "cpt": {
+      "source": "./src/cpt/js/wpjs-cpt.js",
+      "distDir": "./assets/cpt"
     }
   },
   "dependencies": {
