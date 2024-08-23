@@ -383,4 +383,133 @@ class WPJS_Service
 
 		return $response;
 	}
+
+	static function check_plugins_api($site_id)
+	{
+
+		$log_entry = array(
+			'wpjugglersites_id' => $site_id,
+			'log_type' => 'checkPlugins',
+			'log_result' => 'init'
+		);
+
+		$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+		$data = [
+			'taskType' => 'checkPlugins',
+			'taskId' => $task_id
+		];
+
+		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
+
+		if (is_wp_error($response)) {
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+		} else {
+
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+
+			$plugins = $body['data'];
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
+				$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
+			}
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'succ',
+				'log_value' =>  null,
+				'log_data' => json_encode($plugins)
+			);
+
+			WPJS_Cron_Log::update_log($log_entry);
+		}
+
+		return $response;
+	}
+
+	static function check_themes_api($site_id)
+	{
+
+		$log_entry = array(
+			'wpjugglersites_id' => $site_id,
+			'log_type' => 'checkThemes',
+			'log_result' => 'init'
+		);
+
+		$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+		$data = [
+			'taskType' => 'checkThemes',
+			'taskId' => $task_id
+		];
+
+		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
+
+		if (is_wp_error($response)) {
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+		} else {
+
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'succ',
+				'log_value' =>  null,
+				'log_data' => json_encode($body['data'])
+			);
+
+			WPJS_Cron_Log::update_log($log_entry);
+		}
+
+		return $response;
+	}
+
+	static function get_plugin_vulnerabilities($plugin_name, $version) {
+		
+		$api_url = "https://www.wpvulnerability.net/plugin/{$plugin_name}";
+		$response = wp_remote_get($api_url);
+	
+		if (is_wp_error($response)) {
+			return [];  // Return an empty array on error.
+		}
+	
+		$body = wp_remote_retrieve_body($response);
+		$data = json_decode($body, true);
+	
+		if (!isset($data['data']['vulnerability'])) {
+			return [];  // Return an empty array if no vulnerabilities are found.
+		}
+	
+		$vulnerabilities = $data['data']['vulnerability'];
+		$relevant_vulnerabilities = [];
+	
+		foreach ($vulnerabilities as $vulnerability) {
+			$max_version = $vulnerability['operator']['max_version'] ?? null;
+			$max_operator = $vulnerability['operator']['max_operator'] ?? null;
+	
+			if ($max_version && version_compare($version, $max_version, $max_operator)) {
+				$relevant_vulnerabilities[] = $vulnerability;
+			}
+		}
+	
+		return $relevant_vulnerabilities;
+	}
+
+	
 }

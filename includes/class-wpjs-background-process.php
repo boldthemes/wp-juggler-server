@@ -177,43 +177,16 @@ class WPJS_Background_Process extends WP_Background_Process
 
 				$body = json_decode(wp_remote_retrieve_body($response), true);
 
-				$log_entry = array(
-					'ID' => $task_id,
-					'log_result' => 'succ',
-					'log_value' =>  null,
-					'log_data' => json_encode($body['data'])
-				);
+				if ($data['taskType'] == 'checkPlugins') {
+					
+					$plugins = $body['data'];
 
-				WPJS_Cron_Log::update_log($log_entry);
-			}
-		}
+					foreach ($plugins as $plugin => $plugininfo) {
+						$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
+						$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
+					}
 
-		if ($endpoint == 'checkNotices') {
-
-			$log_entry = array(
-				'wpjugglersites_id' => $site_id,
-				'log_type' => $data['taskType'],
-				'log_result' => 'init'
-			);
-
-			$task_id = WPJS_Cron_Log::insert_log($log_entry);
-
-			$data['taskId'] = $task_id;
-
-			$response = WPJS_Service::call_client_api($site_id, $endpoint, $data);
-
-			if (is_wp_error($response)) {
-
-				$log_entry = array(
-					'ID' => $task_id,
-					'log_result' => 'fail',
-					'log_value' =>  $response->get_error_message()
-				);
-
-				$task_id = WPJS_Cron_Log::update_log($log_entry);
-			} else {
-
-				$body = json_decode(wp_remote_retrieve_body($response), true);
+				}
 
 				$log_entry = array(
 					'ID' => $task_id,

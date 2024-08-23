@@ -230,6 +230,62 @@ class WPJS_Cron
 		$this->bg_process->save()->dispatch();
 	}
 
+	public function check_all_plugins_api() {
+
+		$args = array(
+			'post_type'  => 'wpjugglersites',
+			'post_status' => 'publish',
+			'meta_key'   => 'wp_juggler_site_activation',
+			'meta_value' => 'on',
+			'fields'     => 'ids',
+			'numberposts' => -1
+		);
+
+		$site_ids = get_posts($args);
+
+		foreach ($site_ids as $site_id) {
+
+			$this->bg_process->push_to_queue(array(
+				'siteId' => $site_id,
+				'endpoint' => 'initiateTask',
+				'data' => [
+					'taskType' => 'checkPlugins',
+				]
+			));
+
+		}
+
+		$this->bg_process->save()->dispatch();
+	}
+
+	public function check_all_themes_api() {
+
+		$args = array(
+			'post_type'  => 'wpjugglersites',
+			'post_status' => 'publish',
+			'meta_key'   => 'wp_juggler_site_activation',
+			'meta_value' => 'on',
+			'fields'     => 'ids',
+			'numberposts' => -1
+		);
+
+		$site_ids = get_posts($args);
+
+		foreach ($site_ids as $site_id) {
+
+			$this->bg_process->push_to_queue(array(
+				'siteId' => $site_id,
+				'endpoint' => 'initiateTask',
+				'data' => [
+					'taskType' => 'checkThemes',
+				]
+			));
+
+		}
+
+		$this->bg_process->save()->dispatch();
+	}
+
 	public function check_client_api()
 	{
 
