@@ -135,6 +135,7 @@ class WP_Juggler_Server {
 
 		
 		$this->loader->add_action( 'save_post_wpjugglersites', $plugin_admin, 'wpjs_save_sites_meta_boxes' );
+		$this->loader->add_action( 'save_post_wpjugglerplugins', $plugin_admin, 'wpjs_save_plugins_meta_boxes' );
 
 		$this->loader->add_filter( 'admin_menu', $plugin_admin, 'cp_hide_admin_menus', 9999 );
 
