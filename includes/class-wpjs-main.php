@@ -86,6 +86,7 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-cron.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-api.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-background-process.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-plugins.php';
 		
 		$this->loader = new WPJS_Loader();
 	}
@@ -120,6 +121,7 @@ class WP_Juggler_Server {
 		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
 		$plugin_cron  = new WPJS_Cron( $this->get_plugin_name(), $this->get_version() );
 		$plugin_api  = new WPJS_Api( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
+		$plugin_plugins  = new WPJS_Plugins( $this->get_plugin_name(), $this->get_version() );
 		
 		/// Register the admin pages and scripts.
 		
@@ -159,6 +161,9 @@ class WP_Juggler_Server {
 
 		//Api actions
 		$this->loader->add_action( 'rest_api_init', $plugin_api, 'api_register_routes' );
+
+		//Plugins actions
+		$this->loader->add_action( 'template_redirect', $plugin_plugins, 'serve_manifest' );
 
 
 		//FE actions
