@@ -160,9 +160,9 @@ class WPJS_Plugins
 			'requires_php' => $wp_juggler_plugin_requires_php,
 			'last_updated' => date('Y-m-d H:i:s', strtotime($wp_juggler_plugin_last_updated)),
 			'sections' => array(
-				'description' => $wp_juggler_plugin_description,
-				'installation' => $wp_juggler_plugin_installation,
-				'changelog' => $wp_juggler_plugin_changelog
+				'description' => wpautop($wp_juggler_plugin_description),
+				'installation' => wpautop($wp_juggler_plugin_installation),
+				'changelog' => wpautop($wp_juggler_plugin_changelog)
  			),
 			'banners' => array(
 				'low' => $banner_low,
