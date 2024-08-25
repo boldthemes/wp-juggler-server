@@ -72,34 +72,65 @@ class WPJS_Plugins
 		$plugin_slug = (isset($_GET['wpjs_plugin_slug'])) ? sanitize_text_field($_GET['wpjs_plugin_slug']) : false;
 
 		if( !$plugin_slug ){
-			return;
-		}
 
-		$args = array(
-			'post_type'  => 'wpjugglerplugins',
-			'post_status' => 'publish',
-			'meta_query' => array(
-				array(
-					'key'   => 'wp_juggler_plugin_slug',
-					'value' => $plugin_slug,
-					'compare' => '='
-				),
-			),
-		);
-	
-		$plugins = get_posts($args);
+			$args = array(
+				'post_type'  => 'wpjugglerplugins',
+				'post_status' => 'publish'
+			);
+		
+			$plugins = get_posts($args);
 
-		if (!empty($plugins)) {
-			$plugin = $plugins[0];
-			
+			if (empty($plugins)) {
+				return;
+			}
+
+			$update = [];
+
+			foreach( $plugins as $plugin ){
+				$obj = $this->build_object($plugin);
+				$update[ $obj['slug'] ] = $obj;
+			}
+
 		} else {
-			return;
+
+			$args = array(
+				'post_type'  => 'wpjugglerplugins',
+				'post_status' => 'publish',
+				'meta_query' => array(
+					array(
+						'key'   => 'wp_juggler_plugin_slug',
+						'value' => $plugin_slug,
+						'compare' => '='
+					),
+				),
+			);
+		
+			$plugins = get_posts($args);
+	
+			if (!empty($plugins)) {
+				$plugin = $plugins[0];
+			} else {
+				return;
+			}
+
+			$update = $this->build_object($plugin);
+
 		}
+		
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'HTTP/1.1 200 OK' );
+		echo json_encode( $update );
+		die();
+	}
+
+	private function build_object( $plugin ){
 
 		$wp_juggler_plugin_version = get_post_meta($plugin->ID, 'wp_juggler_plugin_version', true);
 		$wp_juggler_plugin_slug = get_post_meta($plugin->ID, 'wp_juggler_plugin_slug', true);
 		$wp_juggler_plugin_author = get_post_meta($plugin->ID, 'wp_juggler_plugin_author', true);
 		$wp_juggler_plugin_author_profile = get_post_meta($plugin->ID, 'wp_juggler_plugin_author_profile', true);
+		$wp_juggler_plugin_donate_link = get_post_meta($plugin->ID, 'wp_juggler_plugin_donate_link', true);
+		$wp_juggler_plugin_homepage = get_post_meta($plugin->ID, 'wp_juggler_plugin_homepage', true);
 		$wp_juggler_plugin_download_file = get_post_meta($plugin->ID, 'wp_juggler_plugin_download_file', true);
 		$wp_juggler_plugin_requires_wp = get_post_meta($plugin->ID, 'wp_juggler_plugin_requires_wp', true);
 		$wp_juggler_plugin_tested_wp = get_post_meta($plugin->ID, 'wp_juggler_plugin_tested_wp', true);
@@ -120,6 +151,8 @@ class WPJS_Plugins
 			'slug' => $wp_juggler_plugin_slug,
 			'author' => $wp_juggler_plugin_author,
 			'author_profile' => $wp_juggler_plugin_author_profile,
+			'donate_link' => $wp_juggler_plugin_donate_link,
+			'homepage' => $wp_juggler_plugin_homepage,
 			'version' => $wp_juggler_plugin_version,
 			'download_url' => $package_url,
 			'requires' => $wp_juggler_plugin_requires_wp,
@@ -136,11 +169,8 @@ class WPJS_Plugins
 				'high' => $banner_high
 			)
 		);
-		
-		header( 'Content-Type: application/json' );
-		echo json_encode( $update );
-		die();
-	}
 
-	
+		return $update;
+
+	}
 }

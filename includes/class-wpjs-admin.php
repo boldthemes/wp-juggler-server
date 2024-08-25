@@ -469,6 +469,8 @@ class WPJS_Admin
 		$wp_juggler_plugin_slug = get_post_meta($post->ID, 'wp_juggler_plugin_slug', true);
 		$wp_juggler_plugin_author = get_post_meta($post->ID, 'wp_juggler_plugin_author', true);
 		$wp_juggler_plugin_author_profile = get_post_meta($post->ID, 'wp_juggler_plugin_author_profile', true);
+		$wp_juggler_plugin_donate_link = get_post_meta($post->ID, 'wp_juggler_plugin_donate_link', true);
+		$wp_juggler_plugin_homepage = get_post_meta($post->ID, 'wp_juggler_plugin_homepage', true);
 		$wp_juggler_plugin_download_file = get_post_meta($post->ID, 'wp_juggler_plugin_download_file', true);
 		$wp_juggler_plugin_requires_wp = get_post_meta($post->ID, 'wp_juggler_plugin_requires_wp', true);
 		$wp_juggler_plugin_tested_wp = get_post_meta($post->ID, 'wp_juggler_plugin_tested_wp', true);
@@ -559,6 +561,16 @@ class WPJS_Admin
 		<p>
 			<label for="wp_juggler_plugin_author_profile">Plugin Author Profile</label><br>
 			<input type="text" name="wp_juggler_plugin_author_profile" id="wp_juggler_plugin_author_profile" value="<?php echo esc_attr($wp_juggler_plugin_author_profile); ?>" size="60" />
+		</p>
+
+		<p>
+			<label for="wp_juggler_plugin_donate_link">Plugin Author Profile</label><br>
+			<input type="text" name="wp_juggler_plugin_donate_link" id="wp_juggler_plugin_donate_link" value="<?php echo esc_attr($wp_juggler_plugin_donate_link); ?>" size="60" />
+		</p>
+
+		<p>
+			<label for="wp_juggler_plugin_homepage">Plugin Author Profile</label><br>
+			<input type="text" name="wp_juggler_plugin_homepage" id="wp_juggler_plugin_homepage" value="<?php echo esc_attr($wp_juggler_plugin_homepage); ?>" size="60" />
 		</p>
 
 		<p>
@@ -839,6 +851,18 @@ class WPJS_Admin
 			update_post_meta($post_id, 'wp_juggler_plugin_author_profile', sanitize_text_field($_POST['wp_juggler_plugin_author_profile']));
 		} else {
 			delete_post_meta($post_id, 'wp_juggler_plugin_author_profile');
+		}
+
+		if (isset($_POST['wp_juggler_plugin_donate_link'])) {
+			update_post_meta($post_id, 'wp_juggler_plugin_donate_link', sanitize_text_field($_POST['wp_juggler_plugin_donate_link']));
+		} else {
+			delete_post_meta($post_id, 'wp_juggler_plugin_donate_link');
+		}
+
+		if (isset($_POST['wp_juggler_plugin_homepage'])) {
+			update_post_meta($post_id, 'wp_juggler_plugin_homepage', sanitize_text_field($_POST['wp_juggler_plugin_homepage']));
+		} else {
+			delete_post_meta($post_id, 'wp_juggler_plugin_homepage');
 		}
 
 		if (isset($_POST['wp_juggler_plugin_download_file'])) {
