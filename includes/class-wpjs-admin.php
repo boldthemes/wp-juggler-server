@@ -157,7 +157,7 @@ class WPJS_Admin
 			);
 		}
 
-		if (in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) && 'wpjugglerplugins' == $typenow){
+		if (in_array($pagenow, array('post.php', 'post-new.php')) && 'wpjugglerplugins' == $typenow) {
 			wp_enqueue_media();
 			wp_enqueue_script(
 				$this->plugin_name . '-cpt',
@@ -167,7 +167,6 @@ class WPJS_Admin
 				true
 			);
 		}
-
 	}
 
 	public function register_menu_page()
@@ -306,6 +305,48 @@ class WPJS_Admin
 		);
 
 		register_post_type('wpjugglerplugins', $args);
+
+		$labels = array(
+			'name'                => __('Tool Buttons', 'wp-juggler-server'),
+			'singular_name'       => __('Tool Button',  'wp-juggler-server'),
+			'menu_name'           => __('WP Juggler', 'wp-juggler-server'),
+			'all_items'           => __('Tool Buttons', 'wp-juggler-server'),
+			'view_item'           => __('View Tool Button', 'wp-juggler-server'),
+			'add_new_item'        => __('Add New Tool Button', 'wp-juggler-server'),
+			'add_new'             => __('Add New', 'wp-juggler-server'),
+			'edit_item'           => __('Edit Tool Button', 'wp-juggler-server'),
+			'update_item'         => __('Update Tool Button', 'wp-juggler-server'),
+			'search_items'        => __('Search Tool Buttons', 'wp-juggler-server'),
+			'not_found'           => __('Not Found', 'wp-juggler-server'),
+			'not_found_in_trash'  => __('Not found in Trash', 'wp-juggler-server'),
+		);
+
+		$args = array(
+			'label'               => __('tool buttons', 'wp-juggler-server'),
+			'description'         => __('Tool Buttons', 'wp-juggler-server'),
+			'labels'              => $labels,
+			'supports'            => array('title'),
+			'hierarchical'        => false,
+			'public'              => false,
+			'show_ui'             => true,
+			'show_in_menu'        => 'wpjs-dashboard',
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'menu_position'       => 5,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => false,
+			'publicly_queryable'  => false,
+			'capability_type'     => 'post',
+			'capabilities'          => array(
+				// todo Srediti prava za new i edit ako ikako moze, ako ne, ostaviti new
+				//'create_posts' => 'do_not_allow', 
+				//'edit_posts' => 'allow' 
+			),
+			'show_in_rest'	=> false,
+		);
+
+		register_post_type('wpjugglertools', $args);
 	}
 
 	public function render_admin_page()
@@ -368,17 +409,29 @@ class WPJS_Admin
 			'side',
 			'high'
 		);
+	}
 
+	public function wpjs_tools_metaboxes()
+	{
+		add_meta_box(
+			'wpjs_tool_details',
+			__('Tool Button Details', 'wp-juggler-server'),
+			array($this, 'render_juggler_tools_meta_box'),
+			'wpjugglertools',
+			'normal',
+			'high'
+		);
 
+		remove_meta_box('submitdiv', 'wpjugglertools', 'side');
 
-		/* add_meta_box(
-			'wpjs_users', // ID
-			__('Assign Users', 'wp-juggler-server'), // Title
-			array($this, 'render_juggler_users_meta_box'),
-			'wpjugglersites', // Post type
-			'normal', // Context
-			'low' // Priority
-		); */
+		add_meta_box(
+			'submitdiv',
+			__('Save', 'wp-juggler-server'),
+			array($this, 'render_juggler_sites_publish_meta_box'),
+			'wpjugglertools',
+			'side',
+			'high'
+		);
 	}
 
 	function cp_hide_admin_menus($context)
@@ -397,7 +450,7 @@ class WPJS_Admin
 				margin-left: 0px !important;
 			}
 			</style>';
-			
+
 			global $menu;
 			$menu = array();
 		}
@@ -489,20 +542,20 @@ class WPJS_Admin
 			<label for="wp_juggler_plugin_version">Plugin Version</label><br>
 			<input type="text" name="wp_juggler_plugin_version" id="wp_juggler_plugin_version" value="<?php echo esc_attr($wp_juggler_plugin_version); ?>" size="60" />
 		</p>
-	
-	<?php
-    	$package_url = $wp_juggler_plugin_download_file ? wp_get_attachment_url($wp_juggler_plugin_download_file) : '';
-    ?>
+
+		<?php
+		$package_url = $wp_juggler_plugin_download_file ? wp_get_attachment_url($wp_juggler_plugin_download_file) : '';
+		?>
 
 		<p>
 			<input type="hidden" id="wp_juggler_plugin_download_file" name="wp_juggler_plugin_download_file" value="<?php echo esc_attr($wp_juggler_plugin_download_file); ?>" />
 			<label for="wp_juggler_plugin_download_file-preview">Plugin Package Url:</label><br>
-			<input type="text" id="wp_juggler_plugin_download_file-preview" value="<?php echo esc_attr($package_url); ?>" size="120" readonly/>
+			<input type="text" id="wp_juggler_plugin_download_file-preview" value="<?php echo esc_attr($package_url); ?>" size="120" readonly />
 			<br>
-			<p>
-				<button type="button" class="button" id="upload-wp_juggler_plugin_download_file-button"><?php _e('Choose Plugin Package'); ?></button>
-				<button type="button" class="button" id="remove-wp_juggler_plugin_download_file-button"><?php _e('Remove Plugin Package'); ?></button>
-			</p>
+		<p>
+			<button type="button" class="button" id="upload-wp_juggler_plugin_download_file-button"><?php _e('Choose Plugin Package'); ?></button>
+			<button type="button" class="button" id="remove-wp_juggler_plugin_download_file-button"><?php _e('Remove Plugin Package'); ?></button>
+		</p>
 		</p>
 
 		<p>
@@ -512,12 +565,12 @@ class WPJS_Admin
 
 		<p>
 			<label for="wp_juggler_plugin_changelog">Plugin Changelog</label><br>
-			
-		<?php
+
+			<?php
 			wp_editor($wp_juggler_plugin_changelog, 'wp_juggler_plugin_changelog', array(
-        		'textarea_name' => 'wp_juggler_plugin_changelog',
-        		'textarea_rows' => 8,
-        		'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
+				'textarea_name' => 'wp_juggler_plugin_changelog',
+				'textarea_rows' => 8,
+				'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
 				'media_buttons' => false,
 				'tinymce' => array(
 					'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo,removeformat,charmap',
@@ -527,7 +580,7 @@ class WPJS_Admin
 					'buttons' => 'strong,em,ul,ol,li,link,close,dfw'
 				)
 			));
-		?>
+			?>
 
 		</p>
 
@@ -576,71 +629,107 @@ class WPJS_Admin
 		<p>
 			<label for="wp_juggler_plugin_description">Plugin Description</label><br>
 			<?php
-				wp_editor($wp_juggler_plugin_description, 'wp_juggler_plugin_description', array(
-					'textarea_name' => 'wp_juggler_plugin_description',
-					'textarea_rows' => 8,
-					'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
-					'media_buttons' => false,
-					'tinymce' => array(
-						'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo,removeformat,charmap',
-						'block_formats' => 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
-					),
-					'quicktags' => array(
-						'buttons' => 'strong,em,ul,ol,li,link,close,dfw'
-					)
-				));
+			wp_editor($wp_juggler_plugin_description, 'wp_juggler_plugin_description', array(
+				'textarea_name' => 'wp_juggler_plugin_description',
+				'textarea_rows' => 8,
+				'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
+				'media_buttons' => false,
+				'tinymce' => array(
+					'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo,removeformat,charmap',
+					'block_formats' => 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
+				),
+				'quicktags' => array(
+					'buttons' => 'strong,em,ul,ol,li,link,close,dfw'
+				)
+			));
 			?>
 		</p>
 
 		<p>
 			<label for="wp_juggler_plugin_installation">Plugin Installation</label><br>
 			<?php
-				wp_editor($wp_juggler_plugin_installation, 'wp_juggler_plugin_installation', array(
-					'textarea_name' => 'wp_juggler_plugin_installation',
-					'textarea_rows' => 8,
-					'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
-					'media_buttons' => false,
-					'tinymce' => array(
-						'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo,removeformat,charmap',
-						'block_formats' => 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
-					),
-					'quicktags' => array(
-						'buttons' => 'strong,em,ul,ol,li,link,close,dfw'
-					)
-				));
+			wp_editor($wp_juggler_plugin_installation, 'wp_juggler_plugin_installation', array(
+				'textarea_name' => 'wp_juggler_plugin_installation',
+				'textarea_rows' => 8,
+				'editor_css' => '<style>.wp-editor-container textarea.wp-editor-area{ width: 100%; max-width: 80ch; }</style>',
+				'media_buttons' => false,
+				'tinymce' => array(
+					'toolbar1' => 'bold,italic,underline,bullist,numlist,link,unlink,undo,redo,removeformat,charmap',
+					'block_formats' => 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4; Heading 5=h5; Heading 6=h6',
+				),
+				'quicktags' => array(
+					'buttons' => 'strong,em,ul,ol,li,link,close,dfw'
+				)
+			));
 			?>
 		</p>
 
 		<?php
-    		$banner_low = $wp_juggler_plugin_banner_low ? wp_get_attachment_image_src($wp_juggler_plugin_banner_low, 'thumbnail')[0] : '';
-    	?>
+		$banner_low = $wp_juggler_plugin_banner_low ? wp_get_attachment_image_src($wp_juggler_plugin_banner_low, 'thumbnail')[0] : '';
+		?>
 
 		<p>
 			<input type="hidden" id="wp_juggler_plugin_banner_low" name="wp_juggler_plugin_banner_low" value="<?php echo esc_attr($wp_juggler_plugin_banner_low); ?>" />
 			<label for="wp_juggler_plugin_banner_low-preview">Plugin Low Resolution Banner:</label><br>
 			<img id="wp_juggler_plugin_banner_low-preview" name="wp_juggler_plugin_banner_low-preview" src="<?php echo esc_attr($banner_low); ?>" style="max-height:100px; max-width:200px" />
 			<br>
-			<p>
-				<button type="button" class="button" id="upload-wp_juggler_plugin_banner_low-button"><?php _e('Choose Banner'); ?></button>
-				<button type="button" class="button" id="remove-wp_juggler_plugin_banner_low-button"><?php _e('Remove Banner'); ?></button>
-			</p>
+		<p>
+			<button type="button" class="button" id="upload-wp_juggler_plugin_banner_low-button"><?php _e('Choose Banner'); ?></button>
+			<button type="button" class="button" id="remove-wp_juggler_plugin_banner_low-button"><?php _e('Remove Banner'); ?></button>
+		</p>
 		</p>
 
 		<?php
-    		$banner_high = $wp_juggler_plugin_banner_high ? wp_get_attachment_image_src($wp_juggler_plugin_banner_high, 'thumbnail')[0] : '';
-    	?>
+		$banner_high = $wp_juggler_plugin_banner_high ? wp_get_attachment_image_src($wp_juggler_plugin_banner_high, 'thumbnail')[0] : '';
+		?>
 
 		<p>
 			<input type="hidden" id="wp_juggler_plugin_banner_high" name="wp_juggler_plugin_banner_high" value="<?php echo esc_attr($wp_juggler_plugin_banner_high); ?>" />
 			<label for="wp_juggler_plugin_banner_high-preview">Plugin High Resolution Banner:</label><br>
-			<img id="wp_juggler_plugin_banner_high-preview" name="wp_juggler_plugin_banner_high-preview" src="<?php echo esc_attr($banner_high); ?>" style="max-height:100px; max-width:200px"/>
+			<img id="wp_juggler_plugin_banner_high-preview" name="wp_juggler_plugin_banner_high-preview" src="<?php echo esc_attr($banner_high); ?>" style="max-height:100px; max-width:200px" />
 			<br>
-			<p>
-				<button type="button" class="button" id="upload-wp_juggler_plugin_banner_high-button"><?php _e('Choose Banner'); ?></button>
-				<button type="button" class="button" id="remove-wp_juggler_plugin_banner_high-button"><?php _e('Remove Banner'); ?></button>
-			</p>
+		<p>
+			<button type="button" class="button" id="upload-wp_juggler_plugin_banner_high-button"><?php _e('Choose Banner'); ?></button>
+			<button type="button" class="button" id="remove-wp_juggler_plugin_banner_high-button"><?php _e('Remove Banner'); ?></button>
 		</p>
-		
+		</p>
+
+
+	<?php
+	}
+
+	public function render_juggler_tools_meta_box($post)
+	{
+		wp_nonce_field($this->plugin_name . '-tool', 'wp_juggler_server_nonce');
+		$wp_juggler_tool_label = get_post_meta($post->ID, 'wp_juggler_tool_label', true);
+		$wp_juggler_tool_url = get_post_meta($post->ID, 'wp_juggler_tool_url', true);
+	?>
+		<p>
+			<label for="wp_juggler_tool_label">Tool Button Label</label><br>
+			<input type="text" name="wp_juggler_tool_label" id="wp_juggler_tool_label" value="<?php echo esc_attr($wp_juggler_tool_label); ?>" size="60" />
+		</p>
+		<p>
+			<label for="wp_juggler_tool_url">Relative URL of Tool Button</label><br>
+			<input type="text" name="wp_juggler_tool_url" id="wp_juggler_tool_url" value="<?php echo esc_attr($wp_juggler_tool_url); ?>" size="60" />
+		</p>
+
+		<h3>Select the sites to show the button on:</h3>
+
+		<?php
+			 $related_sites = get_post_meta($post->ID, 'wp_juggler_related_sites', true) ?: [];
+			 $sites = get_posts([
+				'post_type' => 'wpjugglersites',
+				'post_status' => 'publish',
+				'numberposts' => -1
+			]);
+
+			foreach ($sites as $site) {
+				$checked = in_array($site->ID, $related_sites) ? 'checked' : '';
+				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true); 
+				echo '<p><label><input type="checkbox" name="wp_juggler_related_sites[]" value="' . $site->ID . '" ' . $checked . '> <strong>' . esc_html($site->post_title) . '</strong> - ' . esc_html($site_url) . '</label></p>';
+			}
+		?>
+
 
 	<?php
 	}
@@ -753,7 +842,7 @@ class WPJS_Admin
 				<div class="clear"></div>
 			</div>
 		</div>
-		<?php
+<?php
 	}
 
 	public function wpjs_save_sites_meta_boxes($post_id)
@@ -926,6 +1015,39 @@ class WPJS_Admin
 		}
 	}
 
+	public function wpjs_save_tools_meta_boxes($post_id)
+	{
+		if (!isset($_POST['wp_juggler_server_nonce']) || !wp_verify_nonce($_POST['wp_juggler_server_nonce'], $this->plugin_name . '-tool')) {
+			return;
+		}
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+			return;
+		}
+		if (!current_user_can('edit_post', $post_id)) {
+			return;
+		}
+
+		if (isset($_POST['wp_juggler_tool_label'])) {
+			update_post_meta($post_id, 'wp_juggler_tool_label', sanitize_text_field($_POST['wp_juggler_tool_label']));
+		} else {
+			delete_post_meta($post_id, 'wp_juggler_tool_label');
+		}
+
+		if (isset($_POST['wp_juggler_tool_url']) && !empty($_POST['wp_juggler_tool_url'])) {
+			update_post_meta($post_id, 'wp_juggler_tool_url', sanitize_text_field($_POST['wp_juggler_tool_url']));
+		} else {
+			delete_post_meta($post_id, 'wp_juggler_tool_url');
+		}
+
+		if (isset($_POST['wp_juggler_related_sites'])){
+			$related_sites = array_map('intval', $_POST['wp_juggler_related_sites']);
+			update_post_meta($post_id, 'wp_juggler_related_sites', $related_sites);
+		} else {
+			delete_post_meta($post_id, 'wp_juggler_related_sites');
+		}
+		
+	}
+
 	public function wpjs_add_custom_column($columns)
 	{
 		return array_merge(
@@ -941,5 +1063,4 @@ class WPJS_Admin
 			echo esc_html(get_post_meta($post_id, 'wp_juggler_server_site_url', true));
 		}
 	}
-	
 }
