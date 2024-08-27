@@ -179,6 +179,152 @@ class WPJS_AJAX
 			return in_array($current_user, $allowed_usernames); // Check if current user is in allowed users
 		}
 
+		function get_uptime_stats_7days( $site_id ){
+			global $wpdb;
+		
+			$results = array_fill(0, 7, [
+				'fail_num' => 0,
+				'fail_array' => [],
+				'total_num' => 0,
+			]);
+		
+			$table_name = $wpdb->prefix . 'wpjs_cron_log';
+		
+			$query = $wpdb->prepare(
+				"SELECT * FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s",
+				$site_id,
+				date('Y-m-d H:i:s', strtotime('-7 days'))
+			);
+		
+			$logs = $wpdb->get_results($query, ARRAY_A);
+			$current_time = time();
+		
+			foreach ($logs as $log) {
+				$index = (int) floor((time() - strtotime($log['log_time'])) / 86400);
+				$log_time = strtotime($log['log_time']);
+				$days_ago = (int) floor(($current_time - $log_time) / 86400);
+
+				if ($days_ago >= 0 && $days_ago < 7) {
+					$results[$days_ago]['total_num']++;
+		
+					if ($log['log_result'] == 'fail') {
+						$results[$days_ago]['fail_num']++;
+						$results[$days_ago]['fail_array'][] = $log;
+					}
+				}
+			}
+		
+			return $results;
+		}
+
+		function get_last_plugin_data($site_id) {
+			global $wpdb;
+		
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT log_data 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+					  AND log_type = 'checkPlugins' 
+					  AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+		
+			if (!$result) {
+				return false;
+			}
+		
+			$log_data_array = json_decode($result['log_data'], true);
+
+			return $log_data_array;
+		}
+
+		function get_plugin_checksum_data($site_id) {
+			global $wpdb;
+		
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT log_data 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+					  AND log_type = 'checkPluginChecksum' 
+					  AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+		
+			if (!$result) {
+				return false;
+			}
+		
+			$log_data_array = json_decode($result['log_data'], true);
+
+			return $log_data_array;
+		}
+
+		function get_core_checksum_data($site_id) {
+			global $wpdb;
+		
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT log_data 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+					  AND log_type = 'checkCoreChecksum' 
+					  AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+		
+			if (!$result) {
+				return false;
+			}
+		
+			$log_data_array = json_decode($result['log_data'], true);
+
+			return $log_data_array;
+		}
+
+		function get_updates_and_vul( $plugins_array ){
+
+			if( !$plugins_array ) {
+				return false;
+			}
+
+			$updates_num = 0;
+			$vulnerabilities_num = 0;
+		
+			foreach ($plugins_array as $item) {
+				if (isset($item['UpdateVersion']) && !empty($item['UpdateVersion'])) {
+					$updates_num++;
+				}
+				if (isset($item['Vulnerabilities']) && is_array($item['Vulnerabilities'])) {
+					$vulnerabilities_num += count($item['Vulnerabilities']);
+				}
+			}
+		
+			return (object) [
+				'updates_num' => $updates_num,
+				'vulnerabilities_num' => $vulnerabilities_num
+			];
+		}
+
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
 			return;
@@ -194,21 +340,38 @@ class WPJS_AJAX
 		$data = array();
 
 		foreach ($wpjuggler_sites as $site) {
+
 			if (can_user_access_post($site)) {
 
 				$site_activation = get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false;
+
+				$multisite = get_post_meta($site->ID, 'wp_juggler_multisite', true) == "on" ? true : false;
 
 				$automatic_logon = get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 
 				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
 
+				$uptime7 = get_uptime_stats_7days( $site->ID );
+
+				$plugins_data = get_last_plugin_data($site->ID);
+
+				$updates_vul = get_updates_and_vul( $plugins_data );
+
+				$plugins_checksum = get_plugin_checksum_data( $site->ID );
+
+				$core_checksum = get_core_checksum_data( $site->ID );
+				
 				$newsite = array(
 					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
-					'wp_juggler_automatic_login' => $automatic_logon,
 					'wp_juggler_server_site_url' => $site_url,
+					'wp_juggler_multisite' => $multisite,
 					'wp_juggler_site_activation' => $site_activation,
-					'wp_juggler_automatic_login' => false
+					'wp_juggler_automatic_login' => false,
+					'wp_juggler_uptime_7' => $uptime7,
+					'wp_pluggins_summary' => $updates_vul,
+					'wp_plugins_checksum' => $plugins_checksum,
+					'wp_core_checksum' => $core_checksum
 				);
 
 				if ($site_activation) {

@@ -150,12 +150,12 @@ class WPJS_Api
 
 		$site_id = $this->get_site_id_by_api_key($api_key);
 
-		//$response = WPJS_Service::check_core_checksum_api(37);
+		$response = WPJS_Service::check_core_checksum_api(37);
 		//$response = WPJS_Service::check_plugin_checksum_api(37);
 		//$response = WPJS_Service::check_health_api(37);
 		//$response = WPJS_Service::check_notices_api(37);
 		//$response = WPJS_Service::check_plugins_api(37);
-		$response = WPJS_Service::check_themes_api(37);
+		//$response = WPJS_Service::check_themes_api(37);
 		
 		$body = wp_remote_retrieve_body($response);
 		$data = json_decode($body, true);
@@ -198,6 +198,12 @@ class WPJS_Api
 			wp_send_json_error(new WP_Error('Missing param', 'Site url is not correct'), 400);
 		}
 
+		if (array_key_exists('multisite', $parameters)) {
+			$multisite = sanitize_text_field($parameters['multisite']);
+		} else {
+			wp_send_json_error(new WP_Error('Missing param', 'Multisite param is missing'), 400);
+		}
+
 		$recorded_site_url = get_post_meta($site_id, 'wp_juggler_server_site_url', true);
 
 		if( untrailingslashit($site_url) == untrailingslashit($recorded_site_url) ) {
@@ -207,6 +213,11 @@ class WPJS_Api
 			if ( ! is_wp_error($response) ) {
 
 				update_post_meta($site_id, 'wp_juggler_site_activation', 'on');
+				if( $multisite == 'true' ){
+					update_post_meta($site_id, 'wp_juggler_multisite', 'on');
+				} else {
+					delete_post_meta($site_id, 'wp_juggler_multisite');
+				}
 				
 				$data = array( 
 					'site_id' => $site_id

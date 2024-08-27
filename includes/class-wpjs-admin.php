@@ -466,6 +466,7 @@ class WPJS_Admin
 		$activation_status = get_post_meta($post->ID, 'wp_juggler_site_activation', true);
 		$frontend_ping_url = get_post_meta($post->ID, 'wp_juggler_frontend_ping_url', true);
 		$frontend_ping_string = get_post_meta($post->ID, 'wp_juggler_frontend_ping_string', true);
+		$multisite = get_post_meta($post->ID, 'wp_juggler_multisite', true);
 	?>
 
 		<p>
@@ -479,6 +480,10 @@ class WPJS_Admin
 			<?php else: ?>
 				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo wp_generate_uuid4(); ?>" size="60" readonly />
 			<?php endif; ?>
+		</p>
+		<p>
+			<label for="wp_juggler_multisite">Multisite</label><br>
+			<input type="checkbox" name="wp_juggler_multisite" id="wp_juggler_multisite" <?php checked($multisite, 'on'); ?> />
 		</p>
 		<p>
 			<label for="wp_juggler_automatic_login">Automatic Login</label><br>
@@ -868,6 +873,9 @@ class WPJS_Admin
 		} else {
 			update_post_meta($post_id, 'wp_juggler_api_key', wp_generate_uuid4());
 		}
+
+		$multisite = isset($_POST['wp_juggler_multisite']) ? 'on' : 'off';
+		update_post_meta($post_id, 'wp_juggler_multisite', $multisite);
 
 		$automatic_login = isset($_POST['wp_juggler_automatic_login']) ? 'on' : 'off';
 		update_post_meta($post_id, 'wp_juggler_automatic_login', $automatic_login);

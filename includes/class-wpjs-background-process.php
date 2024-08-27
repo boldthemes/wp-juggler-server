@@ -102,12 +102,23 @@ class WPJS_Background_Process extends WP_Background_Process
 								'log_value' =>  $response_code . ' - Server error occurred'
 							);
 						} else {
+							
+							$body = json_decode(wp_remote_retrieve_body($response), true);
+
+							if( $body['multisite'] === true ){
+								update_post_meta($site_id, 'wp_juggler_multisite', 'on');
+							} else {
+								delete_post_meta($site_id, 'wp_juggler_multisite');
+							}
 
 							$log_entry = array(
 								'wpjugglersites_id' => $site_id,
 								'log_type' => $endpoint,
 								'log_result' => 'succ',
+								'log_data' => json_encode($body['data'])
 							);
+
+
 						}
 						break;
 				}

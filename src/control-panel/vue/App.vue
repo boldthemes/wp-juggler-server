@@ -67,6 +67,12 @@ function backToDashboard() {
   window.location.href = wpjs_control_panel_object.adminurl
 }
 
+function calculateColor(day) {
+  if (day.total_num == 0) return 'blue-lighten-5';
+  if (day.fail_num == 0) return 'success';
+  return 'error';
+}
+
 const gotoLogin = (url) => {
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
   if (newWindow) newWindow.opener = null
@@ -104,7 +110,7 @@ onMounted(() => {
         v-model:expanded="expanded" show-expand>
 
         <template v-slot:item.network="{ item }">
-          <div v-if="item.wp_juggler_automatic_login">
+          <div v-if="item.wp_juggler_multisite">
             <v-icon color="#2196f3" icon="mdi-checkbox-multiple-blank-outline" size="large" class='rm-4'></v-icon>
           </div>
         </template>
@@ -117,11 +123,8 @@ onMounted(() => {
 
         <template v-slot:item.uptime="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <v-icon color="success" icon="mdi-square" size="large" class='rm-4'></v-icon>
-            <v-icon color="success" icon="mdi-square" size="large" class='rm-4'></v-icon>
-            <v-icon color="error" icon="mdi-square" size="large" class='rm-4'></v-icon>
-            <v-icon color="error" icon="mdi-square" size="large" class='rm-4'></v-icon>
-            <v-icon color="success" icon="mdi-square" size="large" class='rm-4'></v-icon>
+            <v-icon v-for="day in item.wp_juggler_uptime_7" :color="calculateColor(day)" icon="mdi-square" size="large"
+              class='rm-4'></v-icon>
           </div>
           <div v-if="!item.wp_juggler_site_activation">
             Inactive
@@ -129,17 +132,33 @@ onMounted(() => {
         </template>
 
         <template v-slot:item.updates="{ item }">
-          <div v-if="item.wp_juggler_automatic_login">
-            <v-icon color="error" icon="mdi-bug-check-outline" size="large" class='rm-4'></v-icon>
+          <div v-if="item.wp_juggler_site_activation">
+            <div v-if="item.wp_pluggins_summary">
+              <v-icon v-if="item.wp_pluggins_summary.vulnerabilities_num > 0" color="error" icon="mdi-bug-check-outline"
+                size="large" class='rm-4'></v-icon>
+              <v-icon v-else-if="item.wp_pluggins_summary.updates_num > 0" color="error" icon="mdi-check-bold"
+                size="large" class='rm-4'></v-icon>
+            </div>
+            <div v-else>
+              <v-icon color="blue-lighten-5" icon="mdi-square" size="large" class='rm-4'></v-icon>
+            </div>
           </div>
           <div v-if="!item.wp_juggler_site_activation">
-            <v-icon color="error" icon="mdi-check-bold" size="large" class='rm-4'></v-icon>
+            Inactive
           </div>
         </template>
 
         <template v-slot:item.checksum="{ item }">
+          <div v-if="item.wp_juggler_site_activation">
+            <div v-if="item.wp_plugins_checksum && item.wp_core_checksum">
+              <v-icon v-if="item.wp_plugins_checksum.failures > 0 || item.wp_core_checksum.errors" color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
+            </div>
+            <div v-else>
+              <v-icon color="blue-lighten-5" icon="mdi-square" size="large" class='rm-4'></v-icon>
+            </div>
+          </div>
           <div v-if="!item.wp_juggler_site_activation">
-            <v-icon color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
+            Inactive
           </div>
         </template>
 
@@ -212,7 +231,7 @@ onMounted(() => {
 
                     <v-card>
                       <div class="d-flex py-3 justify-space-between pb-0">
-                        
+
                         <v-card-item title="Uptime Cron">
                         </v-card-item>
 
@@ -253,9 +272,9 @@ onMounted(() => {
                             </v-row>
                           </div>
                         </div>
-                        
-                          <div>Uptime percetige: 99.54%</div>
-                        
+
+                        <div>Uptime percetige: 99.54%</div>
+
                       </v-card-text>
 
                       <v-divider></v-divider>
@@ -300,7 +319,8 @@ onMounted(() => {
                         <div class="d-flex py-3 justify-space-between pt-0">
                           <div>Recorded vulnerabilities: No</div>
                           <div>Checksum <v-icon color="success" icon="mdi-check-bold" size="large"
-                            class='rm-4'></v-icon> 12 hours ago</div>
+                              class='rm-4'></v-icon> 12 hours ago
+                          </div>
                         </div>
                       </v-card-text>
 
@@ -316,7 +336,7 @@ onMounted(() => {
 
                     <v-card>
                       <div class="d-flex py-3 justify-space-between pb-0">
-                        
+
                         <v-card-item title="Messages">
                         </v-card-item>
 
@@ -348,11 +368,11 @@ onMounted(() => {
                               </v-col>
                             </v-row>
                           </div>
-                          
+
                         </div>
-                        
-                          <div>Last message: 9 hours ago</div>
-                        
+
+                        <div>Last message: 9 hours ago</div>
+
                       </v-card-text>
 
                       <v-divider></v-divider>
