@@ -73,7 +73,7 @@ function calculateColor(day) {
   return 'error';
 }
 
-const gotoLogin = (url) => {
+const gotoUrl = (url) => {
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
   if (newWindow) newWindow.opener = null
 }
@@ -163,20 +163,25 @@ onMounted(() => {
         </template>
 
         <template v-slot:item.links="{ item }">
-          <div v-if="item.wp_juggler_automatic_login">
-            <v-btn variant="elevated" class="text-none text-caption mr-2 ml-2">Maps Api Key</v-btn>
-            <v-btn variant="elevated" class="text-none text-caption">GTM Setup</v-btn>
+          <div v-if="item.wp_juggler_site_activation">
+            <v-btn v-for="button in item.wp_juggler_login_tools" variant="elevated" @click="gotoUrl(button.wp_juggler_tool_url)" class="text-none text-caption mr-1 ml-1">{{ button.wp_juggler_tool_label }}</v-btn>
+          </div>
+          <div v-if="!item.wp_juggler_site_activation">
+            Inactive
           </div>
         </template>
 
         <template v-slot:item.wp_admin="{ item }">
-          <div v-if="item.wp_juggler_automatic_login">
+          <div v-if="item.wp_juggler_site_activation && item.wp_juggler_automatic_login">
             <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-login"
-              @click="gotoLogin(item.wp_juggler_login_url)">Login</v-btn>
+              @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
           </div>
-          <div v-if="!item.wp_juggler_automatic_login">
+          <div v-if="item.wp_juggler_site_activation && !item.wp_juggler_automatic_login">
             <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-account-remove"
-              @click="gotoLogin(item.wp_juggler_login_url)">Login</v-btn>
+              @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
+          </div>
+          <div v-if="!item.wp_juggler_site_activation">
+            Inactive
           </div>
         </template>
 

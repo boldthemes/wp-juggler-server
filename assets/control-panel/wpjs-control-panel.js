@@ -9207,7 +9207,7 @@ exports.default = {
             if (day.fail_num == 0) return "success";
             return "error";
         }
-        const gotoLogin = (url)=>{
+        const gotoUrl = (url)=>{
             const newWindow = window.open(url, "_blank", "noopener,noreferrer");
             if (newWindow) newWindow.opener = null;
         };
@@ -9230,7 +9230,7 @@ exports.default = {
             getDashboard,
             backToDashboard,
             calculateColor,
-            gotoLogin,
+            gotoUrl,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -14727,57 +14727,63 @@ const _hoisted_13 = {
     key: 0
 };
 const _hoisted_14 = {
-    key: 0
-};
-const _hoisted_15 = {
     key: 1
 };
-const _hoisted_16 = [
+const _hoisted_15 = {
+    key: 0
+};
+const _hoisted_16 = {
+    key: 1
+};
+const _hoisted_17 = {
+    key: 2
+};
+const _hoisted_18 = [
     "colspan"
 ];
-const _hoisted_17 = {
+const _hoisted_19 = {
     class: "text-h5 font-weight-bold mt-5 mb-3"
 };
-const _hoisted_18 = {
+const _hoisted_20 = {
     class: "text-h6 text-medium-emphasis font-weight-regular mb-5"
 };
-const _hoisted_19 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of recommended improvements", -1 /* HOISTED */ );
-const _hoisted_20 = {
-    class: "d-flex py-3 justify-space-between"
-};
-const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "WordPress version: 6.31", -1 /* HOISTED */ );
+const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of recommended improvements", -1 /* HOISTED */ );
 const _hoisted_22 = {
-    class: "d-flex py-3 justify-space-between pb-0"
+    class: "d-flex py-3 justify-space-between"
 };
-const _hoisted_23 = {
-    class: "mr-5"
-};
+const _hoisted_23 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "WordPress version: 6.31", -1 /* HOISTED */ );
 const _hoisted_24 = {
-    class: "d-flex py-3 justify-space-between"
-};
-const _hoisted_25 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed frontend checks", -1 /* HOISTED */ );
-const _hoisted_26 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed API checks", -1 /* HOISTED */ );
-const _hoisted_27 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Uptime percetige: 99.54%", -1 /* HOISTED */ );
-const _hoisted_28 = {
-    class: "d-flex py-3 justify-space-between pt-0"
-};
-const _hoisted_29 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Theme updates available", -1 /* HOISTED */ );
-const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Plugin updates available", -1 /* HOISTED */ );
-const _hoisted_31 = {
-    class: "d-flex py-3 justify-space-between pt-0"
-};
-const _hoisted_32 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Recorded vulnerabilities: No", -1 /* HOISTED */ );
-const _hoisted_33 = {
     class: "d-flex py-3 justify-space-between pb-0"
 };
-const _hoisted_34 = {
+const _hoisted_25 = {
     class: "mr-5"
 };
-const _hoisted_35 = {
+const _hoisted_26 = {
     class: "d-flex py-3 justify-space-between"
 };
-const _hoisted_36 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of messages", -1 /* HOISTED */ );
-const _hoisted_37 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Last message: 9 hours ago", -1 /* HOISTED */ );
+const _hoisted_27 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed frontend checks", -1 /* HOISTED */ );
+const _hoisted_28 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Failed API checks", -1 /* HOISTED */ );
+const _hoisted_29 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Uptime percetige: 99.54%", -1 /* HOISTED */ );
+const _hoisted_30 = {
+    class: "d-flex py-3 justify-space-between pt-0"
+};
+const _hoisted_31 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Theme updates available", -1 /* HOISTED */ );
+const _hoisted_32 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Plugin updates available", -1 /* HOISTED */ );
+const _hoisted_33 = {
+    class: "d-flex py-3 justify-space-between pt-0"
+};
+const _hoisted_34 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Recorded vulnerabilities: No", -1 /* HOISTED */ );
+const _hoisted_35 = {
+    class: "d-flex py-3 justify-space-between pb-0"
+};
+const _hoisted_36 = {
+    class: "mr-5"
+};
+const _hoisted_37 = {
+    class: "d-flex py-3 justify-space-between"
+};
+const _hoisted_38 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of messages", -1 /* HOISTED */ );
+const _hoisted_39 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Last message: 9 hours ago", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
@@ -14938,35 +14944,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     "item.links": (0, _vue.withCtx)(({ item })=>[
-                                            item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    variant: "elevated",
-                                                    class: "text-none text-caption mr-2 ml-2"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createTextVNode)("Maps Api Key")
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    variant: "elevated",
-                                                    class: "text-none text-caption"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createTextVNode)("GTM Setup")
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                })
-                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                            item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
+                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_login_tools, (button)=>{
+                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        variant: "elevated",
+                                                        onClick: ($event)=>$setup.gotoUrl(button.wp_juggler_tool_url),
+                                                        class: "text-none text-caption mr-1 ml-1"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)(button.wp_juggler_tool_label), 1 /* TEXT */ )
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "onClick"
+                                                    ]);
+                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                            !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     "item.wp_admin": (0, _vue.withCtx)(({ item })=>[
-                                            item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                            item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
                                                 (0, _vue.createVNode)(_component_v_btn, {
                                                     color: "#2196f3",
                                                     variant: "elevated",
                                                     class: "text-none text-caption",
                                                     "prepend-icon": "mdi-login",
-                                                    onClick: ($event)=>$setup.gotoLogin(item.wp_juggler_login_url)
+                                                    onClick: ($event)=>$setup.gotoUrl(item.wp_juggler_login_url)
                                                 }, {
                                                     default: (0, _vue.withCtx)(()=>[
                                                             (0, _vue.createTextVNode)("Login")
@@ -14976,13 +14979,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     "onClick"
                                                 ])
                                             ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                            !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
+                                            item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
                                                 (0, _vue.createVNode)(_component_v_btn, {
                                                     color: "#2196f3",
                                                     variant: "elevated",
                                                     class: "text-none text-caption",
                                                     "prepend-icon": "mdi-account-remove",
-                                                    onClick: ($event)=>$setup.gotoLogin(item.wp_juggler_login_url)
+                                                    onClick: ($event)=>$setup.gotoUrl(item.wp_juggler_login_url)
                                                 }, {
                                                     default: (0, _vue.withCtx)(()=>[
                                                             (0, _vue.createTextVNode)("Login")
@@ -14991,7 +14994,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
                                                     "onClick"
                                                 ])
-                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                            !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
                                             (0, _vue.createElementVNode)("tr", null, [
@@ -15000,8 +15004,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 }, [
                                                     (0, _vue.createVNode)(_component_v_container, null, {
                                                         default: (0, _vue.withCtx)(()=>[
-                                                                (0, _vue.createElementVNode)("div", _hoisted_17, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ ),
-                                                                (0, _vue.createElementVNode)("div", _hoisted_18, [
+                                                                (0, _vue.createElementVNode)("div", _hoisted_19, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ ),
+                                                                (0, _vue.createElementVNode)("div", _hoisted_20, [
                                                                     (0, _vue.createVNode)(_component_v_icon, {
                                                                         color: "#2196f3",
                                                                         icon: "mdi-checkbox-multiple-blank-outline",
@@ -15038,7 +15042,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         class: "text-medium-emphasis"
                                                                                                     }, {
                                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                                _hoisted_19,
+                                                                                                                _hoisted_21,
                                                                                                                 (0, _vue.createVNode)(_component_v_row, {
                                                                                                                     align: "center",
                                                                                                                     "no-gutters": ""
@@ -15056,8 +15060,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         ]),
                                                                                                                     _: 1 /* STABLE */ 
                                                                                                                 }),
-                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_20, [
-                                                                                                                    _hoisted_21,
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_22, [
+                                                                                                                    _hoisted_23,
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
                                                                                                                         (0, _vue.createTextVNode)("Checksum "),
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
@@ -15091,11 +15095,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                         (0, _vue.createVNode)(_component_v_card, null, {
                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_22, [
+                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_24, [
                                                                                                         (0, _vue.createVNode)(_component_v_card_item, {
                                                                                                             title: "Uptime Cron"
                                                                                                         }),
-                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_23, [
+                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_25, [
                                                                                                             (0, _vue.createVNode)(_component_v_menu, {
                                                                                                                 "open-on-hover": ""
                                                                                                             }, {
@@ -15139,9 +15143,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         class: "text-medium-emphasis pt-0"
                                                                                                     }, {
                                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_24, [
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_26, [
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
-                                                                                                                        _hoisted_25,
+                                                                                                                        _hoisted_27,
                                                                                                                         (0, _vue.createVNode)(_component_v_row, {
                                                                                                                             align: "center",
                                                                                                                             "no-gutters": ""
@@ -15161,7 +15165,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         })
                                                                                                                     ]),
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
-                                                                                                                        _hoisted_26,
+                                                                                                                        _hoisted_28,
                                                                                                                         (0, _vue.createVNode)(_component_v_row, {
                                                                                                                             align: "center",
                                                                                                                             "no-gutters": ""
@@ -15181,7 +15185,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         })
                                                                                                                     ])
                                                                                                                 ]),
-                                                                                                                _hoisted_27
+                                                                                                                _hoisted_29
                                                                                                             ]),
                                                                                                         _: 1 /* STABLE */ 
                                                                                                     }),
@@ -15221,9 +15225,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         class: "text-medium-emphasis"
                                                                                                     }, {
                                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_28, [
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_30, [
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
-                                                                                                                        _hoisted_29,
+                                                                                                                        _hoisted_31,
                                                                                                                         (0, _vue.createVNode)(_component_v_row, {
                                                                                                                             align: "center",
                                                                                                                             "no-gutters": ""
@@ -15243,7 +15247,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         })
                                                                                                                     ]),
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
-                                                                                                                        _hoisted_30,
+                                                                                                                        _hoisted_32,
                                                                                                                         (0, _vue.createVNode)(_component_v_row, {
                                                                                                                             align: "center",
                                                                                                                             "no-gutters": ""
@@ -15263,8 +15267,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         })
                                                                                                                     ])
                                                                                                                 ]),
-                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_31, [
-                                                                                                                    _hoisted_32,
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_33, [
+                                                                                                                    _hoisted_34,
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
                                                                                                                         (0, _vue.createTextVNode)("Checksum "),
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
@@ -15298,11 +15302,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                         (0, _vue.createVNode)(_component_v_card, null, {
                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_33, [
+                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_35, [
                                                                                                         (0, _vue.createVNode)(_component_v_card_item, {
                                                                                                             title: "Messages"
                                                                                                         }),
-                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_34, [
+                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_36, [
                                                                                                             (0, _vue.createVNode)(_component_v_menu, {
                                                                                                                 "open-on-hover": ""
                                                                                                             }, {
@@ -15346,9 +15350,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         class: "text-medium-emphasis pt-0"
                                                                                                     }, {
                                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_35, [
+                                                                                                                (0, _vue.createElementVNode)("div", _hoisted_37, [
                                                                                                                     (0, _vue.createElementVNode)("div", null, [
-                                                                                                                        _hoisted_36,
+                                                                                                                        _hoisted_38,
                                                                                                                         (0, _vue.createVNode)(_component_v_row, {
                                                                                                                             align: "center",
                                                                                                                             "no-gutters": ""
@@ -15368,7 +15372,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         })
                                                                                                                     ])
                                                                                                                 ]),
-                                                                                                                _hoisted_37
+                                                                                                                _hoisted_39
                                                                                                             ]),
                                                                                                         _: 1 /* STABLE */ 
                                                                                                     }),
@@ -15390,7 +15394,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             ]),
                                                         _: 2 /* DYNAMIC */ 
                                                     }, 1024 /* DYNAMIC_SLOTS */ )
-                                                ], 8 /* PROPS */ , _hoisted_16)
+                                                ], 8 /* PROPS */ , _hoisted_18)
                                             ])
                                         ]),
                                     _: 1 /* STABLE */ 

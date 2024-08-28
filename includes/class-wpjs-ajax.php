@@ -325,6 +325,40 @@ class WPJS_AJAX
 			];
 		}
 
+		function load_wpjugglertools() {
+			$args = array(
+				'post_type'      => 'wpjugglertools',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+			);
+		
+			$posts_array = get_posts($args);
+			$posts = array();
+		
+			foreach ($posts_array as $post) {
+				$posts[] = array(
+					'ID'            => $post->ID,
+					'wp_juggler_related_sites' => get_post_meta($post->ID, 'wp_juggler_related_sites', true),
+					'wp_juggler_tool_label' => get_post_meta($post->ID, 'wp_juggler_tool_label', true),
+					'wp_juggler_tool_url' => get_post_meta($post->ID, 'wp_juggler_tool_url', true),
+				);
+			}
+		
+			return $posts;
+		}
+		
+		function get_related_wpjugglertools($site_id, $wpjugglertools_posts) {
+			$related_posts = array();
+		
+			foreach ($wpjugglertools_posts as $post) {
+				if (is_array($post['wp_juggler_related_sites']) && in_array($site_id, $post['wp_juggler_related_sites'])) {
+					$related_posts[] = $post;
+				}
+			}
+		
+			return $related_posts;
+		}
+
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
 			return;
@@ -338,6 +372,8 @@ class WPJS_AJAX
 
 		$wpjuggler_sites = get_posts($args);
 		$data = array();
+		
+		$tools_array = load_wpjugglertools();
 
 		foreach ($wpjuggler_sites as $site) {
 
@@ -378,17 +414,40 @@ class WPJS_AJAX
 
 					$access_token = false;
 					$access_user = get_post_meta($site->ID, 'wp_juggler_login_username', true);
+					$api_key = get_post_meta($site->ID, 'wp_juggler_api_key', true);
 
-					if ($automatic_logon && $access_user) {
+					$related_tools = get_related_wpjugglertools($site->ID, $tools_array);
 
-						$api_key = get_post_meta($site->ID, 'wp_juggler_api_key', true);
+					if ($automatic_logon && $access_user && $api_key) {
+						
+						$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+						$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/' , 'wpjs_token', $access_token);
+						
+						$newsite['wp_juggler_automatic_login'] = true;
+						$newsite['wp_juggler_login_url'] = $final_url;
+						$newsite['wp_juggler_login_tools'] = array();
 
-						if ($api_key) {
-							$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
-							$newsite['wp_juggler_automatic_login'] = true;
-							$newsite['wp_juggler_login_url'] = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/' , 'wpjs_token', $access_token);
+						foreach ($related_tools as $tool) {
+							$newsite['wp_juggler_login_tools'][] = array(
+								'wp_juggler_tool_label' => $tool['wp_juggler_tool_label'],
+								'wp_juggler_tool_url' => WPJS_Service::add_query_var_to_url($final_url , 'wpjs_redirect', rtrim($site_url, '/') . '/' . ltrim($tool['wp_juggler_tool_url'], '/'))
+							);
+						}
+
+					} else {
+						$newsite['wp_juggler_automatic_login'] = false;
+						$newsite['wp_juggler_login_url'] = rtrim($site_url, '/') . '/wp-admin/';
+						$newsite['wp_juggler_login_tools'] = array();
+
+						foreach ($related_tools as $tool) {
+							$newsite['wp_juggler_login_tools'][] = array(
+								'wp_juggler_tool_label' => $tool['wp_juggler_tool_label'],
+								'wp_juggler_tool_url' => rtrim($site_url, '/') . '/' . ltrim($tool['wp_juggler_tool_url'], '/')
+							);
 						}
 					}
+
+
 				}
 
 				$data[] = $newsite;
