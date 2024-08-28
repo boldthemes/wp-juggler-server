@@ -127,10 +127,10 @@ onMounted(() => {
 
         <template v-slot:item.updates="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <div v-if="item.wp_pluggins_summary">
-              <v-icon v-if="item.wp_pluggins_summary.vulnerabilities_num > 0" color="error" icon="mdi-bug-check-outline"
+            <div v-if="item.wp_juggler_plugins_summary">
+              <v-icon v-if="item.wp_juggler_plugins_summary.vulnerabilities_num > 0" color="error" icon="mdi-bug-check-outline"
                 size="large" class='rm-4'></v-icon>
-              <v-icon v-else-if="item.wp_pluggins_summary.updates_num > 0" color="error" icon="mdi-check-bold"
+              <v-icon v-else-if="item.wp_juggler_plugins_summary.updates_num > 0 || item.wp_juggler_themes_summary.updates_num > 0" color="error" icon="mdi-check-bold"
                 size="large" class='rm-4'></v-icon>
             </div>
             <div v-else>
@@ -144,8 +144,8 @@ onMounted(() => {
 
         <template v-slot:item.checksum="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <div v-if="item.wp_plugins_checksum && item.wp_core_checksum">
-              <v-icon v-if="item.wp_plugins_checksum.failures > 0 || item.wp_core_checksum.errors" color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
+            <div v-if="item.wp_juggler_plugins_checksum && item.wp_juggler_core_checksum">
+              <v-icon v-if="item.wp_juggler_plugins_checksum.failures > 0 || item.wp_juggler_core_checksum.errors" color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
             </div>
             <div v-else>
               <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class='rm-4'></v-icon>
