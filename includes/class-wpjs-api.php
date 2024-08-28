@@ -62,6 +62,13 @@ class WPJS_Api
 			'permission_callback' => array($this, 'api_validate_api_key')
 		));
 
+		register_rest_route('juggler/v1', '/checkClientApi/', array(
+			'methods' => 'POST',
+			'callback' => array($this, 'api_check_client_api'),
+			'args' => array(),
+			'permission_callback' => array($this, 'api_validate_api_key')
+		));
+
 		register_rest_route('juggler/v1', '/triggerMultiCron/', array(
 			'methods' => 'POST',
 			'callback' => array($this, 'api_trigger_multi_cron'),
@@ -150,9 +157,9 @@ class WPJS_Api
 
 		$site_id = $this->get_site_id_by_api_key($api_key);
 
-		$response = WPJS_Service::check_core_checksum_api(37);
+		//$response = WPJS_Service::check_core_checksum_api(37);
 		//$response = WPJS_Service::check_plugin_checksum_api(37);
-		//$response = WPJS_Service::check_health_api(37);
+		$response = WPJS_Service::check_health_api(37);
 		//$response = WPJS_Service::check_notices_api(37);
 		//$response = WPJS_Service::check_plugins_api(37);
 		//$response = WPJS_Service::check_themes_api(37);
@@ -161,6 +168,17 @@ class WPJS_Api
 		$data = json_decode($body, true);
 		
 		wp_send_json_success($data['data'], 200);
+
+	}
+
+	public function api_check_client_api(WP_REST_Request $request)
+	{
+
+		$this->cron->check_client_api();
+
+		$data = array();
+		
+		wp_send_json_success($data, 200);
 
 	}
 

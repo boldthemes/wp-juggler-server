@@ -387,13 +387,15 @@ class WPJS_Cron_Log
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		dbDelta($sql);
 
-		$the_default_timestamp_query = "ALTER TABLE $table_name MODIFY COLUMN log_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;";
-
-		$wpdb->query($the_default_timestamp_query);
+		//$the_default_timestamp_query = "ALTER TABLE $table_name MODIFY COLUMN log_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP;";
+		//$wpdb->query($the_default_timestamp_query);
 	}
 
 	static function insert_log($event)
 	{
+		if(!$event){
+			return;
+		}
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'wpjs_cron_log';
@@ -414,8 +416,11 @@ class WPJS_Cron_Log
 
 				$log_data = json_encode($log_data_array);
 				$event_fil["log_data"] = $log_data;
+				
 			}
 		}
+
+		$event_fil["log_time"] = gmdate('Y-m-d H:i:s');
 
 		$wpdb->insert(
 			$table_name,

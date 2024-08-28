@@ -59,7 +59,7 @@ class WPJS_Background_Process extends WP_Background_Process
 						$log_entry = array(
 							'wpjugglersites_id' => $site_id,
 							'log_type' => $endpoint,
-							'log_result' => 'error',
+							'log_result' => 'fail',
 							'log_value' =>  'Remote client is unresponsive'
 						);
 
@@ -69,7 +69,7 @@ class WPJS_Background_Process extends WP_Background_Process
 						$log_entry = array(
 							'wpjugglersites_id' => $site_id,
 							'log_type' => $endpoint,
-							'log_result' => 'error',
+							'log_result' => 'fail',
 							'log_value' =>  '401 - You should check API key'
 						);
 
@@ -79,7 +79,7 @@ class WPJS_Background_Process extends WP_Background_Process
 						$log_entry = array(
 							'wpjugglersites_id' => $site_id,
 							'log_type' => $endpoint,
-							'log_result' => 'error',
+							'log_result' => 'fail',
 							'log_value' =>  '500 - Internal Server Error on remote client'
 						);
 
@@ -90,7 +90,7 @@ class WPJS_Background_Process extends WP_Background_Process
 							$log_entry = array(
 								'wpjugglersites_id' => $site_id,
 								'log_type' => $endpoint,
-								'log_result' => 'error',
+								'log_result' => 'fail',
 								'log_value' =>  $response_code . ' - Client error occurred'
 							);
 						} elseif ($response_code >= 500) {
@@ -98,26 +98,31 @@ class WPJS_Background_Process extends WP_Background_Process
 							$log_entry = array(
 								'wpjugglersites_id' => $site_id,
 								'log_type' => $endpoint,
-								'log_result' => 'error',
+								'log_result' => 'fail',
 								'log_value' =>  $response_code . ' - Server error occurred'
 							);
 						} else {
 							
 							$body = json_decode(wp_remote_retrieve_body($response), true);
 
-							if( $body['multisite'] === true ){
+							if( $body['data']['multisite'] ){
 								update_post_meta($site_id, 'wp_juggler_multisite', 'on');
 							} else {
 								delete_post_meta($site_id, 'wp_juggler_multisite');
 							}
 
-							$log_entry = array(
+							update_post_meta($site_id, 'wp_juggler_wordpress_version', $body['data']['wp_version']);
+
+							// Ne upisujemo uspesne checkove
+
+							/* $log_entry = array(
 								'wpjugglersites_id' => $site_id,
 								'log_type' => $endpoint,
 								'log_result' => 'succ',
 								'log_data' => json_encode($body['data'])
-							);
-
+							); */
+							
+							$log_entry = false;
 
 						}
 						break;
@@ -143,11 +148,16 @@ class WPJS_Background_Process extends WP_Background_Process
 
 			if (!is_wp_error($front_end_check)) {
 
-				$log_entry = array(
+				//Ne upisujemo uspesne checkove
+
+				/*$log_entry = array(
 					'wpjugglersites_id' => $site_id,
 					'log_type' => $endpoint,
 					'log_result' => 'succ',
-				);
+				);*/
+
+				$log_entry = false;
+
 			} else {
 
 				$log_entry = array(

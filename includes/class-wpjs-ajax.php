@@ -87,7 +87,7 @@ class WPJS_AJAX
 		$wpjs_cron_schedules = $this->get_wpjs_cron_schedules();
 
 		$wpjs_cp_slug = get_option('wpjs_cp_slug');
-		
+
 		$wpjs_uptime_cron_interval = get_option('wpjs_uptime_cron_interval');
 		$wpjs_health_cron_interval = get_option('wpjs_health_cron_interval');
 		$wpjs_plugins_cron_interval = get_option('wpjs_plugins_cron_interval');
@@ -99,7 +99,7 @@ class WPJS_AJAX
 			'wpjs_health_cron_interval' => $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'daily',
 			'wpjs_plugins_cron_interval' => $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'daily',
 			'wpjs_checksum_cron_interval' => $wpjs_checksum_cron_interval ? esc_attr($wpjs_checksum_cron_interval) : 'daily',
-			
+
 			'wpjs_cron_schedules' => $wpjs_cron_schedules
 		);
 
@@ -179,26 +179,29 @@ class WPJS_AJAX
 			return in_array($current_user, $allowed_usernames); // Check if current user is in allowed users
 		}
 
-		function get_uptime_stats_7days( $site_id ){
+		function get_uptime_stats_7days($site_id)
+		{
 			global $wpdb;
-		
+
 			$results = array_fill(0, 7, [
 				'fail_num' => 0,
 				'fail_array' => [],
 				'total_num' => 0,
 			]);
-		
+
 			$table_name = $wpdb->prefix . 'wpjs_cron_log';
-		
+
 			$query = $wpdb->prepare(
-				"SELECT * FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s",
+				"SELECT * FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s, %s)",
 				$site_id,
-				date('Y-m-d H:i:s', strtotime('-7 days'))
+				date('Y-m-d H:i:s', strtotime('-7 days')),
+				'confirmClientApi',
+				'confirmFrontEnd'
 			);
-		
+
 			$logs = $wpdb->get_results($query, ARRAY_A);
 			$current_time = time();
-		
+
 			foreach ($logs as $log) {
 				$index = (int) floor((time() - strtotime($log['log_time'])) / 86400);
 				$log_time = strtotime($log['log_time']);
@@ -206,20 +209,21 @@ class WPJS_AJAX
 
 				if ($days_ago >= 0 && $days_ago < 7) {
 					$results[$days_ago]['total_num']++;
-		
+
 					if ($log['log_result'] == 'fail') {
 						$results[$days_ago]['fail_num']++;
 						$results[$days_ago]['fail_array'][] = $log;
 					}
 				}
 			}
-		
+
 			return $results;
 		}
 
-		function get_last_plugin_data($site_id) {
+		function get_last_plugin_data($site_id)
+		{
 			global $wpdb;
-		
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
@@ -235,19 +239,20 @@ class WPJS_AJAX
 				),
 				ARRAY_A
 			);
-		
+
 			if (!$result) {
 				return false;
 			}
-		
+
 			$log_data_array = json_decode($result['log_data'], true);
 
 			return $log_data_array;
 		}
 
-		function get_plugin_checksum_data($site_id) {
+		function get_plugin_checksum_data($site_id)
+		{
 			global $wpdb;
-		
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
@@ -263,19 +268,20 @@ class WPJS_AJAX
 				),
 				ARRAY_A
 			);
-		
+
 			if (!$result) {
 				return false;
 			}
-		
+
 			$log_data_array = json_decode($result['log_data'], true);
 
 			return $log_data_array;
 		}
 
-		function get_core_checksum_data($site_id) {
+		function get_core_checksum_data($site_id)
+		{
 			global $wpdb;
-		
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
@@ -291,25 +297,58 @@ class WPJS_AJAX
 				),
 				ARRAY_A
 			);
-		
+
 			if (!$result) {
 				return false;
 			}
-		
+
 			$log_data_array = json_decode($result['log_data'], true);
 
 			return $log_data_array;
 		}
 
-		function get_updates_and_vul( $plugins_array ){
+		function get_health_data($site_id)
+		{
+			global $wpdb;
 
-			if( !$plugins_array ) {
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+					  AND log_type = 'checkHealth' 
+					  AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+
+			if (!$result) {
+				return false;
+			}
+
+			$log_data_array = json_decode($result['log_data'], true);
+
+			return [
+				'data' => $log_data_array,
+				'timestamp' => strtotime($result['log_time'])
+			];
+		}
+
+		function get_updates_and_vul($plugins_array)
+		{
+
+			if (!$plugins_array) {
 				return false;
 			}
 
 			$updates_num = 0;
 			$vulnerabilities_num = 0;
-		
+
 			foreach ($plugins_array as $item) {
 				if (isset($item['UpdateVersion']) && !empty($item['UpdateVersion'])) {
 					$updates_num++;
@@ -318,23 +357,24 @@ class WPJS_AJAX
 					$vulnerabilities_num += count($item['Vulnerabilities']);
 				}
 			}
-		
+
 			return (object) [
 				'updates_num' => $updates_num,
 				'vulnerabilities_num' => $vulnerabilities_num
 			];
 		}
 
-		function load_wpjugglertools() {
+		function load_wpjugglertools()
+		{
 			$args = array(
 				'post_type'      => 'wpjugglertools',
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 			);
-		
+
 			$posts_array = get_posts($args);
 			$posts = array();
-		
+
 			foreach ($posts_array as $post) {
 				$posts[] = array(
 					'ID'            => $post->ID,
@@ -343,20 +383,47 @@ class WPJS_AJAX
 					'wp_juggler_tool_url' => get_post_meta($post->ID, 'wp_juggler_tool_url', true),
 				);
 			}
-		
+
 			return $posts;
 		}
-		
-		function get_related_wpjugglertools($site_id, $wpjugglertools_posts) {
+
+		function get_related_wpjugglertools($site_id, $wpjugglertools_posts)
+		{
 			$related_posts = array();
-		
+
 			foreach ($wpjugglertools_posts as $post) {
 				if (is_array($post['wp_juggler_related_sites']) && in_array($site_id, $post['wp_juggler_related_sites'])) {
 					$related_posts[] = $post;
 				}
 			}
-		
+
 			return $related_posts;
+		}
+
+		function get_time_ago($time)
+		{
+			$time_difference = time() - $time;
+
+			if ($time_difference < 1) {
+				return 'less than 1 second ago';
+			}
+			$condition = array(
+				12 * 30 * 24 * 60 * 60 =>  'year',
+				30 * 24 * 60 * 60       =>  'month',
+				24 * 60 * 60            =>  'day',
+				60 * 60                 =>  'hour',
+				60                      =>  'minute',
+				1                       =>  'second'
+			);
+
+			foreach ($condition as $secs => $str) {
+				$d = $time_difference / $secs;
+
+				if ($d >= 1) {
+					$t = round($d);
+					return 'about ' . $t . ' ' . $str . ($t > 1 ? 's' : '') . ' ago';
+				}
+			}
 		}
 
 		if (!current_user_can('manage_options')) {
@@ -372,12 +439,14 @@ class WPJS_AJAX
 
 		$wpjuggler_sites = get_posts($args);
 		$data = array();
-		
+
 		$tools_array = load_wpjugglertools();
 
 		foreach ($wpjuggler_sites as $site) {
 
 			if (can_user_access_post($site)) {
+
+				$wp_version = get_post_meta($site->ID, 'wp_juggler_wordpress_version', true);
 
 				$site_activation = get_post_meta($site->ID, 'wp_juggler_site_activation', true) == "on" ? true : false;
 
@@ -387,27 +456,32 @@ class WPJS_AJAX
 
 				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
 
-				$uptime7 = get_uptime_stats_7days( $site->ID );
+				$uptime7 = get_uptime_stats_7days($site->ID);
 
 				$plugins_data = get_last_plugin_data($site->ID);
 
-				$updates_vul = get_updates_and_vul( $plugins_data );
+				$updates_vul = get_updates_and_vul($plugins_data);
 
-				$plugins_checksum = get_plugin_checksum_data( $site->ID );
+				$plugins_checksum = get_plugin_checksum_data($site->ID);
 
-				$core_checksum = get_core_checksum_data( $site->ID );
-				
+				$core_checksum = get_core_checksum_data($site->ID);
+
+				$health_data = get_health_data($site->ID);
+
 				$newsite = array(
 					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
 					'wp_juggler_server_site_url' => $site_url,
 					'wp_juggler_multisite' => $multisite,
+					'wp_juggler_wordpress_version' => $wp_version,
 					'wp_juggler_site_activation' => $site_activation,
 					'wp_juggler_automatic_login' => false,
 					'wp_juggler_uptime_7' => $uptime7,
 					'wp_pluggins_summary' => $updates_vul,
 					'wp_plugins_checksum' => $plugins_checksum,
-					'wp_core_checksum' => $core_checksum
+					'wp_core_checksum' => $core_checksum,
+					'health_data' => $health_data['data']['site_status']['issues'],
+					'health_data_timestamp' => get_time_ago( $health_data['timestamp'] )
 				);
 
 				if ($site_activation) {
@@ -419,10 +493,10 @@ class WPJS_AJAX
 					$related_tools = get_related_wpjugglertools($site->ID, $tools_array);
 
 					if ($automatic_logon && $access_user && $api_key) {
-						
+
 						$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
-						$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/' , 'wpjs_token', $access_token);
-						
+						$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
+
 						$newsite['wp_juggler_automatic_login'] = true;
 						$newsite['wp_juggler_login_url'] = $final_url;
 						$newsite['wp_juggler_login_tools'] = array();
@@ -430,10 +504,9 @@ class WPJS_AJAX
 						foreach ($related_tools as $tool) {
 							$newsite['wp_juggler_login_tools'][] = array(
 								'wp_juggler_tool_label' => $tool['wp_juggler_tool_label'],
-								'wp_juggler_tool_url' => WPJS_Service::add_query_var_to_url($final_url , 'wpjs_redirect', rtrim($site_url, '/') . '/' . ltrim($tool['wp_juggler_tool_url'], '/'))
+								'wp_juggler_tool_url' => WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/' . ltrim($tool['wp_juggler_tool_url'], '/'))
 							);
 						}
-
 					} else {
 						$newsite['wp_juggler_automatic_login'] = false;
 						$newsite['wp_juggler_login_url'] = rtrim($site_url, '/') . '/wp-admin/';
@@ -446,8 +519,6 @@ class WPJS_AJAX
 							);
 						}
 					}
-
-
 				}
 
 				$data[] = $newsite;
@@ -487,16 +558,17 @@ class WPJS_AJAX
 		wp_send_json($results);
 	}
 
-	private function get_wpjs_cron_schedules() {
+	private function get_wpjs_cron_schedules()
+	{
 		$schedules = wp_get_schedules();
 		$wpjs_schedules = array();
-	
+
 		foreach ($schedules as $name => $details) {
 			if (strpos($name, 'wpjs_') === 0) {
 				$wpjs_schedules[$name] = $details['display'];
 			}
 		}
-	
+
 		return $wpjs_schedules;
 	}
 }
