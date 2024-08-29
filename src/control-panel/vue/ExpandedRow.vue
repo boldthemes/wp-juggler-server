@@ -33,8 +33,7 @@ function trial( elem ){
 
 <template>
   <tr>
-    <td :colspan="props.columns?.length">
-      <v-container>
+    <td :colspan="props.columns?.length + 1 ">
         <div class="text-h5 font-weight-bold mt-5 mb-3">
           {{ props.item?.title }}
         </div>
@@ -121,7 +120,7 @@ function trial( elem ){
               <v-btn
                 text="Full Report"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5"
+                class="mb-5 ml-5 mt-4"
               ></v-btn>
             </v-card>
           </v-col>
@@ -250,7 +249,7 @@ function trial( elem ){
               <v-btn
                 text="Manage Themes & Plugins"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5"
+                class="mb-5 ml-5 mt-4"
                 @click="trial"
                 ref="themesButton"
               ></v-btn>
@@ -305,7 +304,6 @@ function trial( elem ){
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
     </td>
   </tr>
 </template>

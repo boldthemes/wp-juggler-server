@@ -1,205 +1,295 @@
 <script setup>
-
-import { useWpjsStore } from './store.js'
-import { onMounted, computed, ref } from 'vue'
-import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query'
+import { useWpjsStore } from "./store.js";
+import { onMounted, computed, ref } from "vue";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 import ExpandedRow from "./ExpandedRow.vue";
 import ThemesPluginsPanel from "./ThemesPluginsPanel.vue";
 
-const queryClient = useQueryClient()
+const queryClient = useQueryClient();
 
-const store = useWpjsStore()
+const store = useWpjsStore();
 
-const dialog = ref(false)
+const dialog = ref(false);
 
-const nonce = ref(wpjs_control_panel_object.nonce)
+const nonce = ref(wpjs_control_panel_object.nonce);
 
-const search = ref("")
+const search = ref("");
 
-const expanded = ref([])
+const expanded = ref([]);
 const headers = [
-  { title: '', key: 'network', align: 'center', sortable: false },
-  { title: 'Title', value: 'title', align: 'start', sortable: true },
-  { title: 'Url', key: 'wp_juggler_server_site_url', align: 'start', sortable: true },
-  { title: 'Messages', key: 'events', align: 'center', sortable: false },
-  { title: 'Downtime incidents', key: 'uptime', align: 'center', sortable: false },
-  { title: 'Updates', key: 'updates', align: 'center', sortable: false },
-  { title: 'Checksum', key: 'checksum', align: 'center', sortable: false },
-  { title: 'Links', key: 'links', align: 'center', sortable: false },
-  { title: 'WP admin', key: 'wp_admin', align: 'center', sortable: false },
-]
+  { title: "", key: "network", align: "center", sortable: false },
+  { title: "Title", value: "title", align: "start", sortable: true },
+  {
+    title: "Url",
+    key: "wp_juggler_server_site_url",
+    align: "start",
+    sortable: true,
+  },
+  { title: "Messages", key: "events", align: "center", sortable: false },
+  {
+    title: "Downtime incidents",
+    key: "uptime",
+    align: "center",
+    sortable: false,
+  },
+  { title: "Updates", key: "updates", align: "center", sortable: false },
+  { title: "Checksum", key: "checksum", align: "center", sortable: false },
+  { title: "Links", key: "links", align: "center", sortable: false },
+  { title: "WP admin", key: "wp_admin", align: "center", sortable: false },
+];
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
-  queryKey: ['wpjs-control-panel'],
-  queryFn: getDashboard
-})
+  queryKey: ["wpjs-control-panel"],
+  queryFn: getDashboard,
+});
 
 async function doAjax(args) {
   let result;
+
   try {
-    result = await jQuery.ajax({
-      url: wpjs_control_panel_object.ajaxurl,
-      type: 'POST',
-      data: args
+    const response = await fetch(wpjs_control_panel_object.ajaxurl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(args),
     });
+    const result = await response.json();
     return result;
   } catch (error) {
-    throw (error)
+    throw error;
   }
 }
 
 async function getDashboard() {
-
-  let ret = {}
-  const response = await doAjax(
-    {
-      action: "wpjs_get_control_panel",  // the action to fire in the server
-    }
-  )
-  ret = response.data
-  return ret
+  let ret = {};
+  const response = await doAjax({
+    action: "wpjs_get_control_panel", // the action to fire in the server
+  });
+  ret = response.data;
+  return ret;
 }
 
 function backToDashboard() {
-  window.location.href = wpjs_control_panel_object.adminurl
+  window.location.href = wpjs_control_panel_object.adminurl;
 }
 
 function calculateColor(day) {
-  if (day.total_num == 0) return 'blue-lighten-5';
-  if (day.fail_num == 0) return 'success';
-  return 'error';
+  if (day.total_num == 0) return "blue-lighten-5";
+  if (day.fail_num == 0) return "success";
+  return "error";
 }
 
 const gotoUrl = (url) => {
-  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-  if (newWindow) newWindow.opener = null
-}
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
 
-onMounted(() => {
-
-})
-
+onMounted(() => {});
 </script>
 
 <template>
-
-  <v-btn color="#2196f3" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to
-    Dashboard</v-btn>
+  <div class="mt-4 ml-4">
+  <v-btn
+    color="#2196f3"
+    variant="flat"
+    class="text-none text-caption"
+    @click="backToDashboard"
+    >Back to Dashboard</v-btn
+  >
   <v-spacer></v-spacer>
 
   <v-card class="pa-4 mr-4 mt-5 mb-5">
-
     <v-card flat>
-
       <v-card-title class="d-flex align-center pe-2 mb-6">
-        <v-icon icon="mdi-video-input-component"></v-icon> &nbsp;
-        WP Juggler Control Panel
+        <v-icon icon="mdi-video-input-component"></v-icon> &nbsp; WP Juggler
+        Control Panel
 
         <v-spacer></v-spacer>
 
-        <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-          variant="solo-filled" flat hide-details single-line></v-text-field>
-
+        <v-text-field
+          v-model="search"
+          density="compact"
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          variant="solo-filled"
+          flat
+          hide-details
+          single-line
+        ></v-text-field>
       </v-card-title>
 
       <v-divider></v-divider>
-      <v-data-table v-model:search="search" :items="data" :headers="headers" item-key="id" show-select
-        v-model:expanded="expanded" show-expand>
-
+      <v-data-table
+        v-model:search="search"
+        :items="data"
+        :headers="headers"
+        item-key="id"
+        show-select
+        v-model:expanded="expanded"
+        show-expand
+      >
         <template v-slot:item.network="{ item }">
           <div v-if="item.wp_juggler_multisite">
-            <v-icon color="#2196f3" icon="mdi-checkbox-multiple-blank-outline" size="large" class='rm-4'></v-icon>
+            <v-icon
+              color="#2196f3"
+              icon="mdi-checkbox-multiple-blank-outline"
+              size="large"
+              class="rm-4"
+            ></v-icon>
           </div>
         </template>
 
         <template v-slot:item.events="{ item }">
           <div v-if="item.wp_juggler_automatic_login">
-            <v-icon color="#2196f3" icon="mdi-email-alert-outline" size="large" class='rm-4'></v-icon>
+            <v-icon
+              color="#2196f3"
+              icon="mdi-email-alert-outline"
+              size="large"
+              class="rm-4"
+            ></v-icon>
           </div>
         </template>
 
         <template v-slot:item.uptime="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <v-icon v-for="day in item.wp_juggler_uptime_stats.uptime_timeline" :color="calculateColor(day)" icon="mdi-square" size="large"
-              class='rm-4'></v-icon>
+            <v-icon
+              v-for="day in item.wp_juggler_uptime_stats.uptime_timeline"
+              :color="calculateColor(day)"
+              icon="mdi-square"
+              size="large"
+              class="rm-4"
+            ></v-icon>
           </div>
-          <div v-if="!item.wp_juggler_site_activation">
-            Inactive
-          </div>
+          <div v-if="!item.wp_juggler_site_activation">Inactive</div>
         </template>
 
         <template v-slot:item.updates="{ item }">
           <div v-if="item.wp_juggler_site_activation">
             <div v-if="item.wp_juggler_plugins_summary">
-              <v-icon v-if="item.wp_juggler_plugins_summary.vulnerabilities_num > 0" color="error" icon="mdi-bug-check-outline"
-                size="large" class='rm-4'></v-icon>
-              <v-icon v-else-if="item.wp_juggler_plugins_summary.updates_num > 0 || item.wp_juggler_themes_summary.updates_num > 0" color="error" icon="mdi-check-bold"
-                size="large" class='rm-4'></v-icon>
+              <v-icon
+                v-if="item.wp_juggler_plugins_summary.vulnerabilities_num > 0"
+                color="error"
+                icon="mdi-bug-check-outline"
+                size="large"
+                class="rm-4"
+              ></v-icon>
+              <v-icon
+                v-else-if="
+                  item.wp_juggler_plugins_summary.updates_num > 0 ||
+                  item.wp_juggler_themes_summary.updates_num > 0
+                "
+                color="error"
+                icon="mdi-check-bold"
+                size="large"
+                class="rm-4"
+              ></v-icon>
             </div>
             <div v-else>
-              <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class='rm-4'></v-icon>
+              <v-icon
+                color="blue-lighten-5"
+                icon="mdi-help"
+                size="large"
+                class="rm-4"
+              ></v-icon>
             </div>
           </div>
-          <div v-if="!item.wp_juggler_site_activation">
-            Inactive
-          </div>
+          <div v-if="!item.wp_juggler_site_activation">Inactive</div>
         </template>
 
         <template v-slot:item.checksum="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <div v-if="item.wp_juggler_plugins_checksum && item.wp_juggler_core_checksum">
-              <v-icon v-if="item.wp_juggler_plugins_checksum.failures > 0 || item.wp_juggler_core_checksum.errors" color="error" icon="mdi-alert-outline" size="large" class='rm-4'></v-icon>
+            <div
+              v-if="
+                item.wp_juggler_plugins_checksum &&
+                item.wp_juggler_core_checksum
+              "
+            >
+              <v-icon
+                v-if="
+                  item.wp_juggler_plugins_checksum.failures > 0 ||
+                  item.wp_juggler_core_checksum.errors
+                "
+                color="error"
+                icon="mdi-alert-outline"
+                size="large"
+                class="rm-4"
+              ></v-icon>
             </div>
             <div v-else>
-              <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class='rm-4'></v-icon>
+              <v-icon
+                color="blue-lighten-5"
+                icon="mdi-help"
+                size="large"
+                class="rm-4"
+              ></v-icon>
             </div>
           </div>
-          <div v-if="!item.wp_juggler_site_activation">
-            Inactive
-          </div>
+          <div v-if="!item.wp_juggler_site_activation">Inactive</div>
         </template>
 
         <template v-slot:item.links="{ item }">
           <div v-if="item.wp_juggler_site_activation">
-            <v-btn v-for="button in item.wp_juggler_login_tools" variant="elevated" @click="gotoUrl(button.wp_juggler_tool_url)" class="text-none text-caption mr-1 ml-1">{{ button.wp_juggler_tool_label }}</v-btn>
+            <v-btn
+              v-for="button in item.wp_juggler_login_tools"
+              variant="elevated"
+              @click="gotoUrl(button.wp_juggler_tool_url)"
+              class="text-none text-caption mr-1 ml-1"
+              >{{ button.wp_juggler_tool_label }}</v-btn
+            >
           </div>
-          <div v-if="!item.wp_juggler_site_activation">
-            Inactive
-          </div>
+          <div v-if="!item.wp_juggler_site_activation">Inactive</div>
         </template>
 
         <template v-slot:item.wp_admin="{ item }">
-          <div v-if="item.wp_juggler_site_activation && item.wp_juggler_automatic_login">
-            <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-login"
-              @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
+          <div
+            v-if="
+              item.wp_juggler_site_activation && item.wp_juggler_automatic_login
+            "
+          >
+            <v-btn
+              color="#2196f3"
+              variant="elevated"
+              class="text-none text-caption"
+              prepend-icon="mdi-login"
+              @click="gotoUrl(item.wp_juggler_login_url)"
+              >Login</v-btn
+            >
           </div>
-          <div v-if="item.wp_juggler_site_activation && !item.wp_juggler_automatic_login">
-            <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-account-remove"
-              @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
+          <div
+            v-if="
+              item.wp_juggler_site_activation &&
+              !item.wp_juggler_automatic_login
+            "
+          >
+            <v-btn
+              color="#2196f3"
+              variant="elevated"
+              class="text-none text-caption"
+              prepend-icon="mdi-account-remove"
+              @click="gotoUrl(item.wp_juggler_login_url)"
+              >Login</v-btn
+            >
           </div>
-          <div v-if="!item.wp_juggler_site_activation">
-            Inactive
-          </div>
+          <div v-if="!item.wp_juggler_site_activation">Inactive</div>
         </template>
 
         <template v-slot:expanded-row="{ columns, item }">
-
           <ExpandedRow :columns="columns" :item="item"></ExpandedRow>
-
         </template>
-
       </v-data-table>
     </v-card>
-
   </v-card>
-  <v-btn color="#2196f3" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to
-    Dashboard</v-btn>
+  <v-btn
+    color="#2196f3"
+    variant="flat"
+    class="text-none text-caption"
+    @click="backToDashboard"
+    >Back to Dashboard</v-btn
+  >
 
-    <div class="text-center pa-4">
-    <v-dialog
-      v-model="dialog"
-      transition="dialog-bottom-transition"
-    >
+  <div class="text-center pa-4">
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ props: activatorProps }">
         <v-btn
           prepend-icon="mdi-cog"
@@ -211,28 +301,18 @@ onMounted(() => {
 
       <v-card>
         <v-toolbar>
-          <v-btn
-            icon="mdi-close"
-            @click="dialog = false"
-          ></v-btn>
+          <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
 
           <v-toolbar-title>Settings</v-toolbar-title>
 
           <v-spacer></v-spacer>
 
           <v-toolbar-items>
-            <v-btn
-              text="Save"
-              variant="text"
-              @click="dialog = false"
-            ></v-btn>
+            <v-btn text="Save" variant="text" @click="dialog = false"></v-btn>
           </v-toolbar-items>
         </v-toolbar>
 
-        <v-list
-          lines="two"
-          subheader
-        >
+        <v-list lines="two" subheader>
           <v-list-subheader>User Controls</v-list-subheader>
 
           <v-list-item
@@ -258,7 +338,10 @@ onMounted(() => {
           >
             <template v-slot:prepend>
               <v-list-item-action start>
-                <v-checkbox-btn v-model="notifications" color="primary"></v-checkbox-btn>
+                <v-checkbox-btn
+                  v-model="notifications"
+                  color="primary"
+                ></v-checkbox-btn>
               </v-list-item-action>
             </template>
           </v-list-item>
@@ -270,7 +353,10 @@ onMounted(() => {
           >
             <template v-slot:prepend>
               <v-list-item-action start>
-                <v-checkbox-btn v-model="sound" color="primary"></v-checkbox-btn>
+                <v-checkbox-btn
+                  v-model="sound"
+                  color="primary"
+                ></v-checkbox-btn>
               </v-list-item-action>
             </template>
           </v-list-item>
@@ -282,7 +368,10 @@ onMounted(() => {
           >
             <template v-slot:prepend>
               <v-list-item-action start>
-                <v-checkbox-btn v-model="widgets" color="primary"></v-checkbox-btn>
+                <v-checkbox-btn
+                  v-model="widgets"
+                  color="primary"
+                ></v-checkbox-btn>
               </v-list-item-action>
             </template>
           </v-list-item>
@@ -290,10 +379,12 @@ onMounted(() => {
       </v-card>
     </v-dialog>
   </div>
+</div>
 </template>
 
 <style>
-body, html {
+body,
+html {
   height: revert !important;
 }
 

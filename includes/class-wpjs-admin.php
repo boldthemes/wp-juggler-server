@@ -169,6 +169,43 @@ class WPJS_Admin
 		}
 	}
 
+	//TODO ostalo kao referenca verovatno treba da se ukloni
+	public function enqueue_control_panel_assets($suffix)
+	{
+		
+		
+			wp_enqueue_script(
+				$this->plugin_name . '-control-panel',
+				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.js',
+				array('jquery'),
+				'',
+				[]
+			);
+
+			wp_enqueue_style(
+				$this->plugin_name . '-control-panel',
+				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.css',
+				[],
+				''
+			);
+
+			$nonce = wp_create_nonce($this->plugin_name . '-control-panel');
+
+			wp_localize_script(
+				$this->plugin_name . '-control-panel',
+				$this->plugin_name . '_control_panel_object',
+				array(
+					'ajaxurl' => admin_url('admin-ajax.php'),
+					'nonce' => $nonce,
+					'adminurl' => admin_url()
+				)
+			);
+
+			wp_dequeue_style('admin-bar');
+    		wp_deregister_style('admin-bar');
+	
+	}
+
 	public function register_menu_page()
 	{
 
@@ -213,8 +250,7 @@ class WPJS_Admin
 			__('Control Panel', 'wp-juggler-server'),
 			__('Control Panel', 'wp-juggler-server'),
 			$cap,
-			'wpjs-control-panel',
-			[$this, 'render_admin_page']
+			'wpjs-control-panel'
 		);
 	}
 
@@ -1065,10 +1101,44 @@ class WPJS_Admin
 		);
 	}
 
-	function wpjs_display_custom_column($column, $post_id)
+	public function wpjs_display_custom_column($column, $post_id)
 	{
 		if ($column == 'server_site_url') {
 			echo esc_html(get_post_meta($post_id, 'wp_juggler_server_site_url', true));
 		}
 	}
+
+	public function wpjs_cp_query_vars($vars) {
+		$vars[] = 'wpjs_cp';
+		return $vars;
+	}
+
+	public function wpjs_cp_rewrite_rule() {
+		//add_rewrite_rule('^wpjs-control-panel/?$', 'index.php?wpjs_cp=1', 'top');
+		add_rewrite_rule('^wp-admin/wpjs-control-panel/?$', 'index.php?wpjs_cp=1', 'top');
+	}
+
+	public function wpjs_cp_template_redirect() {
+		global $wp_query;
+	
+		if (isset($wp_query->query_vars['wpjs_cp'])) {
+			$template = plugin_dir_path(__FILE__) . '../templates/cp-template.php';
+
+			if (file_exists($template)) {
+				show_admin_bar( false );
+				include($template);
+				exit;
+			}
+		}
+	}
+
+	public function wpjs_plugin_activation() {
+		$this->wpjs_cp_rewrite_rule();
+		flush_rewrite_rules();
+	}
+
+	public function wpjs_plugin_deactivation() {
+		flush_rewrite_rules();
+	}
+	
 }

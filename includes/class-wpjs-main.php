@@ -129,8 +129,15 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menu_page_end' );
 		
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_plugin_assets' );
+
+		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_control_panel_assets' );
 		
 		$this->loader->add_action( 'init', $plugin_admin, 'wpjs_cpt', 5 );
+
+		$this->loader->add_filter( 'query_vars', $plugin_admin, 'wpjs_cp_query_vars' );
+		$this->loader->add_action( 'init', $plugin_admin, 'wpjs_cp_rewrite_rule');
+		$this->loader->add_action( 'template_redirect', $plugin_admin, 'wpjs_cp_template_redirect');
+		//$this->loader->add_action( 'admin_init', $plugin_admin, 'wpjs_cp_redirect');
 
 		$this->loader->add_action( 'add_meta_boxes_wpjugglersites', $plugin_admin, 'wpjs_sites_metaboxes' );
 		$this->loader->add_action( 'add_meta_boxes_wpjugglerplugins', $plugin_admin, 'wpjs_plugins_metaboxes' );
@@ -155,6 +162,9 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs_save_settings', $plugin_ajax, 'ajax_save_settings' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs_get_control_panel', $plugin_ajax, 'ajax_get_control_panel' );
+		
+		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );
+		register_deactivation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_deactivation') );
 
 		//Cron actions
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array('WPJS_Cron_Log', 'create_database_tables') );
