@@ -177,45 +177,96 @@ class WPJS_AJAX
 		return in_array($current_user, $allowed_usernames); // Check if current user is in allowed users
 	}
 
-	private function get_uptime_stats_7days($site_id)
+	private function get_uptime_stats($site_id)
 	{
 		global $wpdb;
 
 		$results = array_fill(0, 7, [
 			'fail_num' => 0,
-			'fail_array' => [],
+			//'fail_array' => [],
 			'total_num' => 0,
 		]);
 
 		$table_name = $wpdb->prefix . 'wpjs_cron_log';
 
 		$query = $wpdb->prepare(
-			"SELECT * FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s, %s)",
+			"SELECT * FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s, %s) AND log_result IN (%s, %s)",
 			$site_id,
 			date('Y-m-d H:i:s', strtotime('-7 days')),
 			'confirmClientApi',
-			'confirmFrontEnd'
+			'confirmFrontEnd',
+			'fail',
+			'error'
 		);
 
 		$logs = $wpdb->get_results($query, ARRAY_A);
 		$current_time = time();
 
 		foreach ($logs as $log) {
-			$index = (int) floor((time() - strtotime($log['log_time'])) / 86400);
 			$log_time = strtotime($log['log_time']);
 			$days_ago = (int) floor(($current_time - $log_time) / 86400);
 
 			if ($days_ago >= 0 && $days_ago < 7) {
 				$results[$days_ago]['total_num']++;
 
-				if ($log['log_result'] == 'fail') {
+				if ($log['log_result'] == 'fail' || $log['log_result'] == 'error') {
 					$results[$days_ago]['fail_num']++;
-					$results[$days_ago]['fail_array'][] = $log;
+					//$results[$days_ago]['fail_array'][] = $log;
 				}
 			}
 		}
 
-		return $results;
+		$final_res = [
+			'uptime_timeline' => $results
+		];
+
+		$final_res['summary'] = array();
+		
+		$uptime_periods = [
+			'-1 day',
+			'-7 days',
+			'-30 days',
+			'-3 months',
+		];
+
+		foreach( $uptime_periods as $period ){
+
+			$query = $wpdb->prepare(
+				"SELECT COUNT(ID) AS Num FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s) AND log_result IN (%s, %s)",
+				$site_id,
+				date('Y-m-d H:i:s', strtotime($period)),
+				'confirmClientApi',
+				'fail',
+				'error'
+			);
+	
+			$logs = $wpdb->get_results($query, ARRAY_A);
+	
+			$numapi = $logs[0]['Num'];
+	
+			$query = $wpdb->prepare(
+				"SELECT COUNT(ID) AS Num FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s) AND log_result IN (%s, %s)",
+				$site_id,
+				date('Y-m-d H:i:s', strtotime($period)),
+				'confirmFrontEnd',
+				'fail',
+				'error'
+			);
+	
+			$logs = $wpdb->get_results($query, ARRAY_A);
+	
+			$numfront = $logs[0]['Num'];
+	
+			$obj = [
+				'api' => $numapi,
+				'front' => $numfront
+			];
+	
+			$final_res['summary'][] = $obj;
+		}
+
+		return $final_res;
+
 	}
 
 	private function get_latest_plugin_data($site_id)
@@ -521,7 +572,7 @@ class WPJS_AJAX
 				$automatic_logon = get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
 
-				$uptime7 = $this->get_uptime_stats_7days($site->ID);
+				$uptime_stats= $this->get_uptime_stats($site->ID);
 				
 				$plugins_data = $this->get_latest_plugin_data($site->ID);
 
@@ -581,7 +632,7 @@ class WPJS_AJAX
 					'wp_juggler_wordpress_version' => $wp_version,
 					'wp_juggler_site_activation' => $site_activation,
 					'wp_juggler_automatic_login' => false,
-					'wp_juggler_uptime_7' => $uptime7,
+					'wp_juggler_uptime_stats' => $uptime_stats,
 					'wp_juggler_plugins_summary' => $updates_vul,
 					'wp_juggler_plugins_summary_timestamp' => $plugins_timestamp,
 					'wp_juggler_themes_summary' => $themes_array,

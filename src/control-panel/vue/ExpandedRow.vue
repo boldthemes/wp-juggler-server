@@ -3,14 +3,32 @@ import { useWpjsStore } from "./store.js";
 import { onMounted, computed, ref } from "vue";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 
-const props = defineProps(["columns", "item"]);
+const store = useWpjsStore()
 
-const menu_items = [
-  { title: "Click Me" },
-  { title: "Click Me" },
-  { title: "Click Me" },
-  { title: "Click Me 2" },
+const props = defineProps(["columns", "item"])
+
+const uptimePeriods = [
+  { title: "Last 24 hours" },
+  { title: "Last 7 days" },
+  { title: "Last 30 days" },
+  { title: "Last 3 months" },
 ];
+
+const selectedUptimePeriod = ref(0)
+
+function selectUptimePeriod( ind ){
+  console.log(ind)
+  selectedUptimePeriod.value = ind
+  console.log(selectedUptimePeriod.value)
+}
+
+const themesButton = ref(null)
+
+function trial( elem ){
+  console.log('Petar')
+  document.body.classList.toggle('noscroll', true);
+  store.activated_themes = true
+}
 </script>
 
 <template>
@@ -56,8 +74,8 @@ const menu_items = [
                 </template>
               </v-card-item>
 
-              <v-card-text class="text-medium-emphasis pt-0">
-                <div class="d-flex py-3 justify-space-between">
+              <v-card-text class="text-medium-emphasis">
+                <div class="d-flex py-3 justify-space-between pt-0">
                   <div>
                     <div>Critical Improvements</div>
                     <v-row align="center" no-gutters>
@@ -74,7 +92,7 @@ const menu_items = [
                   </div>
                 </div>
 
-                <div class="d-flex py-3 justify-space-between">
+                <div class="d-flex py-3 justify-space-between pt-0">
                   <div v-if="props.item.wp_juggler_wordpress_version">WordPress version: {{ props.item.wp_juggler_wordpress_version }}</div>
                   <div v-else>WordPress version: ?</div>
                   <div v-if="props.item.wp_juggler_core_checksum">
@@ -117,14 +135,15 @@ const menu_items = [
                   <v-menu open-on-hover>
                     <template v-slot:activator="{ props }">
                       <v-btn v-bind="props" class="text-none text-caption">
-                        Last 24 hours
+                        {{ uptimePeriods[selectedUptimePeriod].title }}
                       </v-btn>
                     </template>
 
                     <v-list>
                       <v-list-item
-                        v-for="(item, index) in menu_items"
+                        v-for="(item, index) in uptimePeriods"
                         :key="index"
+                        @click="selectUptimePeriod( index )"
                       >
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
                       </v-list-item>
@@ -138,18 +157,18 @@ const menu_items = [
                   <div>
                     <div>Failed frontend checks</div>
                     <v-row align="center" no-gutters>
-                      <v-col class="text-h2" cols="12"> 12 </v-col>
+                      <v-col class="text-h2" cols="12"> {{ item.wp_juggler_uptime_stats.summary[selectedUptimePeriod].front }} </v-col>
                     </v-row>
                   </div>
                   <div>
                     <div>Failed API checks</div>
                     <v-row align="center" no-gutters>
-                      <v-col class="text-h2" cols="12"> 21 </v-col>
+                      <v-col class="text-h2" cols="12"> {{ item.wp_juggler_uptime_stats.summary[selectedUptimePeriod].api }} </v-col>
                     </v-row>
                   </div>
                 </div>
 
-                <div>Uptime percetige: 99.54%</div>
+                <div>Total failed checks: {{ parseInt(item.wp_juggler_uptime_stats.summary[selectedUptimePeriod].front) + parseInt(item.wp_juggler_uptime_stats.summary[selectedUptimePeriod].api) }}</div>
               </v-card-text>
 
               <v-divider></v-divider>
@@ -232,6 +251,8 @@ const menu_items = [
                 text="Manage Themes & Plugins"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5"
+                @click="trial"
+                ref="themesButton"
               ></v-btn>
             </v-card>
           </v-col>
@@ -251,7 +272,7 @@ const menu_items = [
 
                     <v-list>
                       <v-list-item
-                        v-for="(item, index) in menu_items"
+                        v-for="(item, index) in uptimePeriods"
                         :key="index"
                       >
                         <v-list-item-title>{{ item.title }}</v-list-item-title>
