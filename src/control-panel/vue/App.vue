@@ -9,10 +9,6 @@ const queryClient = useQueryClient();
 
 const store = useWpjsStore();
 
-const dialog = ref(false);
-
-const nonce = ref(wpjs_control_panel_object.nonce);
-
 const search = ref("");
 
 const expanded = ref([]);
@@ -47,7 +43,7 @@ async function doAjax(args) {
   let result;
 
   try {
-    const response = await fetch(wpjs_control_panel_object.ajaxurl, {
+    const response = await fetch(store.ajaxUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -85,11 +81,14 @@ const gotoUrl = (url) => {
   if (newWindow) newWindow.opener = null;
 };
 
-onMounted(() => {});
+onMounted(() => {
+  store.nonce = wpjs_control_panel_object.nonce;
+  store.ajaxUrl = wpjs_control_panel_object.ajaxurl
+});
 </script>
 
 <template>
-  <div class="mt-4 ml-4">
+  <div class="mt-4 ml-4 mb-4">
   <v-btn
     color="#2196f3"
     variant="flat"
@@ -287,99 +286,8 @@ onMounted(() => {});
     @click="backToDashboard"
     >Back to Dashboard</v-btn
   >
-
-  <div class="text-center pa-4">
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition">
-      <template v-slot:activator="{ props: activatorProps }">
-        <v-btn
-          prepend-icon="mdi-cog"
-          size="small"
-          text="Settings"
-          v-bind="activatorProps"
-        ></v-btn>
-      </template>
-
-      <v-card>
-        <v-toolbar>
-          <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
-
-          <v-toolbar-title>Settings</v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-toolbar-items>
-            <v-btn text="Save" variant="text" @click="dialog = false"></v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-
-        <v-list lines="two" subheader>
-          <v-list-subheader>User Controls</v-list-subheader>
-
-          <v-list-item
-            subtitle="Set the content filtering level to restrict apps that can be downloaded"
-            title="Content filtering"
-            link
-          ></v-list-item>
-
-          <v-list-item
-            subtitle="Require password for purchase or use password to restrict purchase"
-            title="Password"
-            link
-          ></v-list-item>
-
-          <v-divider></v-divider>
-
-          <v-list-subheader>General</v-list-subheader>
-
-          <v-list-item
-            subtitle="Notify me about updates to apps or games that I downloaded"
-            title="Notifications"
-            @click="notifications = !notifications"
-          >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="notifications"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-
-          <v-list-item
-            subtitle="Auto-update apps at any time. Data charges may apply"
-            title="Sound"
-            @click="sound = !sound"
-          >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="sound"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-
-          <v-list-item
-            subtitle="Automatically add home screen widgets"
-            title="Auto-add widgets"
-            @click="widgets = !widgets"
-          >
-            <template v-slot:prepend>
-              <v-list-item-action start>
-                <v-checkbox-btn
-                  v-model="widgets"
-                  color="primary"
-                ></v-checkbox-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-dialog>
-  </div>
 </div>
+<ThemesPluginsPanel v-if="store.activatedThemes"></ThemesPluginsPanel>
 </template>
 
 <style>

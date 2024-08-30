@@ -1,6 +1,6 @@
 <script setup>
 import { useWpjsStore } from "./store.js";
-import { onMounted, computed, ref } from "vue";
+import { onMounted, computed, ref, BaseTransitionPropsValidators } from "vue";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 
 const store = useWpjsStore()
@@ -17,25 +17,23 @@ const uptimePeriods = [
 const selectedUptimePeriod = ref(0)
 
 function selectUptimePeriod( ind ){
-  console.log(ind)
   selectedUptimePeriod.value = ind
-  console.log(selectedUptimePeriod.value)
+}
+
+function openThemesPlugins( site ){
+  store.activatedSite = site
+  store.activatedThemes = true
 }
 
 const themesButton = ref(null)
 
-function trial( elem ){
-  console.log('Petar')
-  document.body.classList.toggle('noscroll', true);
-  store.activated_themes = true
-}
 </script>
 
 <template>
   <tr>
     <td :colspan="props.columns?.length + 1 ">
         <div class="text-h5 font-weight-bold mt-5 mb-3">
-          {{ props.item?.title }}
+          {{ props.item?.id}} {{ props.item?.title }}
         </div>
 
         <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
@@ -250,7 +248,7 @@ function trial( elem ){
                 text="Manage Themes & Plugins"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4"
-                @click="trial"
+                @click="openThemesPlugins( props.item )"
                 ref="themesButton"
               ></v-btn>
             </v-card>

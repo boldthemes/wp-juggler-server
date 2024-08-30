@@ -3,7 +3,11 @@ import { ref, watch, computed } from "vue";
 
 export const useWpjsStore = defineStore("wpjsstore", () => {
   const initial = ref("Dashboard");
-  const activated_themes = ref(false)
+  
+  const activatedThemes = ref(false)
+  const activatedSite = ref(null)
+  const nonce = ref('')
+  const ajaxUrl = ref('')
 
   /* watch(activetab, (newactivetab, prevactivetab) => {
       
@@ -16,6 +20,9 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
   //return { zoomlevel, doubleCount, increment }
   return {
     initial,
-    activated_themes
+    nonce,
+    ajaxUrl,
+    activatedSite,
+    activatedThemes
   };
 });
