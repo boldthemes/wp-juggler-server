@@ -118,7 +118,7 @@ const themesButton = ref(null)
               <v-btn
                 text="Full Report"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4"
+                class="mb-5 ml-5 mt-4 text-none text-caption"
               ></v-btn>
             </v-card>
           </v-col>
@@ -173,7 +173,7 @@ const themesButton = ref(null)
               <v-btn
                 text="Full Report"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4"
+                class="mb-5 ml-5 mt-4 text-none text-caption"
               ></v-btn>
             </v-card>
           </v-col>
@@ -247,7 +247,7 @@ const themesButton = ref(null)
               <v-btn
                 text="Manage Themes & Plugins"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4"
+                class="mb-5 ml-5 mt-4 text-none text-caption"
                 @click="openThemesPlugins( props.item )"
                 ref="themesButton"
               ></v-btn>
@@ -297,7 +297,7 @@ const themesButton = ref(null)
               <v-btn
                 text="All Messages"
                 append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4"
+                class="mb-5 ml-5 mt-4 text-none text-caption"
               ></v-btn>
             </v-card>
           </v-col>

@@ -124,7 +124,6 @@ onMounted(() => {
         :items="data"
         :headers="headers"
         item-key="id"
-        show-select
         v-model:expanded="expanded"
         show-expand
       >
