@@ -9072,16 +9072,16 @@ let initialize = ()=>{
     script.render = require("a1a1a23e097e248d").render;
     script.__cssModules = require("f4c8e73db5a92829").default;
     require("b93ef45881d45a45").default(script);
-    script.__scopeId = "data-v-edd33f";
-    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/App.vue";
+    script.__scopeId = "data-v-a77703";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\App.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "edd33f-hmr";
+    script.__hmrId = "a77703-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("edd33f-hmr", script)) __VUE_HMR_RUNTIME__.reload("edd33f-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("a77703-hmr", script)) __VUE_HMR_RUNTIME__.reload("a77703-hmr", script);
         }, 0);
     });
 }
@@ -9250,7 +9250,7 @@ exports.default = {
     }
 };
 
-},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS"}],"7kZ8m":[function(require,module,exports) {
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"7kZ8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
@@ -9278,7 +9278,7 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
 
 },{"pinia":"hqc1O","vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"hqc1O":[function(require,module,exports) {
 /*!
- * pinia v2.2.2
+ * pinia v2.2.1
  * (c) 2024 Eduardo San Martin Morote
  * @license MIT
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -10665,8 +10665,7 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
     isSyncListening = true;
     return store;
 }
-// improves tree shaking
-/*#__NO_SIDE_EFFECTS__*/ function defineStore(// TODO: add proper types from above
+function defineStore(// TODO: add proper types from above
 idOrOptions, setup, setupOptions) {
     let id;
     let options;
@@ -14696,16 +14695,16 @@ let initialize = ()=>{
     script.render = require("afae823331491f67").render;
     script.__cssModules = require("e1e8b018c842a273").default;
     require("17aaf7019aa03763").default(script);
-    script.__scopeId = "data-v-ab35b9";
-    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/ExpandedRow.vue";
+    script.__scopeId = "data-v-04cc78";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ExpandedRow.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "ab35b9-hmr";
+    script.__hmrId = "04cc78-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("ab35b9-hmr", script)) __VUE_HMR_RUNTIME__.reload("ab35b9-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("04cc78-hmr", script)) __VUE_HMR_RUNTIME__.reload("04cc78-hmr", script);
         }, 0);
     });
 }
@@ -15375,7 +15374,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("ab35b9-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("04cc78-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"dFAqL":[function() {},{}],"9akjZ":[function(require,module,exports) {
@@ -15393,16 +15392,16 @@ let initialize = ()=>{
     if (script.__esModule) script = script.default;
     script.render = require("14fb851e6d9f8c39").render;
     require("81e5f303e5990112").default(script);
-    script.__scopeId = "data-v-a14a40";
-    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/ThemesPluginsPanel.vue";
+    script.__scopeId = "data-v-f6f7e2";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ThemesPluginsPanel.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "a14a40-hmr";
+    script.__hmrId = "f6f7e2-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("a14a40-hmr", script)) __VUE_HMR_RUNTIME__.reload("a14a40-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("f6f7e2-hmr", script)) __VUE_HMR_RUNTIME__.reload("f6f7e2-hmr", script);
         }, 0);
     });
 }
@@ -15419,13 +15418,461 @@ exports.default = {
     setup (__props, { expose: __expose }) {
         __expose();
         const store = (0, _storeJs.useWpjsStore)();
+        const search = (0, _vue.ref)("");
+        const dialogInner = (0, _vue.ref)(false);
+        const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const data = [
+            {
+                "File": "example-notice/example-notice.php",
+                "Checksum": true,
+                "Wporg": false,
+                "WpJuggler": true,
+                "Name": "Example Notice",
+                "Slug": "example-notice",
+                "Title": "Example Notice",
+                "Active": true,
+                "Author": "BoldThemes",
+                "Update": false,
+                "Network": false,
+                "Version": "1.0",
+                "AuthorURI": "https://profiles.wordpress.org/boldthemes/",
+                "PluginURI": "https://www.bold-themes.com",
+                "UpdateURI": "",
+                "AuthorName": "BoldThemes",
+                "DomainPath": "",
+                "RequiresWP": "",
+                "TextDomain": "example-notice",
+                "Description": "Displays a sample admin notice once for admins. (Requires PHP 5.3+.)",
+                "RequiresPHP": "",
+                "UpdateVersion": "",
+                "RequiresPlugins": "",
+                "Vulnerabilities": []
+            },
+            {
+                "File": "contact-form-7/wp-contact-form-7.php",
+                "Checksum": false,
+                "Wporg": true,
+                "WpJuggler": false,
+                "Name": "Contact Form 7",
+                "Slug": "contact-form-7",
+                "Title": "Contact Form 7",
+                "Active": false,
+                "Author": "Takayuki Miyoshi",
+                "Update": true,
+                "Network": true,
+                "Version": "4.0.0",
+                "AuthorURI": "https://ideasilo.wordpress.com/",
+                "PluginURI": "https://contactform7.com/",
+                "UpdateURI": "",
+                "AuthorName": "Takayuki Miyoshi",
+                "DomainPath": "",
+                "RequiresWP": "6.3",
+                "TextDomain": "contact-form-7",
+                "Description": "Just another contact form plugin. Simple but flexible.",
+                "RequiresPHP": "7.4",
+                "UpdateVersion": "5.9.8",
+                "RequiresPlugins": "",
+                "Vulnerabilities": [
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.3.2",
+                        "uuid": "69f4e580612c835bfea455eb87c0aa010b02c26489b2edccc6a5d9b1154113dc",
+                        "impact": {
+                            "cwe": [
+                                {
+                                    "cwe": "CWE-434",
+                                    "name": "Unrestricted Upload of File with Dangerous Type",
+                                    "description": "The product allows the upload or transfer of dangerous file types that are automatically processed within its environment."
+                                }
+                            ]
+                        },
+                        "source": [
+                            {
+                                "id": "CVE-2020-35489",
+                                "date": "2020-12-17",
+                                "link": "https://www.cve.org/CVERecord?id=CVE-2020-35489",
+                                "name": "CVE-2020-35489",
+                                "description": "[en] The contact-form-7 (aka Contact Form 7) plugin before 5.3.2 for WordPress allows Unrestricted File Upload and remote code execution because a filename may contain special characters."
+                            },
+                            {
+                                "id": "7391118e-eef5-4ff8-a8ea-f6b65f442c63",
+                                "date": null,
+                                "link": "https://wpscan.com/vulnerability/7391118e-eef5-4ff8-a8ea-f6b65f442c63",
+                                "name": "Contact Form 7 &lt; 5.3.2 - Unrestricted File Upload",
+                                "description": "The popular WordPress plugin, Contact Form 7 was found to be vulnerable to Unrestricted File Upload."
+                            },
+                            {
+                                "id": "c4eafdf392908e880ec6b4c91d37e8413a7510d8",
+                                "date": "2020-12-17",
+                                "link": "https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/contact-form-7/contact-form-7-531-arbitrary-file-upload-via-bypass",
+                                "name": "Contact Form 7 <= 5.3.1 - Arbitrary File Upload via Bypass",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to arbitrary file uploads in versions up to 5.3.2. This is due to the fact that the plugin allows filenames to contain special characters which may make extension filter evasion possible on certain configurations. Our team was not able to reproduce this issue which leads us to believe there is a high attack complexity or special configuration requirement."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.3.2",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.0.4",
+                        "uuid": "bf43a61e8ad7b51c20303b493f392c94d4556dceedb663862e26bc996b3caaab",
+                        "impact": [],
+                        "source": [
+                            {
+                                "id": "CVE-2018-20979",
+                                "date": "2019-08-22",
+                                "link": "https://www.cve.org/CVERecord?id=CVE-2018-20979",
+                                "name": "CVE-2018-20979",
+                                "description": "[en] The contact-form-7 plugin before 5.0.4 for WordPress has privilege escalation because of capability_type mishandling in register_post_type."
+                            },
+                            {
+                                "id": "af945f64-9ce2-485c-bf36-c2ff59dc10d5",
+                                "date": null,
+                                "link": "https://wpscan.com/vulnerability/af945f64-9ce2-485c-bf36-c2ff59dc10d5",
+                                "name": "Contact Form 7 &lt;= 5.0.3 - register_post_type() Privilege Escalation",
+                                "description": "According to the official release:\r\n\r\n&quot;A privilege escalation vulnerability has been found in Contact Form 7 5.0.3 and older versions. Utilizing this vulnerability, a logged-in user in the Contributor role can potentially edit contact forms, which only Administrator and Editor-role users are allowed to access by default. This issue has been reported by Simon Scannell from RIPS Technologies.\r\n\r\nTo minimize damage from possible attacks utilizing those vulnerabilities, Contact Form 7 5.0.4 and higher will restrict the local file attachment feature. More particularly, you will no longer be able to specify an absolute file path that refers to a file placed outside the wp-content directory. You can still specify files inside the wp-content directory with relative or absolute file paths, so all you need to change is the location of the attachment files.&quot;\r\n\r\nAccording to the changelog:\r\n\r\n&quot;Specifies the capability_type argument explicitly in the register_post_type() call to fix the privilege escalation vulnerability issue.&quot;"
+                            },
+                            {
+                                "id": "0013c8267f3da7ebe3f28e9a851deee6765d231d",
+                                "date": "2018-09-04",
+                                "link": "https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/contact-form-7/contact-form-7-503-authorization-bypass",
+                                "name": "Contact Form 7 <= 5.0.3 - Authorization Bypass",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to authorization bypass due to capability_type mishandling in register_post_type in versions up to, and including, 5.0.3. This makes it possible for authenticated attackers with contributor level privileges and above to modify contact forms and potential supply paths to sensitive files that make sensitive information disclosure possible."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.0.4",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.3.2",
+                        "uuid": "a26423547b6bf8c59ad7d7259609e22c14f3bea37232df4091c06e8be64583df",
+                        "impact": [],
+                        "source": [
+                            {
+                                "id": "d6b8d2f948bb107e118f3cee56cc9df0dc13e184",
+                                "date": "2020-12-17",
+                                "link": "https://patchstack.com/database/vulnerability/contact-form-7/wordpress-contact-form-7-plugin-5-3-1-unrestricted-file-upload-vulnerability",
+                                "name": "WordPress Contact Form 7 plugin <= 5.3.1 - Unrestricted File Upload vulnerability",
+                                "description": "Unrestricted File Upload vulnerability found by Jinson Varghese Behanan in WordPress Contact Form 7 plugin (versions <= 5.3.1)."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.3.2",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.0.4",
+                        "uuid": "46ad0a1e402e2b7fd43755090d353ebeeef7500e6ea531a129546012fed0ba84",
+                        "impact": [],
+                        "source": [
+                            {
+                                "id": "2838338b96418a4eda0472f209005117c380f4d5",
+                                "date": "2018-09-13",
+                                "link": "https://patchstack.com/database/vulnerability/contact-form-7/wordpress-contact-form-7-plugin-5-0-3-privilege-escalation-vulnerability",
+                                "name": "WordPress Contact Form 7 plugin <= 5.0.3 - Privilege Escalation vulnerability",
+                                "description": "Privilege Escalation vulnerability found by Simon Scannell in WordPress Contact Form 7 plugin (versions <= 5.0.3)."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.0.4",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.8.4",
+                        "uuid": "3f3e7cdb5d815edb66f209dbb269f42df26ad83d9d3a69c7c3c4da5fce561d6d",
+                        "impact": {
+                            "cwe": [
+                                {
+                                    "cwe": "CWE-434",
+                                    "name": "Unrestricted Upload of File with Dangerous Type",
+                                    "description": "The product allows the upload or transfer of dangerous file types that are automatically processed within its environment."
+                                }
+                            ],
+                            "cvss": {
+                                "a": "h",
+                                "c": "h",
+                                "i": "h",
+                                "s": "u",
+                                "ac": "h",
+                                "av": "n",
+                                "pr": "h",
+                                "ui": "n",
+                                "score": "6.6",
+                                "impact": "0.0",
+                                "vector": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H",
+                                "version": "3.1",
+                                "severity": "m",
+                                "exploitable": "0.0"
+                            }
+                        },
+                        "source": [
+                            {
+                                "id": "CVE-2023-6449",
+                                "date": "2023-12-01",
+                                "link": "https://www.cve.org/CVERecord?id=CVE-2023-6449",
+                                "name": "CVE-2023-6449",
+                                "description": "[en] The Contact Form 7 plugin for WordPress is vulnerable to arbitrary file uploads due to insufficient file type validation in the 'validate' function and insufficient blocklisting on the 'wpcf7_antiscript_file_name' function in versions up to, and including, 5.8.3. This makes it possible for authenticated attackers with editor-level capabilities or above to upload arbitrary files on the affected site's server, but due to the htaccess configuration, remote code cannot be executed in most cases. By default, the file will be deleted from the server immediately. However, in some cases, other plugins may make it possible for the file to live on the server longer. This can make remote code execution possible when combined with another vulnerability, such as local file inclusion."
+                            },
+                            {
+                                "id": "24f57396df52355e47d4e49ae3c67ee7c109d4ff",
+                                "date": "2023-11-30",
+                                "link": "https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/contact-form-7/contact-form-7-583-authenticated-editor-arbitrary-file-upload",
+                                "name": "Contact Form 7 <= 5.8.3 - Authenticated (Editor+) Arbitrary File Upload",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to arbitrary file uploads due to insufficient file type validation in the 'validate' function and insufficient blocklisting on the 'wpcf7_antiscript_file_name' function in versions up to, and including, 5.8.3. This makes it possible for authenticated attackers with editor-level capabilities or above to upload arbitrary files on the affected site's server, but due to the htaccess configuration, remote code cannot be executed in most cases. By default, the file will be deleted from the server immediately. However, in some cases, other plugins may make it possible for the file to live on the server longer. This can make remote code execution possible when combined with another vulnerability, such as local file inclusion."
+                            },
+                            {
+                                "id": "e15c192035155221d4e0b807d25248131600495e",
+                                "date": "2023-12-01",
+                                "link": "https://patchstack.com/database/vulnerability/contact-form-7/wordpress-contact-form-7-plugin-5-8-3-authenticated-editor-arbitrary-file-upload-vulnerability",
+                                "name": "WordPress  Contact Form 7 Plugin  <= 5.8.3 is vulnerable to Arbitrary File Upload",
+                                "description": "Update the WordPress Add-on SweetAlert Contact Form 7 plugin to the latest available version (at least 5.8.4).\nIstv\xe1n M\xe1rton discovered and reported this Arbitrary File Upload vulnerability in WordPress Contact Form 7 Plugin. This could allow a malicious actor to upload any type of file to your website. This can include backdoors which are then executed to gain further access to your website. This vulnerability has been fixed in version 5.8.4."
+                            },
+                            {
+                                "id": "70e21d9a-b1e6-4083-bcd3-7c1c13fd5382",
+                                "date": null,
+                                "link": "https://wpscan.com/vulnerability/70e21d9a-b1e6-4083-bcd3-7c1c13fd5382",
+                                "name": "Contact Form 7 &lt; 5.8.4 - Authenticated (Editor+) Arbitrary File Upload",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to arbitrary file uploads due to insufficient file type validation in the &#039;validate&#039; function and insufficient blocklisting on the &#039;wpcf7_antiscript_file_name&#039; function in versions up to, and including, 5.8.3. This makes it possible for authenticated attackers with editor-level capabilities or above to upload arbitrary files on the affected site&#039;s server, but due to the htaccess configuration, remote code cannot be executed in most cases. By default, the file will be deleted from the server immediately. However, in some cases, other plugins may make it possible for the file to live on the server longer. This can make remote code execution possible when combined with another vulnerability, such as local file inclusion."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.8.4",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.9.2",
+                        "uuid": "f2293632631341a14596411858137750d6f77619f8f2bfdab04b9f95536a26e5",
+                        "impact": {
+                            "cwe": [
+                                {
+                                    "cwe": "CWE-79",
+                                    "name": "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                                    "description": "The product does not neutralize or incorrectly neutralizes user-controllable input before it is placed in output that is used as a web page that is served to other users."
+                                }
+                            ],
+                            "cvss": {
+                                "a": "n",
+                                "c": "l",
+                                "i": "l",
+                                "s": "c",
+                                "ac": "l",
+                                "av": "n",
+                                "pr": "n",
+                                "ui": "r",
+                                "score": "6.1",
+                                "impact": "0.0",
+                                "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+                                "version": "3.1",
+                                "severity": "m",
+                                "exploitable": "0.0"
+                            }
+                        },
+                        "source": [
+                            {
+                                "id": "CVE-2024-2242",
+                                "date": "2024-03-13",
+                                "link": "https://www.cve.org/CVERecord?id=CVE-2024-2242",
+                                "name": "CVE-2024-2242",
+                                "description": "[en] The Contact Form 7 plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the \u2018active-tab\u2019 parameter in all versions up to, and including, 5.9 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+                            },
+                            {
+                                "id": "a4133485452498aa7c096da4d284b3d6869ebf4b",
+                                "date": "2024-03-13",
+                                "link": "https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/contact-form-7/contact-form-7-59-reflected-cross-site-scripting",
+                                "name": "Contact Form 7 <= 5.9 - Reflected Cross-Site Scripting",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the \u2018active-tab\u2019 parameter in all versions up to, and including, 5.9 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+                            },
+                            {
+                                "id": "e2dfb032e1438ea61faec1dccb16dfde131ec8b5",
+                                "date": null,
+                                "link": "https://patchstack.com/database/vulnerability/contact-form-7/wordpress-contact-form-7-plugin-5-9-reflected-cross-site-scripting-vulnerability",
+                                "name": "WordPress  Contact Form 7 Plugin    <= 5.9 is vulnerable to Cross Site Scripting (XSS)",
+                                "description": "Update the WordPress Contact Form 7 plugin to the latest available version (at least 5.9.2).\nAsaf Mozes discovered and reported this Cross Site Scripting (XSS) vulnerability in WordPress Contact Form 7 Plugin. This could allow a malicious actor to inject malicious scripts, such as redirects, advertisements, and other HTML payloads into your website which will be executed when guests visit your site.  This vulnerability has been fixed in version 5.9.2.\nHave additional information or questions about this entry? Get in touch."
+                            },
+                            {
+                                "id": "1c070a2c-2ab0-43bf-b10b-6575709918bc",
+                                "date": null,
+                                "link": "https://wpscan.com/vulnerability/1c070a2c-2ab0-43bf-b10b-6575709918bc",
+                                "name": "Contact Form 7 &lt; 5.9.2 - Reflected Cross-Site Scripting",
+                                "description": "The plugin does not sanitise and escape a parameter before outputting it back in the page, leading to a Reflected Cross-Site Scripting which could be used against administrators."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.9.2",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    },
+                    {
+                        "name": "Contact Form 7 [contact-form-7] < 5.9.5",
+                        "uuid": "11deabaaffc704bdad7665508e0dd88de89a9b330115fdb1718a72104c302b1d",
+                        "impact": {
+                            "cwe": [
+                                {
+                                    "cwe": "CWE-601",
+                                    "name": "URL Redirection to Untrusted Site ('Open Redirect')",
+                                    "description": "A web application accepts a user-controlled input that specifies a link to an external site, and uses that link in a Redirect. This simplifies phishing attacks."
+                                }
+                            ]
+                        },
+                        "source": [
+                            {
+                                "id": "CVE-2024-4704",
+                                "date": "2024-06-27",
+                                "link": "https://www.cve.org/CVERecord?id=CVE-2024-4704",
+                                "name": "CVE-2024-4704",
+                                "description": "[en] The Contact Form 7 WordPress plugin before 5.9.5 has an open redirect that allows an attacker to utilize a false URL and redirect to the URL of their choosing."
+                            },
+                            {
+                                "id": "9d7789cdb626ed7fcc9916f072bc7538770c205c",
+                                "date": "2024-06-27",
+                                "link": "https://patchstack.com/database/vulnerability/contact-form-7/wordpress-contact-form-7-plugin-5-9-5-unauthenticated-open-redirect-vulnerability",
+                                "name": "WordPress Contact Form 7 Plugin < 5.9.5 is vulnerable to Open Redirection",
+                                "description": "<p>WordPress Contact Form 7 Plugin < 5.9.5 is vulnerable to Open Redirection</p><p>Software: Contact Form 7</p><p>Link: https://wordpress.org/plugins/contact-form-7/#developers</p><p>Affected Version < 5.9.5</p><p>Fixed in version 5.9.5 </p>"
+                            },
+                            {
+                                "id": "1eb2c1adb2ea5a6fea057ea1092e7be5e98b776d",
+                                "date": "2024-06-05",
+                                "link": "https://www.wordfence.com/threat-intel/vulnerabilities/wordpress-plugins/contact-form-7/contact-form-7-594-unauthenticated-open-redirect",
+                                "name": "Contact Form 7 <= 5.9.4 - Unauthenticated Open Redirect",
+                                "description": "The Contact Form 7 plugin for WordPress is vulnerable to Open Redirect in all versions up to, and including, 5.9.4. This is due to insufficient validation on the redirect url supplied via accessing the contact form with a spoofed page. This makes it possible for unauthenticated attackers to redirect site users to potentially malicious sites if they can successfully trick them into performing an action."
+                            }
+                        ],
+                        "operator": {
+                            "closed": "0",
+                            "unfixed": "0",
+                            "max_version": "5.9.5",
+                            "min_version": null,
+                            "max_operator": "lt",
+                            "min_operator": null
+                        },
+                        "description": null
+                    }
+                ]
+            },
+            {
+                "File": "wp-juggler-client/wp-juggler-client.php",
+                "Checksum": true,
+                "Wporg": false,
+                "WpJuggler": false,
+                "Name": "WP Juggler Client",
+                "Slug": "wp-juggler-client",
+                "Title": "WP Juggler Client",
+                "Active": true,
+                "Author": "BoldThemes",
+                "Update": false,
+                "Network": true,
+                "Version": "1.0.0",
+                "AuthorURI": "https://wpjuggler.com",
+                "PluginURI": "https://wpjuggler.com",
+                "UpdateURI": "",
+                "AuthorName": "BoldThemes",
+                "DomainPath": "/languages",
+                "RequiresWP": "",
+                "TextDomain": "wp-juggler-client",
+                "Description": "WP Juggler Client",
+                "RequiresPHP": "",
+                "UpdateVersion": "",
+                "RequiresPlugins": "",
+                "Vulnerabilities": []
+            }
+        ];
+        const headers = [
+            {
+                title: "Name",
+                value: "Name",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Active",
+                key: "active",
+                align: "center",
+                sortable: false
+            },
+            {
+                title: "Version",
+                value: "Version",
+                align: "center",
+                sortable: true
+            },
+            {
+                title: "Update",
+                key: "update",
+                align: "center",
+                sortable: false
+            },
+            {
+                title: "Vulnerabilities",
+                key: "vulnerabilities",
+                align: "center",
+                sortable: true
+            },
+            {
+                title: "Cheksum",
+                key: "checksum",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Actions",
+                key: "actions",
+                align: "start",
+                sortable: true
+            }
+        ];
+        const expanded = (0, _vue.ref)([]);
         const dialog = (0, _vue.ref)(false);
         const tab = (0, _vue.ref)(0);
-        console.log(store.activatedSite);
+        function openVulnerabilities(item) {
+            vulnerabilitiesItem.value = item;
+            dialogInner.value = true;
+        }
         const __returned__ = {
             store,
+            search,
+            dialogInner,
+            vulnerabilitiesItem,
+            data,
+            headers,
+            expanded,
             dialog,
             tab,
+            openVulnerabilities,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -15480,40 +15927,28 @@ const _hoisted_8 = {
     key: 0
 };
 const _hoisted_9 = {
-    key: 0
+    key: 1
 };
 const _hoisted_10 = {
-    key: 1
+    key: 0,
+    class: "ml-6 mt-2"
 };
-const _hoisted_11 = {
-    key: 1
-};
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "mt-4 ml-6"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Sources:")
+], -1 /* HOISTED */ );
 const _hoisted_12 = {
-    key: 0
+    class: "mt-2 ml-6"
 };
 const _hoisted_13 = {
-    key: 0
+    class: "ml-4"
 };
-const _hoisted_14 = {
-    key: 1
-};
+const _hoisted_14 = [
+    "href"
+];
 const _hoisted_15 = {
-    key: 1
-};
-const _hoisted_16 = {
-    key: 0
-};
-const _hoisted_17 = {
-    key: 1
-};
-const _hoisted_18 = {
-    key: 0
-};
-const _hoisted_19 = {
-    key: 1
-};
-const _hoisted_20 = {
-    key: 2
+    class: "ml-4"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
@@ -15527,7 +15962,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
-    const _component_ExpandedRow = (0, _vue.resolveComponent)("ExpandedRow");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_tabs_window_item = (0, _vue.resolveComponent)("v-tabs-window-item");
     const _component_v_tabs_window = (0, _vue.resolveComponent)("v-tabs-window");
@@ -15537,7 +15971,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedThemes,
-            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event)=>$setup.store.activatedThemes = $event),
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.store.activatedThemes = $event),
             transition: "dialog-bottom-transition",
             fullscreen: ""
         }, {
@@ -15552,7 +15986,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             }),
                                             (0, _vue.createVNode)(_component_v_toolbar_title, null, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)("Themes and Plugins 1 - " + (0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             }),
@@ -15596,7 +16030,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             default: (0, _vue.withCtx)(()=>[
                                                                     (0, _vue.createVNode)(_component_v_tabs_window, {
                                                                         modelValue: $setup.tab,
-                                                                        "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.tab = $event)
+                                                                        "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.tab = $event)
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                 (0, _vue.createVNode)(_component_v_tabs_window_item, {
@@ -15649,8 +16083,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                         (0, _vue.createVNode)(_component_v_spacer),
                                                                                                         (0, _vue.createVNode)(_component_v_text_field, {
-                                                                                                            modelValue: _ctx.search,
-                                                                                                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>_ctx.search = $event),
+                                                                                                            modelValue: $setup.search,
+                                                                                                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.search = $event),
                                                                                                             density: "compact",
                                                                                                             label: "Search",
                                                                                                             "prepend-inner-icon": "mdi-magnify",
@@ -15662,168 +16096,123 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             "modelValue"
                                                                                                         ]),
                                                                                                         (0, _vue.createVNode)(_component_v_data_table, {
-                                                                                                            search: _ctx.search,
-                                                                                                            "onUpdate:search": _cache[3] || (_cache[3] = ($event)=>_ctx.search = $event),
-                                                                                                            items: _ctx.data,
-                                                                                                            headers: _ctx.headers,
+                                                                                                            search: $setup.search,
+                                                                                                            "onUpdate:search": _cache[3] || (_cache[3] = ($event)=>$setup.search = $event),
+                                                                                                            items: $setup.data,
+                                                                                                            headers: $setup.headers,
                                                                                                             "item-key": "id",
-                                                                                                            "show-select": "",
-                                                                                                            expanded: _ctx.expanded,
-                                                                                                            "onUpdate:expanded": _cache[4] || (_cache[4] = ($event)=>_ctx.expanded = $event),
-                                                                                                            "show-expand": ""
+                                                                                                            "show-select": ""
                                                                                                         }, {
-                                                                                                            "item.network": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_multisite ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                                                                            "item.active": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                    item.Active ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                            color: "#2196f3",
-                                                                                                                            icon: "mdi-checkbox-multiple-blank-outline",
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
                                                                                                                             size: "large",
                                                                                                                             class: "rm-4"
                                                                                                                         })
                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
-                                                                                                            "item.events": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                                                                            "item.update": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                            color: "#2196f3",
-                                                                                                                            icon: "mdi-email-alert-outline",
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                            size: "large",
+                                                                                                                            class: "rm-4"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                ]),
+                                                                                                            "item.vulnerabilities": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                    item.Vulnerabilities.length > 0 && item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "error",
+                                                                                                                            icon: "mdi-bug-check-outline",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.Vulnerabilities.length) + " ", 1 /* TEXT */ ),
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                            class: "ml-3 text-none text-caption",
+                                                                                                                            onClick: ($event)=>$setup.openVulnerabilities(item)
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)("Details ")
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                            "onClick"
+                                                                                                                        ])
+                                                                                                                    ])) : !item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "blue-lighten-5",
+                                                                                                                            icon: "mdi-help",
                                                                                                                             size: "large",
                                                                                                                             class: "rm-4"
                                                                                                                         })
                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                ]),
-                                                                                                            "item.uptime": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
-                                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_uptime_stats.uptime_timeline, (day)=>{
-                                                                                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                                                                                color: _ctx.calculateColor(day),
-                                                                                                                                icon: "mdi-square",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            }, null, 8 /* PROPS */ , [
-                                                                                                                                "color"
-                                                                                                                            ]);
-                                                                                                                        }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                ]),
-                                                                                                            "item.updates": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
-                                                                                                                        item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
-                                                                                                                            item.wp_juggler_plugins_summary.vulnerabilities_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                                                                                key: 0,
-                                                                                                                                color: "error",
-                                                                                                                                icon: "mdi-bug-check-outline",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            })) : item.wp_juggler_plugins_summary.updates_num > 0 || item.wp_juggler_themes_summary.updates_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                                                                                key: 1,
-                                                                                                                                color: "error",
-                                                                                                                                icon: "mdi-check-bold",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                        ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
-                                                                                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                color: "blue-lighten-5",
-                                                                                                                                icon: "mdi-help",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            })
-                                                                                                                        ]))
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             "item.checksum": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
-                                                                                                                        item.wp_juggler_plugins_checksum && item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
-                                                                                                                            item.wp_juggler_plugins_checksum.failures > 0 || item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                                                                                key: 0,
-                                                                                                                                color: "error",
-                                                                                                                                icon: "mdi-alert-outline",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                        ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
-                                                                                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                color: "blue-lighten-5",
-                                                                                                                                icon: "mdi-help",
-                                                                                                                                size: "large",
-                                                                                                                                class: "rm-4"
-                                                                                                                            })
-                                                                                                                        ]))
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                    !item.Vulnerabilities.Checksum && item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "error",
+                                                                                                                            icon: "mdi-alert-outline",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        })
+                                                                                                                    ])) : !item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "blue-lighten-5",
+                                                                                                                            icon: "mdi-help",
+                                                                                                                            size: "large",
+                                                                                                                            class: "rm-4"
+                                                                                                                        })
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
-                                                                                                            "item.links": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
-                                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_login_tools, (button)=>{
-                                                                                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                variant: "elevated",
-                                                                                                                                onClick: ($event)=>_ctx.gotoUrl(button.wp_juggler_tool_url),
-                                                                                                                                class: "text-none text-caption mr-1 ml-1"
-                                                                                                                            }, {
-                                                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)(button.wp_juggler_tool_label), 1 /* TEXT */ )
-                                                                                                                                    ]),
-                                                                                                                                _: 2 /* DYNAMIC */ 
-                                                                                                                            }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                "onClick"
-                                                                                                                            ]);
-                                                                                                                        }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                ]),
-                                                                                                            "item.wp_admin": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
-                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                            color: "#2196f3",
-                                                                                                                            variant: "elevated",
-                                                                                                                            class: "text-none text-caption",
-                                                                                                                            "prepend-icon": "mdi-login",
-                                                                                                                            onClick: ($event)=>_ctx.gotoUrl(item.wp_juggler_login_url)
-                                                                                                                        }, {
-                                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                                    (0, _vue.createTextVNode)("Login")
-                                                                                                                                ]),
-                                                                                                                            _: 2 /* DYNAMIC */ 
-                                                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                            "onClick"
-                                                                                                                        ])
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
-                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                            color: "#2196f3",
-                                                                                                                            variant: "elevated",
-                                                                                                                            class: "text-none text-caption",
-                                                                                                                            "prepend-icon": "mdi-account-remove",
-                                                                                                                            onClick: ($event)=>_ctx.gotoUrl(item.wp_juggler_login_url)
-                                                                                                                        }, {
-                                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                                    (0, _vue.createTextVNode)("Login")
-                                                                                                                                ]),
-                                                                                                                            _: 2 /* DYNAMIC */ 
-                                                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                            "onClick"
-                                                                                                                        ])
-                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, " Inactive ")) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                ]),
-                                                                                                            "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
-                                                                                                                    (0, _vue.createVNode)(_component_ExpandedRow, {
-                                                                                                                        columns: columns,
-                                                                                                                        item: item
-                                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                                        "columns",
-                                                                                                                        "item"
-                                                                                                                    ])
+                                                                                                            "item.actions": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                    item.Active ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 0,
+                                                                                                                        class: "ml-3 text-none text-caption"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Deactivate ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 1,
+                                                                                                                        class: "ml-3 text-none text-caption"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Activate ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 2,
+                                                                                                                        class: "ml-3 text-none text-caption"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 3,
+                                                                                                                        color: "#2196f3",
+                                                                                                                        variant: "elevated",
+                                                                                                                        class: "text-none text-caption ml-3"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Update ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         }, 8 /* PROPS */ , [
-                                                                                                            "search",
-                                                                                                            "items",
-                                                                                                            "headers",
-                                                                                                            "expanded"
+                                                                                                            "search"
                                                                                                         ])
                                                                                                     ]),
                                                                                                 _: 1 /* STABLE */ 
@@ -15860,11 +16249,77 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
             "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogInner,
+            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.dialogInner = $event),
+            "min-width": "600"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[6] || (_cache[6] = ($event)=>$setup.dialogInner = false)
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("List of vulnerabilities ")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
+                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createElementVNode)("div", null, [
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
+                                                            ]),
+                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
+                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
+                                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                            _hoisted_11,
+                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
+                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_13, [
+                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
+                                                                        (0, _vue.createElementVNode)("a", {
+                                                                            href: src.link,
+                                                                            target: "_blank"
+                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_14)
+                                                                    ]),
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_15, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                ]);
+                                                            }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                class: "mt-4 mb-4"
+                                                            })
+                                                        ]),
+                                                    _: 2 /* DYNAMIC */ 
+                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
         ])
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("a14a40-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("f6f7e2-hmr", render);
 });
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","vue":"gCTam"}],"kAFhE":[function(require,module,exports) {
@@ -16175,7 +16630,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("edd33f-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("a77703-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jvxye":[function() {},{}],"cwDHb":[function(require,module,exports) {
@@ -16271,7 +16726,7 @@ function createVuetify() {
         goTo
     };
 }
-const version = "3.7.0";
+const version = "3.6.14";
 createVuetify.version = version;
 // Vue's inject() can only be used in setup
 function inject(key) {
@@ -16857,15 +17312,15 @@ parcelHelpers.export(exports, "defer", ()=>defer);
 parcelHelpers.export(exports, "eagerComputed", ()=>eagerComputed);
 parcelHelpers.export(exports, "isClickInsideElement", ()=>isClickInsideElement);
 parcelHelpers.export(exports, "templateRef", ()=>templateRef);
-parcelHelpers.export(exports, "checkPrintable", ()=>checkPrintable);
 // Utilities
 var _vue = require("vue");
 var _globalsMjs = require("./globals.mjs"); // Types
-function _classPrivateFieldInitSpec(e, t, a) {
-    _checkPrivateRedeclaration(e, t), t.set(e, a);
+function _classPrivateFieldInitSpec(obj, privateMap, value) {
+    _checkPrivateRedeclaration(obj, privateMap);
+    privateMap.set(obj, value);
 }
-function _checkPrivateRedeclaration(e, t) {
-    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+function _checkPrivateRedeclaration(obj, privateCollection) {
+    if (privateCollection.has(obj)) throw new TypeError("Cannot initialize the same private elements twice on an object");
 }
 function _classPrivateFieldSet(s, a, r) {
     return s.set(_assertClassBrand(s, a), r), r;
@@ -17408,11 +17863,6 @@ function templateRef() {
         get: ()=>refElement(el.value)
     });
     return fn;
-}
-function checkPrintable(e) {
-    const isPrintableChar = e.key.length === 1;
-    const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey;
-    return isPrintableChar && noModifier;
 }
 
 },{"vue":"gCTam","./globals.mjs":"6CXK1","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"6CXK1":[function(require,module,exports) {
@@ -20260,7 +20710,9 @@ const makeLayoutItemProps = (0, _indexMjs.propsFactory)({
 function useLayout() {
     const layout = (0, _vue.inject)(VuetifyLayoutKey);
     if (!layout) throw new Error("[Vuetify] Could not find injected layout");
+    const layoutIsReady = (0, _vue.nextTick)();
     return {
+        layoutIsReady,
         getLayoutItem: layout.getLayoutItem,
         mainRect: layout.mainRect,
         mainStyles: layout.mainStyles
@@ -20277,6 +20729,7 @@ function useLayoutItem(options) {
     const isKeptAlive = (0, _vue.shallowRef)(false);
     (0, _vue.onDeactivated)(()=>isKeptAlive.value = true);
     (0, _vue.onActivated)(()=>isKeptAlive.value = false);
+    const layoutIsReady = (0, _vue.nextTick)();
     const { layoutItemStyles, layoutItemScrimStyles } = layout.register(vm, {
         ...options,
         active: (0, _vue.computed)(()=>isKeptAlive.value ? false : options.active.value),
@@ -20286,7 +20739,8 @@ function useLayoutItem(options) {
     return {
         layoutItemStyles,
         layoutRect: layout.layoutRect,
-        layoutItemScrimStyles
+        layoutItemScrimStyles,
+        layoutIsReady
     };
 }
 const generateLayers = (layout, positions, layoutSizes, activeItems)=>{
@@ -20331,29 +20785,7 @@ function createLayout(props) {
     const activeItems = (0, _vue.reactive)(new Map());
     const disabledTransitions = (0, _vue.reactive)(new Map());
     const { resizeRef, contentRect: layoutRect } = (0, _resizeObserverMjs.useResizeObserver)();
-    const computedOverlaps = (0, _vue.computed)(()=>{
-        const map = new Map();
-        const overlaps = props.overlaps ?? [];
-        for (const overlap of overlaps.filter((item)=>item.includes(":"))){
-            const [top, bottom] = overlap.split(":");
-            if (!registered.value.includes(top) || !registered.value.includes(bottom)) continue;
-            const topPosition = positions.get(top);
-            const bottomPosition = positions.get(bottom);
-            const topAmount = layoutSizes.get(top);
-            const bottomAmount = layoutSizes.get(bottom);
-            if (!topPosition || !bottomPosition || !topAmount || !bottomAmount) continue;
-            map.set(bottom, {
-                position: topPosition.value,
-                amount: parseInt(topAmount.value, 10)
-            });
-            map.set(top, {
-                position: bottomPosition.value,
-                amount: -parseInt(bottomAmount.value, 10)
-            });
-        }
-        return map;
-    });
-    const layers = (0, _vue.computed)(()=>{
+    const layers = (0, _indexMjs.eagerComputed)(()=>{
         const uniquePriorities = [
             ...new Set([
                 ...priorities.values()
@@ -20383,7 +20815,7 @@ function createLayout(props) {
             }
         };
     });
-    const items = (0, _vue.computed)(()=>{
+    const items = (0, _indexMjs.eagerComputed)(()=>{
         return layers.value.slice(1).map((_ref, index)=>{
             let { id } = _ref;
             const { layer } = layers.value[index];
@@ -20401,10 +20833,7 @@ function createLayout(props) {
         return items.value.find((item)=>item.id === id);
     };
     const rootVm = (0, _indexMjs.getCurrentInstance)("createLayout");
-    const isMounted = (0, _vue.shallowRef)(false);
-    (0, _vue.onMounted)(()=>{
-        isMounted.value = true;
-    });
+    const layoutIsReady = (0, _vue.nextTick)();
     (0, _vue.provide)(VuetifyLayoutKey, {
         register: (vm, _ref2)=>{
             let { id, order, position, layoutSize, elementSize, active, disableTransitions, absolute } = _ref2;
@@ -20434,11 +20863,9 @@ function createLayout(props) {
                         transition: "none"
                     }
                 };
-                if (!isMounted.value) return styles;
+                if (index.value < 0) throw new Error(`Layout item "${id}" is missing`);
                 const item = items.value[index.value];
                 if (!item) throw new Error(`[Vuetify] Could not find layout item "${id}"`);
-                const overlap = computedOverlaps.value.get(id);
-                if (overlap) item[overlap.position] += overlap.amount;
                 return {
                     ...styles,
                     height: isHorizontal ? `calc(100% - ${item.top}px - ${item.bottom}px)` : elementSize.value ? `${elementSize.value}px` : undefined,
@@ -20471,7 +20898,8 @@ function createLayout(props) {
         getLayoutItem,
         items,
         layoutRect,
-        rootZIndex
+        rootZIndex,
+        layoutIsReady
     });
     const layoutClasses = (0, _vue.computed)(()=>[
             "v-layout",
@@ -20490,6 +20918,7 @@ function createLayout(props) {
         getLayoutItem,
         items,
         layoutRect,
+        layoutIsReady,
         layoutRef: resizeRef
     };
 }
@@ -20767,7 +21196,13 @@ const VApp = (0, _indexMjs.genericComponent)()({
                 (0, _vue.createVNode)("div", {
                     "class": "v-application__wrap"
                 }, [
-                    slots.default?.()
+                    (0, _vue.createVNode)((0, _vue.Suspense), null, {
+                        default: ()=>[
+                                (0, _vue.createVNode)((0, _vue.Fragment), null, [
+                                    slots.default?.()
+                                ])
+                            ]
+                    })
                 ])
             ]));
         return {
@@ -20863,9 +21298,8 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
         const isFlat = (0, _vue.computed)(()=>props.flat || scrollBehavior.value.fullyHide && !isActive.value || scrollBehavior.value.elevate && (scrollBehavior.value.inverted ? currentScroll.value > 0 : currentScroll.value === 0));
         const opacity = (0, _vue.computed)(()=>scrollBehavior.value.fadeImage ? scrollBehavior.value.inverted ? 1 - scrollRatio.value : scrollRatio.value : undefined);
         const height = (0, _vue.computed)(()=>{
-            if (scrollBehavior.value.hide && scrollBehavior.value.inverted) return 0;
-            const height = vToolbarRef.value?.contentHeight ?? 0;
-            const extensionHeight = vToolbarRef.value?.extensionHeight ?? 0;
+            const height = Number(vToolbarRef.value?.contentHeight ?? props.height);
+            const extensionHeight = Number(vToolbarRef.value?.extensionHeight ?? 0);
             if (!canHide.value) return height + extensionHeight;
             return currentScroll.value < scrollThreshold.value || scrollBehavior.value.fullyHide ? height + extensionHeight : height;
         });
@@ -20878,7 +21312,7 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
             });
         });
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
-        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.toRef)(props, "location"),
@@ -20912,7 +21346,7 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
                 "flat": isFlat.value
             }), slots);
         });
-        return {};
+        return layoutIsReady;
     }
 });
 
@@ -21582,7 +22016,6 @@ var _indexMjs = require("../../directives/intersect/index.mjs"); // Utilities
 var _indexMjsDefault = parcelHelpers.interopDefault(_indexMjs);
 var _indexMjs1 = require("../../util/index.mjs"); // Types
 const makeVImgProps = (0, _indexMjs1.propsFactory)({
-    absolute: Boolean,
     alt: String,
     cover: Boolean,
     color: String,
@@ -21856,7 +22289,6 @@ const VImg = (0, _indexMjs1.genericComponent)()({
                 "class": [
                     "v-img",
                     {
-                        "v-img--absolute": props.absolute,
                         "v-img--booting": !isBooted.value
                     },
                     backgroundColorClasses.value,
@@ -22459,7 +22891,6 @@ const makeVBtnProps = (0, _indexMjs4.propsFactory)({
         type: Boolean,
         default: undefined
     },
-    activeColor: String,
     baseColor: String,
     symbol: {
         type: null,
@@ -22531,11 +22962,10 @@ const VBtn = (0, _indexMjs4.genericComponent)()({
             if (link.isLink.value) return link.isActive?.value;
             return group?.isSelected.value;
         });
-        const color = (0, _vue.computed)(()=>isActive.value ? props.activeColor ?? props.color : props.color);
         const variantProps = (0, _vue.computed)(()=>{
             const showColor = group?.isSelected.value && (!link.isLink.value || link.isActive?.value) || !group || link.isActive?.value;
             return {
-                color: showColor ? color.value ?? props.baseColor : props.baseColor,
+                color: showColor ? props.color ?? props.baseColor : props.baseColor,
                 variant: props.variant
             };
         });
@@ -24585,7 +25015,7 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
                 _menu.value = v;
             }
         });
@@ -24619,7 +25049,7 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
         });
         const menuDisabled = (0, _vue.computed)(()=>props.hideNoData && !displayItems.value.length || props.readonly || form?.isReadonly.value);
         const listRef = (0, _vue.ref)();
-        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             if (props.openOnClear) menu.value = true;
             search.value = "";
@@ -24635,9 +25065,6 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                 e.stopPropagation();
             }
             menu.value = !menu.value;
-        }
-        function onListKeydown(e) {
-            if ((0, _indexMjs8.checkPrintable)(e)) vTextFieldRef.value?.focus();
         }
         function onKeydown(e) {
             if (props.readonly || form?.isReadonly.value) return;
@@ -24699,9 +25126,6 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                 const item = items.value.find((item)=>item.title === e.target.value);
                 if (item) select(item);
             }
-        }
-        function onAfterEnter() {
-            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) {
@@ -24839,7 +25263,6 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
-                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, props.menuProps), {
                             default: ()=>[
@@ -24851,10 +25274,11 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
                                         "onFocusout": onFocusout,
+                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, listEvents, props.listProps), {
+                                    }, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs5.VListItem), {
@@ -25028,7 +25452,6 @@ var _vavatarCss = require("./VAvatar.css");
 var _indexMjs = require("../VDefaultsProvider/index.mjs");
 var _indexMjs1 = require("../VIcon/index.mjs");
 var _indexMjs2 = require("../VImg/index.mjs"); // Composables
-var _borderMjs = require("../../composables/border.mjs");
 var _componentMjs = require("../../composables/component.mjs");
 var _densityMjs = require("../../composables/density.mjs");
 var _iconsMjs = require("../../composables/icons.mjs");
@@ -25044,7 +25467,6 @@ const makeVAvatarProps = (0, _indexMjs3.propsFactory)({
     icon: (0, _iconsMjs.IconValue),
     image: String,
     text: String,
-    ...(0, _borderMjs.makeBorderProps)(),
     ...(0, _componentMjs.makeComponentProps)(),
     ...(0, _densityMjs.makeDensityProps)(),
     ...(0, _roundedMjs.makeRoundedProps)(),
@@ -25061,7 +25483,6 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { themeClasses } = (0, _themeMjs.provideTheme)(props);
-        const { borderClasses } = (0, _borderMjs.useBorder)(props);
         const { colorClasses, colorStyles, variantClasses } = (0, _variantMjs.useVariant)(props);
         const { densityClasses } = (0, _densityMjs.useDensity)(props);
         const { roundedClasses } = (0, _roundedMjs.useRounded)(props);
@@ -25074,7 +25495,6 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
                         "v-avatar--end": props.end
                     },
                     themeClasses.value,
-                    borderClasses.value,
                     colorClasses.value,
                     densityClasses.value,
                     roundedClasses.value,
@@ -25120,7 +25540,7 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./VAvatar.css":"kBiid","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../VImg/index.mjs":"dbGJJ","../../composables/border.mjs":"iYaxw","../../composables/component.mjs":"4YAxs","../../composables/density.mjs":"kOsEB","../../composables/icons.mjs":"g4kLv","../../composables/rounded.mjs":"1RfhA","../../composables/size.mjs":"2PnSq","../../composables/tag.mjs":"3LqcC","../../composables/theme.mjs":"c9HGg","../../composables/variant.mjs":"ivQo4","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"kBiid":[function() {},{}],"c1Gdu":[function(require,module,exports) {
+},{"vue":"gCTam","./VAvatar.css":"kBiid","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../VImg/index.mjs":"dbGJJ","../../composables/component.mjs":"4YAxs","../../composables/density.mjs":"kOsEB","../../composables/icons.mjs":"g4kLv","../../composables/rounded.mjs":"1RfhA","../../composables/size.mjs":"2PnSq","../../composables/tag.mjs":"3LqcC","../../composables/theme.mjs":"c9HGg","../../composables/variant.mjs":"ivQo4","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"kBiid":[function() {},{}],"c1Gdu":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VCheckbox", ()=>(0, _vcheckboxMjs.VCheckbox));
@@ -25998,14 +26418,12 @@ function useValidation(props) {
     const validateOn = (0, _vue.computed)(()=>{
         let value = (props.validateOn ?? form?.validateOn.value) || "input";
         if (value === "lazy") value = "input lazy";
-        if (value === "eager") value = "input eager";
         const set = new Set(value?.split(" ") ?? []);
         return {
+            blur: set.has("blur") || set.has("input"),
             input: set.has("input"),
-            blur: set.has("blur") || set.has("input") || set.has("invalid-input"),
-            invalidInput: set.has("invalid-input"),
-            lazy: set.has("lazy"),
-            eager: set.has("eager")
+            submit: set.has("submit"),
+            lazy: set.has("lazy")
         };
     });
     const isValid = (0, _vue.computed)(()=>{
@@ -26038,10 +26456,10 @@ function useValidation(props) {
         form?.unregister(uid.value);
     });
     (0, _vue.onMounted)(async ()=>{
-        if (!validateOn.value.lazy) await validate(!validateOn.value.eager);
+        if (!validateOn.value.lazy) await validate(true);
         form?.update(uid.value, isValid.value, errorMessages.value);
     });
-    (0, _toggleScopeMjs.useToggleScope)(()=>validateOn.value.input || validateOn.value.invalidInput && isValid.value === false, ()=>{
+    (0, _toggleScopeMjs.useToggleScope)(()=>validateOn.value.input, ()=>{
         (0, _vue.watch)(validationModel, ()=>{
             if (validationModel.value != null) validate();
             else if (props.focused) {
@@ -26070,7 +26488,7 @@ function useValidation(props) {
     }
     async function resetValidation() {
         isPristine.value = true;
-        if (!validateOn.value.lazy) await validate(!validateOn.value.eager);
+        if (!validateOn.value.lazy) await validate(true);
         else internalErrorMessages.value = [];
     }
     async function validate() {
@@ -27008,9 +27426,7 @@ const VSlideGroup = (0, _indexMjs2.genericComponent)()({
             selected: group.selected,
             scrollTo,
             scrollOffset,
-            focus,
-            hasPrev,
-            hasNext
+            focus
         };
     }
 });
@@ -27629,7 +28045,7 @@ const useNested = (props)=>{
     let isUnmounted = false;
     const children = (0, _vue.ref)(new Map());
     const parents = (0, _vue.ref)(new Map());
-    const opened = (0, _proxiedModelMjs.useProxiedModel)(props, "opened", props.opened, (v)=>new Set((0, _vue.toRaw)(v)), (v)=>[
+    const opened = (0, _proxiedModelMjs.useProxiedModel)(props, "opened", props.opened, (v)=>new Set(v), (v)=>[
             ...v.values()
         ]);
     const activeStrategy = (0, _vue.computed)(()=>{
@@ -27801,9 +28217,9 @@ const useNestedItem = (id, isGroup)=>{
     const item = {
         ...parent,
         id: computedId,
-        open: (open, e)=>parent.root.open((0, _vue.toRaw)(computedId.value), open, e),
+        open: (open, e)=>parent.root.open(computedId.value, open, e),
         openOnSelect: (open, e)=>parent.root.openOnSelect(computedId.value, open, e),
-        isOpen: (0, _vue.computed)(()=>parent.root.opened.value.has((0, _vue.toRaw)(computedId.value))),
+        isOpen: (0, _vue.computed)(()=>parent.root.opened.value.has(computedId.value)),
         parent: (0, _vue.computed)(()=>parent.root.parents.value.get(computedId.value)),
         activate: (activated, e)=>parent.root.activate(computedId.value, activated, e),
         isActivated: (0, _vue.computed)(()=>parent.root.activated.value.has((0, _vue.toRaw)(computedId.value))),
@@ -27936,13 +28352,11 @@ const leafSingleActiveStrategy = (mandatory)=>{
 };
 
 },{"vue":"gCTam","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"fDDlS":[function(require,module,exports) {
-// Utilities
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "singleOpenStrategy", ()=>singleOpenStrategy);
 parcelHelpers.export(exports, "multipleOpenStrategy", ()=>multipleOpenStrategy);
 parcelHelpers.export(exports, "listOpenStrategy", ()=>listOpenStrategy);
-var _vue = require("vue");
 const singleOpenStrategy = {
     open: (_ref)=>{
         let { id, value, opened, parents } = _ref;
@@ -27966,11 +28380,11 @@ const multipleOpenStrategy = {
     open: (_ref2)=>{
         let { id, value, opened, parents } = _ref2;
         if (value) {
-            let parent = (0, _vue.toRaw)(parents.get(id));
+            let parent = parents.get(id);
             opened.add(id);
             while(parent != null && parent !== id){
                 opened.add(parent);
-                parent = (0, _vue.toRaw)(parents.get(parent));
+                parent = parents.get(parent);
             }
             return opened;
         } else opened.delete(id);
@@ -27993,7 +28407,7 @@ const listOpenStrategy = {
     }
 };
 
-},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9zzs8":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9zzs8":[function(require,module,exports) {
 /* eslint-disable sonarjs/no-identical-functions */ // Utilities
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -28118,16 +28532,16 @@ const classicSelectStrategy = (mandatory)=>{
             ];
             while(items.length){
                 const item = items.shift();
-                selected.set((0, _vue.toRaw)(item), value ? "on" : "off");
+                selected.set(item, value ? "on" : "off");
                 if (children.has(item)) items.push(...children.get(item));
             }
-            let parent = (0, _vue.toRaw)(parents.get(id));
+            let parent = parents.get(id);
             while(parent){
                 const childrenIds = children.get(parent);
-                const everySelected = childrenIds.every((cid)=>selected.get((0, _vue.toRaw)(cid)) === "on");
-                const noneSelected = childrenIds.every((cid)=>!selected.has((0, _vue.toRaw)(cid)) || selected.get((0, _vue.toRaw)(cid)) === "off");
+                const everySelected = childrenIds.every((cid)=>selected.get(cid) === "on");
+                const noneSelected = childrenIds.every((cid)=>!selected.has(cid) || selected.get(cid) === "off");
                 selected.set(parent, everySelected ? "on" : noneSelected ? "off" : "indeterminate");
-                parent = (0, _vue.toRaw)(parents.get(parent));
+                parent = parents.get(parent);
             }
             // If mandatory and planned deselect results in no selected
             // items then we can't do it, so return original state
@@ -28257,7 +28671,7 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         let { attrs, slots, emit } = _ref;
         const link = (0, _routerMjs.useLink)(props, attrs);
         const id = (0, _vue.computed)(()=>props.value === undefined ? link.href.value : props.value);
-        const { activate, isActivated, select, isOpen, isSelected, isIndeterminate, isGroupActivator, root, parent, openOnSelect } = (0, _nestedMjs.useNestedItem)(id, false);
+        const { activate, isActivated, select, isSelected, isIndeterminate, isGroupActivator, root, parent, openOnSelect } = (0, _nestedMjs.useNestedItem)(id, false);
         const list = (0, _listMjs.useList)();
         const isActive = (0, _vue.computed)(()=>props.active !== false && (props.active || link.isActive?.value || (root.activatable.value ? isActivated.value : isSelected.value)));
         const isLink = (0, _vue.computed)(()=>props.link !== false && link.isLink.value);
@@ -28285,7 +28699,6 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         const slotProps = (0, _vue.computed)(()=>({
                 isActive: isActive.value,
                 select,
-                isOpen: isOpen.value,
                 isSelected: isSelected.value,
                 isIndeterminate: isIndeterminate.value
             }));
@@ -28301,7 +28714,7 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         function onKeyDown(e) {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                e.target.dispatchEvent(new MouseEvent("click", e));
+                onClick(e);
             }
         }
         (0, _indexMjs4.useRender)(()=>{
@@ -28887,7 +29300,6 @@ var _indexMjs1 = require("../VDefaultsProvider/index.mjs");
 var _indexMjs2 = require("../VOverlay/index.mjs");
 var _voverlayMjs = require("../VOverlay/VOverlay.mjs"); // Composables
 var _forwardRefsMjs = require("../../composables/forwardRefs.mjs");
-var _localeMjs = require("../../composables/locale.mjs");
 var _proxiedModelMjs = require("../../composables/proxiedModel.mjs");
 var _scopeIdMjs = require("../../composables/scopeId.mjs"); // Utilities
 var _sharedMjs = require("./shared.mjs");
@@ -28896,12 +29308,10 @@ const makeVMenuProps = (0, _indexMjs3.propsFactory)({
     // TODO
     // disableKeys: Boolean,
     id: String,
-    submenu: Boolean,
     ...(0, _indexMjs3.omit)((0, _voverlayMjs.makeVOverlayProps)({
         closeDelay: 250,
         closeOnContentClick: true,
         locationStrategy: "connected",
-        location: undefined,
         openDelay: 300,
         scrim: false,
         scrollStrategy: "reposition",
@@ -28922,30 +29332,27 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
         let { slots } = _ref;
         const isActive = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const { scopeId } = (0, _scopeIdMjs.useScopeId)();
-        const { isRtl } = (0, _localeMjs.useRtl)();
         const uid = (0, _indexMjs3.getUid)();
         const id = (0, _vue.computed)(()=>props.id || `v-menu-${uid}`);
         const overlay = (0, _vue.ref)();
         const parent = (0, _vue.inject)((0, _sharedMjs.VMenuSymbol), null);
-        const openChildren = (0, _vue.shallowRef)(new Set());
+        const openChildren = (0, _vue.shallowRef)(0);
         (0, _vue.provide)((0, _sharedMjs.VMenuSymbol), {
             register () {
-                openChildren.value.add(uid);
+                ++openChildren.value;
             },
             unregister () {
-                openChildren.value.delete(uid);
+                --openChildren.value;
             },
             closeParents (e) {
                 setTimeout(()=>{
-                    if (!openChildren.value.size && !props.persistent && (e == null || overlay.value?.contentEl && !(0, _indexMjs3.isClickInsideElement)(e, overlay.value.contentEl))) {
+                    if (!openChildren.value && !props.persistent && (e == null || overlay.value?.contentEl && !(0, _indexMjs3.isClickInsideElement)(e, overlay.value.contentEl))) {
                         isActive.value = false;
                         parent?.closeParents();
                     }
                 }, 40);
             }
         });
-        (0, _vue.onBeforeUnmount)(()=>parent?.unregister());
-        (0, _vue.onDeactivated)(()=>isActive.value = false);
         async function onFocusIn(e) {
             const before = e.relatedTarget;
             const after = e.target;
@@ -28985,9 +29392,12 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
                     isActive.value = false;
                     overlay.value?.activatorEl?.focus();
                 }
-            } else if (props.submenu && e.key === (isRtl.value ? "ArrowRight" : "ArrowLeft")) {
+            } else if ([
+                "Enter",
+                " "
+            ].includes(e.key) && props.closeOnContentClick) {
                 isActive.value = false;
-                overlay.value?.activatorEl?.focus();
+                parent?.closeParents();
             }
         }
         function onActivatorKeydown(e) {
@@ -28996,20 +29406,12 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
             if (el && isActive.value) {
                 if (e.key === "ArrowDown") {
                     e.preventDefault();
-                    e.stopImmediatePropagation();
                     (0, _indexMjs3.focusChild)(el, "next");
                 } else if (e.key === "ArrowUp") {
                     e.preventDefault();
-                    e.stopImmediatePropagation();
                     (0, _indexMjs3.focusChild)(el, "prev");
-                } else if (props.submenu) {
-                    if (e.key === (isRtl.value ? "ArrowRight" : "ArrowLeft")) isActive.value = false;
-                    else if (e.key === (isRtl.value ? "ArrowLeft" : "ArrowRight")) {
-                        e.preventDefault();
-                        (0, _indexMjs3.focusChild)(el, "first");
-                    }
                 }
-            } else if (props.submenu ? e.key === (isRtl.value ? "ArrowLeft" : "ArrowRight") : [
+            } else if ([
                 "ArrowDown",
                 "ArrowUp"
             ].includes(e.key)) {
@@ -29039,7 +29441,6 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
                 "onUpdate:modelValue": ($event)=>isActive.value = $event,
                 "absolute": true,
                 "activatorProps": activatorProps.value,
-                "location": props.location ?? (props.submenu ? "end" : "bottom"),
                 "onClick:outside": onClickOutside,
                 "onKeydown": onKeydown
             }, scopeId), {
@@ -29063,7 +29464,7 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./VMenu.css":"4KSmC","../transitions/index.mjs":"3ybHr","../VDefaultsProvider/index.mjs":"eFFvH","../VOverlay/index.mjs":"seRqS","../VOverlay/VOverlay.mjs":"2XVbS","../../composables/forwardRefs.mjs":"2TNTP","../../composables/locale.mjs":"9rJP0","../../composables/proxiedModel.mjs":"huwLk","../../composables/scopeId.mjs":"1zMgM","./shared.mjs":"1ZaHA","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4KSmC":[function() {},{}],"seRqS":[function(require,module,exports) {
+},{"vue":"gCTam","./VMenu.css":"4KSmC","../transitions/index.mjs":"3ybHr","../VDefaultsProvider/index.mjs":"eFFvH","../VOverlay/index.mjs":"seRqS","../VOverlay/VOverlay.mjs":"2XVbS","../../composables/forwardRefs.mjs":"2TNTP","../../composables/proxiedModel.mjs":"huwLk","../../composables/scopeId.mjs":"1zMgM","./shared.mjs":"1ZaHA","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4KSmC":[function() {},{}],"seRqS":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VOverlay", ()=>(0, _voverlayMjs.VOverlay));
@@ -29177,10 +29578,6 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
     },
     setup (props, _ref) {
         let { slots, attrs, emit } = _ref;
-        const vm = (0, _indexMjs1.getCurrentInstance)("VOverlay");
-        const root = (0, _vue.ref)();
-        const scrimEl = (0, _vue.ref)();
-        const contentEl = (0, _vue.ref)();
         const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const isActive = (0, _vue.computed)({
             get: ()=>model.value,
@@ -29197,13 +29594,12 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         const { globalTop, localTop, stackStyles } = (0, _stackMjs.useStack)(isActive, (0, _vue.toRef)(props, "zIndex"), props._disableGlobalStack);
         const { activatorEl, activatorRef, target, targetEl, targetRef, activatorEvents, contentEvents, scrimEvents } = (0, _useActivatorMjs.useActivator)(props, {
             isActive,
-            isTop: localTop,
-            contentEl
+            isTop: localTop
         });
         const { teleportTarget } = (0, _teleportMjs.useTeleport)(()=>{
             const target = props.attach || props.contained;
             if (target) return target;
-            const rootNode = activatorEl?.value?.getRootNode() || vm.proxy?.$el?.getRootNode();
+            const rootNode = activatorEl?.value?.getRootNode();
             if (rootNode instanceof ShadowRoot) return rootNode;
             return false;
         });
@@ -29213,6 +29609,9 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         (0, _vue.watch)(()=>props.disabled, (v)=>{
             if (v) isActive.value = false;
         });
+        const root = (0, _vue.ref)();
+        const scrimEl = (0, _vue.ref)();
+        const contentEl = (0, _vue.ref)();
         const { contentStyles, updateLocation } = (0, _locationStrategiesMjs.useLocationStrategies)(props, {
             isRtl,
             contentEl,
@@ -29233,7 +29632,7 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         }
         function closeConditional(e) {
             return isActive.value && globalTop.value && // If using scrim, only close if clicking on it rather than anything opened on top
-            (!props.scrim || e.target === scrimEl.value || e instanceof MouseEvent && e.shadowTarget === scrimEl.value);
+            (!props.scrim || e.target === scrimEl.value);
         }
         (0, _indexMjs1.IN_BROWSER) && (0, _vue.watch)(isActive, (val)=>{
             if (val) window.addEventListener("keydown", onKeydown);
@@ -29471,6 +29870,8 @@ function staticLocationStrategy() {
     // const initialMaxHeight = el.style.maxHeight
     // el.style.removeProperty('max-width')
     // el.style.removeProperty('max-height')
+    if (isRtl) el.style.removeProperty("left");
+    else el.style.removeProperty("right");
     /* eslint-disable-next-line sonarjs/prefer-immediate-return */ const contentBox = (0, _indexMjs.nullifyTransforms)(el);
     if (isRtl) contentBox.x += parseFloat(el.style.right || 0);
     else contentBox.x -= parseFloat(el.style.left || 0);
@@ -30013,7 +30414,7 @@ const makeActivatorProps = (0, _indexMjs.propsFactory)({
     ...(0, _delayMjs.makeDelayProps)()
 }, "VOverlay-activator");
 function useActivator(props, _ref) {
-    let { isActive, isTop, contentEl } = _ref;
+    let { isActive, isTop } = _ref;
     const vm = (0, _indexMjs.getCurrentInstance)("useActivator");
     const activatorEl = (0, _vue.ref)();
     let isHovered = false;
@@ -30123,7 +30524,7 @@ function useActivator(props, _ref) {
         return events;
     });
     (0, _vue.watch)(isTop, (val)=>{
-        if (val && (props.openOnHover && !isHovered && (!openOnFocus.value || !isFocused) || openOnFocus.value && !isFocused && (!props.openOnHover || !isHovered)) && !contentEl.value?.contains(document.activeElement)) isActive.value = false;
+        if (val && (props.openOnHover && !isHovered && (!openOnFocus.value || !isFocused) || openOnFocus.value && !isFocused && (!props.openOnHover || !isHovered))) isActive.value = false;
     });
     (0, _vue.watch)(isActive, (val)=>{
         if (!val) setTimeout(()=>{
@@ -30406,9 +30807,7 @@ function useTeleport(target) {
             (0, _vue.warn)(`Unable to locate target ${_target}`);
             return undefined;
         }
-        let container = [
-            ...targetElement.children
-        ].find((el)=>el.matches(".v-overlay-container"));
+        let container = targetElement.querySelector(":scope > .v-overlay-container");
         if (!container) {
             container = document.createElement("div");
             container.className = "v-overlay-container";
@@ -30459,8 +30858,6 @@ function checkIsActive(e, binding) {
 }
 function directive(e, el, binding) {
     const handler = typeof binding.value === "function" ? binding.value : binding.value.handler;
-    // Clicks in the Shadow DOM change their target while using setTimeout, so the original target is saved here
-    e.shadowTarget = e.target;
     el._clickOutside.lastMousedownWasOutside && checkEvent(e, el, binding) && setTimeout(()=>{
         checkIsActive(e, binding) && handler && handler(e);
     }, 0);
@@ -30493,7 +30890,7 @@ const ClickOutside = {
             onMousedown
         };
     },
-    beforeUnmount (el, binding) {
+    unmounted (el, binding) {
         if (!el._clickOutside) return;
         handleShadow(el, (app)=>{
             if (!app || !el._clickOutside?.[binding.instance.$.uid]) return;
@@ -30680,7 +31077,7 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
                 _menu.value = v;
             }
         });
@@ -30715,16 +31112,13 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
             };
         });
         const listRef = (0, _vue.ref)();
-        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             if (props.openOnClear) menu.value = true;
         }
         function onMousedownControl() {
             if (menuDisabled.value) return;
             menu.value = !menu.value;
-        }
-        function onListKeydown(e) {
-            if ((0, _indexMjs9.checkPrintable)(e)) onKeydown(e);
         }
         function onKeydown(e) {
             if (!e.key || props.readonly || form?.isReadonly.value) return;
@@ -30749,7 +31143,12 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
             else if (e.key === "End") listRef.value?.focus("last");
             // html select hotkeys
             const KEYBOARD_LOOKUP_THRESHOLD = 1000; // milliseconds
-            if (props.multiple || !(0, _indexMjs9.checkPrintable)(e)) return;
+            function checkPrintable(e) {
+                const isPrintableChar = e.key.length === 1;
+                const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey;
+                return isPrintableChar && noModifier;
+            }
+            if (props.multiple || !checkPrintable(e)) return;
             const now = performance.now();
             if (now - keyboardLookupLastTime > KEYBOARD_LOOKUP_THRESHOLD) keyboardLookupPrefix = "";
             keyboardLookupPrefix += e.key.toLowerCase();
@@ -30796,9 +31195,6 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
         }
         function onBlur(e) {
             if (!listRef.value?.$el.contains(e.relatedTarget)) menu.value = false;
-        }
-        function onAfterEnter() {
-            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) vTextFieldRef.value?.focus();
@@ -30876,7 +31272,6 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
-                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, computedMenuProps.value), {
                             default: ()=>[
@@ -30887,10 +31282,11 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
                                         "onMousedown": (e)=>e.preventDefault(),
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
+                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, listEvents, props.listProps), {
+                                    }, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs6.VListItem), {
@@ -31797,7 +32193,7 @@ const VVirtualScroll = (0, _indexMjs.genericComponent)()({
         let { slots } = _ref;
         const vm = (0, _indexMjs.getCurrentInstance)("VVirtualScroll");
         const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
-        const { calculateVisibleItems, containerRef, markerRef, handleScroll, handleScrollend, handleItemResize, scrollToIndex, paddingTop, paddingBottom, computedItems } = (0, _virtualMjs.useVirtual)(props, (0, _vue.toRef)(props, "items"));
+        const { containerRef, markerRef, handleScroll, handleScrollend, handleItemResize, scrollToIndex, paddingTop, paddingBottom, computedItems } = (0, _virtualMjs.useVirtual)(props, (0, _vue.toRef)(props, "items"));
         (0, _toggleScopeMjs.useToggleScope)(()=>props.renderless, ()=>{
             function handleListeners() {
                 let add = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -31873,7 +32269,6 @@ const VVirtualScroll = (0, _indexMjs.genericComponent)()({
             ]);
         });
         return {
-            calculateVisibleItems,
             scrollToIndex
         };
     }
@@ -32118,7 +32513,6 @@ function useVirtual(props, items) {
         deep: true
     });
     return {
-        calculateVisibleItems,
         containerRef,
         markerRef,
         computedItems,
@@ -32216,9 +32610,9 @@ function useScrolling(listRef, textFieldRef) {
         }
     }
     return {
-        onScrollPassive: onListScroll,
-        onKeydown: onListKeydown
-    }; // typescript doesn't know about vue's event merging
+        onListScroll,
+        onListKeydown
+    };
 }
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eW6zz":[function(require,module,exports) {
@@ -32788,7 +33182,7 @@ const VBottomNavigation = (0, _indexMjs.genericComponent)()({
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
         const height = (0, _vue.computed)(()=>Number(props.height) - (props.density === "comfortable" ? 8 : 0) - (props.density === "compact" ? 16 : 0));
         const isActive = (0, _proxiedModelMjs.useProxiedModel)(props, "active", props.active);
-        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.computed)(()=>"bottom"),
@@ -32845,7 +33239,7 @@ const VBottomNavigation = (0, _indexMjs.genericComponent)()({
                     ]
             });
         });
-        return {};
+        return layoutIsReady;
     }
 });
 
@@ -36681,7 +37075,7 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
                 _menu.value = v;
             }
         });
@@ -36747,7 +37141,7 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
         });
         const menuDisabled = (0, _vue.computed)(()=>props.hideNoData && !displayItems.value.length || props.readonly || form?.isReadonly.value);
         const listRef = (0, _vue.ref)();
-        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             cleared = true;
             if (props.openOnClear) menu.value = true;
@@ -36763,9 +37157,6 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                 e.stopPropagation();
             }
             menu.value = !menu.value;
-        }
-        function onListKeydown(e) {
-            if ((0, _indexMjs9.checkPrintable)(e)) vTextFieldRef.value?.focus();
         }
         // eslint-disable-next-line complexity
         function onKeydown(e) {
@@ -36833,9 +37224,6 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                     vTextFieldRef.value.setSelectionRange(0, 0);
                 }
             }
-        }
-        function onAfterEnter() {
-            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) {
@@ -36966,7 +37354,6 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
-                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, props.menuProps), {
                             default: ()=>[
@@ -36978,10 +37365,11 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
                                         "onFocusout": onFocusout,
+                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, listEvents, props.listProps), {
+                                    }, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs5.VListItem), {
@@ -40805,7 +41193,6 @@ var _vue = require("vue");
 var _vgridCss = require("./VGrid.css");
 // Composables
 var _componentMjs = require("../../composables/component.mjs");
-var _dimensionsMjs = require("../../composables/dimensions.mjs");
 var _localeMjs = require("../../composables/locale.mjs");
 var _tagMjs = require("../../composables/tag.mjs"); // Utilities
 var _indexMjs = require("../../util/index.mjs");
@@ -40815,7 +41202,6 @@ const makeVContainerProps = (0, _indexMjs.propsFactory)({
         default: false
     },
     ...(0, _componentMjs.makeComponentProps)(),
-    ...(0, _dimensionsMjs.makeDimensionProps)(),
     ...(0, _tagMjs.makeTagProps)()
 }, "VContainer");
 const VContainer = (0, _indexMjs.genericComponent)()({
@@ -40824,7 +41210,6 @@ const VContainer = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { rtlClasses } = (0, _localeMjs.useRtl)();
-        const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
                 "class": [
                     "v-container",
@@ -40834,16 +41219,13 @@ const VContainer = (0, _indexMjs.genericComponent)()({
                     rtlClasses.value,
                     props.class
                 ],
-                "style": [
-                    dimensionStyles.value,
-                    props.style
-                ]
+                "style": props.style
             }, slots));
         return {};
     }
 });
 
-},{"vue":"gCTam","./VGrid.css":"eRXN2","../../composables/component.mjs":"4YAxs","../../composables/dimensions.mjs":"daVmy","../../composables/locale.mjs":"9rJP0","../../composables/tag.mjs":"3LqcC","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eRXN2":[function() {},{}],"8cMC5":[function(require,module,exports) {
+},{"vue":"gCTam","./VGrid.css":"eRXN2","../../composables/component.mjs":"4YAxs","../../composables/locale.mjs":"9rJP0","../../composables/tag.mjs":"3LqcC","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eRXN2":[function() {},{}],"8cMC5":[function(require,module,exports) {
 // Styles
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -42410,7 +42792,6 @@ var _indexMjs = require("../VDefaultsProvider/index.mjs");
 var _indexMjs1 = require("../VIcon/index.mjs"); // Composables
 var _colorMjs = require("../../composables/color.mjs");
 var _componentMjs = require("../../composables/component.mjs");
-var _dimensionsMjs = require("../../composables/dimensions.mjs");
 var _iconsMjs = require("../../composables/icons.mjs"); // Directives
 var _indexMjs2 = require("../../directives/ripple/index.mjs"); // Utilities
 var _indexMjs3 = require("../../util/index.mjs"); // Types
@@ -42435,8 +42816,7 @@ const makeVExpansionPanelTitleProps = (0, _indexMjs3.propsFactory)({
         default: false
     },
     readonly: Boolean,
-    ...(0, _componentMjs.makeComponentProps)(),
-    ...(0, _dimensionsMjs.makeDimensionProps)()
+    ...(0, _componentMjs.makeComponentProps)()
 }, "VExpansionPanelTitle");
 const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
     name: "VExpansionPanelTitle",
@@ -42449,7 +42829,6 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
         const expansionPanel = (0, _vue.inject)((0, _sharedMjs.VExpansionPanelSymbol));
         if (!expansionPanel) throw new Error("[Vuetify] v-expansion-panel-title needs to be placed inside v-expansion-panel");
         const { backgroundColorClasses, backgroundColorStyles } = (0, _colorMjs.useBackgroundColor)(props, "color");
-        const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
         const slotProps = (0, _vue.computed)(()=>({
                 collapseIcon: props.collapseIcon,
                 disabled: expansionPanel.disabled.value,
@@ -42471,7 +42850,6 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
                 ],
                 "style": [
                     backgroundColorStyles.value,
-                    dimensionStyles.value,
                     props.style
                 ],
                 "type": "button",
@@ -42509,7 +42887,7 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./shared.mjs":"8Mgp0","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../../composables/color.mjs":"6TeQR","../../composables/component.mjs":"4YAxs","../../composables/dimensions.mjs":"daVmy","../../composables/icons.mjs":"g4kLv","../../directives/ripple/index.mjs":"41ncU","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"8qxjp":[function(require,module,exports) {
+},{"vue":"gCTam","./shared.mjs":"8Mgp0","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../../composables/color.mjs":"6TeQR","../../composables/component.mjs":"4YAxs","../../composables/icons.mjs":"g4kLv","../../directives/ripple/index.mjs":"41ncU","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"8qxjp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VFab", ()=>(0, _vfabMjs.VFab));
@@ -42736,7 +43114,7 @@ const VFileInput = (0, _indexMjs3.genericComponent)()({
     setup (props, _ref) {
         let { attrs, emit, slots } = _ref;
         const { t } = (0, _localeMjs.useLocale)();
-        const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue", props.modelValue, (val)=>(0, _indexMjs3.wrapInArray)(val), (val)=>!props.multiple && Array.isArray(val) ? val[0] : val);
+        const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue", props.modelValue, (val)=>(0, _indexMjs3.wrapInArray)(val), (val)=>props.multiple || Array.isArray(props.modelValue) ? val : val[0] ?? null);
         const { isFocused, focus, blur } = (0, _focusMjs.useFocus)(props);
         const base = (0, _vue.computed)(()=>typeof props.showSize !== "boolean" ? props.showSize : undefined);
         const totalBytes = (0, _vue.computed)(()=>(model.value ?? []).reduce((bytes, _ref2)=>{
@@ -42943,6 +43321,7 @@ const VFooter = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const layoutItemStyles = (0, _vue.ref)();
+        const layoutIsReady = (0, _vue.shallowRef)();
         const { themeClasses } = (0, _themeMjs.provideTheme)(props);
         const { backgroundColorClasses, backgroundColorStyles } = (0, _colorMjs.useBackgroundColor)((0, _vue.toRef)(props, "color"));
         const { borderClasses } = (0, _borderMjs.useBorder)(props);
@@ -42966,6 +43345,7 @@ const VFooter = (0, _indexMjs.genericComponent)()({
             });
             (0, _vue.watchEffect)(()=>{
                 layoutItemStyles.value = layout.layoutItemStyles.value;
+                layoutIsReady.value = layout.layoutIsReady;
             });
         });
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
@@ -42987,7 +43367,7 @@ const VFooter = (0, _indexMjs.genericComponent)()({
                     props.style
                 ]
             }, slots));
-        return {};
+        return props.app ? layoutIsReady.value : {};
     }
 });
 
@@ -43512,7 +43892,13 @@ const VLayout = (0, _indexMjs.genericComponent)()({
                     props.style
                 ]
             }, [
-                slots.default?.()
+                (0, _vue.createVNode)((0, _vue.Suspense), null, {
+                    default: ()=>[
+                            (0, _vue.createVNode)((0, _vue.Fragment), null, [
+                                slots.default?.()
+                            ])
+                        ]
+                })
             ]));
         return {
             getLayoutItem,
@@ -43554,7 +43940,7 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
     props: makeVLayoutItemProps(),
     setup (props, _ref) {
         let { slots } = _ref;
-        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.toRef)(props, "position"),
@@ -43563,7 +43949,7 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
             active: (0, _vue.toRef)(props, "modelValue"),
             absolute: (0, _vue.toRef)(props, "absolute")
         });
-        return ()=>(0, _vue.createVNode)("div", {
+        (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)("div", {
                 "class": [
                     "v-layout-item",
                     props.class
@@ -43574,7 +43960,8 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
                 ]
             }, [
                 slots.default?.()
-            ]);
+            ]));
+        return layoutIsReady;
     }
 });
 
@@ -43752,7 +44139,7 @@ const VMain = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
-        const { mainStyles } = (0, _layoutMjs.useLayout)();
+        const { mainStyles, layoutIsReady } = (0, _layoutMjs.useLayout)();
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
                 "class": [
@@ -43777,7 +44164,7 @@ const VMain = (0, _indexMjs.genericComponent)()({
                         ]) : slots.default?.()
                     ]
             }));
-        return {};
+        return layoutIsReady;
     }
 });
 
@@ -43955,7 +44342,7 @@ const VNavigationDrawer = (0, _indexMjs3.genericComponent)()({
                 "top",
                 "bottom"
             ].includes(props.location) ? 0 : width.value);
-        const { layoutItemStyles, layoutItemScrimStyles } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles, layoutItemScrimStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: location,
@@ -44091,9 +44478,9 @@ const VNavigationDrawer = (0, _indexMjs3.genericComponent)()({
                 })
             ]);
         });
-        return {
-            isStuck
-        };
+        return layoutIsReady.then(()=>({
+                isStuck
+            }));
     }
 });
 
@@ -45808,9 +46195,6 @@ const VSnackbar = (0, _indexMjs4.genericComponent)()({
         function onTouchend(event) {
             if (Math.abs(startY.value - event.changedTouches[0].clientY) > 50) isActive.value = false;
         }
-        function onAfterLeave() {
-            if (isHovering.value) onPointerleave();
-        }
         const locationClasses = (0, _vue.computed)(()=>{
             return props.location.split(" ").reduce((acc, loc)=>{
                 acc[`v-snackbar--${loc}`] = true;
@@ -45861,8 +46245,7 @@ const VSnackbar = (0, _indexMjs4.genericComponent)()({
                 "scrollStrategy": "none",
                 "_disableGlobalStack": true,
                 "onTouchstartPassive": onTouchstart,
-                "onTouchend": onTouchend,
-                "onAfterLeave": onAfterLeave
+                "onTouchend": onTouchend
             }, scopeId), {
                 default: ()=>[
                         (0, _variantMjs.genOverlays)(false, "v-snackbar"),
@@ -46473,7 +46856,7 @@ const VSpeedDial = (0, _indexMjs1.genericComponent)()({
         const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const menuRef = (0, _vue.ref)();
         const location = (0, _vue.computed)(()=>{
-            const [y, x = "center"] = props.location?.split(" ") ?? [];
+            const [y, x = "center"] = props.location.split(" ");
             return `${y} ${x}`;
         });
         const locationClasses = (0, _vue.computed)(()=>({
@@ -46488,8 +46871,7 @@ const VSpeedDial = (0, _indexMjs1.genericComponent)()({
                 "style": props.style,
                 "contentClass": [
                     "v-speed-dial__content",
-                    locationClasses.value,
-                    props.contentClass
+                    locationClasses.value
                 ],
                 "location": location.value,
                 "ref": menuRef,
