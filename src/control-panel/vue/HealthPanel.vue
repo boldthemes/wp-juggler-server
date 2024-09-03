@@ -108,9 +108,9 @@ function debugFields( fieldArray ){
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="status" transition="false" reverse-transition="false">
 
-                  <v-sheet max-width="800" class="align-center justify-center text-center mx-auto px-4 pb-4">
+                  <v-sheet max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
 
-                    <v-sheet max-width="800" class="align-left justify-left text-left mb-10">
+                    <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Status</div>
                       <div class="mt-3 mb-4">The site health check shows information about your WordPress configuration
                         and items that may need your attention.</div>
@@ -125,7 +125,7 @@ function debugFields( fieldArray ){
                           <v-expansion-panel-title>
                             {{ recommendation.label }}
                             <v-spacer></v-spacer>
-                            <div class="mr-3 border-sm pa-2 blue">{{ recommendation.badge.label }}</div>
+                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', recommendation.badge.color ]">{{ recommendation.badge.label }}</div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text >
                             <div class="wpjs-health-panel-description" v-html="recommendation.description" ></div>
@@ -137,7 +137,7 @@ function debugFields( fieldArray ){
 
                     <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon" @click="passedOpen = !passedOpen">Passed tests</v-btn>
 
-                    <v-sheet v-if="passedOpen" max-width="800" class="align-left justify-left text-left my-10" >
+                    <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10" >
 
                       <div class="text-h6">{{ goods.length }} items with no issues detected</div>
 
@@ -147,7 +147,7 @@ function debugFields( fieldArray ){
                           <v-expansion-panel-title>
                             {{ good.label }}
                             <v-spacer></v-spacer>
-                            <div class="mr-3 border-sm pa-2 blue">{{ good.badge.label }}</div>
+                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', good.badge.color ]">{{ good.badge.label }}</div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
                             <div class="wpjs-health-panel-description" v-html="good.description" ></div>
@@ -162,9 +162,9 @@ function debugFields( fieldArray ){
 
                 <v-tabs-window-item value="info" transition="false" reverse-transition="false">
 
-                  <v-sheet max-width="800" class="align-center justify-center text-center mx-auto px-4">
+                  <v-sheet max-width="1200" class="align-center justify-center text-center mx-auto px-4">
 
-                    <v-sheet max-width="800" class="align-left justify-left text-left mb-10">
+                    <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Info</div>
 
 
@@ -228,33 +228,27 @@ function debugFields( fieldArray ){
 
 }
 
-.health-check-accordion-trigger .badge.blue,
-.privacy-settings-accordion-trigger .badge.blue {
+.wpjs-health-badge-label.blue {
   border: 1px solid #72aee6
 }
 
-.health-check-accordion-trigger .badge.orange,
-.privacy-settings-accordion-trigger .badge.orange {
+.wpjs-health-badge-label.orange {
   border: 1px solid #dba617
 }
 
-.health-check-accordion-trigger .badge.red,
-.privacy-settings-accordion-trigger .badge.red {
+.wpjs-health-badge-label.red {
   border: 1px solid #e65054
 }
 
-.health-check-accordion-trigger .badge.green,
-.privacy-settings-accordion-trigger .badge.green {
+.wpjs-health-badge-label.green {
   border: 1px solid #00ba37
 }
 
-.health-check-accordion-trigger .badge.purple,
-.privacy-settings-accordion-trigger .badge.purple {
+.wpjs-health-badge-label.purple {
   border: 1px solid #2271b1
 }
 
-.health-check-accordion-trigger .badge.gray,
-.privacy-settings-accordion-trigger .badge.gray {
+.wpjs-health-badge-label.gray {
   border: 1px solid #c3c4c7
 }
 </style>
