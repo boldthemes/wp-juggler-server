@@ -10,7 +10,7 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
-const data = [
+const plugins_data = [
   {
     "File": "example-notice/example-notice.php",
     "Checksum": true,
@@ -401,7 +401,49 @@ const data = [
   }
 ]
 
-const headers = [
+const themes_data = [
+  {
+    "Active": true,
+    "Network": false,
+    "Name": "Twenty Twenty-Four",
+    "Author": "the WordPress team",
+    "Update": false,
+    "Version": "1.2",
+    "ThemeObject": {
+      "update": false
+    },
+    "IsChildTheme": false,
+    "UpdateVersion": ""
+  },
+  {
+    "Active": false,
+    "Network": false,
+    "Name": "Twenty Twenty-Two",
+    "Author": "the WordPress team",
+    "Update": true,
+    "Version": "1.8",
+    "ThemeObject": {
+      "update": false
+    },
+    "IsChildTheme": false,
+    "UpdateVersion": "2.3"
+  },
+  {
+    "Active": false,
+    "Network": false,
+    "Name": "Twenty Twenty-Three",
+    "Author": "the WordPress team",
+    "Update": false,
+    "Version": "1.5",
+    "ThemeObject": {
+      "update": false
+    },
+    "IsChildTheme": true,
+    "UpdateVersion": ""
+  }
+]
+
+const plugin_headers = [
   { title: "Name", value: "Name", align: "start", sortable: true },
   {
     title: "Active",
@@ -429,10 +471,40 @@ const headers = [
     sortable: true,
   },
   {
+    title: "Source",
+    key: "source",
+    align: "start",
+    sortable: true,
+  },
+  {
     title: "Actions",
     key: "actions",
     align: "start",
     sortable: true,
+  },
+];
+
+const theme_headers = [
+  { title: "Name", value: "Name", align: "start", sortable: true },
+  { title: "Author", value: "Author", align: "left", sortable: true },
+  {
+    title: "Active",
+    key: "active",
+    align: "center",
+    sortable: false,
+  },
+  { title: "Version", value: "Version", align: "center", sortable: true }, 
+  {
+    title: "Child Theme",
+    key: "child",
+    align: "center",
+    sortable: false,
+  },
+  {
+    title: "Update",
+    key: "update",
+    align: "center",
+    sortable: false,
   },
 ];
 
@@ -473,7 +545,7 @@ function openVulnerabilities(item) {
 
             <v-card-text>
               <v-tabs-window v-model="tab">
-                <v-tabs-window-item value="plugins">
+                <v-tabs-window-item value="plugins" transition="false" reverse-transition="false">
                   <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
                     <div v-if="
                       store.activatedSite.wp_juggler_plugins_summary_timestamp
@@ -501,10 +573,13 @@ function openVulnerabilities(item) {
                     <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
                       variant="solo-filled" flat hide-details single-line></v-text-field>
 
-                    <v-data-table v-model:search="search" :items="data" :headers="headers" item-key="id" show-select>
+                    <v-data-table v-model:search="search" :items="plugins_data" :headers="plugin_headers" item-key="id">
                       <template v-slot:item.active="{ item }">
-                        <div v-if="item.Active">
+                        <div v-if="item.Active && !item.Network">
                           <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                        </div>
+                        <div v-if="item.Active && item.Network">
+                          <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
                         </div>
                       </template>
 
@@ -536,6 +611,17 @@ function openVulnerabilities(item) {
                         </div>
                       </template>
 
+                      <template v-slot:item.source="{ item }">
+                        <div v-if="item.Wporg && !item.WpJuggler">
+                          <v-icon color="grey-lighten-1" icon="mdi-wordpress" size="large" class="mr-1"></v-icon>
+                        </div>
+                        <div v-else-if="!item.Wporg && item.WpJuggler">
+                          <v-icon color="grey-lighten-1" icon="mdi-lan" size="large" class="rm-4"></v-icon>
+                        </div>
+                        <div v-else>
+                          <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                        </div>
+                      </template>
                       <template v-slot:item.actions="{ item }">
                         <v-btn v-if="item.Active" class="ml-3 text-none text-caption">Deactivate
                         </v-btn>
@@ -551,7 +637,63 @@ function openVulnerabilities(item) {
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="themes"> Two </v-tabs-window-item>
+                <v-tabs-window-item value="themes" transition="false" reverse-transition="false">
+
+                  <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
+                    <div v-if="
+                      store.activatedSite.wp_juggler_themes_summary_timestamp
+                    ">
+                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
+                      {{
+                        store.activatedSite.wp_juggler_themes_summary_timestamp
+                      }}
+                      <v-btn class="ml-3 text-none text-caption">Refresh
+                      </v-btn>
+                    </div>
+
+                    <div v-else>
+                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
+                      Never
+                      <v-btn class="ml-3 text-none text-caption">Refresh
+                      </v-btn>
+                    </div>
+                  </v-sheet>
+                  <v-divider></v-divider>
+
+                  <v-sheet>
+                    <v-spacer></v-spacer>
+
+                    <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
+                      variant="solo-filled" flat hide-details single-line></v-text-field>
+
+                    <v-data-table v-model:search="search" :items="themes_data" :headers="theme_headers" item-key="id">
+                      <template v-slot:item.active="{ item }">
+                        <div v-if="item.Active && !item.Network">
+                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                        </div>
+                        <div v-if="item.Active && item.Network">
+                          <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+                        </div>
+                      </template>
+
+                      <template v-slot:item.child="{ item }">
+                        <div v-if="item.IsChildTheme">
+                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                        </div>
+                      </template>
+
+                      <template v-slot:item.update="{ item }">
+                        <div v-if="item.Update">
+                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon> {{
+                            item.UpdateVersion }}
+                        </div>
+                      </template>
+                    
+                    </v-data-table>
+                  </v-sheet>
+
+                </v-tabs-window-item>
+
               </v-tabs-window>
             </v-card-text>
           </v-card>

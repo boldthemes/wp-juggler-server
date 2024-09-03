@@ -221,7 +221,7 @@ class WPJS_AJAX
 		];
 
 		$final_res['summary'] = array();
-		
+
 		$uptime_periods = [
 			'-1 day',
 			'-7 days',
@@ -229,7 +229,7 @@ class WPJS_AJAX
 			'-3 months',
 		];
 
-		foreach( $uptime_periods as $period ){
+		foreach ($uptime_periods as $period) {
 
 			$query = $wpdb->prepare(
 				"SELECT COUNT(ID) AS Num FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s) AND log_result IN (%s, %s)",
@@ -239,11 +239,11 @@ class WPJS_AJAX
 				'fail',
 				'error'
 			);
-	
+
 			$logs = $wpdb->get_results($query, ARRAY_A);
-	
+
 			$numapi = $logs[0]['Num'];
-	
+
 			$query = $wpdb->prepare(
 				"SELECT COUNT(ID) AS Num FROM $table_name WHERE  wpjugglersites_id = %s AND log_time >= %s AND log_type IN (%s) AND log_result IN (%s, %s)",
 				$site_id,
@@ -252,21 +252,20 @@ class WPJS_AJAX
 				'fail',
 				'error'
 			);
-	
+
 			$logs = $wpdb->get_results($query, ARRAY_A);
-	
+
 			$numfront = $logs[0]['Num'];
-	
+
 			$obj = [
 				'api' => $numapi,
 				'front' => $numfront
 			];
-	
+
 			$final_res['summary'][] = $obj;
 		}
 
 		return $final_res;
-
 	}
 
 	private function get_latest_plugin_data($site_id)
@@ -442,14 +441,14 @@ class WPJS_AJAX
 			$updates_num++;
 		}
 
-		if (isset($themes_array['inactive'])){
+		if (isset($themes_array['inactive'])) {
 			foreach ($themes_array['inactive'] as $item) {
 				if (isset($item['Update']) && $item['Update']) {
 					$updates_num++;
 				}
 			}
 		}
-		
+
 
 		return (object) [
 			'updates_num' => $updates_num
@@ -543,6 +542,63 @@ class WPJS_AJAX
 		}
 	}
 
+	public function ajax_get_health_panel()
+	{
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		$health_data = $this->get_health_data($site_id);
+
+		if (!$health_data) {
+			$health_data_status = false;
+			$health_data_info = false;
+			$health_data_timestamp = false;
+		} else {
+			$health_data_status = $health_data['data']['site_status']['direct'];
+
+			$final_debug_array = array();
+
+			foreach ($health_data['data']['debug'] as $key => $value) {
+				//$value->slug = $key;
+				$fin_value = $value;
+
+				$fields_obj = $value['fields'];
+				$final_fields = array();
+
+				foreach( $fields_obj as $key_obj => $value_obj ){
+					$field_fin_value = $value_obj;
+					$field_fin_value['slug'] = $key_obj;
+					$final_fields[] = $field_fin_value;
+				}
+
+				$fin_value['fields'] = $final_fields;
+
+				$fin_value['slug'] = $key;
+				$final_debug_array[] = $fin_value;
+			}
+
+			$health_data_info = $final_debug_array;
+			$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
+		}
+
+		$newsite = array(
+			'wp_juggler_health_data_status' => $health_data_status,
+			'wp_juggler_health_data_info' => $health_data_info,
+			'wp_juggler_health_data_timestamp' => $health_data_timestamp
+		);
+
+		$data[] = $newsite;
+
+		wp_send_json_success($data, 200);
+	}
+
 	public function ajax_get_control_panel()
 	{
 
@@ -572,56 +628,56 @@ class WPJS_AJAX
 				$automatic_logon = get_post_meta($site->ID, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
 
-				$uptime_stats= $this->get_uptime_stats($site->ID);
-				
+				$uptime_stats = $this->get_uptime_stats($site->ID);
+
 				$plugins_data = $this->get_latest_plugin_data($site->ID);
 
-				if(!$plugins_data) {
+				if (!$plugins_data) {
 					$updates_vul = false;
 					$plugins_timestamp = false;
 				} else {
 					$updates_vul = $this->get_plugin_updates_and_vul($plugins_data['data']);
-					$plugins_timestamp = $this->get_time_ago( $plugins_data['timestamp'] );
+					$plugins_timestamp = $this->get_time_ago($plugins_data['timestamp']);
 				}
 
 				$themes_data = $this->get_latest_themes_data($site->ID);
-				
-				if(!$themes_data) {
+
+				if (!$themes_data) {
 					$themes_array = false;
 					$themes_timestamp = false;
 				} else {
 					$themes_array = $this->get_theme_updates($themes_data['data']);
-					$themes_timestamp = $this->get_time_ago( $themes_data['timestamp'] );
+					$themes_timestamp = $this->get_time_ago($themes_data['timestamp']);
 				}
-						
+
 				$plugins_checksum_data = $this->get_plugin_checksum_data($site->ID);
 
-				if(!$plugins_checksum_data) {
+				if (!$plugins_checksum_data) {
 					$plugins_checksum = false;
 					$plugins_checksum_timestamp = false;
 				} else {
 					$plugins_checksum = $plugins_checksum_data['data'];
-					$plugins_checksum_timestamp = $this->get_time_ago( $plugins_checksum_data['timestamp'] );
+					$plugins_checksum_timestamp = $this->get_time_ago($plugins_checksum_data['timestamp']);
 				}
 
 				$core_checksum_data = $this->get_core_checksum_data($site->ID);
 
-				if(!$core_checksum_data) {
+				if (!$core_checksum_data) {
 					$core_checksum = false;
 					$core_checksum_timestamp = false;
 				} else {
 					$core_checksum = $core_checksum_data['data'];
-					$core_checksum_timestamp = $this->get_time_ago( $core_checksum_data['timestamp'] );
+					$core_checksum_timestamp = $this->get_time_ago($core_checksum_data['timestamp']);
 				}
 
 				$health_data = $this->get_health_data($site->ID);
 
-				if(!$health_data) {
+				if (!$health_data) {
 					$health_data_issues = false;
 					$health_data_timestamp = false;
 				} else {
 					$health_data_issues = $health_data['data']['site_status']['issues'];
-					$health_data_timestamp = $this->get_time_ago( $health_data['timestamp'] );
+					$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
 				}
 
 				$newsite = array(

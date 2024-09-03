@@ -25,6 +25,11 @@ function openThemesPlugins( site ){
   store.activatedThemes = true
 }
 
+function openHealth( site ){
+  store.activatedSite = site
+  store.activatedHealth = true
+}
+
 const themesButton = ref(null)
 
 </script>
@@ -119,6 +124,7 @@ const themesButton = ref(null)
                 text="Full Report"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4 text-none text-caption"
+                @click="openHealth( props.item )"
               ></v-btn>
             </v-card>
           </v-col>
@@ -149,7 +155,7 @@ const themesButton = ref(null)
                 </div>
               </div>
 
-              <v-card-text class="text-medium-emphasis pt-0">
+              <v-card-text class="text-medium-emphasis pt-0 mb-4">
                 <div class="d-flex py-3 justify-space-between">
                   <div>
                     <div>Failed frontend checks</div>
@@ -279,7 +285,7 @@ const themesButton = ref(null)
                 </div>
               </div>
 
-              <v-card-text class="text-medium-emphasis pt-0">
+              <v-card-text class="text-medium-emphasis mb-4 pt-0">
                 <div class="d-flex py-3 justify-space-between">
                   <div>
                     <div>Number of messages</div>

@@ -5,6 +5,7 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
   const initial = ref("Dashboard");
   
   const activatedThemes = ref(false)
+  const activatedHealth = ref(false)
   const activatedSite = ref(null)
   const nonce = ref('')
   const ajaxUrl = ref('')
@@ -23,6 +24,7 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
     nonce,
     ajaxUrl,
     activatedSite,
-    activatedThemes
+    activatedThemes,
+    activatedHealth
   };
 });
