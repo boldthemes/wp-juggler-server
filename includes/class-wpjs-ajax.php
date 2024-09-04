@@ -428,6 +428,57 @@ class WPJS_AJAX
 		];
 	}
 
+	public function get_latest_notices()
+	{
+		global $wpdb;
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		} 
+
+		$result = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkNotices' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
+		if (!$result) {
+			
+			$ret_obj = array(
+				'wp_juggler_notices' => false,
+				'wp_juggler_notices_timestamp' =>  false
+			);
+
+		} else {
+
+			$ret_obj = array(
+				'wp_juggler_notices' => json_decode( $result['log_data'], true ),
+				'wp_juggler_notices_timestamp' =>  $this->get_time_ago( strtotime($result['log_time' ]))
+			);
+
+		}		
+
+		$data[] = $ret_obj;
+
+		wp_send_json_success($data, 200);
+
+	}
+
 	private function get_theme_updates($themes_array)
 	{
 

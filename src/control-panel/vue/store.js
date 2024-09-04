@@ -8,6 +8,8 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
   const activatedHealth = ref(false)
   const activatedUptime = ref(false)
   const activatedSite = ref(null)
+  const activatedNotices = ref(null)
+
   const nonce = ref('')
   const ajaxUrl = ref('')
 
@@ -27,6 +29,7 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
     activatedSite,
     activatedThemes,
     activatedHealth,
-    activatedUptime
+    activatedUptime,
+    activatedNotices
   };
 });

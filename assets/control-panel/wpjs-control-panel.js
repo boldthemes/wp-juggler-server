@@ -9101,6 +9101,8 @@ var _healthPanelVue = require("./HealthPanel.vue");
 var _healthPanelVueDefault = parcelHelpers.interopDefault(_healthPanelVue);
 var _uptimePanelVue = require("./UptimePanel.vue");
 var _uptimePanelVueDefault = parcelHelpers.interopDefault(_uptimePanelVue);
+var _noticesPanelVue = require("./NoticesPanel.vue");
+var _noticesPanelVueDefault = parcelHelpers.interopDefault(_noticesPanelVue);
 exports.default = {
     __name: "App",
     setup (__props, { expose: __expose }) {
@@ -9246,7 +9248,8 @@ exports.default = {
             ExpandedRow: (0, _expandedRowVueDefault.default),
             ThemesPluginsPanel: (0, _themesPluginsPanelVueDefault.default),
             HealthPanel: (0, _healthPanelVueDefault.default),
-            UptimePanel: (0, _uptimePanelVueDefault.default)
+            UptimePanel: (0, _uptimePanelVueDefault.default),
+            NoticesPanel: (0, _noticesPanelVueDefault.default)
         };
         Object.defineProperty(__returned__, "__isScriptSetup", {
             enumerable: false,
@@ -9256,7 +9259,7 @@ exports.default = {
     }
 };
 
-},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4"}],"7kZ8m":[function(require,module,exports) {
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4","./NoticesPanel.vue":"3sk65"}],"7kZ8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
@@ -9268,6 +9271,7 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
     const activatedHealth = (0, _vue.ref)(false);
     const activatedUptime = (0, _vue.ref)(false);
     const activatedSite = (0, _vue.ref)(null);
+    const activatedNotices = (0, _vue.ref)(null);
     const nonce = (0, _vue.ref)("");
     const ajaxUrl = (0, _vue.ref)("");
     /* watch(activetab, (newactivetab, prevactivetab) => {
@@ -9282,7 +9286,8 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
         activatedSite,
         activatedThemes,
         activatedHealth,
-        activatedUptime
+        activatedUptime,
+        activatedNotices
     };
 });
 
@@ -14766,7 +14771,12 @@ exports.default = {
             store.activatedSite = site;
             store.activatedUptime = true;
         }
+        function openNotices(site) {
+            store.activatedSite = site;
+            store.activatedNotices = true;
+        }
         const themesButton = (0, _vue.ref)(null);
+        const noticesButton = (0, _vue.ref)(null);
         const __returned__ = {
             store,
             props,
@@ -14776,7 +14786,9 @@ exports.default = {
             openThemesPlugins,
             openHealth,
             openUptime,
+            openNotices,
             themesButton,
+            noticesButton,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -14874,16 +14886,20 @@ const _hoisted_26 = {
     key: 2
 };
 const _hoisted_27 = {
-    class: "d-flex py-3 justify-space-between pb-0"
+    key: 0
 };
 const _hoisted_28 = {
-    class: "mr-5"
+    key: 1
 };
 const _hoisted_29 = {
-    class: "d-flex py-3 justify-space-between"
+    class: "d-flex py-3 justify-space-between pt-0"
 };
-const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of messages", -1 /* HOISTED */ );
-const _hoisted_31 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Last message: 9 hours ago", -1 /* HOISTED */ );
+const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "Number of notices", -1 /* HOISTED */ );
+const _hoisted_31 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "d-flex py-3 justify-space-between pt-0"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "\xa0")
+], -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_card_item = (0, _vue.resolveComponent)("v-card-item");
@@ -15303,52 +15319,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             default: (0, _vue.withCtx)(()=>[
                                     (0, _vue.createVNode)(_component_v_card, null, {
                                         default: (0, _vue.withCtx)(()=>[
-                                                (0, _vue.createElementVNode)("div", _hoisted_27, [
-                                                    (0, _vue.createVNode)(_component_v_card_item, {
-                                                        title: "Messages"
-                                                    }),
-                                                    (0, _vue.createElementVNode)("div", _hoisted_28, [
-                                                        (0, _vue.createVNode)(_component_v_menu, {
-                                                            "open-on-hover": ""
-                                                        }, {
-                                                            activator: (0, _vue.withCtx)(({ props })=>[
-                                                                    (0, _vue.createVNode)(_component_v_btn, (0, _vue.mergeProps)(props, {
-                                                                        class: "text-none text-caption"
-                                                                    }), {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createTextVNode)(" Last 24 hours ")
-                                                                            ]),
-                                                                        _: 2 /* DYNAMIC */ 
-                                                                    }, 1040 /* FULL_PROPS, DYNAMIC_SLOTS */ )
-                                                                ]),
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_list, null, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.uptimePeriods, (item, index)=>{
-                                                                                    return (0, _vue.createVNode)(_component_v_list_item, {
-                                                                                        key: index
-                                                                                    }, {
-                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                (0, _vue.createVNode)(_component_v_list_item_title, null, {
-                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
-                                                                                                        ]),
-                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                                            ]),
-                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
-                                                                                }), 64 /* STABLE_FRAGMENT */ ))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ]),
-                                                            _: 1 /* STABLE */ 
-                                                        })
-                                                    ])
-                                                ]),
+                                                (0, _vue.createVNode)(_component_v_card_item, {
+                                                    title: "Notices"
+                                                }, {
+                                                    subtitle: (0, _vue.withCtx)(()=>[
+                                                            $setup.props.item.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_27, [
+                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                    class: "me-1 pb-1",
+                                                                    icon: "mdi-refresh",
+                                                                    size: "18"
+                                                                }),
+                                                                (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary_timestamp), 1 /* TEXT */ )
+                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_28, [
+                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                    class: "me-1 pb-1",
+                                                                    icon: "mdi-refresh",
+                                                                    size: "18"
+                                                                }),
+                                                                (0, _vue.createTextVNode)(" Never ")
+                                                            ]))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }),
                                                 (0, _vue.createVNode)(_component_v_card_text, {
-                                                    class: "text-medium-emphasis mb-4 pt-0"
+                                                    class: "text-medium-emphasis"
                                                 }, {
                                                     default: (0, _vue.withCtx)(()=>[
                                                             (0, _vue.createElementVNode)("div", _hoisted_29, [
@@ -15359,15 +15353,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         "no-gutters": ""
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                $setup.props.item?.wp_juggler_themes_summary ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                    key: 0,
                                                                                     class: "text-h2",
                                                                                     cols: "12"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" 12 ")
+                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_themes_summary.updates_num), 1 /* TEXT */ )
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
-                                                                                })
+                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                    key: 1,
+                                                                                    class: "text-h2",
+                                                                                    cols: "12"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            (0, _vue.createTextVNode)(" ? ")
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                }))
                                                                             ]),
                                                                         _: 1 /* STABLE */ 
                                                                     })
@@ -15379,10 +15383,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 }),
                                                 (0, _vue.createVNode)(_component_v_divider),
                                                 (0, _vue.createVNode)(_component_v_btn, {
-                                                    text: "All Messages",
+                                                    text: "All notices",
                                                     "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption"
-                                                })
+                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                    onClick: _cache[3] || (_cache[3] = ($event)=>$setup.openNotices($setup.props.item)),
+                                                    ref: "noticesButton"
+                                                }, null, 512 /* NEED_PATCH */ )
                                             ]),
                                         _: 1 /* STABLE */ 
                                     })
@@ -19780,6 +19786,409 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"3sk65":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let script;
+let initialize = ()=>{
+    script = require("3b43eea281a67ef2");
+    if (script.__esModule) script = script.default;
+    script.render = require("dcc5366acec989c0").render;
+    script.__cssModules = require("2b858a785811796d").default;
+    require("a976c808d589edd4").default(script);
+    script.__scopeId = "data-v-67c374";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\NoticesPanel.vue";
+};
+initialize();
+if (module.hot) {
+    script.__hmrId = "67c374-hmr";
+    module.hot.accept(()=>{
+        setTimeout(()=>{
+            initialize();
+            if (!__VUE_HMR_RUNTIME__.createRecord("67c374-hmr", script)) __VUE_HMR_RUNTIME__.reload("67c374-hmr", script);
+        }, 0);
+    });
+}
+exports.default = script;
+
+},{"3b43eea281a67ef2":"a5ID5","dcc5366acec989c0":"hUnyL","2b858a785811796d":"jDFGq","a976c808d589edd4":"4H9hc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"a5ID5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _storeJs = require("./store.js");
+var _vue = require("vue");
+var _vueQuery = require("@tanstack/vue-query");
+exports.default = {
+    __name: "NoticesPanel",
+    setup (__props, { expose: __expose }) {
+        __expose();
+        const store = (0, _storeJs.useWpjsStore)();
+        const passedOpen = (0, _vue.ref)(false);
+        const search = (0, _vue.ref)("");
+        const dialogInner = (0, _vue.ref)(false);
+        const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const tab = (0, _vue.ref)(0);
+        const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
+            queryKey: [
+                "wpjs-notices-panel",
+                store.activatedSite.id
+            ],
+            queryFn: getNoticesPanel
+        });
+        async function getNoticesPanel() {
+            let ret = {};
+            const response = await doAjax({
+                action: "wpjs-get-notices-panel",
+                siteId: store.activatedSite.id
+            });
+            ret = response.data[0];
+            return ret;
+        }
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw error;
+            }
+        }
+        const recommendations = (0, _vue.computed)(()=>{
+            return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "recommended" && item.test !== "rest_availability");
+        });
+        const openIcon = (0, _vue.computed)(()=>{
+            return passedOpen.value ? "mdi-chevron-up" : "mdi-chevron-down";
+        });
+        const __returned__ = {
+            store,
+            passedOpen,
+            search,
+            dialogInner,
+            vulnerabilitiesItem,
+            tab,
+            isLoading,
+            isError,
+            isFetching,
+            data,
+            error,
+            refetch,
+            getNoticesPanel,
+            doAjax,
+            recommendations,
+            openIcon,
+            get useWpjsStore () {
+                return 0, _storeJs.useWpjsStore;
+            },
+            onMounted: (0, _vue.onMounted),
+            computed: (0, _vue.computed),
+            ref: (0, _vue.ref),
+            get useQueryClient () {
+                return 0, _vueQuery.useQueryClient;
+            },
+            get useQuery () {
+                return 0, _vueQuery.useQuery;
+            },
+            get useMutation () {
+                return 0, _vueQuery.useMutation;
+            }
+        };
+        Object.defineProperty(__returned__, "__isScriptSetup", {
+            enumerable: false,
+            value: true
+        });
+        return __returned__;
+    }
+};
+
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"hUnyL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "render", ()=>render);
+var _vue = require("vue");
+const _hoisted_1 = {
+    class: "text-center pa-4"
+};
+const _hoisted_2 = {
+    key: 0
+};
+const _hoisted_3 = {
+    key: 1
+};
+const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "Currently active Notices:", -1 /* HOISTED */ );
+const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-15"
+}, "Notices History", -1 /* HOISTED */ );
+const _hoisted_6 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-10"
+}, "Sep 2024", -1 /* HOISTED */ );
+const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-10"
+}, "Aug 2024", -1 /* HOISTED */ );
+const _hoisted_8 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "3 Notices", -1 /* HOISTED */ );
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_toolbar_items = (0, _vue.resolveComponent)("v-toolbar-items");
+    const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
+    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
+    const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
+    const _component_v_expansion_panel_title = (0, _vue.resolveComponent)("v-expansion-panel-title");
+    const _component_v_expansion_panel_text = (0, _vue.resolveComponent)("v-expansion-panel-text");
+    const _component_v_expansion_panel = (0, _vue.resolveComponent)("v-expansion-panel");
+    const _component_v_expansion_panels = (0, _vue.resolveComponent)("v-expansion-panels");
+    const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
+    const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.store.activatedNotices,
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.store.activatedNotices = $event),
+            transition: "dialog-bottom-transition",
+            fullscreen: ""
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedNotices = false)
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_spacer),
+                                            (0, _vue.createVNode)(_component_v_toolbar_items)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                                        class: "pa-4 text-right mx-auto",
+                                                                        elevation: "0",
+                                                                        width: "100%",
+                                                                        rounded: "lg"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                                        class: "me-1 pb-1",
+                                                                                        icon: "mdi-refresh",
+                                                                                        size: "18"
+                                                                                    }),
+                                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_notices_timestamp) + " ", 1 /* TEXT */ ),
+                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                        class: "ml-3 text-none text-caption"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)("Refresh ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })
+                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                                        class: "me-1 pb-1",
+                                                                                        icon: "mdi-refresh",
+                                                                                        size: "18"
+                                                                                    }),
+                                                                                    (0, _vue.createTextVNode)(" Never "),
+                                                                                    (0, _vue.createVNode)(_component_v_btn, {
+                                                                                        class: "ml-3 text-none text-caption"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)("Refresh ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })
+                                                                                ]))
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    }),
+                                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                                        "max-width": "1200",
+                                                                        class: "align-left justify-left text-left mx-auto px-4 pb-4 mb-10"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                _hoisted_4,
+                                                                                (0, _vue.createVNode)(_component_v_divider, {
+                                                                                    class: "mb-10"
+                                                                                }),
+                                                                                $setup.data.wp_juggler_notices.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                    key: 0
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data.wp_juggler_notices, (notice)=>{
+                                                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                    class: "wpjs-debug-table-row"
+                                                                                                }, {
+                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                class: "text-left",
+                                                                                                                innerHTML: notice.NoticeHTML
+                                                                                                            }, null, 8 /* PROPS */ , [
+                                                                                                                "innerHTML"
+                                                                                                            ])
+                                                                                                        ]),
+                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                    key: 1
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                                                class: "wpjs-debug-table-row"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                                                            class: "text-left"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createTextVNode)(" No active notices ")
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            })
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                })),
+                                                                                _hoisted_5,
+                                                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                    class: "align-left justify-left text-left mb-15 mt-10"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            _hoisted_6,
+                                                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                class: "mb-4"
+                                                                                            }),
+                                                                                            (0, _vue.createTextVNode)(" No incidents reported "),
+                                                                                            _hoisted_7,
+                                                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                class: "mb-4"
+                                                                                            }),
+                                                                                            (0, _vue.createVNode)(_component_v_expansion_panels, {
+                                                                                                class: "mt-8",
+                                                                                                variant: "accordion"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_expansion_panel, null, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panel_title, null, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" Aug 24, 2024 - 13:24:01 "),
+                                                                                                                                (0, _vue.createVNode)(_component_v_spacer),
+                                                                                                                                _hoisted_8
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panel_text, null, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_sheet, null, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                                                class: "wpjs-debug-table-row"
+                                                                                                                                            }, {
+                                                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                            class: "text-left"
+                                                                                                                                                        }, {
+                                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                    (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
+                                                                                                                                                                ]),
+                                                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                                                        })
+                                                                                                                                                    ]),
+                                                                                                                                                _: 1 /* STABLE */ 
+                                                                                                                                            }),
+                                                                                                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                                                class: "wpjs-debug-table-row"
+                                                                                                                                            }, {
+                                                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                            class: "text-left"
+                                                                                                                                                        }, {
+                                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                    (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
+                                                                                                                                                                ]),
+                                                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                                                        })
+                                                                                                                                                    ]),
+                                                                                                                                                _: 1 /* STABLE */ 
+                                                                                                                                            })
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            })
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                })
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    })
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        })
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ])
+    ]);
+}
+if (module.hot) module.hot.accept(()=>{
+    __VUE_HMR_RUNTIME__.rerender("67c374-hmr", render);
+});
+
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jDFGq":[function() {},{}],"4H9hc":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let NOOP = ()=>{};
+exports.default = (script)=>{};
+
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"e7mfF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -20084,6 +20493,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })) : (0, _vue.createCommentVNode)("v-if", true),
         $setup.store.activatedUptime ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["UptimePanel"], {
             key: 2
+        })) : (0, _vue.createCommentVNode)("v-if", true),
+        $setup.store.activatedNotices ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["NoticesPanel"], {
+            key: 3
         })) : (0, _vue.createCommentVNode)("v-if", true)
     ], 64 /* STABLE_FRAGMENT */ );
 }

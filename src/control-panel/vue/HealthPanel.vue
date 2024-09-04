@@ -4,7 +4,7 @@ import { onMounted, computed, ref } from "vue";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 
 const store = useWpjsStore();
-const passedOpen = ref( false );
+const passedOpen = ref(false);
 
 const search = ref("");
 
@@ -14,7 +14,7 @@ const vulnerabilitiesItem = ref(null);
 const tab = ref(0);
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
-  queryKey: ["wpjs-health-panel", store.activatedSite.id ],
+  queryKey: ["wpjs-health-panel", store.activatedSite.id],
   queryFn: getHealthPanel,
 });
 
@@ -55,10 +55,10 @@ const goods = computed(() => {
 })
 
 const openIcon = computed(() => {
-  return passedOpen.value? 'mdi-chevron-up': 'mdi-chevron-down'
+  return passedOpen.value ? 'mdi-chevron-up' : 'mdi-chevron-down'
 })
 
-function debugFields( fieldArray ){
+function debugFields(fieldArray) {
   return fieldArray.filter(item => item.debug !== 'loading...');
 }
 
@@ -100,7 +100,7 @@ function debugFields( fieldArray ){
 
           <v-card v-if="data">
             <v-tabs v-model="tab" bg-color="surface">
-              <v-tab value="status" >Status</v-tab>
+              <v-tab value="status">Status</v-tab>
               <v-tab value="info">Info</v-tab>
             </v-tabs>
 
@@ -125,19 +125,21 @@ function debugFields( fieldArray ){
                           <v-expansion-panel-title>
                             {{ recommendation.label }}
                             <v-spacer></v-spacer>
-                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', recommendation.badge.color ]">{{ recommendation.badge.label }}</div>
+                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', recommendation.badge.color]">{{
+                              recommendation.badge.label }}</div>
                           </v-expansion-panel-title>
-                          <v-expansion-panel-text >
-                            <div class="wpjs-health-panel-description" v-html="recommendation.description" ></div>
-                            <div class="wpjs-health-panel-actions" v-html="recommendation.actions" ></div>
+                          <v-expansion-panel-text>
+                            <div class="wpjs-health-panel-description" v-html="recommendation.description"></div>
+                            <div class="wpjs-health-panel-actions" v-html="recommendation.actions"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
                     </v-sheet>
 
-                    <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon" @click="passedOpen = !passedOpen">Passed tests</v-btn>
+                    <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon"
+                      @click="passedOpen = !passedOpen">Passed tests</v-btn>
 
-                    <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10" >
+                    <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10">
 
                       <div class="text-h6">{{ goods.length }} items with no issues detected</div>
 
@@ -147,10 +149,11 @@ function debugFields( fieldArray ){
                           <v-expansion-panel-title>
                             {{ good.label }}
                             <v-spacer></v-spacer>
-                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', good.badge.color ]">{{ good.badge.label }}</div>
+                            <div :class="['mr-3 pa-2 wpjs-health-badge-label', good.badge.color]">{{ good.badge.label
+                              }}</div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div class="wpjs-health-panel-description" v-html="good.description" ></div>
+                            <div class="wpjs-health-panel-description" v-html="good.description"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
 
@@ -170,14 +173,14 @@ function debugFields( fieldArray ){
 
                       <v-expansion-panels class="mt-8" variant="accordion">
                         <v-expansion-panel v-for="debug in data.wp_juggler_health_data_info">
-                          <v-expansion-panel-title v-if=" debug.fields.length > 0 && debug.show_count">
+                          <v-expansion-panel-title v-if="debug.fields.length > 0 && debug.show_count">
                             {{ debug.label }} ({{ debug.fields.length }})
                           </v-expansion-panel-title>
-                          <v-expansion-panel-title v-else-if=" debug.fields.length > 0">
+                          <v-expansion-panel-title v-else-if="debug.fields.length > 0">
                             {{ debug.label }}
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <v-table density="compact" >
+                            <v-table density="compact">
                               <tbody>
                                 <tr v-for="field in debugFields(debug.fields)" class="wpjs-debug-table-row">
                                   <td>{{ field.label }}</td>
@@ -192,7 +195,7 @@ function debugFields( fieldArray ){
                       </v-expansion-panels>
                     </v-sheet>
 
-                    
+
                   </v-sheet>
 
                 </v-tabs-window-item>
@@ -207,7 +210,6 @@ function debugFields( fieldArray ){
 </template>
 
 <style>
-
 .wpjs-health-panel-description {
   padding-top: 24px;
 }

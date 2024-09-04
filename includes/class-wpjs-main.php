@@ -164,6 +164,8 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs_get_control_panel', $plugin_ajax, 'ajax_get_control_panel' );
 		
 		$this->loader->add_action( 'wp_ajax_wpjs-get-health-panel', $plugin_ajax, 'ajax_get_health_panel' );
+
+		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-panel', $plugin_ajax, 'get_latest_notices' );
 		
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );
 		register_deactivation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_deactivation') );
