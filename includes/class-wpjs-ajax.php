@@ -488,16 +488,6 @@ class WPJS_AJAX
 		$site_id = (isset($_POST['siteId'])) ? sanitize_text_field($_POST['siteId']) : false;;
 		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
 
-		/* if (intval($page) == 0) {
-			$results = $wpdb->get_results("SELECT * FROM $table_name WHERE direktt_user_id = '" . $direktt_user_id . "' ORDER BY ID DESC LIMIT 20");
-		} else {
-			$results = $wpdb->get_results("SELECT * FROM $table_name WHERE direktt_user_id = '" . $direktt_user_id . "' AND ID < " . intval($page) . " ORDER BY ID DESC LIMIT 20");
-		}
-
-		$data = $results;
-
-		wp_send_json_success($data, 200); */
-
 		if (intval($page) == 0) {
 
 			$results = $wpdb->get_results(
@@ -535,6 +525,13 @@ class WPJS_AJAX
 			);
 		}
 
+		foreach ($results as &$item) {
+			if (isset($item['log_time'])) {
+				$item['log_timestamp'] = strtotime($item['log_time']);
+			}
+		}
+		unset($item);
+
 		wp_send_json_success($results, 200);
 		exit;
 
@@ -545,6 +542,8 @@ class WPJS_AJAX
 				'wp_juggler_notices_timestamp' =>  false
 			);
 		} else {
+
+			
 
 			$ret_obj = array(
 				'wp_juggler_notices' => json_decode($result['log_data'], true),
