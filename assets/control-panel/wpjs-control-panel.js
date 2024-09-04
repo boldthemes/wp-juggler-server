@@ -16693,10 +16693,12 @@ exports.default = {
             }
         }
         const recommendations = (0, _vue.computed)(()=>{
-            return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "recommended" && item.test !== "rest_availability");
+            if (data.value.wp_juggler_health_data_status) return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "recommended" && item.test !== "rest_availability");
+            else return [];
         });
         const goods = (0, _vue.computed)(()=>{
-            return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "good" && item.test !== "rest_availability");
+            if (data.value.wp_juggler_health_data_status) return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "good" && item.test !== "rest_availability");
+            else return [];
         });
         const openIcon = (0, _vue.computed)(()=>{
             return passedOpen.value ? "mdi-chevron-up" : "mdi-chevron-down";
@@ -16766,13 +16768,13 @@ const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
 }, "Site Health Status", -1 /* HOISTED */ );
 const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-3 mb-4"
-}, "The site health check shows information about your WordPress configuration and items that may need your attention.", -1 /* HOISTED */ );
+}, " The site health check shows information about your WordPress configuration and items that may need your attention. ", -1 /* HOISTED */ );
 const _hoisted_6 = {
     class: "text-h6"
 };
 const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-3 mb-4"
-}, "Recommended items are considered beneficial to your site, although not as important to prioritize as a critical issue, they may include improvements to things such as; Performance, user experience, and more.", -1 /* HOISTED */ );
+}, " Recommended items are considered beneficial to your site, although not as important to prioritize as a critical issue, they may include improvements to things such as; Performance, user experience, and more. ", -1 /* HOISTED */ );
 const _hoisted_8 = [
     "innerHTML"
 ];
@@ -16787,10 +16789,16 @@ const _hoisted_11 = [
 ];
 const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
+}, "No Recorded Site Health Status", -1 /* HOISTED */ );
+const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
 }, "Site Health Info", -1 /* HOISTED */ );
-const _hoisted_13 = {
+const _hoisted_14 = {
     class: "wpjs-debug-table-row"
 };
+const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "No Recorded Site Health Info", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -16838,7 +16846,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ]),
                                     _: 1 /* STABLE */ 
                                 }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 0
+                                }, {
                                     default: (0, _vue.withCtx)(()=>[
                                             (0, _vue.createVNode)(_component_v_sheet, {
                                                 class: "pa-4 text-right mx-auto",
@@ -16847,7 +16857,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 rounded: "lg"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                        $setup.data.wp_juggler_health_data_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
                                                             (0, _vue.createVNode)(_component_v_icon, {
                                                                 class: "me-1 pb-1",
                                                                 icon: "mdi-refresh",
@@ -16881,9 +16891,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             }),
-                                            $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
-                                                key: 0
-                                            }, {
+                                            (0, _vue.createVNode)(_component_v_card, null, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createVNode)(_component_v_tabs, {
                                                             modelValue: $setup.tab,
@@ -16927,7 +16935,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                     "reverse-transition": "false"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                            $setup.recommendations.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 0,
                                                                                                 "max-width": "1200",
                                                                                                 class: "align-center justify-center text-center mx-auto px-4 pb-4"
                                                                                             }, {
@@ -16938,7 +16947,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             default: (0, _vue.withCtx)(()=>[
                                                                                                                     _hoisted_4,
                                                                                                                     _hoisted_5,
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_6, (0, _vue.toDisplayString)($setup.recommendations.length) + " recommended improvements", 1 /* TEXT */ ),
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_6, (0, _vue.toDisplayString)($setup.recommendations.length) + " recommended improvements ", 1 /* TEXT */ ),
                                                                                                                     _hoisted_7,
                                                                                                                     (0, _vue.createVNode)(_component_v_expansion_panels, {
                                                                                                                         class: "mt-8",
@@ -17001,7 +17010,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left my-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_10, (0, _vue.toDisplayString)($setup.goods.length) + " items with no issues detected", 1 /* TEXT */ ),
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_10, (0, _vue.toDisplayString)($setup.goods.length) + " items with no issues detected ", 1 /* TEXT */ ),
                                                                                                                     (0, _vue.createVNode)(_component_v_expansion_panels, {
                                                                                                                         class: "mt-8",
                                                                                                                         variant: "accordion"
@@ -17044,7 +17053,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         })) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                     ]),
                                                                                                 _: 1 /* STABLE */ 
-                                                                                            })
+                                                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 1,
+                                                                                                "max-width": "1200",
+                                                                                                class: "align-center justify-center text-center mx-auto px-4 pb-4"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                                            class: "align-left justify-left text-left mb-10"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    _hoisted_12
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            }))
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 }),
@@ -17054,16 +17079,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                     "reverse-transition": "false"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                            $setup.data.wp_juggler_health_data_info ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 0,
                                                                                                 "max-width": "1200",
-                                                                                                class: "align-center justify-center text-center mx-auto px-4"
+                                                                                                class: "align-center justify-center text-center mx-auto px-4 pb-4"
                                                                                             }, {
                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                         (0, _vue.createVNode)(_component_v_sheet, {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_12,
+                                                                                                                    _hoisted_13,
                                                                                                                     (0, _vue.createVNode)(_component_v_expansion_panels, {
                                                                                                                         class: "mt-8",
                                                                                                                         variant: "accordion"
@@ -17095,7 +17121,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                                                                                         (0, _vue.createElementVNode)("tbody", null, [
                                                                                                                                                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.debugFields(debug.fields), (field)=>{
-                                                                                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_13, [
+                                                                                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_14, [
                                                                                                                                                                                     (0, _vue.createElementVNode)("td", null, (0, _vue.toDisplayString)(field.label), 1 /* TEXT */ ),
                                                                                                                                                                                     (0, _vue.createElementVNode)("td", null, (0, _vue.toDisplayString)(field.value), 1 /* TEXT */ )
                                                                                                                                                                                 ]);
@@ -17119,7 +17145,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                         })
                                                                                                     ]),
                                                                                                 _: 1 /* STABLE */ 
-                                                                                            })
+                                                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 1,
+                                                                                                "max-width": "1200",
+                                                                                                class: "align-center justify-center text-center mx-auto px-4 pb-4"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                                            class: "align-left justify-left text-left mb-10"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    _hoisted_15
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            }))
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 })
@@ -17133,10 +17175,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            })
                                         ]),
                                     _: 1 /* STABLE */ 
-                                })
+                                })) : (0, _vue.createCommentVNode)("v-if", true)
                             ]),
                         _: 1 /* STABLE */ 
                     })
@@ -19901,7 +19943,9 @@ exports.default = {
                 "Dec"
             ];
             const groupedLogs = {};
-            noticeHistoryItems.value.forEach((log)=>{
+            const hitems = noticeHistoryItems.value;
+            if (data.value && data.value.wp_juggler_notices.length && data.value.wp_juggler_notices.length > 0) hitems.shift();
+            hitems.forEach((log)=>{
                 const date = new Date(log.log_timestamp * 1000);
                 const monthYear = `${months[date.getMonth()]} ${date.getFullYear()}`;
                 if (!groupedLogs[monthYear]) groupedLogs[monthYear] = [];
@@ -19913,7 +19957,6 @@ exports.default = {
             sortedMonths.forEach((monthYear)=>{
                 result[monthYear] = groupedLogs[monthYear];
             });
-            console.log(result);
             return result;
         });
         const __returned__ = {
@@ -19994,6 +20037,9 @@ const _hoisted_8 = {
 const _hoisted_9 = {
     class: "text-h6"
 };
+const _hoisted_10 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-15"
+}, "No Recorded Notices History", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -20055,7 +20101,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         rounded: "lg"
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                                                $setup.data.wp_juggler_notices_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
                                                                                     (0, _vue.createVNode)(_component_v_icon, {
                                                                                         class: "me-1 pb-1",
                                                                                         icon: "mdi-refresh",
@@ -20141,11 +20187,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 })),
-                                                                                _hoisted_5,
-                                                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                $setup.data.wp_juggler_history_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                    key: 2,
                                                                                     class: "align-left justify-left text-left px-5 mb-15"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
+                                                                                            _hoisted_5,
                                                                                             (0, _vue.createVNode)(_component_v_infinite_scroll, {
                                                                                                 height: 600,
                                                                                                 items: $setup.noticeHistoryItems,
@@ -20186,7 +20233,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                 (0, _vue.createVNode)(_component_v_expansion_panel_text, null, {
                                                                                                                                                     default: (0, _vue.withCtx)(()=>[
                                                                                                                                                             (0, _vue.createVNode)(_component_v_sheet, {
-                                                                                                                                                                class: "mt-1"
+                                                                                                                                                                class: "mt-2"
                                                                                                                                                             }, {
                                                                                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                                                                                         ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(notice.notices, (single_item)=>{
@@ -20227,7 +20274,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                             ])
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
-                                                                                })
+                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                    key: 3,
+                                                                                    class: "align-left justify-left text-left px-5 mb-15"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            _hoisted_10
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                }))
                                                                             ]),
                                                                         _: 1 /* STABLE */ 
                                                                     })

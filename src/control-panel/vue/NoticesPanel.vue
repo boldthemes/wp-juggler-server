@@ -91,14 +91,20 @@ const orgnizeByMonth = computed(() => {
   ];
   const groupedLogs = {};
 
-  noticeHistoryItems.value.forEach((log) => {
+  const hitems = noticeHistoryItems.value;
+
+  if(data.value && data.value.wp_juggler_notices.length && data.value.wp_juggler_notices.length > 0){
+    hitems.shift();
+  }
+
+  hitems.forEach((log) => {
     const date = new Date(log.log_timestamp * 1000);
     const monthYear = `${months[date.getMonth()]} ${date.getFullYear()}`;
 
     if (!groupedLogs[monthYear]) {
       groupedLogs[monthYear] = [];
     }
-    log.notices = JSON.parse(log.log_data)
+    log.notices = JSON.parse(log.log_data);
     groupedLogs[monthYear].push(log);
   });
 
@@ -110,8 +116,6 @@ const orgnizeByMonth = computed(() => {
   sortedMonths.forEach((monthYear) => {
     result[monthYear] = groupedLogs[monthYear];
   });
-
-  console.log(result);
 
   return result;
 });
@@ -147,7 +151,7 @@ const orgnizeByMonth = computed(() => {
                 width="100%"
                 rounded="lg"
               >
-                <div v-if="data">
+                <div v-if="data.wp_juggler_notices_timestamp">
                   <v-icon
                     class="me-1 pb-1"
                     icon="mdi-refresh"
@@ -190,9 +194,12 @@ const orgnizeByMonth = computed(() => {
                   </v-row>
                 </v-sheet>
 
-                <div class="text-h6 mt-15">Notices History:</div>
+                <v-sheet
+                  v-if="data.wp_juggler_history_count > 0"
+                  class="align-left justify-left text-left px-5 mb-15"
+                >
+                  <div class="text-h6 mt-15">Notices History:</div>
 
-                <v-sheet class="align-left justify-left text-left px-5 mb-15">
                   <v-infinite-scroll
                     :height="600"
                     :items="noticeHistoryItems"
@@ -219,10 +226,15 @@ const orgnizeByMonth = computed(() => {
                               <div>{{ notice.notices.length }} Notices</div>
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                              <v-sheet class="mt-1">
-                                <v-row v-for="single_item in notice.notices" class="wpjs-debug-table-row">
-                                  <v-col class="text-left px-5" v-html="single_item.NoticeHTML">
-                                   
+                              <v-sheet class="mt-2">
+                                <v-row
+                                  v-for="single_item in notice.notices"
+                                  class="wpjs-debug-table-row"
+                                >
+                                  <v-col
+                                    class="text-left px-5"
+                                    v-html="single_item.NoticeHTML"
+                                  >
                                   </v-col>
                                 </v-row>
                               </v-sheet>
@@ -233,6 +245,14 @@ const orgnizeByMonth = computed(() => {
                     </template>
                   </v-infinite-scroll>
                 </v-sheet>
+
+                <v-sheet
+                  v-else
+                  class="align-left justify-left text-left px-5 mb-15"
+                >
+                  <div class="text-h6 mt-15">No Recorded Notices History</div>
+                </v-sheet>
+
               </v-sheet>
             </v-card-text>
           </v-card>

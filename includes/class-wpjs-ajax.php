@@ -457,17 +457,36 @@ class WPJS_AJAX
 			ARRAY_A
 		);
 
-		if (!$result) {
+		$result1 = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT COUNT(ID) AS log_count
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkNotices' 
+					AND log_result = 'succ' 
+					AND	NOT JSON_LENGTH(log_data) = 0
+				ORDER BY log_time DESC 
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
 
+
+
+		if (!$result) {
 			$ret_obj = array(
 				'wp_juggler_notices' => false,
-				'wp_juggler_notices_timestamp' =>  false
+				'wp_juggler_notices_timestamp' =>  false,
+				'wp_juggler_history_count' => 0
 			);
 		} else {
 
 			$ret_obj = array(
 				'wp_juggler_notices' => json_decode($result['log_data'], true),
-				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time']))
+				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time'])),
+				'wp_juggler_history_count' => $result1['log_count'] - 1
 			);
 		}
 
@@ -497,7 +516,8 @@ class WPJS_AJAX
 				FROM wp_wpjs_cron_log 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
-					AND log_result = 'succ' 
+					AND log_result = 'succ'
+					AND	NOT JSON_LENGTH(log_data) = 0 
 				ORDER BY ID DESC 
 				LIMIT 20
 				",
@@ -514,6 +534,7 @@ class WPJS_AJAX
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
 					AND log_result = 'succ'
+					AND	NOT JSON_LENGTH(log_data) = 0
 					AND ID < %s 
 				ORDER BY ID DESC 
 				LIMIT 20
