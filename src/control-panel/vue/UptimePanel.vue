@@ -81,7 +81,7 @@ function debugFields(fieldArray) {
 
         <v-card-text>
 
-          <v-card v-if="data">
+          <v-card v-if="data" class="mt-10">
 
             <v-card-text>
 

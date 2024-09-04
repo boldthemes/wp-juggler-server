@@ -104,7 +104,7 @@ function debugFields(fieldArray) {
               <v-tab value="info">Info</v-tab>
             </v-tabs>
 
-            <v-card-text>
+            <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="status" transition="false" reverse-transition="false">
 

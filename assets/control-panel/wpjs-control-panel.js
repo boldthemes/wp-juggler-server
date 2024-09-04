@@ -16912,7 +16912,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         }, 8 /* PROPS */ , [
                                                             "modelValue"
                                                         ]),
-                                                        (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                        (0, _vue.createVNode)(_component_v_card_text, {
+                                                            class: "mt-10"
+                                                        }, {
                                                             default: (0, _vue.withCtx)(()=>[
                                                                     (0, _vue.createVNode)(_component_v_tabs_window, {
                                                                         modelValue: $setup.tab,
@@ -19531,7 +19533,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 (0, _vue.createVNode)(_component_v_card_text, null, {
                                     default: (0, _vue.withCtx)(()=>[
                                             $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
-                                                key: 0
+                                                key: 0,
+                                                class: "mt-10"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createVNode)(_component_v_card_text, null, {
