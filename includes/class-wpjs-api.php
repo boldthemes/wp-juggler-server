@@ -159,8 +159,8 @@ class WPJS_Api
 
 		//$response = WPJS_Service::check_core_checksum_api(37);
 		//$response = WPJS_Service::check_plugin_checksum_api(37);
-		$response = WPJS_Service::check_health_api(37);
-		//$response = WPJS_Service::check_notices_api(37);
+		//$response = WPJS_Service::check_health_api(37);
+		$response = WPJS_Service::check_notices_api(37);
 		//$response = WPJS_Service::check_plugins_api(37);
 		//$response = WPJS_Service::check_themes_api(37);
 

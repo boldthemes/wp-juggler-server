@@ -5,6 +5,7 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 import ExpandedRow from "./ExpandedRow.vue";
 import ThemesPluginsPanel from "./ThemesPluginsPanel.vue";
 import HealthPanel from "./HealthPanel.vue";
+import UptimePanel from "./UptimePanel.vue";
 
 const queryClient = useQueryClient();
 
@@ -289,6 +290,7 @@ onMounted(() => {
 </div>
 <ThemesPluginsPanel v-if="store.activatedThemes"></ThemesPluginsPanel>
 <HealthPanel v-if="store.activatedHealth"></HealthPanel>
+<UptimePanel v-if="store.activatedUptime"></UptimePanel>
 </template>
 
 <style>

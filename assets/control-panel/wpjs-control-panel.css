@@ -10,10 +10,6 @@
   margin-bottom: 8px;
 }
 
-.wpjs-debug-table-row:nth-child(odd) {
-  background-color: #f7f7f7;
-}
-
 .wpjs-health-badge-label.blue {
   border: 1px solid #72aee6;
 }
@@ -36,6 +32,10 @@
 
 .wpjs-health-badge-label.gray {
   border: 1px solid #c3c4c7;
+}
+
+.wpjs-debug-table-row:nth-child(odd) {
+  background-color: #f7f7f7;
 }
 
 body, html {

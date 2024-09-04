@@ -30,6 +30,11 @@ function openHealth( site ){
   store.activatedHealth = true
 }
 
+function openUptime( site ){
+  store.activatedSite = site
+  store.activatedUptime = true
+}
+
 const themesButton = ref(null)
 
 </script>
@@ -180,6 +185,7 @@ const themesButton = ref(null)
                 text="Full Report"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4 text-none text-caption"
+                @click="openUptime( props.item )"
               ></v-btn>
             </v-card>
           </v-col>

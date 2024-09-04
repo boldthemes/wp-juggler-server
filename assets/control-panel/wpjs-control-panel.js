@@ -9099,6 +9099,8 @@ var _themesPluginsPanelVue = require("./ThemesPluginsPanel.vue");
 var _themesPluginsPanelVueDefault = parcelHelpers.interopDefault(_themesPluginsPanelVue);
 var _healthPanelVue = require("./HealthPanel.vue");
 var _healthPanelVueDefault = parcelHelpers.interopDefault(_healthPanelVue);
+var _uptimePanelVue = require("./UptimePanel.vue");
+var _uptimePanelVueDefault = parcelHelpers.interopDefault(_uptimePanelVue);
 exports.default = {
     __name: "App",
     setup (__props, { expose: __expose }) {
@@ -9243,7 +9245,8 @@ exports.default = {
             },
             ExpandedRow: (0, _expandedRowVueDefault.default),
             ThemesPluginsPanel: (0, _themesPluginsPanelVueDefault.default),
-            HealthPanel: (0, _healthPanelVueDefault.default)
+            HealthPanel: (0, _healthPanelVueDefault.default),
+            UptimePanel: (0, _uptimePanelVueDefault.default)
         };
         Object.defineProperty(__returned__, "__isScriptSetup", {
             enumerable: false,
@@ -9253,7 +9256,7 @@ exports.default = {
     }
 };
 
-},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./HealthPanel.vue":"jr9wA"}],"7kZ8m":[function(require,module,exports) {
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4"}],"7kZ8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
@@ -9263,6 +9266,7 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
     const initial = (0, _vue.ref)("Dashboard");
     const activatedThemes = (0, _vue.ref)(false);
     const activatedHealth = (0, _vue.ref)(false);
+    const activatedUptime = (0, _vue.ref)(false);
     const activatedSite = (0, _vue.ref)(null);
     const nonce = (0, _vue.ref)("");
     const ajaxUrl = (0, _vue.ref)("");
@@ -9277,7 +9281,8 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
         ajaxUrl,
         activatedSite,
         activatedThemes,
-        activatedHealth
+        activatedHealth,
+        activatedUptime
     };
 });
 
@@ -14757,6 +14762,10 @@ exports.default = {
             store.activatedSite = site;
             store.activatedHealth = true;
         }
+        function openUptime(site) {
+            store.activatedSite = site;
+            store.activatedUptime = true;
+        }
         const themesButton = (0, _vue.ref)(null);
         const __returned__ = {
             store,
@@ -14766,6 +14775,7 @@ exports.default = {
             selectUptimePeriod,
             openThemesPlugins,
             openHealth,
+            openUptime,
             themesButton,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
@@ -15145,7 +15155,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 (0, _vue.createVNode)(_component_v_btn, {
                                                     text: "Full Report",
                                                     "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption"
+                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openUptime($setup.props.item))
                                                 })
                                             ]),
                                         _: 1 /* STABLE */ 
@@ -15276,7 +15287,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     text: "Manage Themes & Plugins",
                                                     "append-icon": "mdi-chevron-right",
                                                     class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
+                                                    onClick: _cache[2] || (_cache[2] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
                                                     ref: "themesButton"
                                                 }, null, 512 /* NEED_PATCH */ )
                                             ]),
@@ -17137,7 +17148,2639 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"bpKOx":[function() {},{}],"e7mfF":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"bpKOx":[function() {},{}],"hwbx4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let script;
+let initialize = ()=>{
+    script = require("a1f05650abaec17a");
+    if (script.__esModule) script = script.default;
+    script.render = require("e48904655aba27e4").render;
+    script.__cssModules = require("cd6135384bed4502").default;
+    require("33adb7bb0be0a46d").default(script);
+    script.__scopeId = "data-v-4f4529";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\UptimePanel.vue";
+};
+initialize();
+if (module.hot) {
+    script.__hmrId = "4f4529-hmr";
+    module.hot.accept(()=>{
+        setTimeout(()=>{
+            initialize();
+            if (!__VUE_HMR_RUNTIME__.createRecord("4f4529-hmr", script)) __VUE_HMR_RUNTIME__.reload("4f4529-hmr", script);
+        }, 0);
+    });
+}
+exports.default = script;
+
+},{"a1f05650abaec17a":"lz6Pg","e48904655aba27e4":"djPmG","cd6135384bed4502":"aRmPX","33adb7bb0be0a46d":"acLJl","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"lz6Pg":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _storeJs = require("./store.js");
+var _vue = require("vue");
+var _vueQuery = require("@tanstack/vue-query");
+exports.default = {
+    __name: "UptimePanel",
+    setup (__props, { expose: __expose }) {
+        __expose();
+        const store = (0, _storeJs.useWpjsStore)();
+        const passedOpen = (0, _vue.ref)(false);
+        const search = (0, _vue.ref)("");
+        const dialogInner = (0, _vue.ref)(false);
+        const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const tab = (0, _vue.ref)(0);
+        const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
+            queryKey: [
+                "wpjs-health-panel",
+                store.activatedSite.id
+            ],
+            queryFn: getHealthPanel
+        });
+        async function getHealthPanel() {
+            let ret = {};
+            const response = await doAjax({
+                action: "wpjs-get-health-panel",
+                siteId: store.activatedSite.id
+            });
+            ret = response.data[0];
+            return ret;
+        }
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw error;
+            }
+        }
+        const recommendations = (0, _vue.computed)(()=>{
+            return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "recommended" && item.test !== "rest_availability");
+        });
+        const goods = (0, _vue.computed)(()=>{
+            return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "good" && item.test !== "rest_availability");
+        });
+        const openIcon = (0, _vue.computed)(()=>{
+            return passedOpen.value ? "mdi-chevron-up" : "mdi-chevron-down";
+        });
+        function debugFields(fieldArray) {
+            return fieldArray.filter((item)=>item.debug !== "loading...");
+        }
+        const __returned__ = {
+            store,
+            passedOpen,
+            search,
+            dialogInner,
+            vulnerabilitiesItem,
+            tab,
+            isLoading,
+            isError,
+            isFetching,
+            data,
+            error,
+            refetch,
+            getHealthPanel,
+            doAjax,
+            recommendations,
+            goods,
+            openIcon,
+            debugFields,
+            get useWpjsStore () {
+                return 0, _storeJs.useWpjsStore;
+            },
+            onMounted: (0, _vue.onMounted),
+            computed: (0, _vue.computed),
+            ref: (0, _vue.ref),
+            get useQueryClient () {
+                return 0, _vueQuery.useQueryClient;
+            },
+            get useQuery () {
+                return 0, _vueQuery.useQuery;
+            },
+            get useMutation () {
+                return 0, _vueQuery.useMutation;
+            }
+        };
+        Object.defineProperty(__returned__, "__isScriptSetup", {
+            enumerable: false,
+            value: true
+        });
+        return __returned__;
+    }
+};
+
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"djPmG":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "render", ()=>render);
+var _vue = require("vue");
+const _hoisted_1 = {
+    class: "text-center pa-4"
+};
+const _hoisted_2 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "Incidents over the past 90 days", -1 /* HOISTED */ );
+const _hoisted_3 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "API", -1 /* HOISTED */ );
+const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("svg", {
+    class: "availability-time-line-graphic mx-auto",
+    id: "uptime-component-qgf0gk4xsbmd",
+    preserveAspectRatio: "none",
+    height: "34",
+    viewBox: "0 0 448 34"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "0",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-0",
+        "data-html": "true",
+        tabindex: "0",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "5",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-1",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "10",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-2",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "15",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-3",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "20",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-4",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "25",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-5",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "30",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-6",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "35",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-7",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "40",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-8",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "45",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-9",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "50",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-10",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "55",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-11",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "60",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-12",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "65",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-13",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "70",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-14",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "75",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-15",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "80",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-16",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "85",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-17",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "90",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-18",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "95",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-19",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "100",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-20",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "105",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-21",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "110",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-22",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "115",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-23",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "120",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-24",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "125",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-25",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "130",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-26",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "135",
+        y: "0",
+        fill: "#97b43d",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-27",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "140",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-28",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "145",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-29",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "150",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-30",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "155",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-31",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "160",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-32",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "165",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-33",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "170",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-34",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "175",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-35",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "180",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-36",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "185",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-37",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "190",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-38",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "195",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-39",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "200",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-40",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "205",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-41",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "210",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-42",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "215",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-43",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "220",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-44",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "225",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-45",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "230",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-46",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "235",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-47",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "240",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-48",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "245",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-49",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "250",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-50",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "255",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-51",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "260",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-52",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "265",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-53",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "270",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-54",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "275",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-55",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "280",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-56",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "285",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-57",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "290",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-58",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "295",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-59",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "300",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-60",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "305",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-61",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "310",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-62",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "315",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-63",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "320",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-64",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "325",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-65",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "330",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-66",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "335",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-67",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "340",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-68",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "345",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-69",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "350",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-70",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "355",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-71",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "360",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-72",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "365",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-73",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "370",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-74",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "375",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-75",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "380",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-76",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "385",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-77",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "390",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-78",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "395",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-79",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "400",
+        y: "0",
+        fill: "#e3b411",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-80",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "405",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-81",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "410",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-82",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "415",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-83",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "420",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-84",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "425",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-85",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "430",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-86",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "435",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-87",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "440",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-88",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "445",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-89",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    })
+], -1 /* HOISTED */ );
+const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "Front-End", -1 /* HOISTED */ );
+const _hoisted_6 = /*#__PURE__*/ (0, _vue.createElementVNode)("svg", {
+    class: "availability-time-line-graphic mx-auto",
+    id: "uptime-component-qgf0gk4xsbmd",
+    preserveAspectRatio: "none",
+    height: "34",
+    viewBox: "0 0 448 34"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "0",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-0",
+        "data-html": "true",
+        tabindex: "0",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "5",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-1",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "10",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-2",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "15",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-3",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "20",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-4",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "25",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-5",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "30",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-6",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "35",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-7",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "40",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-8",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "45",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-9",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "50",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-10",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "55",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-11",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "60",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-12",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "65",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-13",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "70",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-14",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "75",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-15",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "80",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-16",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "85",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-17",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "90",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-18",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "95",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-19",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "100",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-20",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "105",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-21",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "110",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-22",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "115",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-23",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "120",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-24",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "125",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-25",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "130",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-26",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "135",
+        y: "0",
+        fill: "#97b43d",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-27",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "140",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-28",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "145",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-29",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "150",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-30",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "155",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-31",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "160",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-32",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "165",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-33",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "170",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-34",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "175",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-35",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "180",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-36",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "185",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-37",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "190",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-38",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "195",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-39",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "200",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-40",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "205",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-41",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "210",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-42",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "215",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-43",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "220",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-44",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "225",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-45",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "230",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-46",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "235",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-47",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "240",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-48",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "245",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-49",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "250",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-50",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "255",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-51",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "260",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-52",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "265",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-53",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "270",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-54",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "275",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-55",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "280",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-56",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "285",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-57",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "290",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-58",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "295",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-59",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "300",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-60",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "305",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-61",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "310",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-62",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "315",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-63",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "320",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-64",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "325",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-65",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "330",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-66",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "335",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-67",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "340",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-68",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "345",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-69",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "350",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-70",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "355",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-71",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "360",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-72",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "365",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-73",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "370",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-74",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "375",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-75",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "380",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-76",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "385",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-77",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "390",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-78",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "395",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-79",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "400",
+        y: "0",
+        fill: "#e3b411",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-80",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "405",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-81",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "410",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-82",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "415",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-83",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "420",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-84",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "425",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-85",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "430",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-86",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "435",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-87",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "440",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-88",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    }),
+    /*#__PURE__*/ (0, _vue.createElementVNode)("rect", {
+        height: "34",
+        width: "3",
+        x: "445",
+        y: "0",
+        fill: "#26b47f",
+        role: "tab",
+        class: "uptime-day component-qgf0gk4xsbmd day-89",
+        "data-html": "true",
+        tabindex: "-1",
+        "aria-describedby": "uptime-tooltip"
+    })
+], -1 /* HOISTED */ );
+const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-15"
+}, "Incident History", -1 /* HOISTED */ );
+const _hoisted_8 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-10"
+}, "Sep 2024", -1 /* HOISTED */ );
+const _hoisted_9 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-10"
+}, "Aug 2024", -1 /* HOISTED */ );
+const _hoisted_10 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6 mt-10"
+}, "Aug 2024", -1 /* HOISTED */ );
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_toolbar_items = (0, _vue.resolveComponent)("v-toolbar-items");
+    const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
+    const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
+    const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.store.activatedUptime,
+            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.store.activatedUptime = $event),
+            transition: "dialog-bottom-transition",
+            fullscreen: ""
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedUptime = false)
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_spacer),
+                                            (0, _vue.createVNode)(_component_v_toolbar_items)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                                        "max-width": "1200",
+                                                                        class: "align-center justify-center text-center mx-auto px-4 pb-4 mb-10"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                _hoisted_2,
+                                                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                    class: "align-center justify-center text-center mb-15 mt-10 mx-auto"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_col, null, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                        class: "py-0"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-left pl-15 py-4"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            _hoisted_3
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "align-center justify-center text-center py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            _hoisted_4
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                        class: "py-0"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-left pl-15 py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            (0, _vue.createTextVNode)(" 90 days ago ")
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                }),
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-right pr-15 py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            (0, _vue.createTextVNode)(" Today ")
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        }),
+                                                                                                        (0, _vue.createVNode)(_component_v_col, null, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                        class: "py-0"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-left pl-15 py-4"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            _hoisted_5
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "align-center justify-center text-center py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            _hoisted_6
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-left pl-15 py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            (0, _vue.createTextVNode)(" 90 days ago ")
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                }),
+                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                    class: "text-right pr-15 py-0"
+                                                                                                                                }, {
+                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                            (0, _vue.createTextVNode)(" Today ")
+                                                                                                                                        ]),
+                                                                                                                                    _: 1 /* STABLE */ 
+                                                                                                                                })
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            })
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                }),
+                                                                                _hoisted_7,
+                                                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                    class: "align-left justify-left text-left mb-15 mt-10"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            _hoisted_8,
+                                                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                class: "mb-4"
+                                                                                            }),
+                                                                                            (0, _vue.createTextVNode)(" No incidents reported "),
+                                                                                            _hoisted_9,
+                                                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                class: "mb-4"
+                                                                                            }),
+                                                                                            (0, _vue.createTextVNode)(" No incidents reported "),
+                                                                                            _hoisted_10,
+                                                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                class: "mb-4"
+                                                                                            }),
+                                                                                            (0, _vue.createVNode)(_component_v_sheet, null, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                            class: "wpjs-debug-table-row"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" Aug 24, 2024 - 13:24:01 ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" Front-End ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left",
+                                                                                                                        cols: "6"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        }),
+                                                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                                                            class: "wpjs-debug-table-row"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" Aug 24, 2024 - 13:24:01 ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" Front-End ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    }),
+                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                        class: "text-left",
+                                                                                                                        cols: "6"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            })
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
+                                                                                })
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    })
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        })
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ])
+    ]);
+}
+if (module.hot) module.hot.accept(()=>{
+    __VUE_HMR_RUNTIME__.rerender("4f4529-hmr", render);
+});
+
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"aRmPX":[function() {},{}],"acLJl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let NOOP = ()=>{};
+exports.default = (script)=>{};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"e7mfF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "render", ()=>render);
@@ -17438,6 +20081,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })) : (0, _vue.createCommentVNode)("v-if", true),
         $setup.store.activatedHealth ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["HealthPanel"], {
             key: 1
+        })) : (0, _vue.createCommentVNode)("v-if", true),
+        $setup.store.activatedUptime ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["UptimePanel"], {
+            key: 2
         })) : (0, _vue.createCommentVNode)("v-if", true)
     ], 64 /* STABLE_FRAGMENT */ );
 }
