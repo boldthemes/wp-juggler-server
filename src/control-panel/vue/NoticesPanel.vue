@@ -11,7 +11,10 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
-const tab = ref(0);
+const tab = ref(0)
+
+const noticeHistoryItems = ref([])
+const noticePage = ref(0)
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-notices-panel", store.activatedSite.id],
@@ -25,6 +28,20 @@ async function getNoticesPanel() {
     siteId: store.activatedSite.id
   });
   ret = response.data[0];
+  return ret;
+}
+
+async function getNoticeHistory() {
+  let ret = {};
+  console.log('Ucitavam');
+  console.log(noticePage.value);
+  const response = await doAjax({
+    action: "wpjs-get-notices-history", // the action to fire in the server
+    siteId: store.activatedSite.id,
+    page: noticePage.value
+  });
+
+  ret = response.data;
   return ret;
 }
 
@@ -46,14 +63,21 @@ async function doAjax(args) {
   }
 }
 
-const recommendations = computed(() => {
-  return data.value.wp_juggler_health_data_status.filter(item => item.status === 'recommended' && item.test !== 'rest_availability');
-})
+async function loadNoticeHistory({ done }) {
+  // Perform API call
+    const res = await getNoticeHistory();
+    console.log(res)
+    if (res.length == 0) {
+      done("empty");
+    } else {
+      noticeHistoryItems.value.push(...res);
 
-const openIcon = computed(() => {
-  return passedOpen.value ? 'mdi-chevron-up' : 'mdi-chevron-down'
-})
+      console.log(noticeHistoryItems.value);
 
+      noticePage.value = noticeHistoryItems.value[noticeHistoryItems.value.length - 1].ID
+      done("ok");
+    }
+}
 
 </script>
 
@@ -116,10 +140,13 @@ const openIcon = computed(() => {
 
 
 
-                <div class="text-h6 mt-15">Notices History</div>
+                <div class="text-h6 mt-15">Notices History:</div>
 
                 <v-sheet class="align-left justify-left text-left mb-15 mt-10">
-                  <div class="text-h6 mt-10">Sep 2024</div>
+
+                  <v-infinite-scroll :height="600" :items="noticeHistoryItems" :onLoad="loadNoticeHistory">
+                    <!--<template v-for="(item, index) in noticeHistoryItems" :key="item">
+                      <div class="text-h6 mt-10">Sep 2024</div>
                   <v-divider class="mb-4"></v-divider>
                   No incidents reported
 
@@ -127,7 +154,7 @@ const openIcon = computed(() => {
                   <div class="text-h6 mt-10">Aug 2024</div>
                   <v-divider class="mb-4"></v-divider>
                   <v-expansion-panels class="mt-8" variant="accordion">
-                    <v-expansion-panel >
+                    <v-expansion-panel>
                       <v-expansion-panel-title>
                         Aug 24, 2024 - 13:24:01
                         <v-spacer></v-spacer>
@@ -150,7 +177,8 @@ const openIcon = computed(() => {
                       </v-expansion-panel-text>
                     </v-expansion-panel>
                   </v-expansion-panels>
-
+                    </template>-->
+                  </v-infinite-scroll>
 
                 </v-sheet>
 

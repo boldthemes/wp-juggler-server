@@ -439,7 +439,7 @@ class WPJS_AJAX
 
 		if (isset($_POST['siteId'])) {
 			$site_id = sanitize_text_field($_POST['siteId']);
-		} 
+		}
 
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
@@ -458,25 +458,103 @@ class WPJS_AJAX
 		);
 
 		if (!$result) {
-			
+
 			$ret_obj = array(
 				'wp_juggler_notices' => false,
 				'wp_juggler_notices_timestamp' =>  false
 			);
-
 		} else {
 
 			$ret_obj = array(
-				'wp_juggler_notices' => json_decode( $result['log_data'], true ),
-				'wp_juggler_notices_timestamp' =>  $this->get_time_ago( strtotime($result['log_time' ]))
+				'wp_juggler_notices' => json_decode($result['log_data'], true),
+				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time']))
 			);
-
-		}		
+		}
 
 		$data[] = $ret_obj;
 
 		wp_send_json_success($data, 200);
+	}
 
+	public function get_notices_history()
+	{
+		global $wpdb;
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$site_id = (isset($_POST['siteId'])) ? sanitize_text_field($_POST['siteId']) : false;;
+		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
+
+		/* if (intval($page) == 0) {
+			$results = $wpdb->get_results("SELECT * FROM $table_name WHERE direktt_user_id = '" . $direktt_user_id . "' ORDER BY ID DESC LIMIT 20");
+		} else {
+			$results = $wpdb->get_results("SELECT * FROM $table_name WHERE direktt_user_id = '" . $direktt_user_id . "' AND ID < " . intval($page) . " ORDER BY ID DESC LIMIT 20");
+		}
+
+		$data = $results;
+
+		wp_send_json_success($data, 200); */
+
+		if (intval($page) == 0) {
+
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkNotices' 
+					AND log_result = 'succ' 
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					$site_id
+				),
+				ARRAY_A
+			);
+		} else {
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkNotices' 
+					AND log_result = 'succ'
+					AND ID < %s 
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					$site_id,
+					intval($page)
+				),
+				ARRAY_A
+			);
+		}
+
+		wp_send_json_success($results, 200);
+		exit;
+
+		if (!$result) {
+
+			$ret_obj = array(
+				'wp_juggler_notices' => false,
+				'wp_juggler_notices_timestamp' =>  false
+			);
+		} else {
+
+			$ret_obj = array(
+				'wp_juggler_notices' => json_decode($result['log_data'], true),
+				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time']))
+			);
+		}
+
+		$data[] = $ret_obj;
+
+		wp_send_json_success($data, 200);
 	}
 
 	private function get_theme_updates($themes_array)
@@ -623,7 +701,7 @@ class WPJS_AJAX
 				$fields_obj = $value['fields'];
 				$final_fields = array();
 
-				foreach( $fields_obj as $key_obj => $value_obj ){
+				foreach ($fields_obj as $key_obj => $value_obj) {
 					$field_fin_value = $value_obj;
 					$field_fin_value['slug'] = $key_obj;
 					$final_fields[] = $field_fin_value;
