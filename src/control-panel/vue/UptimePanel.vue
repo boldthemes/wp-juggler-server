@@ -16,6 +16,9 @@ const tab = ref(0);
 const apiPopOverIndex = ref(-1)
 const fePopOverIndex = ref(-1)
 
+const uptimeHistoryItems = ref([]);
+const uptimePage = ref(0);
+
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-uptime-panel", store.activatedSite.id],
   queryFn: getUptimePanel,
@@ -49,19 +52,19 @@ async function doAjax(args) {
   }
 }
 
-function graphApiMouseOver(index){
+function graphApiMouseOver(index) {
   apiPopOverIndex.value = index;
 }
 
-function graphApiMouseOut(index){
+function graphApiMouseOut(index) {
   apiPopOverIndex.value = -1;
 }
 
-function graphFEMouseOver(index){
+function graphFEMouseOver(index) {
   fePopOverIndex.value = index;
 }
 
-function graphFEMouseOut(index){
+function graphFEMouseOut(index) {
   fePopOverIndex.value = -1;
 }
 
@@ -81,15 +84,19 @@ const apidowns = computed(() => {
     }
   });
 
-  console.log(incidentsLast90Days)
-
   return incidentsLast90Days
 })
 
 function formatDate(unixTimestamp) {
-    const date = new Date(unixTimestamp * 1000);
-    const options = { month: 'short', day: '2-digit' };
-    return date.toLocaleDateString('en-US', options);
+  const date = new Date(unixTimestamp * 1000);
+  const options = { month: 'short', day: '2-digit' };
+  return date.toLocaleDateString('en-US', options);
+}
+
+function historyDateTime(dateTime) {
+    const dateObj = new Date(dateTime);
+    const options = { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return dateObj.toLocaleDateString('en-US', options);
 }
 
 const fedowns = computed(() => {
@@ -108,12 +115,96 @@ const fedowns = computed(() => {
     }
   });
 
-  console.log(incidentsLast90Days)
-
   return incidentsLast90Days
 })
 
+async function loadUptimeHistory({ done }) {
+  // Perform API call
+  const res = await getUptimeHistory();
+  if (res.length == 0) {
+    done("empty");
+  } else {
+    uptimeHistoryItems.value.push(...res);
+    uptimePage.value =
+      uptimeHistoryItems.value[uptimeHistoryItems.value.length - 1].ID;
+    done("ok");
+  }
+}
 
+async function getUptimeHistory() {
+  let ret = {};
+  const response = await doAjax({
+    action: "wpjs-get-uptime-history", // the action to fire in the server
+    siteId: store.activatedSite.id,
+    page: uptimePage.value,
+  });
+
+  ret = response.data;
+  return ret;
+}
+
+
+const organizeByMonth = computed(() => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const groupedLogs = {};
+
+  const hitems = uptimeHistoryItems.value;
+
+  hitems.forEach((log) => {
+    const date = new Date(log.log_timestamp * 1000);
+    const monthYear = `${months[date.getMonth()]} ${date.getFullYear()}`;
+
+    if (!groupedLogs[monthYear]) {
+      groupedLogs[monthYear] = [];
+    }
+    groupedLogs[monthYear].push(log);
+  });
+
+  if (hitems.length > 0) {
+    const earliestLog = new Date(hitems[0].log_timestamp * 1000);
+    const currentDate = new Date();
+
+    const startDate = new Date(earliestLog.getFullYear(), earliestLog.getMonth(), 1);
+
+    while (startDate <= currentDate) {
+      const year = startDate.getFullYear();
+      const month = months[startDate.getMonth()];
+      const monthYear = `${month} ${year}`;
+
+      if (!groupedLogs[monthYear]) {
+        groupedLogs[monthYear] = [];
+      }
+
+      startDate.setMonth(startDate.getMonth() + 1);
+    }
+  }
+
+  const sortedMonths = Object.keys(groupedLogs).sort(
+    (a, b) => new Date(b + " 1") - new Date(a + " 1")
+  );
+
+  const result = {};
+  sortedMonths.forEach((monthYear) => {
+    result[monthYear] = groupedLogs[monthYear];
+  });
+
+  console.log(result)
+
+  return result;
+});
 
 </script>
 
@@ -151,24 +242,26 @@ const fedowns = computed(() => {
                         </v-col>
                       </v-row>
                       <v-row style="position: relative;">
-                        
-                        <div v-if="apiPopOverIndex > -1" class="wpjs-api-tooltip text-left" :style="{ left: (apiPopOverIndex * 5) + 'px' }">
-                          <p>{{ formatDate(apidowns[apiPopOverIndex][0].log_timestamp) }} - <strong>{{ apidowns[apiPopOverIndex].length }} Incidents</strong></p>
+
+                        <div v-if="apiPopOverIndex > -1" class="wpjs-api-tooltip text-left"
+                          :style="{ left: (apiPopOverIndex * 5) + 'px' }">
+                          <p>{{ formatDate(apidowns[apiPopOverIndex][0].log_timestamp) }} - {{
+                            apidowns[apiPopOverIndex].length }} Incidents</p>
                         </div>
 
                         <v-col class="align-center justify-center text-center py-0">
                           <svg class="availability-time-line-graphic mx-auto" id="uptime-component-qgf0gk4xsbmd"
                             preserveAspectRatio="none" height="34" viewBox="0 0 448 34">
                             <g v-for="(apidown, index) in apidowns">
-                              
+
                               <rect v-if="apidown.length == 0" height="34" width="3" :x="index * 5" y="0" fill="#26b47f"
                                 role="tab" class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
                                 aria-describedby="uptime-tooltip"></rect>
-                              
-                                <rect v-else height="34" width="3" :x="index * 5" y="0" fill="#E57373" role="tab"
-                                  class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
-                                  aria-describedby="uptime-tooltip"  @mouseover="graphApiMouseOver(index)"
-                                  @mouseout="graphApiMouseOut(index)"></rect>
+
+                              <rect v-else height="34" width="3" :x="index * 5" y="0" fill="#E57373" role="tab"
+                                class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
+                                aria-describedby="uptime-tooltip" @mouseover="graphApiMouseOver(index)"
+                                @mouseout="graphApiMouseOut(index)"></rect>
 
                             </g>
                           </svg>
@@ -190,24 +283,26 @@ const fedowns = computed(() => {
                         </v-col>
                       </v-row>
                       <v-row style="position: relative;">
-                        
-                        <div v-if="fePopOverIndex > -1" class="wpjs-api-tooltip text-left" :style="{ left: (fePopOverIndex * 5) + 'px' }">
-                          <p>{{ formatDate(fedowns[fePopOverIndex][0].log_timestamp) }} - <strong>{{ fedowns[fePopOverIndex].length }} Incidents</strong></p>
+
+                        <div v-if="fePopOverIndex > -1" class="wpjs-api-tooltip text-left"
+                          :style="{ left: (fePopOverIndex * 5) + 'px' }">
+                          <p>{{ formatDate(fedowns[fePopOverIndex][0].log_timestamp) }} - {{
+                            fedowns[fePopOverIndex].length }} Incidents</p>
                         </div>
 
                         <v-col class="align-center justify-center text-center py-0">
                           <svg class="availability-time-line-graphic mx-auto" id="uptime-component-qgf0gk4xsbmd"
                             preserveAspectRatio="none" height="34" viewBox="0 0 448 34">
                             <g v-for="(fedown, index) in fedowns">
-                              
+
                               <rect v-if="fedown.length == 0" height="34" width="3" :x="index * 5" y="0" fill="#26b47f"
                                 role="tab" class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
                                 aria-describedby="uptime-tooltip"></rect>
-                              
-                                <rect v-else height="34" width="3" :x="index * 5" y="0" fill="#E57373" role="tab"
-                                  class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
-                                  aria-describedby="uptime-tooltip"  @mouseover="graphFEMouseOver(index)"
-                                  @mouseout="graphFEMouseOut(index)"></rect>
+
+                              <rect v-else height="34" width="3" :x="index * 5" y="0" fill="#E57373" role="tab"
+                                class="uptime-day component-qgf0gk4xsbmd day-0" data-html="true" tabindex="0"
+                                aria-describedby="uptime-tooltip" @mouseover="graphFEMouseOver(index)"
+                                @mouseout="graphFEMouseOut(index)"></rect>
 
                             </g>
                           </svg>
@@ -229,40 +324,44 @@ const fedowns = computed(() => {
                 <div class="text-h6 mt-15">Incident History</div>
 
                 <v-sheet class="align-left justify-left text-left mb-15 mt-10">
-                  <div class="text-h6 mt-10">Sep 2024</div>
-                  <v-divider class="mb-4"></v-divider>
-                  No incidents reported
-                  <div class="text-h6 mt-10">Aug 2024</div>
-                  <v-divider class="mb-4"></v-divider>
-                  No incidents reported
-                  <div class="text-h6 mt-10">Aug 2024</div>
-                  <v-divider class="mb-4"></v-divider>
-                  <v-sheet>
-                    <v-row class="wpjs-debug-table-row">
-                      <v-col class="text-left">
-                        Aug 24, 2024 - 13:24:01
-                      </v-col>
-                      <v-col class="text-left">
-                        Front-End
-                      </v-col>
-                      <v-col class="text-left" cols="6">
-                        No route was found matching the URL and request method
-                      </v-col>
-                    </v-row>
 
-                    <v-row class="wpjs-debug-table-row">
-                      <v-col class="text-left">
-                        Aug 24, 2024 - 13:24:01
-                      </v-col>
-                      <v-col class="text-left">
-                        Front-End
-                      </v-col>
-                      <v-col class="text-left" cols="6">
-                        No route was found matching the URL and request method
-                      </v-col>
-                    </v-row>
+                  <v-infinite-scroll :height="600" :items="uptimeHistoryItems" :onLoad="loadUptimeHistory">
+                    <template v-if="uptimeHistoryItems.length > 0" v-for="(item, name, index) in organizeByMonth"
+                      :key="index">
+                      <div v-if="item.length == 0" class="mt-10">
+                        <div class="text-h6">{{ name }}</div>
+                        <v-divider class="mb-4"></v-divider>
+                        No incidents reported
+                      </div>
 
-                  </v-sheet>
+                      <div v-else class="mt-10">
+                        <div class="text-h6">{{ name }}</div>
+                        <v-divider class="mb-4"></v-divider>
+
+                        <v-sheet>
+                          <v-row class="wpjs-debug-table-row" v-for="inc in item">
+                            <v-col class="text-left">
+                              {{ historyDateTime(inc.log_time) }}
+                            </v-col>
+                            <v-col class="text-left">
+                              <div v-if="inc.log_type == 'confirmClientApi'">
+                                API
+                              </div>
+                              <div v-if="inc.log_type == 'confirmFrontEnd'">
+                                Front-End
+                              </div>
+                            </v-col>
+                            <v-col class="text-left" cols="6">
+                              {{ inc.log_value }}
+                            </v-col>
+                          </v-row>
+
+                        </v-sheet>
+
+                      </div>
+                    </template>
+                  </v-infinite-scroll>
+
                 </v-sheet>
 
               </v-sheet>
@@ -277,10 +376,9 @@ const fedowns = computed(() => {
 </template>
 
 <style>
-
-.wpjs-api-tooltip{
-  position:absolute;
-  top:-20px
+.wpjs-api-tooltip {
+  position: absolute;
+  top: -20px
 }
 
 .wpjs-debug-table-row {

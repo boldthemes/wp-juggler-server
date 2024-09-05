@@ -165,10 +165,11 @@ class WP_Juggler_Server {
 		
 		$this->loader->add_action( 'wp_ajax_wpjs-get-health-panel', $plugin_ajax, 'ajax_get_health_panel' );
 
-		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-panel', $plugin_ajax, 'get_latest_notices' );
-		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-history', $plugin_ajax, 'get_notices_history' );
+		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-panel', $plugin_ajax, 'ajax_get_latest_notices' );
+		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-history', $plugin_ajax, 'ajax_get_notices_history' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-get-uptime-panel', $plugin_ajax, 'ajax_get_uptime_panel' );
+		$this->loader->add_action( 'wp_ajax_wpjs-get-uptime-history', $plugin_ajax, 'ajax_get_uptime_history' );
 		
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );
 		register_deactivation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_deactivation') );

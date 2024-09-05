@@ -428,7 +428,7 @@ class WPJS_AJAX
 		];
 	}
 
-	public function get_latest_notices()
+	public function ajax_get_latest_notices()
 	{
 		global $wpdb;
 
@@ -570,7 +570,7 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
-	public function get_notices_history()
+	public function ajax_get_notices_history()
 	{
 		global $wpdb;
 
@@ -629,27 +629,73 @@ class WPJS_AJAX
 		unset($item);
 
 		wp_send_json_success($results, 200);
-		exit;
+	}
 
-		if (!$result) {
+	public function ajax_get_uptime_history()
+	{
+		global $wpdb;
 
-			$ret_obj = array(
-				'wp_juggler_notices' => false,
-				'wp_juggler_notices_timestamp' =>  false
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$site_id = (isset($_POST['siteId'])) ? sanitize_text_field($_POST['siteId']) : false;;
+		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
+
+		if (intval($page) == 0) {
+
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type IN (%s, %s) 
+					AND log_result IN (%s, %s)
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					$site_id,
+					'confirmClientApi',
+					'confirmFrontEnd',
+					'error',
+					'fail',
+				),
+				ARRAY_A
 			);
 		} else {
-
-			
-
-			$ret_obj = array(
-				'wp_juggler_notices' => json_decode($result['log_data'], true),
-				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time']))
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type IN (%s, %s) 
+					AND log_result IN (%s, %s)
+					AND ID < %s 
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					$site_id,
+					'confirmClientApi',
+					'confirmFrontEnd',
+					'error',
+					'fail',
+					intval($page)
+				),
+				ARRAY_A
 			);
 		}
 
-		$data[] = $ret_obj;
+		foreach ($results as &$item) {
+			if (isset($item['log_time'])) {
+				$item['log_timestamp'] = strtotime($item['log_time']);
+			}
+		}
+		unset($item);
 
-		wp_send_json_success($data, 200);
+		wp_send_json_success($results, 200);
 	}
 
 	private function get_theme_updates($themes_array)

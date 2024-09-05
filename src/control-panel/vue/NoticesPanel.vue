@@ -74,7 +74,7 @@ async function loadNoticeHistory({ done }) {
   }
 }
 
-const orgnizeByMonth = computed(() => {
+const organizeByMonth = computed(() => {
   const months = [
     "Jan",
     "Feb",
@@ -206,7 +206,7 @@ const orgnizeByMonth = computed(() => {
                     :onLoad="loadNoticeHistory"
                   >
                     <template
-                      v-for="(item, name) in orgnizeByMonth"
+                      v-for="(item, name) in organizeByMonth"
                       :key="item.ID"
                     >
                       <div v-if="item.length == 0" class="mt-10">

@@ -17241,6 +17241,8 @@ exports.default = {
         const tab = (0, _vue.ref)(0);
         const apiPopOverIndex = (0, _vue.ref)(-1);
         const fePopOverIndex = (0, _vue.ref)(-1);
+        const uptimeHistoryItems = (0, _vue.ref)([]);
+        const uptimePage = (0, _vue.ref)(0);
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
                 "wpjs-uptime-panel",
@@ -17297,7 +17299,6 @@ exports.default = {
                 const daysAgo = Math.floor((startOfTodayTimestamp - incident.log_timestamp) / 86400);
                 if (daysAgo >= 0 && daysAgo < 90) incidentsLast90Days[89 - daysAgo].push(incident);
             });
-            console.log(incidentsLast90Days);
             return incidentsLast90Days;
         });
         function formatDate(unixTimestamp) {
@@ -17307,6 +17308,17 @@ exports.default = {
                 day: "2-digit"
             };
             return date.toLocaleDateString("en-US", options);
+        }
+        function historyDateTime(dateTime) {
+            const dateObj = new Date(dateTime);
+            const options = {
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            };
+            return dateObj.toLocaleDateString("en-US", options);
         }
         const fedowns = (0, _vue.computed)(()=>{
             const incidentsLast90Days = Array.from({
@@ -17320,8 +17332,70 @@ exports.default = {
                 const daysAgo = Math.floor((startOfTodayTimestamp - incident.log_timestamp) / 86400);
                 if (daysAgo >= 0 && daysAgo < 90) incidentsLast90Days[89 - daysAgo].push(incident);
             });
-            console.log(incidentsLast90Days);
             return incidentsLast90Days;
+        });
+        async function loadUptimeHistory({ done }) {
+            // Perform API call
+            const res = await getUptimeHistory();
+            if (res.length == 0) done("empty");
+            else {
+                uptimeHistoryItems.value.push(...res);
+                uptimePage.value = uptimeHistoryItems.value[uptimeHistoryItems.value.length - 1].ID;
+                done("ok");
+            }
+        }
+        async function getUptimeHistory() {
+            let ret = {};
+            const response = await doAjax({
+                action: "wpjs-get-uptime-history",
+                siteId: store.activatedSite.id,
+                page: uptimePage.value
+            });
+            ret = response.data;
+            return ret;
+        }
+        const organizeByMonth = (0, _vue.computed)(()=>{
+            const months = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec"
+            ];
+            const groupedLogs = {};
+            const hitems = uptimeHistoryItems.value;
+            hitems.forEach((log)=>{
+                const date = new Date(log.log_timestamp * 1000);
+                const monthYear = `${months[date.getMonth()]} ${date.getFullYear()}`;
+                if (!groupedLogs[monthYear]) groupedLogs[monthYear] = [];
+                groupedLogs[monthYear].push(log);
+            });
+            if (hitems.length > 0) {
+                const earliestLog = new Date(hitems[0].log_timestamp * 1000);
+                const currentDate = new Date();
+                const startDate = new Date(earliestLog.getFullYear(), earliestLog.getMonth(), 1);
+                while(startDate <= currentDate){
+                    const year = startDate.getFullYear();
+                    const month = months[startDate.getMonth()];
+                    const monthYear = `${month} ${year}`;
+                    if (!groupedLogs[monthYear]) groupedLogs[monthYear] = [];
+                    startDate.setMonth(startDate.getMonth() + 1);
+                }
+            }
+            const sortedMonths = Object.keys(groupedLogs).sort((a, b)=>new Date(b + " 1") - new Date(a + " 1"));
+            const result = {};
+            sortedMonths.forEach((monthYear)=>{
+                result[monthYear] = groupedLogs[monthYear];
+            });
+            console.log(result);
+            return result;
         });
         const __returned__ = {
             store,
@@ -17332,6 +17406,8 @@ exports.default = {
             tab,
             apiPopOverIndex,
             fePopOverIndex,
+            uptimeHistoryItems,
+            uptimePage,
             isLoading,
             isError,
             isFetching,
@@ -17346,7 +17422,11 @@ exports.default = {
             graphFEMouseOut,
             apidowns,
             formatDate,
+            historyDateTime,
             fedowns,
+            loadUptimeHistory,
+            getUptimeHistory,
+            organizeByMonth,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -17421,15 +17501,26 @@ const _hoisted_10 = [
 const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6 mt-15"
 }, "Incident History", -1 /* HOISTED */ );
-const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "text-h6 mt-10"
-}, "Sep 2024", -1 /* HOISTED */ );
-const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "text-h6 mt-10"
-}, "Aug 2024", -1 /* HOISTED */ );
-const _hoisted_14 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "text-h6 mt-10"
-}, "Aug 2024", -1 /* HOISTED */ );
+const _hoisted_12 = {
+    key: 0,
+    class: "mt-10"
+};
+const _hoisted_13 = {
+    class: "text-h6"
+};
+const _hoisted_14 = {
+    key: 1,
+    class: "mt-10"
+};
+const _hoisted_15 = {
+    class: "text-h6"
+};
+const _hoisted_16 = {
+    key: 0
+};
+const _hoisted_17 = {
+    key: 1
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -17440,6 +17531,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_row = (0, _vue.resolveComponent)("v-row");
     const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_infinite_scroll = (0, _vue.resolveComponent)("v-infinite-scroll");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
@@ -17521,10 +17613,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         left: $setup.apiPopOverIndex * 5 + "px"
                                                                                                                                     })
                                                                                                                                 }, [
-                                                                                                                                    (0, _vue.createElementVNode)("p", null, [
-                                                                                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.formatDate($setup.apidowns[$setup.apiPopOverIndex][0].log_timestamp)) + " - ", 1 /* TEXT */ ),
-                                                                                                                                        (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.apidowns[$setup.apiPopOverIndex].length) + " Incidents", 1 /* TEXT */ )
-                                                                                                                                    ])
+                                                                                                                                    (0, _vue.createElementVNode)("p", null, (0, _vue.toDisplayString)($setup.formatDate($setup.apidowns[$setup.apiPopOverIndex][0].log_timestamp)) + " - " + (0, _vue.toDisplayString)($setup.apidowns[$setup.apiPopOverIndex].length) + " Incidents", 1 /* TEXT */ )
                                                                                                                                 ], 4 /* STYLE */ )) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                                 (0, _vue.createVNode)(_component_v_col, {
                                                                                                                                     class: "align-center justify-center text-center py-0"
@@ -17625,10 +17714,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         left: $setup.fePopOverIndex * 5 + "px"
                                                                                                                                     })
                                                                                                                                 }, [
-                                                                                                                                    (0, _vue.createElementVNode)("p", null, [
-                                                                                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.formatDate($setup.fedowns[$setup.fePopOverIndex][0].log_timestamp)) + " - ", 1 /* TEXT */ ),
-                                                                                                                                        (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.fedowns[$setup.fePopOverIndex].length) + " Incidents", 1 /* TEXT */ )
-                                                                                                                                    ])
+                                                                                                                                    (0, _vue.createElementVNode)("p", null, (0, _vue.toDisplayString)($setup.formatDate($setup.fedowns[$setup.fePopOverIndex][0].log_timestamp)) + " - " + (0, _vue.toDisplayString)($setup.fedowns[$setup.fePopOverIndex].length) + " Incidents", 1 /* TEXT */ )
                                                                                                                                 ], 4 /* STYLE */ )) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                                 (0, _vue.createVNode)(_component_v_col, {
                                                                                                                                     class: "align-center justify-center text-center py-0"
@@ -17708,89 +17794,77 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                     class: "align-left justify-left text-left mb-15 mt-10"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            _hoisted_12,
-                                                                                            (0, _vue.createVNode)(_component_v_divider, {
-                                                                                                class: "mb-4"
-                                                                                            }),
-                                                                                            (0, _vue.createTextVNode)(" No incidents reported "),
-                                                                                            _hoisted_13,
-                                                                                            (0, _vue.createVNode)(_component_v_divider, {
-                                                                                                class: "mb-4"
-                                                                                            }),
-                                                                                            (0, _vue.createTextVNode)(" No incidents reported "),
-                                                                                            _hoisted_14,
-                                                                                            (0, _vue.createVNode)(_component_v_divider, {
-                                                                                                class: "mb-4"
-                                                                                            }),
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, null, {
+                                                                                            (0, _vue.createVNode)(_component_v_infinite_scroll, {
+                                                                                                height: 600,
+                                                                                                items: $setup.uptimeHistoryItems,
+                                                                                                onLoad: $setup.loadUptimeHistory
+                                                                                            }, {
                                                                                                 default: (0, _vue.withCtx)(()=>[
-                                                                                                        (0, _vue.createVNode)(_component_v_row, {
-                                                                                                            class: "wpjs-debug-table-row"
-                                                                                                        }, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" Aug 24, 2024 - 13:24:01 ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                        $setup.uptimeHistoryItems.length > 0 ? ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), {
+                                                                                                            key: 0
+                                                                                                        }, (0, _vue.renderList)($setup.organizeByMonth, (item, name, index)=>{
+                                                                                                            return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), {
+                                                                                                                key: index
+                                                                                                            }, [
+                                                                                                                item.length == 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_13, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
+                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                        class: "mb-4"
                                                                                                                     }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" Front-End ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    (0, _vue.createTextVNode)(" No incidents reported ")
+                                                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_15, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
+                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                        class: "mb-4"
                                                                                                                     }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left",
-                                                                                                                        cols: "6"
-                                                                                                                    }, {
+                                                                                                                    (0, _vue.createVNode)(_component_v_sheet, null, {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
+                                                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item, (inc)=>{
+                                                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                                                        class: "wpjs-debug-table-row"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                    class: "text-left"
+                                                                                                                                                }, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.historyDateTime(inc.log_time)), 1 /* TEXT */ )
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                    class: "text-left"
+                                                                                                                                                }, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            inc.log_type == "confirmClientApi" ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, " API ")) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                                            inc.log_type == "confirmFrontEnd" ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, " Front-End ")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                    class: "text-left",
+                                                                                                                                                    cols: "6"
+                                                                                                                                                }, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(inc.log_value), 1 /* TEXT */ )
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
                                                                                                                             ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        }),
-                                                                                                        (0, _vue.createVNode)(_component_v_row, {
-                                                                                                            class: "wpjs-debug-table-row"
-                                                                                                        }, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" Aug 24, 2024 - 13:24:01 ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" Front-End ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                        class: "text-left",
-                                                                                                                        cols: "6"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)(" No route was found matching the URL and request method ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        })
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                ]))
+                                                                                                            ], 64 /* STABLE_FRAGMENT */ );
+                                                                                                        }), 128 /* KEYED_FRAGMENT */ )) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                     ]),
                                                                                                 _: 1 /* STABLE */ 
-                                                                                            })
+                                                                                            }, 8 /* PROPS */ , [
+                                                                                                "items"
+                                                                                            ])
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 })
@@ -17921,7 +17995,7 @@ exports.default = {
                 done("ok");
             }
         }
-        const orgnizeByMonth = (0, _vue.computed)(()=>{
+        const organizeByMonth = (0, _vue.computed)(()=>{
             const months = [
                 "Jan",
                 "Feb",
@@ -17972,7 +18046,7 @@ exports.default = {
             getNoticeHistory,
             doAjax,
             loadNoticeHistory,
-            orgnizeByMonth,
+            organizeByMonth,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -18193,7 +18267,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                 onLoad: $setup.loadNoticeHistory
                                                                                             }, {
                                                                                                 default: (0, _vue.withCtx)(()=>[
-                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.orgnizeByMonth, (item, name)=>{
+                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.organizeByMonth, (item, name)=>{
                                                                                                             return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), {
                                                                                                                 key: item.ID
                                                                                                             }, [
