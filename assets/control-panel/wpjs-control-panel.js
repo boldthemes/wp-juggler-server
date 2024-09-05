@@ -17503,17 +17503,17 @@ const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
 }, "Incident History", -1 /* HOISTED */ );
 const _hoisted_12 = {
     key: 0,
-    class: "mt-10"
+    class: "mt-0 mb-10"
 };
 const _hoisted_13 = {
-    class: "text-h6"
+    class: "text-h6 mb-4"
 };
 const _hoisted_14 = {
     key: 1,
-    class: "mt-10"
+    class: "mt-0 mb-10"
 };
 const _hoisted_15 = {
-    class: "text-h6"
+    class: "text-h6 mb-4"
 };
 const _hoisted_16 = {
     key: 0
@@ -17791,13 +17791,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                 }),
                                                                                 _hoisted_11,
                                                                                 (0, _vue.createVNode)(_component_v_sheet, {
-                                                                                    class: "align-left justify-left text-left mb-15 mt-10"
+                                                                                    class: "align-left justify-left text-left mb-15 mt-4"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
                                                                                             (0, _vue.createVNode)(_component_v_infinite_scroll, {
                                                                                                 height: 600,
                                                                                                 items: $setup.uptimeHistoryItems,
-                                                                                                onLoad: $setup.loadUptimeHistory
+                                                                                                onLoad: $setup.loadUptimeHistory,
+                                                                                                style: {
+                                                                                                    "overflow-x": "hidden"
+                                                                                                }
                                                                                             }, {
                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                         $setup.uptimeHistoryItems.length > 0 ? ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), {
@@ -17825,7 +17828,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                     }, {
                                                                                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                                                                                 (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                                                    class: "text-left"
+                                                                                                                                                    class: "text-left pl-5"
                                                                                                                                                 }, {
                                                                                                                                                     default: (0, _vue.withCtx)(()=>[
                                                                                                                                                             (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.historyDateTime(inc.log_time)), 1 /* TEXT */ )
@@ -17843,7 +17846,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                 }, 1024 /* DYNAMIC_SLOTS */ ),
                                                                                                                                                 (0, _vue.createVNode)(_component_v_col, {
                                                                                                                                                     class: "text-left",
-                                                                                                                                                    cols: "6"
+                                                                                                                                                    cols: "8"
                                                                                                                                                 }, {
                                                                                                                                                     default: (0, _vue.withCtx)(()=>[
                                                                                                                                                             (0, _vue.createTextVNode)((0, _vue.toDisplayString)(inc.log_value), 1 /* TEXT */ )

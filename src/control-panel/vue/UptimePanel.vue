@@ -323,24 +323,25 @@ const organizeByMonth = computed(() => {
 
                 <div class="text-h6 mt-15">Incident History</div>
 
-                <v-sheet class="align-left justify-left text-left mb-15 mt-10">
+                <v-sheet class="align-left justify-left text-left mb-15 mt-4">
 
-                  <v-infinite-scroll :height="600" :items="uptimeHistoryItems" :onLoad="loadUptimeHistory">
+                  <v-infinite-scroll :height="600" :items="uptimeHistoryItems" :onLoad="loadUptimeHistory" style="overflow-x: hidden;">
+
                     <template v-if="uptimeHistoryItems.length > 0" v-for="(item, name, index) in organizeByMonth"
                       :key="index">
-                      <div v-if="item.length == 0" class="mt-10">
-                        <div class="text-h6">{{ name }}</div>
+                      <div v-if="item.length == 0" class="mt-0 mb-10">
+                        <div class="text-h6 mb-4">{{ name }}</div>
                         <v-divider class="mb-4"></v-divider>
                         No incidents reported
                       </div>
 
-                      <div v-else class="mt-10">
-                        <div class="text-h6">{{ name }}</div>
+                      <div v-else class="mt-0 mb-10">
+                        <div class="text-h6 mb-4">{{ name }}</div>
                         <v-divider class="mb-4"></v-divider>
 
                         <v-sheet>
                           <v-row class="wpjs-debug-table-row" v-for="inc in item">
-                            <v-col class="text-left">
+                            <v-col class="text-left pl-5">
                               {{ historyDateTime(inc.log_time) }}
                             </v-col>
                             <v-col class="text-left">
@@ -351,7 +352,7 @@ const organizeByMonth = computed(() => {
                                 Front-End
                               </div>
                             </v-col>
-                            <v-col class="text-left" cols="6">
+                            <v-col class="text-left" cols="8">
                               {{ inc.log_value }}
                             </v-col>
                           </v-row>
