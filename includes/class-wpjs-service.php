@@ -416,7 +416,8 @@ class WPJS_Service
 			$body = json_decode(wp_remote_retrieve_body($response), true);
 
 
-			$plugins = $body['data'];
+			$plugins = $body['data']['plugins_data'];
+			$themes = $body['data']['themes_data'];
 
 			foreach ($plugins as $plugin => $plugininfo) {
 				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
@@ -427,7 +428,12 @@ class WPJS_Service
 				'ID' => $task_id,
 				'log_result' => 'succ',
 				'log_value' =>  null,
-				'log_data' => json_encode($plugins)
+				'log_data' => json_encode(
+					array(
+						'plugins_data' => $plugins,
+						'themes_data' => $themes
+					)
+				)
 			);
 
 			WPJS_Cron_Log::update_log($log_entry);

@@ -192,8 +192,8 @@ class WPJS_Api
 		//$this->cron->check_all_plugin_checksum_api();
 		//$this->cron->check_all_health_api();
 		//$this->cron->check_all_notices_api();
-		//$this->cron->check_all_plugins_api();
-		$this->cron->check_all_themes_api();
+		$this->cron->check_all_plugins_api();
+		//$this->cron->check_all_themes_api();
 
 		$data = [];
 		wp_send_json_success($data, 200);

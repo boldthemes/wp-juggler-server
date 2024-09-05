@@ -4,14 +4,6 @@ import { onMounted, computed, ref } from "vue";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 
 const store = useWpjsStore();
-const passedOpen = ref(false);
-
-const search = ref("");
-
-const dialogInner = ref(false);
-const vulnerabilitiesItem = ref(null);
-
-const tab = ref(0);
 
 const apiPopOverIndex = ref(-1)
 const fePopOverIndex = ref(-1)

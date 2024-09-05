@@ -295,7 +295,7 @@ class WPJS_AJAX
 		$log_data_array = json_decode($result['log_data'], true);
 
 		return [
-			'data' => $log_data_array,
+			'data' => $log_data_array['plugins_data'],
 			'timestamp' => strtotime($result['log_time'])
 		];
 	}
@@ -426,6 +426,43 @@ class WPJS_AJAX
 			'data' => $log_data_array,
 			'timestamp' => strtotime($result['log_time'])
 		];
+	}
+
+	public function ajax_get_plugins_panel()
+	{
+		global $wpdb;
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		$result = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkPlugins' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
+		if (!$result) {
+			$data =[];
+		} else {
+			$data[] = json_decode($result['log_data'], true);
+		}
+		wp_send_json_success($data, 200);
 	}
 
 	public function ajax_get_latest_notices()

@@ -200,23 +200,41 @@ class WPJS_Background_Process extends WP_Background_Process
 
 				if ($data['taskType'] == 'checkPlugins') {
 					
-					$plugins = $body['data'];
+					$plugins = $body['data']['plugins_data'];
+					$themes = $body['data']['themes_data'];
 
 					foreach ($plugins as $plugin => $plugininfo) {
 						$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
 						$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
 					}
 
+					$log_entry = array(
+						'ID' => $task_id,
+						'log_result' => 'succ',
+						'log_value' =>  null,
+						'log_data' => json_encode(
+							array(
+								'plugins_data' => $plugins,
+								'themes_data' => $themes
+							)
+						)		
+					);
+	
+					WPJS_Cron_Log::update_log($log_entry);
+
+				} else {
+
+					$log_entry = array(
+						'ID' => $task_id,
+						'log_result' => 'succ',
+						'log_value' =>  null,
+						'log_data' => json_encode($body['data'])
+					);
+	
+					WPJS_Cron_Log::update_log($log_entry);
+
 				}
 
-				$log_entry = array(
-					'ID' => $task_id,
-					'log_result' => 'succ',
-					'log_value' =>  null,
-					'log_data' => json_encode($body['data'])
-				);
-
-				WPJS_Cron_Log::update_log($log_entry);
 			}
 		}
 

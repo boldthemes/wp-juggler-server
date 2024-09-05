@@ -164,6 +164,8 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs_get_control_panel', $plugin_ajax, 'ajax_get_control_panel' );
 		
 		$this->loader->add_action( 'wp_ajax_wpjs-get-health-panel', $plugin_ajax, 'ajax_get_health_panel' );
+		
+		$this->loader->add_action( 'wp_ajax_wpjs-get-plugins-panel', $plugin_ajax, 'ajax_get_plugins_panel' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-panel', $plugin_ajax, 'ajax_get_latest_notices' );
 		$this->loader->add_action( 'wp_ajax_wpjs-get-notices-history', $plugin_ajax, 'ajax_get_notices_history' );
