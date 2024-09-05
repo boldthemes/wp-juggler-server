@@ -80,17 +80,15 @@ class WPJS_Plugins
 		
 			$plugins = get_posts($args);
 
-			if (empty($plugins)) {
-				return;
-			}
-
 			$update = [];
 
-			foreach( $plugins as $plugin ){
-				$obj = $this->build_object($plugin);
-				$update[ $obj['slug'] ] = $obj;
+			if (! empty($plugins)) {
+				foreach( $plugins as $plugin ){
+					$obj = $this->build_object($plugin);
+					$update[ $obj['slug'] ] = $obj;
+				}
 			}
-
+			
 		} else {
 
 			$args = array(
