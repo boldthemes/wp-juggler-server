@@ -495,6 +495,81 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
+	public function ajax_get_uptime_panel()
+	{
+		global $wpdb;
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'confirmClientApi' 
+					AND log_result IN (%s, %s)
+					AND log_time >= NOW() - INTERVAL %d DAY 
+				ORDER BY log_time DESC 
+				",
+				$site_id,
+				'error',
+				'fail',
+				90
+			),
+			ARRAY_A
+		);
+
+		foreach ($results as &$item) {
+			if (isset($item['log_time'])) {
+				$item['log_timestamp'] = strtotime($item['log_time']);
+			}
+		}
+		unset($item);
+
+		$results1 = $wpdb->get_results(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'confirmFrontEnd' 
+					AND log_result IN (%s, %s)
+					AND log_time >= NOW() - INTERVAL %d DAY 
+				ORDER BY log_time DESC 
+				",
+				$site_id,
+				'error',
+				'fail',
+				90
+			),
+			ARRAY_A
+		);
+
+		foreach ($results1 as &$item) {
+			if (isset($item['log_time'])) {
+				$item['log_timestamp'] = strtotime($item['log_time']);
+			}
+		}
+		unset($item);
+
+		$ret_obj = array(
+			'wp_juggler_api_downs' => $results,
+			'wp_juggler_fe_downs' => $results1,
+		);
+
+		$data[] = $ret_obj;
+
+		wp_send_json_success($data, 200);
+	}
+
 	public function get_notices_history()
 	{
 		global $wpdb;
