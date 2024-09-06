@@ -78,17 +78,10 @@ function debugFields(fieldArray) {
 
 <template>
   <div class="text-center pa-4">
-    <v-dialog
-      v-model="store.activatedHealth"
-      transition="dialog-bottom-transition"
-      fullscreen
-    >
+    <v-dialog v-model="store.activatedHealth" transition="dialog-bottom-transition" fullscreen>
       <v-card>
         <v-toolbar>
-          <v-btn
-            icon="mdi-close"
-            @click="store.activatedHealth = false"
-          ></v-btn>
+          <v-btn icon="mdi-close" @click="store.activatedHealth = false"></v-btn>
 
           <v-toolbar-title>{{ store.activatedSite.title }} </v-toolbar-title>
 
@@ -98,12 +91,7 @@ function debugFields(fieldArray) {
         </v-toolbar>
 
         <v-card-text v-if="data">
-          <v-sheet
-            class="pa-4 text-right mx-auto"
-            elevation="0"
-            width="100%"
-            rounded="lg"
-          >
+          <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
             <div v-if="data.wp_juggler_health_data_timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               {{ data.wp_juggler_health_data_timestamp }}
@@ -125,16 +113,9 @@ function debugFields(fieldArray) {
 
             <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
-                <v-tabs-window-item
-                  value="status"
-                  transition="false"
-                  reverse-transition="false"
-                >
-                  <v-sheet
-                    v-if="recommendations.length > 0"
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                <v-tabs-window-item value="status" transition="false" reverse-transition="false">
+                  <v-sheet v-if="recommendations.length > 0" max-width="1200"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Status</div>
                       <div class="mt-3 mb-4">
@@ -154,46 +135,29 @@ function debugFields(fieldArray) {
                       </div>
 
                       <v-expansion-panels class="mt-8" variant="accordion">
-                        <v-expansion-panel
-                          v-for="recommendation in recommendations"
-                        >
+                        <v-expansion-panel v-for="recommendation in recommendations">
                           <v-expansion-panel-title>
                             {{ recommendation.label }}
                             <v-spacer></v-spacer>
-                            <div
-                              :class="[
-                                'mr-3 pa-2 wpjs-health-badge-label',
-                                recommendation.badge.color,
-                              ]"
-                            >
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              recommendation.badge.color,
+                            ]">
                               {{ recommendation.badge.label }}
                             </div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div
-                              class="wpjs-health-panel-description"
-                              v-html="recommendation.description"
-                            ></div>
-                            <div
-                              class="wpjs-health-panel-actions"
-                              v-html="recommendation.actions"
-                            ></div>
+                            <div class="wpjs-health-panel-description" v-html="recommendation.description"></div>
+                            <div class="wpjs-health-panel-actions" v-html="recommendation.actions"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
                     </v-sheet>
 
-                    <v-btn
-                      class="ml-3 text-none text-caption"
-                      :append-icon="openIcon"
-                      @click="passedOpen = !passedOpen"
-                      >Passed tests</v-btn
-                    >
+                    <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon"
+                      @click="passedOpen = !passedOpen">Passed tests</v-btn>
 
-                    <v-sheet
-                      v-if="passedOpen"
-                      class="align-left justify-left text-left my-10"
-                    >
+                    <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10">
                       <div class="text-h6">
                         {{ goods.length }} items with no issues detected
                       </div>
@@ -203,71 +167,46 @@ function debugFields(fieldArray) {
                           <v-expansion-panel-title>
                             {{ good.label }}
                             <v-spacer></v-spacer>
-                            <div
-                              :class="[
-                                'mr-3 pa-2 wpjs-health-badge-label',
-                                good.badge.color,
-                              ]"
-                            >
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              good.badge.color,
+                            ]">
                               {{ good.badge.label }}
                             </div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div
-                              class="wpjs-health-panel-description"
-                              v-html="good.description"
-                            ></div>
+                            <div class="wpjs-health-panel-description" v-html="good.description"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
                     </v-sheet>
                   </v-sheet>
 
-                  <v-sheet
-                    v-else
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">No Recorded Site Health Status</div>
                     </v-sheet>
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item
-                  value="info"
-                  transition="false"
-                  reverse-transition="false"
-                >
-                  <v-sheet
-                    v-if="data.wp_juggler_health_data_info"
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                <v-tabs-window-item value="info" transition="false" reverse-transition="false">
+                  <v-sheet v-if="data.wp_juggler_health_data_info" max-width="1200"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Info</div>
 
                       <v-expansion-panels class="mt-8" variant="accordion">
-                        <v-expansion-panel
-                          v-for="debug in data.wp_juggler_health_data_info"
-                        >
-                          <v-expansion-panel-title
-                            v-if="debug.fields.length > 0 && debug.show_count"
-                          >
+                        <v-expansion-panel v-for="debug in data.wp_juggler_health_data_info">
+                          <v-expansion-panel-title v-if="debug.fields.length > 0 && debug.show_count">
                             {{ debug.label }} ({{ debug.fields.length }})
                           </v-expansion-panel-title>
-                          <v-expansion-panel-title
-                            v-else-if="debug.fields.length > 0"
-                          >
+                          <v-expansion-panel-title v-else-if="debug.fields.length > 0">
                             {{ debug.label }}
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
                             <v-table density="compact">
                               <tbody>
-                                <tr
-                                  v-for="field in debugFields(debug.fields)"
-                                  class="wpjs-debug-table-row"
-                                >
+                                <tr v-for="field in debugFields(debug.fields)" class="wpjs-debug-table-row">
                                   <td>{{ field.label }}</td>
                                   <td>{{ field.value }}</td>
                                 </tr>
@@ -279,11 +218,7 @@ function debugFields(fieldArray) {
                     </v-sheet>
                   </v-sheet>
 
-                  <v-sheet
-                    v-else
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">No Recorded Site Health Info</div>
                     </v-sheet>
@@ -292,6 +227,14 @@ function debugFields(fieldArray) {
               </v-tabs-window>
             </v-card-text>
           </v-card>
+        </v-card-text>
+
+        <v-card-text v-else>
+          <v-skeleton-loader type="heading, table-row-divider, list-item-two-line@6, table-tfoot"
+            class="mt-15 mx-auto" max-width="1200">
+
+          </v-skeleton-loader>
+
         </v-card-text>
       </v-card>
     </v-dialog>

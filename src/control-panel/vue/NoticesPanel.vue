@@ -142,8 +142,8 @@ const organizeByMonth = computed(() => {
           <v-toolbar-items> </v-toolbar-items>
         </v-toolbar>
 
-        <v-card-text>
-          <v-card v-if="data">
+        <v-card-text v-if="data">
+          <v-card>
             <v-card-text>
               <v-sheet
                 class="pa-4 text-right mx-auto"
@@ -257,6 +257,15 @@ const organizeByMonth = computed(() => {
             </v-card-text>
           </v-card>
         </v-card-text>
+
+        <v-card-text v-else>
+          <v-skeleton-loader type="heading, table-row-divider, list-item-two-line@6, table-tfoot"
+            class="mt-15 mx-auto" max-width="1200">
+
+          </v-skeleton-loader>
+
+        </v-card-text>
+
       </v-card>
     </v-dialog>
   </div>

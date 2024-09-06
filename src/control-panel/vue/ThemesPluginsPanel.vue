@@ -44,21 +44,21 @@ async function doAjax(args) {
 }
 
 const plugins_data = computed(() => {
-  if(data.value){
+  if (data.value) {
     console.log(Object.values(data.value.plugins_data))
     return Object.values(data.value.plugins_data)
   } else {
-    return[]
+    return []
   }
-  
+
 })
 
 const themes_data = computed(() => {
-  if(data.value){
+  if (data.value) {
     console.log(Object.values(data.value.themes_data))
     return Object.values(data.value.themes_data)
   } else {
-    return[]
+    return []
   }
 })
 
@@ -152,35 +152,38 @@ function openVulnerabilities(item) {
           <v-toolbar-items> </v-toolbar-items>
         </v-toolbar>
 
-        <v-card-text>
+        <v-card-text v-if="data">
+
+          <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
+            <div v-if="
+              store.activatedSite.wp_juggler_plugins_summary_timestamp
+            ">
+              <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
+              {{
+                store.activatedSite.wp_juggler_plugins_summary_timestamp
+              }}
+              <v-btn class="ml-3 text-none text-caption">Refresh
+              </v-btn>
+            </div>
+
+            <div v-else>
+              <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
+              Never
+              <v-btn class="ml-3 text-none text-caption">Refresh
+              </v-btn>
+            </div>
+          </v-sheet>
+
           <v-card>
             <v-tabs v-model="tab" bg-color="surface">
               <v-tab value="plugins">Plugins</v-tab>
               <v-tab value="themes">Themes</v-tab>
             </v-tabs>
 
-            <v-card-text>
+            <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="plugins" transition="false" reverse-transition="false">
-                  <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
-                    <div v-if="
-                      store.activatedSite.wp_juggler_plugins_summary_timestamp
-                    ">
-                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-                      {{
-                        store.activatedSite.wp_juggler_plugins_summary_timestamp
-                      }}
-                      <v-btn class="ml-3 text-none text-caption">Refresh
-                      </v-btn>
-                    </div>
 
-                    <div v-else>
-                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-                      Never
-                      <v-btn class="ml-3 text-none text-caption">Refresh
-                      </v-btn>
-                    </div>
-                  </v-sheet>
                   <v-divider></v-divider>
 
                   <v-sheet>
@@ -312,8 +315,17 @@ function openVulnerabilities(item) {
 
               </v-tabs-window>
             </v-card-text>
+
           </v-card>
         </v-card-text>
+
+        <v-card-text v-else>
+          <v-skeleton-loader type="table" class="mt-15">
+
+          </v-skeleton-loader>
+
+        </v-card-text>
+
       </v-card>
     </v-dialog>
 
@@ -330,8 +342,8 @@ function openVulnerabilities(item) {
 
         <v-card-text>
           <v-sheet v-for="vul in vulnerabilitiesItem.Vulnerabilities">
-            <div><strong>{{ vul.name }}</strong></div>
-            <div v-if="'cwe' in vul.impact" class="ml-6 mt-2">
+            <div class="text-h7"><strong>{{ vul.name }}</strong></div>
+            <div v-if="'cwe' in vul.impact" class="ml-6 mt-2 wpjs-plugin-vul">
               <div>
                 {{ vul.impact.cwe[0].name }}
               </div>
@@ -342,7 +354,7 @@ function openVulnerabilities(item) {
 
             <div class="mt-4 ml-6"><strong>Sources:</strong></div>
 
-            <div v-for="src in vul.source" class="mt-2 ml-6">
+            <div v-for="src in vul.source" class="mt-2 ml-6 wpjs-plugin-vul">
               <div class="ml-4">
                 {{ src.date }} - <a :href="src.link" target="_blank">{{ src.name }}</a>
               </div>
@@ -360,4 +372,8 @@ function openVulnerabilities(item) {
   </div>
 </template>
 
-<style></style>
+<style>
+.wpjs-plugin-vul {
+  font-size: 14px;
+}
+</style>

@@ -15419,6 +15419,7 @@ let initialize = ()=>{
     script = require("e2cee6db6576530e");
     if (script.__esModule) script = script.default;
     script.render = require("14fb851e6d9f8c39").render;
+    script.__cssModules = require("a32bb40640c88a1e").default;
     require("81e5f303e5990112").default(script);
     script.__scopeId = "data-v-f6f7e2";
     script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ThemesPluginsPanel.vue";
@@ -15435,7 +15436,7 @@ if (module.hot) {
 }
 exports.default = script;
 
-},{"e2cee6db6576530e":"i8MiM","14fb851e6d9f8c39":"1QZ4k","81e5f303e5990112":"kAFhE","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"i8MiM":[function(require,module,exports) {
+},{"e2cee6db6576530e":"i8MiM","14fb851e6d9f8c39":"1QZ4k","81e5f303e5990112":"kAFhE","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","a32bb40640c88a1e":"cgkwZ"}],"i8MiM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _storeJs = require("./store.js");
@@ -15692,24 +15693,27 @@ const _hoisted_19 = {
     key: 0
 };
 const _hoisted_20 = {
-    key: 0,
-    class: "ml-6 mt-2"
+    class: "text-h7"
 };
-const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+const _hoisted_21 = {
+    key: 0,
+    class: "ml-6 mt-2 wpjs-plugin-vul"
+};
+const _hoisted_22 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-4 ml-6"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Sources:")
 ], -1 /* HOISTED */ );
-const _hoisted_22 = {
-    class: "mt-2 ml-6"
-};
 const _hoisted_23 = {
+    class: "mt-2 ml-6 wpjs-plugin-vul"
+};
+const _hoisted_24 = {
     class: "ml-4"
 };
-const _hoisted_24 = [
+const _hoisted_25 = [
     "href"
 ];
-const _hoisted_25 = {
+const _hoisted_26 = {
     class: "ml-4"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -15718,10 +15722,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
     const _component_v_toolbar_items = (0, _vue.resolveComponent)("v-toolbar-items");
     const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
-    const _component_v_tab = (0, _vue.resolveComponent)("v-tab");
-    const _component_v_tabs = (0, _vue.resolveComponent)("v-tabs");
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
+    const _component_v_tab = (0, _vue.resolveComponent)("v-tab");
+    const _component_v_tabs = (0, _vue.resolveComponent)("v-tabs");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
@@ -15729,6 +15733,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_tabs_window = (0, _vue.resolveComponent)("v-tabs-window");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
@@ -15757,8 +15762,51 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ]),
                                     _: 1 /* STABLE */ 
                                 }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 0
+                                }, {
                                     default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_sheet, {
+                                                class: "pa-4 text-right mx-auto",
+                                                elevation: "0",
+                                                width: "100%",
+                                                rounded: "lg"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        $setup.store.activatedSite.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                class: "me-1 pb-1",
+                                                                icon: "mdi-refresh",
+                                                                size: "18"
+                                                            }),
+                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.store.activatedSite.wp_juggler_plugins_summary_timestamp) + " ", 1 /* TEXT */ ),
+                                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                                class: "ml-3 text-none text-caption"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createTextVNode)("Refresh ")
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })
+                                                        ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                class: "me-1 pb-1",
+                                                                icon: "mdi-refresh",
+                                                                size: "18"
+                                                            }),
+                                                            (0, _vue.createTextVNode)(" Never "),
+                                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                                class: "ml-3 text-none text-caption"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createTextVNode)("Refresh ")
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })
+                                                        ]))
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }),
                                             (0, _vue.createVNode)(_component_v_card, null, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createVNode)(_component_v_tabs, {
@@ -15788,7 +15836,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         }, 8 /* PROPS */ , [
                                                             "modelValue"
                                                         ]),
-                                                        (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                        (0, _vue.createVNode)(_component_v_card_text, {
+                                                            class: "mt-10"
+                                                        }, {
                                                             default: (0, _vue.withCtx)(()=>[
                                                                     (0, _vue.createVNode)(_component_v_tabs_window, {
                                                                         modelValue: $setup.tab,
@@ -15801,47 +15851,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                     "reverse-transition": "false"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, {
-                                                                                                class: "pa-4 text-right mx-auto",
-                                                                                                elevation: "0",
-                                                                                                width: "100%",
-                                                                                                rounded: "lg"
-                                                                                            }, {
-                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                        $setup.store.activatedSite.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
-                                                                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                class: "me-1 pb-1",
-                                                                                                                icon: "mdi-refresh",
-                                                                                                                size: "18"
-                                                                                                            }),
-                                                                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.store.activatedSite.wp_juggler_plugins_summary_timestamp) + " ", 1 /* TEXT */ ),
-                                                                                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                class: "ml-3 text-none text-caption"
-                                                                                                            }, {
-                                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                                        (0, _vue.createTextVNode)("Refresh ")
-                                                                                                                    ]),
-                                                                                                                _: 1 /* STABLE */ 
-                                                                                                            })
-                                                                                                        ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
-                                                                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                class: "me-1 pb-1",
-                                                                                                                icon: "mdi-refresh",
-                                                                                                                size: "18"
-                                                                                                            }),
-                                                                                                            (0, _vue.createTextVNode)(" Never "),
-                                                                                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                class: "ml-3 text-none text-caption"
-                                                                                                            }, {
-                                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                                        (0, _vue.createTextVNode)("Refresh ")
-                                                                                                                    ]),
-                                                                                                                _: 1 /* STABLE */ 
-                                                                                                            })
-                                                                                                        ]))
-                                                                                                    ]),
-                                                                                                _: 1 /* STABLE */ 
-                                                                                            }),
                                                                                             (0, _vue.createVNode)(_component_v_divider),
                                                                                             (0, _vue.createVNode)(_component_v_sheet, null, {
                                                                                                 default: (0, _vue.withCtx)(()=>[
@@ -16150,7 +16159,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             })
                                         ]),
                                     _: 1 /* STABLE */ 
-                                })
+                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 1
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                type: "table",
+                                                class: "mt-15"
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }))
                             ]),
                         _: 1 /* STABLE */ 
                     })
@@ -16187,24 +16206,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
                                                 return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
                                                     default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", null, [
+                                                            (0, _vue.createElementVNode)("div", _hoisted_20, [
                                                                 (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
                                                             ]),
-                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
+                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
                                                                 (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
                                                                 (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
                                                             ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                            _hoisted_21,
+                                                            _hoisted_22,
                                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
-                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, [
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_23, [
+                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, [
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_24, [
                                                                         (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
                                                                         (0, _vue.createElementVNode)("a", {
                                                                             href: src.link,
                                                                             target: "_blank"
-                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_24)
+                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_25)
                                                                     ]),
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_25, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_26, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
                                                                 ]);
                                                             }), 256 /* UNKEYED_FRAGMENT */ )),
                                                             (0, _vue.createVNode)(_component_v_divider, {
@@ -16237,7 +16256,7 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jr9wA":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"cgkwZ":[function() {},{}],"jr9wA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 let script;
@@ -16436,6 +16455,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_tabs_window = (0, _vue.resolveComponent)("v-tabs-window");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
@@ -16796,7 +16816,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             })
                                         ]),
                                     _: 1 /* STABLE */ 
-                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 1
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                type: "heading, table-row-divider, list-item-two-line@6, table-tfoot",
+                                                class: "mt-15 mx-auto",
+                                                "max-width": "1200"
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }))
                             ]),
                         _: 1 /* STABLE */ 
                     })
@@ -17143,6 +17174,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_infinite_scroll = (0, _vue.resolveComponent)("v-infinite-scroll");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
@@ -17171,10 +17203,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ]),
                                     _: 1 /* STABLE */ 
                                 }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 0
+                                }, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
-                                                key: 0,
+                                            (0, _vue.createVNode)(_component_v_card, {
                                                 class: "mt-10"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
@@ -17488,10 +17521,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            })
                                         ]),
                                     _: 1 /* STABLE */ 
-                                })
+                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 1
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                type: "heading, image, table-row-divider, list-item-two-line@4, table-tfoot",
+                                                class: "mt-15 mx-auto",
+                                                "max-width": "1200"
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }))
                             ]),
                         _: 1 /* STABLE */ 
                     })
@@ -17738,6 +17782,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_infinite_scroll = (0, _vue.resolveComponent)("v-infinite-scroll");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
@@ -17766,11 +17811,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ]),
                                     _: 1 /* STABLE */ 
                                 }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 0
+                                }, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
-                                                key: 0
-                                            }, {
+                                            (0, _vue.createVNode)(_component_v_card, null, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createVNode)(_component_v_card_text, null, {
                                                             default: (0, _vue.withCtx)(()=>[
@@ -17971,10 +18016,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            })
                                         ]),
                                     _: 1 /* STABLE */ 
-                                })
+                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                    key: 1
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                type: "heading, table-row-divider, list-item-two-line@6, table-tfoot",
+                                                class: "mt-15 mx-auto",
+                                                "max-width": "1200"
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }))
                             ]),
                         _: 1 /* STABLE */ 
                     })
@@ -18063,6 +18119,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
         (0, _vue.createElementVNode)("div", _hoisted_1, [
             (0, _vue.createVNode)(_component_v_btn, {
@@ -18081,7 +18138,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 class: "pa-4 mr-4 mt-5 mb-5"
             }, {
                 default: (0, _vue.withCtx)(()=>[
-                        (0, _vue.createVNode)(_component_v_card, {
+                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                            key: 0,
                             flat: ""
                         }, {
                             default: (0, _vue.withCtx)(()=>[
@@ -18275,7 +18333,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     ])
                                 ]),
                             _: 1 /* STABLE */ 
-                        })
+                        })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                            key: 1,
+                            flat: ""
+                        }, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                        type: "table"
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }))
                     ]),
                 _: 1 /* STABLE */ 
             }),
