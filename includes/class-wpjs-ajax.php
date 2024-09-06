@@ -465,18 +465,9 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
-	public function ajax_get_latest_notices()
-	{
+	private function get_latest_notices( $site_id ) {
+
 		global $wpdb;
-
-		if (!current_user_can('manage_options')) {
-			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
-			return;
-		}
-
-		if (isset($_POST['siteId'])) {
-			$site_id = sanitize_text_field($_POST['siteId']);
-		}
 
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
@@ -527,7 +518,23 @@ class WPJS_AJAX
 			);
 		}
 
-		$data[] = $ret_obj;
+		return $ret_obj;
+
+	}
+
+	public function ajax_get_latest_notices()
+	{
+		
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		$data[] = $this->get_latest_notices( $site_id );
 
 		wp_send_json_success($data, 200);
 	}
@@ -987,6 +994,20 @@ class WPJS_AJAX
 					$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
 				}
 
+				$notices_data = $this->get_latest_notices($site->ID);
+
+				if (!$notices_data['wp_juggler_notices_timestamp']) {
+					$notices_data_number = false;
+					$notices_data_timestamp = false;
+				} else {
+					$notices_data_number = count($notices_data['wp_juggler_notices']);
+					$notices_data_timestamp = $notices_data['wp_juggler_notices_timestamp'];
+				}
+
+				//wp_juggler_notices' => false,
+				//'wp_juggler_notices_timestamp' =>  false,
+				//'wp_juggler_history_count' => 0
+
 				$newsite = array(
 					'id' => $site->ID,
 					'title' => get_the_title($site->ID),
@@ -1005,7 +1026,9 @@ class WPJS_AJAX
 					'wp_juggler_core_checksum' => $core_checksum,
 					'wp_juggler_core_checksum_timestamp' => $core_checksum_timestamp,
 					'wp_juggler_health_data' => $health_data_issues,
-					'wp_juggler_health_data_timestamp' => $health_data_timestamp
+					'wp_juggler_health_data_timestamp' => $health_data_timestamp,
+					'wp_juggler_notices_timestamp' => $notices_data_timestamp,
+					'wp_juggler_notices_count' => $notices_data_number
 				);
 
 				if ($site_activation) {
@@ -1094,5 +1117,24 @@ class WPJS_AJAX
 		}
 
 		return $wpjs_schedules;
+	}
+
+	public function ajax_refresh_notices(){
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		$response = WPJS_Service::check_notices_api( $site_id );
+
+		$data = [];
+
+		wp_send_json_success($data, 200);
+
 	}
 }

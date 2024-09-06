@@ -216,7 +216,7 @@ function openVulnerabilities(item) {
                           <v-btn class="ml-3 text-none text-caption" @click="openVulnerabilities(item)">Details
                           </v-btn>
                         </div>
-                        <div v-else-if="!item.Wporg || (item.WpJuggler && item.Wporg)">
+                        <div v-else-if="!item.Wporg || item.WpJuggler">
                           <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
                         </div>
                       </template>
@@ -225,8 +225,11 @@ function openVulnerabilities(item) {
                         <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
                           <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
                         </div>
-                        <div v-else-if="!item.Wporg || (item.WpJuggler && item.Wporg)">
+                        <div v-else-if="!item.Wporg || item.WpJuggler ">
                           <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                        </div>
+                        <div v-else>
+                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
                         </div>
                       </template>
 
@@ -258,25 +261,7 @@ function openVulnerabilities(item) {
 
                 <v-tabs-window-item value="themes" transition="false" reverse-transition="false">
 
-                  <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
-                    <div v-if="
-                      store.activatedSite.wp_juggler_themes_summary_timestamp
-                    ">
-                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-                      {{
-                        store.activatedSite.wp_juggler_themes_summary_timestamp
-                      }}
-                      <v-btn class="ml-3 text-none text-caption">Refresh
-                      </v-btn>
-                    </div>
-
-                    <div v-else>
-                      <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-                      Never
-                      <v-btn class="ml-3 text-none text-caption">Refresh
-                      </v-btn>
-                    </div>
-                  </v-sheet>
+                  
                   <v-divider></v-divider>
 
                   <v-sheet>

@@ -99,10 +99,10 @@ const noticesButton = ref(null)
                 </div>
                 <div v-else>WordPress version: ?</div>
                 <div v-if="props.item.wp_juggler_core_checksum">
-                  Checksum
-                  <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"
+                  WP Checksum
+                  <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"
                     v-if="!props.item.wp_juggler_core_checksum.errors"></v-icon>
-                  <v-icon color="error" icon="mdi-alert-outline" size="large" class="rm-4" v-else></v-icon>
+                  <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1" v-else></v-icon>
                   {{ props.item.wp_juggler_core_checksum_timestamp }}
                 </div>
               </div>
@@ -212,7 +212,6 @@ const noticesButton = ref(null)
                   <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"
                     v-if="props.item.wp_juggler_plugins_checksum.failures == 0"></v-icon>
                   <v-icon color="error" icon="mdi-alert-outline" size="large" class="rm-4" v-else></v-icon>
-                  {{ props.item.wp_juggler_plugins_checksum_timestamp }}
                 </div>
               </div>
             </v-card-text>
@@ -229,9 +228,9 @@ const noticesButton = ref(null)
           <v-card>
             <v-card-item title="Notices">
               <template v-slot:subtitle>
-                <div v-if="props.item.wp_juggler_plugins_summary_timestamp">
+                <div v-if="props.item.wp_juggler_notices_timestamp">
                   <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-                  {{ props.item.wp_juggler_plugins_summary_timestamp }}
+                  {{ props.item.wp_juggler_notices_timestamp }}
                 </div>
                 <div v-else>
                   <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
@@ -245,8 +244,8 @@ const noticesButton = ref(null)
                 <div>
                   <div>Number of notices</div>
                   <v-row align="center" no-gutters>
-                    <v-col class="text-h2" cols="12" v-if="props.item?.wp_juggler_themes_summary"> {{
-                      props.item.wp_juggler_themes_summary.updates_num }} </v-col>
+                    <v-col class="text-h2" cols="12" v-if="props.item?.wp_juggler_notices_count"> {{
+                      props.item.wp_juggler_notices_count }} </v-col>
                     <v-col class="text-h2" cols="12" v-else> ? </v-col>
                   </v-row>
                 </div>

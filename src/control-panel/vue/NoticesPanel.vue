@@ -16,6 +16,12 @@ const tab = ref(0);
 const noticeHistoryItems = ref([]);
 const noticePage = ref(0);
 
+const refreshActive = ref(false)
+const refreshNeeded = ref(true)
+
+let infiniteScrollEvents
+
+const queryClient = useQueryClient()
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-notices-panel", store.activatedSite.id],
   queryFn: getNoticesPanel,
@@ -63,6 +69,7 @@ async function doAjax(args) {
 
 async function loadNoticeHistory({ done }) {
   // Perform API call
+  infiniteScrollEvents = done;
   const res = await getNoticeHistory();
   if (res.length == 0) {
     done("empty");
@@ -71,6 +78,36 @@ async function loadNoticeHistory({ done }) {
     noticePage.value =
       noticeHistoryItems.value[noticeHistoryItems.value.length - 1].ID;
     done("ok");
+  }
+}
+
+async function refreshNotices() {
+  refreshActive.value = true
+
+  let ret = {};
+  const response = await doAjax({
+    action: "wpjs-refresh-notices", // the action to fire in the server
+    siteId: store.activatedSite.id
+  });
+
+  ret = response.data;
+
+  refreshNeeded.value = false
+
+  noticeHistoryItems.value=[]
+  noticePage.value = 0
+  
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-notices-panel", store.activatedSite.id],
+  })
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-control-panel"],
+  })
+
+  refreshNeeded.value = true
+  refreshActive.value = false
+  if (infiniteScrollEvents) {
+        infiniteScrollEvents('ok');
   }
 }
 
@@ -92,10 +129,6 @@ const organizeByMonth = computed(() => {
   const groupedLogs = {};
 
   const hitems = noticeHistoryItems.value;
-
-  if(data.value && data.value.wp_juggler_notices.length && data.value.wp_juggler_notices.length > 0){
-    hitems.shift();
-  }
 
   hitems.forEach((log) => {
     const date = new Date(log.log_timestamp * 1000);
@@ -123,17 +156,10 @@ const organizeByMonth = computed(() => {
 
 <template>
   <div class="text-center pa-4">
-    <v-dialog
-      v-model="store.activatedNotices"
-      transition="dialog-bottom-transition"
-      fullscreen
-    >
+    <v-dialog v-model="store.activatedNotices" transition="dialog-bottom-transition" fullscreen>
       <v-card>
         <v-toolbar>
-          <v-btn
-            icon="mdi-close"
-            @click="store.activatedNotices = false"
-          ></v-btn>
+          <v-btn icon="mdi-close" @click="store.activatedNotices = false"></v-btn>
 
           <v-toolbar-title>{{ store.activatedSite.title }} </v-toolbar-title>
 
@@ -145,45 +171,28 @@ const organizeByMonth = computed(() => {
         <v-card-text v-if="data">
           <v-card>
             <v-card-text>
-              <v-sheet
-                class="pa-4 text-right mx-auto"
-                elevation="0"
-                width="100%"
-                rounded="lg"
-              >
+              <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
                 <div v-if="data.wp_juggler_notices_timestamp">
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
+                  <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
                   {{ data.wp_juggler_notices_timestamp }}
-                  <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
+                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices">Refresh
+                  </v-btn>
                 </div>
 
                 <div v-else>
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
+                  <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
                   Never
-                  <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
+                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices">Refresh
+                  </v-btn>
                 </div>
               </v-sheet>
 
-              <v-sheet
-                max-width="1200"
-                class="align-left justify-left text-left mx-auto px-4 pb-4 mb-10"
-              >
+              <v-sheet max-width="1200" class="align-left justify-left text-left mx-auto px-4 pb-4 mb-10">
                 <div class="text-h6">Currently active Notices:</div>
                 <v-divider class="mb-10"></v-divider>
 
                 <v-sheet v-if="data.wp_juggler_notices.length > 0">
-                  <v-row
-                    class="wpjs-debug-table-row"
-                    v-for="notice in data.wp_juggler_notices"
-                  >
+                  <v-row class="wpjs-debug-table-row" v-for="notice in data.wp_juggler_notices">
                     <v-col class="text-left" v-html="notice.NoticeHTML">
                     </v-col>
                   </v-row>
@@ -194,21 +203,11 @@ const organizeByMonth = computed(() => {
                   </v-row>
                 </v-sheet>
 
-                <v-sheet
-                  v-if="data.wp_juggler_history_count > 0"
-                  class="align-left justify-left text-left px-5 mb-15"
-                >
+                <v-sheet v-if="data.wp_juggler_history_count > 0" class="align-left justify-left text-left px-5 mb-15">
                   <div class="text-h6 mt-15">Notices History:</div>
 
-                  <v-infinite-scroll
-                    :height="600"
-                    :items="noticeHistoryItems"
-                    :onLoad="loadNoticeHistory"
-                  >
-                    <template
-                      v-for="(item, name) in organizeByMonth"
-                      :key="item.ID"
-                    >
+                  <v-infinite-scroll v-if="refreshNeeded" :height="600" :items="organizeByMonth" :onLoad="loadNoticeHistory">
+                    <template v-for="(item, name) in organizeByMonth" :key="item.ID">
                       <div v-if="item.length == 0" class="mt-10">
                         <div class="text-h6">{{ name }}</div>
                         <v-divider class="mb-4"></v-divider>
@@ -227,14 +226,8 @@ const organizeByMonth = computed(() => {
                             </v-expansion-panel-title>
                             <v-expansion-panel-text>
                               <v-sheet class="mt-2">
-                                <v-row
-                                  v-for="single_item in notice.notices"
-                                  class="wpjs-debug-table-row"
-                                >
-                                  <v-col
-                                    class="text-left px-5"
-                                    v-html="single_item.NoticeHTML"
-                                  >
+                                <v-row v-for="single_item in notice.notices" class="wpjs-debug-table-row">
+                                  <v-col class="text-left px-5" v-html="single_item.NoticeHTML">
                                   </v-col>
                                 </v-row>
                               </v-sheet>
@@ -246,10 +239,7 @@ const organizeByMonth = computed(() => {
                   </v-infinite-scroll>
                 </v-sheet>
 
-                <v-sheet
-                  v-else
-                  class="align-left justify-left text-left px-5 mb-15"
-                >
+                <v-sheet v-else class="align-left justify-left text-left px-5 mb-15">
                   <div class="text-h6 mt-15">No Recorded Notices History</div>
                 </v-sheet>
 
@@ -259,8 +249,8 @@ const organizeByMonth = computed(() => {
         </v-card-text>
 
         <v-card-text v-else>
-          <v-skeleton-loader type="heading, table-row-divider, list-item-two-line@6, table-tfoot"
-            class="mt-15 mx-auto" max-width="1200">
+          <v-skeleton-loader type="heading, table-row-divider, list-item-two-line@6, table-tfoot" class="mt-15 mx-auto"
+            max-width="1200">
 
           </v-skeleton-loader>
 
