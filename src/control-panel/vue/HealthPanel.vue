@@ -11,8 +11,13 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
+const refreshActive = ref(false);
+const ajaxError = ref(false);
+const ajaxErrorText = ref("");
+
 const tab = ref(0);
 
+const queryClient = useQueryClient();
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-health-panel", store.activatedSite.id],
   queryFn: getHealthPanel,
@@ -74,6 +79,39 @@ const openIcon = computed(() => {
 function debugFields(fieldArray) {
   return fieldArray.filter((item) => item.debug !== "loading...");
 }
+
+async function refreshHealth() {
+  refreshActive.value = true;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-health", // the action to fire in the server
+      siteId: store.activatedSite.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-health-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      refreshActive.value = false;
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+    refreshActive.value = false;
+  }
+}
 </script>
 
 <template>
@@ -95,7 +133,7 @@ function debugFields(fieldArray) {
             <div v-if="data.wp_juggler_health_data_timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               {{ data.wp_juggler_health_data_timestamp }}
-              <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth">Refresh </v-btn>
             </div>
 
             <div v-else>
@@ -237,6 +275,21 @@ function debugFields(fieldArray) {
 
         </v-card-text>
       </v-card>
+
+      <v-snackbar v-model="ajaxError" color="red-lighten-2">
+        {{ ajaxErrorText }}
+
+        <template v-slot:actions>
+          <v-btn
+            color="red-lighten-4"
+            variant="text"
+            @click="ajaxError = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
     </v-dialog>
   </div>
 </template>

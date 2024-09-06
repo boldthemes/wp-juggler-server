@@ -99,11 +99,10 @@ const noticesButton = ref(null)
                 </div>
                 <div v-else>WordPress version: ?</div>
                 <div v-if="props.item.wp_juggler_core_checksum">
-                  WP Checksum
+                  Checksum
                   <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"
                     v-if="!props.item.wp_juggler_core_checksum.errors"></v-icon>
                   <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1" v-else></v-icon>
-                  {{ props.item.wp_juggler_core_checksum_timestamp }}
                 </div>
               </div>
             </v-card-text>

@@ -10,6 +10,11 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
+const refreshActive = ref(false);
+const ajaxError = ref(false);
+const ajaxErrorText = ref("");
+
+const queryClient = useQueryClient();
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
   queryFn: getPluginsPanel,
@@ -19,7 +24,7 @@ async function getPluginsPanel() {
   let ret = {};
   const response = await doAjax({
     action: "wpjs-get-plugins-panel", // the action to fire in the server
-    siteId: store.activatedSite.id
+    siteId: store.activatedSite.id,
   });
   ret = response.data[0];
   return ret;
@@ -36,32 +41,33 @@ async function doAjax(args) {
       },
       body: new URLSearchParams(args),
     });
+
     const result = await response.json();
-    return result;
+
+    return result
+
   } catch (error) {
-    throw error;
+    throw new Error('No response from the WP Juggler Server');
   }
 }
 
 const plugins_data = computed(() => {
   if (data.value) {
-    console.log(Object.values(data.value.plugins_data))
-    return Object.values(data.value.plugins_data)
+    console.log(Object.values(data.value.plugins_data));
+    return Object.values(data.value.plugins_data);
   } else {
-    return []
+    return [];
   }
-
-})
+});
 
 const themes_data = computed(() => {
   if (data.value) {
-    console.log(Object.values(data.value.themes_data))
-    return Object.values(data.value.themes_data)
+    console.log(Object.values(data.value.themes_data));
+    return Object.values(data.value.themes_data);
   } else {
-    return []
+    return [];
   }
-})
-
+});
 
 const plugin_headers = [
   { title: "Name", value: "Name", align: "start", sortable: true },
@@ -131,21 +137,59 @@ const theme_headers = [
 const tab = ref(0);
 
 function openVulnerabilities(item) {
-  vulnerabilitiesItem.value = item
-  dialogInner.value = true
+  vulnerabilitiesItem.value = item;
+  dialogInner.value = true;
 }
 
+async function refreshPlugins() {
+  refreshActive.value = true;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-plugins", // the action to fire in the server
+      siteId: store.activatedSite.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      refreshActive.value = false;
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+    refreshActive.value = false;
+  }
+}
 </script>
 
 <template>
   <div class="text-center pa-4">
-    <v-dialog v-model="store.activatedThemes" transition="dialog-bottom-transition" fullscreen>
+    <v-dialog
+      v-model="store.activatedThemes"
+      transition="dialog-bottom-transition"
+      fullscreen
+    >
       <v-card>
         <v-toolbar>
-          <v-btn icon="mdi-close" @click="store.activatedThemes = false"></v-btn>
+          <v-btn
+            icon="mdi-close"
+            @click="store.activatedThemes = false"
+          ></v-btn>
 
-          <v-toolbar-title>{{ store.activatedSite.title }}
-          </v-toolbar-title>
+          <v-toolbar-title>{{ store.activatedSite.title }} </v-toolbar-title>
 
           <v-spacer></v-spacer>
 
@@ -153,24 +197,24 @@ function openVulnerabilities(item) {
         </v-toolbar>
 
         <v-card-text v-if="data">
-
-          <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
-            <div v-if="
-              store.activatedSite.wp_juggler_plugins_summary_timestamp
-            ">
+          <v-sheet
+            class="pa-4 text-right mx-auto"
+            elevation="0"
+            width="100%"
+            rounded="lg"
+          >
+            <div
+              v-if="data.wp_juggler_plugins_timestamp"
+            >
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-              {{
-                store.activatedSite.wp_juggler_plugins_summary_timestamp
-              }}
-              <v-btn class="ml-3 text-none text-caption">Refresh
-              </v-btn>
+              {{ data.wp_juggler_plugins_timestamp }}
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshPlugins">Refresh </v-btn>
             </div>
 
             <div v-else>
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
-              <v-btn class="ml-3 text-none text-caption">Refresh
-              </v-btn>
+              <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
             </div>
           </v-sheet>
 
@@ -182,152 +226,273 @@ function openVulnerabilities(item) {
 
             <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
-                <v-tabs-window-item value="plugins" transition="false" reverse-transition="false">
-
+                <v-tabs-window-item
+                  value="plugins"
+                  transition="false"
+                  reverse-transition="false"
+                >
                   <v-divider></v-divider>
 
                   <v-sheet>
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-                      variant="solo-filled" flat hide-details single-line></v-text-field>
+                    <v-text-field
+                      v-model="search"
+                      density="compact"
+                      label="Search"
+                      prepend-inner-icon="mdi-magnify"
+                      variant="solo-filled"
+                      flat
+                      hide-details
+                      single-line
+                    ></v-text-field>
 
-                    <v-data-table v-model:search="search" :items="plugins_data" :headers="plugin_headers" item-key="id">
+                    <v-data-table
+                      v-model:search="search"
+                      :items="plugins_data"
+                      :headers="plugin_headers"
+                      item-key="id"
+                    >
                       <template v-slot:item.active="{ item }">
                         <div v-if="item.Active && !item.NetworkActive">
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                         <div v-if="item.NetworkActive">
-                          <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-network-outline"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
 
                       <template v-slot:item.update="{ item }">
                         <div v-if="item.Update">
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon> {{
-                            item.UpdateVersion }}
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
+                          {{ item.UpdateVersion }}
                         </div>
                       </template>
 
                       <template v-slot:item.vulnerabilities="{ item }">
-                        <div v-if="item.Vulnerabilities.length > 0 && item.Wporg && !item.WpJuggler">
-                          <v-icon color="error" icon="mdi-bug-check-outline" size="large" class="mr-1"></v-icon> {{
-                            item.Vulnerabilities.length }}
-                          <v-btn class="ml-3 text-none text-caption" @click="openVulnerabilities(item)">Details
+                        <div
+                          v-if="
+                            item.Vulnerabilities.length > 0 &&
+                            item.Wporg &&
+                            !item.WpJuggler
+                          "
+                        >
+                          <v-icon
+                            color="error"
+                            icon="mdi-bug-check-outline"
+                            size="large"
+                            class="mr-1"
+                          ></v-icon>
+                          {{ item.Vulnerabilities.length }}
+                          <v-btn
+                            class="ml-3 text-none text-caption"
+                            @click="openVulnerabilities(item)"
+                            >Details
                           </v-btn>
                         </div>
                         <div v-else-if="!item.Wporg || item.WpJuggler">
-                          <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="blue-lighten-5"
+                            icon="mdi-help"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
 
                       <template v-slot:item.checksum="{ item }">
-                        <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
-                          <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
+                        <div
+                          v-if="!item.Checksum && !item.WpJuggler && item.Wporg"
+                        >
+                          <v-icon
+                            color="error"
+                            icon="mdi-alert-outline"
+                            size="large"
+                            class="mr-1"
+                          ></v-icon>
                         </div>
-                        <div v-else-if="!item.Wporg || item.WpJuggler ">
-                          <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                        <div v-else-if="!item.Wporg || item.WpJuggler">
+                          <v-icon
+                            color="blue-lighten-5"
+                            icon="mdi-help"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                         <div v-else>
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
 
                       <template v-slot:item.source="{ item }">
                         <div v-if="item.Wporg && !item.WpJuggler">
-                          <v-icon color="grey-lighten-1" icon="mdi-wordpress" size="large" class="mr-1"></v-icon>
+                          <v-icon
+                            color="grey-lighten-1"
+                            icon="mdi-wordpress"
+                            size="large"
+                            class="mr-1"
+                          ></v-icon>
                         </div>
                         <div v-else-if="item.WpJuggler">
-                          <v-icon color="grey-lighten-1" icon="mdi-lan" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="grey-lighten-1"
+                            icon="mdi-lan"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                         <div v-else>
-                          <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="blue-lighten-5"
+                            icon="mdi-help"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
                       <template v-slot:item.actions="{ item }">
-                        <v-btn v-if="item.Active" class="ml-3 text-none text-caption">Deactivate
+                        <v-btn
+                          v-if="item.Active"
+                          class="ml-3 text-none text-caption"
+                          >Deactivate
                         </v-btn>
-                        <v-btn v-if="!item.Active" class="ml-3 text-none text-caption">Activate
+                        <v-btn
+                          v-if="!item.Active"
+                          class="ml-3 text-none text-caption"
+                          >Activate
                         </v-btn>
-                        <v-btn v-if="!item.Active && item.Network" class="ml-3 text-none text-caption">Network Activate
+                        <v-btn
+                          v-if="!item.Active && item.Network"
+                          class="ml-3 text-none text-caption"
+                          >Network Activate
                         </v-btn>
-                        <v-btn v-if="item.Update" color="#2196f3" variant="elevated"
-                          class="text-none text-caption ml-3">Update
+                        <v-btn
+                          v-if="item.Update"
+                          color="#2196f3"
+                          variant="elevated"
+                          class="text-none text-caption ml-3"
+                          >Update
                         </v-btn>
                       </template>
                     </v-data-table>
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="themes" transition="false" reverse-transition="false">
-
-                  
+                <v-tabs-window-item
+                  value="themes"
+                  transition="false"
+                  reverse-transition="false"
+                >
                   <v-divider></v-divider>
 
                   <v-sheet>
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-                      variant="solo-filled" flat hide-details single-line></v-text-field>
+                    <v-text-field
+                      v-model="search"
+                      density="compact"
+                      label="Search"
+                      prepend-inner-icon="mdi-magnify"
+                      variant="solo-filled"
+                      flat
+                      hide-details
+                      single-line
+                    ></v-text-field>
 
-                    <v-data-table v-model:search="search" :items="themes_data" :headers="theme_headers" item-key="id">
+                    <v-data-table
+                      v-model:search="search"
+                      :items="themes_data"
+                      :headers="theme_headers"
+                      item-key="id"
+                    >
                       <template v-slot:item.active="{ item }">
                         <div v-if="item.Active && !item.Network">
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                         <div v-if="item.Active && item.Network">
-                          <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-network-outline"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
 
                       <template v-slot:item.child="{ item }">
                         <div v-if="item.IsChildTheme">
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
                         </div>
                       </template>
 
                       <template v-slot:item.update="{ item }">
                         <div v-if="item.Update">
-                          <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon> {{
-                            item.UpdateVersion }}
+                          <v-icon
+                            color="success"
+                            icon="mdi-check-bold"
+                            size="large"
+                            class="rm-4"
+                          ></v-icon>
+                          {{ item.UpdateVersion }}
                         </div>
                       </template>
-
                     </v-data-table>
                   </v-sheet>
-
                 </v-tabs-window-item>
-
               </v-tabs-window>
             </v-card-text>
-
           </v-card>
         </v-card-text>
 
         <v-card-text v-else>
-          <v-skeleton-loader type="table" class="mt-15">
-
-          </v-skeleton-loader>
-
+          <v-skeleton-loader type="table" class="mt-15"> </v-skeleton-loader>
         </v-card-text>
-
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="dialogInner" min-width="600">
-
       <v-card>
         <v-toolbar>
           <v-btn icon="mdi-close" @click="dialogInner = false"></v-btn>
 
-          <v-toolbar-title>List of vulnerabilities
-          </v-toolbar-title>
-
+          <v-toolbar-title>List of vulnerabilities </v-toolbar-title>
         </v-toolbar>
 
         <v-card-text>
           <v-sheet v-for="vul in vulnerabilitiesItem.Vulnerabilities">
-            <div class="text-h7"><strong>{{ vul.name }}</strong></div>
+            <div class="text-h7">
+              <strong>{{ vul.name }}</strong>
+            </div>
             <div v-if="'cwe' in vul.impact" class="ml-6 mt-2 wpjs-plugin-vul">
               <div>
                 {{ vul.impact.cwe[0].name }}
@@ -341,7 +506,8 @@ function openVulnerabilities(item) {
 
             <div v-for="src in vul.source" class="mt-2 ml-6 wpjs-plugin-vul">
               <div class="ml-4">
-                {{ src.date }} - <a :href="src.link" target="_blank">{{ src.name }}</a>
+                {{ src.date }} -
+                <a :href="src.link" target="_blank">{{ src.name }}</a>
               </div>
               <div class="ml-4">
                 {{ src.description }}
@@ -349,10 +515,22 @@ function openVulnerabilities(item) {
             </div>
             <v-divider class="mt-4 mb-4"></v-divider>
           </v-sheet>
-
         </v-card-text>
-
       </v-card>
+
+      <v-snackbar v-model="ajaxError" color="red-lighten-2">
+        {{ ajaxErrorText }}
+
+        <template v-slot:actions>
+          <v-btn
+            color="red-lighten-4"
+            variant="text"
+            @click="ajaxError = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-dialog>
   </div>
 </template>

@@ -9072,16 +9072,16 @@ let initialize = ()=>{
     script.render = require("a1a1a23e097e248d").render;
     script.__cssModules = require("f4c8e73db5a92829").default;
     require("b93ef45881d45a45").default(script);
-    script.__scopeId = "data-v-a77703";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\App.vue";
+    script.__scopeId = "data-v-edd33f";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/App.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "a77703-hmr";
+    script.__hmrId = "edd33f-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("a77703-hmr", script)) __VUE_HMR_RUNTIME__.reload("a77703-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("edd33f-hmr", script)) __VUE_HMR_RUNTIME__.reload("edd33f-hmr", script);
         }, 0);
     });
 }
@@ -9293,7 +9293,7 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
 
 },{"pinia":"hqc1O","vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"hqc1O":[function(require,module,exports) {
 /*!
- * pinia v2.2.1
+ * pinia v2.2.2
  * (c) 2024 Eduardo San Martin Morote
  * @license MIT
  */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -10680,7 +10680,8 @@ function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) 
     isSyncListening = true;
     return store;
 }
-function defineStore(// TODO: add proper types from above
+// improves tree shaking
+/*#__NO_SIDE_EFFECTS__*/ function defineStore(// TODO: add proper types from above
 idOrOptions, setup, setupOptions) {
     let id;
     let options;
@@ -14710,16 +14711,16 @@ let initialize = ()=>{
     script.render = require("afae823331491f67").render;
     script.__cssModules = require("e1e8b018c842a273").default;
     require("17aaf7019aa03763").default(script);
-    script.__scopeId = "data-v-04cc78";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ExpandedRow.vue";
+    script.__scopeId = "data-v-ab35b9";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/ExpandedRow.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "04cc78-hmr";
+    script.__hmrId = "ab35b9-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("04cc78-hmr", script)) __VUE_HMR_RUNTIME__.reload("04cc78-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("ab35b9-hmr", script)) __VUE_HMR_RUNTIME__.reload("ab35b9-hmr", script);
         }, 0);
     });
 }
@@ -15030,7 +15031,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             (0, _vue.createElementVNode)("div", _hoisted_9, [
                                                                 $setup.props.item.wp_juggler_wordpress_version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, "WordPress version: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_wordpress_version), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "WordPress version: ?")),
                                                                 $setup.props.item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
-                                                                    (0, _vue.createTextVNode)(" WP Checksum "),
+                                                                    (0, _vue.createTextVNode)(" Checksum "),
                                                                     !$setup.props.item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
                                                                         key: 0,
                                                                         color: "success",
@@ -15043,8 +15044,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         icon: "mdi-alert-outline",
                                                                         size: "large",
                                                                         class: "mr-1"
-                                                                    })),
-                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_core_checksum_timestamp), 1 /* TEXT */ )
+                                                                    }))
                                                                 ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                             ])
                                                         ]),
@@ -15401,7 +15401,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("04cc78-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("ab35b9-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"dFAqL":[function() {},{}],"9akjZ":[function(require,module,exports) {
@@ -15420,16 +15420,16 @@ let initialize = ()=>{
     script.render = require("14fb851e6d9f8c39").render;
     script.__cssModules = require("a32bb40640c88a1e").default;
     require("81e5f303e5990112").default(script);
-    script.__scopeId = "data-v-f6f7e2";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ThemesPluginsPanel.vue";
+    script.__scopeId = "data-v-a14a40";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/ThemesPluginsPanel.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "f6f7e2-hmr";
+    script.__hmrId = "a14a40-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("f6f7e2-hmr", script)) __VUE_HMR_RUNTIME__.reload("f6f7e2-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("a14a40-hmr", script)) __VUE_HMR_RUNTIME__.reload("a14a40-hmr", script);
         }, 0);
     });
 }
@@ -15449,6 +15449,10 @@ exports.default = {
         const search = (0, _vue.ref)("");
         const dialogInner = (0, _vue.ref)(false);
         const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const refreshActive = (0, _vue.ref)(false);
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
+        const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
                 "wpjs-plugins-panel",
@@ -15478,7 +15482,7 @@ exports.default = {
                 const result = await response.json();
                 return result;
             } catch (error) {
-                throw error;
+                throw new Error("No response from the WP Juggler Server");
             }
         }
         const plugins_data = (0, _vue.computed)(()=>{
@@ -15586,11 +15590,44 @@ exports.default = {
             vulnerabilitiesItem.value = item;
             dialogInner.value = true;
         }
+        async function refreshPlugins() {
+            refreshActive.value = true;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-plugins",
+                    siteId: store.activatedSite.id
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-plugins-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshActive.value = false;
+            }
+        }
         const __returned__ = {
             store,
             search,
             dialogInner,
             vulnerabilitiesItem,
+            refreshActive,
+            ajaxError,
+            ajaxErrorText,
+            queryClient,
             isLoading,
             isError,
             isFetching,
@@ -15605,6 +15642,7 @@ exports.default = {
             theme_headers,
             tab,
             openVulnerabilities,
+            refreshPlugins,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -15731,6 +15769,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedThemes,
@@ -15769,21 +15808,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 rounded: "lg"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        $setup.store.activatedSite.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                        $setup.data.wp_juggler_plugins_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
                                                             (0, _vue.createVNode)(_component_v_icon, {
                                                                 class: "me-1 pb-1",
                                                                 icon: "mdi-refresh",
                                                                 size: "18"
                                                             }),
-                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.store.activatedSite.wp_juggler_plugins_summary_timestamp) + " ", 1 /* TEXT */ ),
+                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_plugins_timestamp) + " ", 1 /* TEXT */ ),
                                                             (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption"
+                                                                class: "ml-3 text-none text-caption",
+                                                                loading: $setup.refreshActive,
+                                                                onClick: $setup.refreshPlugins
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createTextVNode)("Refresh ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
-                                                            })
+                                                            }, 8 /* PROPS */ , [
+                                                                "loading"
+                                                            ])
                                                         ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
                                                             (0, _vue.createVNode)(_component_v_icon, {
                                                                 class: "me-1 pb-1",
@@ -16142,7 +16185,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.dialogInner,
-            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event)=>$setup.dialogInner = $event),
+            "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event)=>$setup.dialogInner = $event),
             "min-width": "600"
         }, {
             default: (0, _vue.withCtx)(()=>[
@@ -16200,7 +16243,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 })
                             ]),
                         _: 1 /* STABLE */ 
-                    })
+                    }),
+                    (0, _vue.createVNode)(_component_v_snackbar, {
+                        modelValue: $setup.ajaxError,
+                        "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event)=>$setup.ajaxError = $event),
+                        color: "red-lighten-2"
+                    }, {
+                        actions: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_btn, {
+                                    color: "red-lighten-4",
+                                    variant: "text",
+                                    onClick: _cache[9] || (_cache[9] = ($event)=>$setup.ajaxError = false)
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createTextVNode)(" Close ")
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                            ]),
+                        _: 1 /* STABLE */ 
+                    }, 8 /* PROPS */ , [
+                        "modelValue"
+                    ])
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
@@ -16209,7 +16276,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("f6f7e2-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("a14a40-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"cgkwZ":[function() {},{}],"kAFhE":[function(require,module,exports) {
@@ -16228,16 +16295,16 @@ let initialize = ()=>{
     script.render = require("9c6064eb1efa18b3").render;
     script.__cssModules = require("9134724363018d1f").default;
     require("9c3c92c247ac048a").default(script);
-    script.__scopeId = "data-v-cd0683";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\HealthPanel.vue";
+    script.__scopeId = "data-v-03ce50";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/HealthPanel.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "cd0683-hmr";
+    script.__hmrId = "03ce50-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("cd0683-hmr", script)) __VUE_HMR_RUNTIME__.reload("cd0683-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("03ce50-hmr", script)) __VUE_HMR_RUNTIME__.reload("03ce50-hmr", script);
         }, 0);
     });
 }
@@ -16258,7 +16325,11 @@ exports.default = {
         const search = (0, _vue.ref)("");
         const dialogInner = (0, _vue.ref)(false);
         const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const refreshActive = (0, _vue.ref)(false);
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
         const tab = (0, _vue.ref)(0);
+        const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
                 "wpjs-health-panel",
@@ -16305,13 +16376,46 @@ exports.default = {
         function debugFields(fieldArray) {
             return fieldArray.filter((item)=>item.debug !== "loading...");
         }
+        async function refreshHealth() {
+            refreshActive.value = true;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-health",
+                    siteId: store.activatedSite.id
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-health-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshActive.value = false;
+            }
+        }
         const __returned__ = {
             store,
             passedOpen,
             search,
             dialogInner,
             vulnerabilitiesItem,
+            refreshActive,
+            ajaxError,
+            ajaxErrorText,
             tab,
+            queryClient,
             isLoading,
             isError,
             isFetching,
@@ -16324,6 +16428,7 @@ exports.default = {
             goods,
             openIcon,
             debugFields,
+            refreshHealth,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -16418,11 +16523,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedHealth,
-            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.store.activatedHealth = $event),
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event)=>$setup.store.activatedHealth = $event),
             transition: "dialog-bottom-transition",
             fullscreen: ""
         }, {
@@ -16465,13 +16571,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             }),
                                                             (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_health_data_timestamp) + " ", 1 /* TEXT */ ),
                                                             (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption"
+                                                                class: "ml-3 text-none text-caption",
+                                                                loading: $setup.refreshActive,
+                                                                onClick: $setup.refreshHealth
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createTextVNode)("Refresh ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
-                                                            })
+                                                            }, 8 /* PROPS */ , [
+                                                                "loading"
+                                                            ])
                                                         ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
                                                             (0, _vue.createVNode)(_component_v_icon, {
                                                                 class: "me-1 pb-1",
@@ -16792,7 +16902,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }))
                             ]),
                         _: 1 /* STABLE */ 
-                    })
+                    }),
+                    (0, _vue.createVNode)(_component_v_snackbar, {
+                        modelValue: $setup.ajaxError,
+                        "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.ajaxError = $event),
+                        color: "red-lighten-2"
+                    }, {
+                        actions: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_btn, {
+                                    color: "red-lighten-4",
+                                    variant: "text",
+                                    onClick: _cache[4] || (_cache[4] = ($event)=>$setup.ajaxError = false)
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createTextVNode)(" Close ")
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                            ]),
+                        _: 1 /* STABLE */ 
+                    }, 8 /* PROPS */ , [
+                        "modelValue"
+                    ])
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
@@ -16801,7 +16935,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("cd0683-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("03ce50-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"bpKOx":[function() {},{}],"b2Rnh":[function(require,module,exports) {
@@ -16820,16 +16954,16 @@ let initialize = ()=>{
     script.render = require("e48904655aba27e4").render;
     script.__cssModules = require("cd6135384bed4502").default;
     require("33adb7bb0be0a46d").default(script);
-    script.__scopeId = "data-v-4f4529";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\UptimePanel.vue";
+    script.__scopeId = "data-v-51cfb5";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/UptimePanel.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "4f4529-hmr";
+    script.__hmrId = "51cfb5-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("4f4529-hmr", script)) __VUE_HMR_RUNTIME__.reload("4f4529-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("51cfb5-hmr", script)) __VUE_HMR_RUNTIME__.reload("51cfb5-hmr", script);
         }, 0);
     });
 }
@@ -17509,7 +17643,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("4f4529-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("51cfb5-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"aRmPX":[function() {},{}],"acLJl":[function(require,module,exports) {
@@ -17528,16 +17662,16 @@ let initialize = ()=>{
     script.render = require("dcc5366acec989c0").render;
     script.__cssModules = require("2b858a785811796d").default;
     require("a976c808d589edd4").default(script);
-    script.__scopeId = "data-v-67c374";
-    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\NoticesPanel.vue";
+    script.__scopeId = "data-v-ce6e11";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/NoticesPanel.vue";
 };
 initialize();
 if (module.hot) {
-    script.__hmrId = "67c374-hmr";
+    script.__hmrId = "ce6e11-hmr";
     module.hot.accept(()=>{
         setTimeout(()=>{
             initialize();
-            if (!__VUE_HMR_RUNTIME__.createRecord("67c374-hmr", script)) __VUE_HMR_RUNTIME__.reload("67c374-hmr", script);
+            if (!__VUE_HMR_RUNTIME__.createRecord("ce6e11-hmr", script)) __VUE_HMR_RUNTIME__.reload("ce6e11-hmr", script);
         }, 0);
     });
 }
@@ -18089,7 +18223,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ]);
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("67c374-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("ce6e11-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jDFGq":[function() {},{}],"4H9hc":[function(require,module,exports) {
@@ -18421,7 +18555,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
-    __VUE_HMR_RUNTIME__.rerender("a77703-hmr", render);
+    __VUE_HMR_RUNTIME__.rerender("edd33f-hmr", render);
 });
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"jvxye":[function() {},{}],"cwDHb":[function(require,module,exports) {
@@ -18517,7 +18651,7 @@ function createVuetify() {
         goTo
     };
 }
-const version = "3.6.14";
+const version = "3.7.0";
 createVuetify.version = version;
 // Vue's inject() can only be used in setup
 function inject(key) {
@@ -19103,15 +19237,15 @@ parcelHelpers.export(exports, "defer", ()=>defer);
 parcelHelpers.export(exports, "eagerComputed", ()=>eagerComputed);
 parcelHelpers.export(exports, "isClickInsideElement", ()=>isClickInsideElement);
 parcelHelpers.export(exports, "templateRef", ()=>templateRef);
+parcelHelpers.export(exports, "checkPrintable", ()=>checkPrintable);
 // Utilities
 var _vue = require("vue");
 var _globalsMjs = require("./globals.mjs"); // Types
-function _classPrivateFieldInitSpec(obj, privateMap, value) {
-    _checkPrivateRedeclaration(obj, privateMap);
-    privateMap.set(obj, value);
+function _classPrivateFieldInitSpec(e, t, a) {
+    _checkPrivateRedeclaration(e, t), t.set(e, a);
 }
-function _checkPrivateRedeclaration(obj, privateCollection) {
-    if (privateCollection.has(obj)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+function _checkPrivateRedeclaration(e, t) {
+    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
 }
 function _classPrivateFieldSet(s, a, r) {
     return s.set(_assertClassBrand(s, a), r), r;
@@ -19654,6 +19788,11 @@ function templateRef() {
         get: ()=>refElement(el.value)
     });
     return fn;
+}
+function checkPrintable(e) {
+    const isPrintableChar = e.key.length === 1;
+    const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey;
+    return isPrintableChar && noModifier;
 }
 
 },{"vue":"gCTam","./globals.mjs":"6CXK1","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"6CXK1":[function(require,module,exports) {
@@ -22501,9 +22640,7 @@ const makeLayoutItemProps = (0, _indexMjs.propsFactory)({
 function useLayout() {
     const layout = (0, _vue.inject)(VuetifyLayoutKey);
     if (!layout) throw new Error("[Vuetify] Could not find injected layout");
-    const layoutIsReady = (0, _vue.nextTick)();
     return {
-        layoutIsReady,
         getLayoutItem: layout.getLayoutItem,
         mainRect: layout.mainRect,
         mainStyles: layout.mainStyles
@@ -22520,7 +22657,6 @@ function useLayoutItem(options) {
     const isKeptAlive = (0, _vue.shallowRef)(false);
     (0, _vue.onDeactivated)(()=>isKeptAlive.value = true);
     (0, _vue.onActivated)(()=>isKeptAlive.value = false);
-    const layoutIsReady = (0, _vue.nextTick)();
     const { layoutItemStyles, layoutItemScrimStyles } = layout.register(vm, {
         ...options,
         active: (0, _vue.computed)(()=>isKeptAlive.value ? false : options.active.value),
@@ -22530,8 +22666,7 @@ function useLayoutItem(options) {
     return {
         layoutItemStyles,
         layoutRect: layout.layoutRect,
-        layoutItemScrimStyles,
-        layoutIsReady
+        layoutItemScrimStyles
     };
 }
 const generateLayers = (layout, positions, layoutSizes, activeItems)=>{
@@ -22576,7 +22711,29 @@ function createLayout(props) {
     const activeItems = (0, _vue.reactive)(new Map());
     const disabledTransitions = (0, _vue.reactive)(new Map());
     const { resizeRef, contentRect: layoutRect } = (0, _resizeObserverMjs.useResizeObserver)();
-    const layers = (0, _indexMjs.eagerComputed)(()=>{
+    const computedOverlaps = (0, _vue.computed)(()=>{
+        const map = new Map();
+        const overlaps = props.overlaps ?? [];
+        for (const overlap of overlaps.filter((item)=>item.includes(":"))){
+            const [top, bottom] = overlap.split(":");
+            if (!registered.value.includes(top) || !registered.value.includes(bottom)) continue;
+            const topPosition = positions.get(top);
+            const bottomPosition = positions.get(bottom);
+            const topAmount = layoutSizes.get(top);
+            const bottomAmount = layoutSizes.get(bottom);
+            if (!topPosition || !bottomPosition || !topAmount || !bottomAmount) continue;
+            map.set(bottom, {
+                position: topPosition.value,
+                amount: parseInt(topAmount.value, 10)
+            });
+            map.set(top, {
+                position: bottomPosition.value,
+                amount: -parseInt(bottomAmount.value, 10)
+            });
+        }
+        return map;
+    });
+    const layers = (0, _vue.computed)(()=>{
         const uniquePriorities = [
             ...new Set([
                 ...priorities.values()
@@ -22606,7 +22763,7 @@ function createLayout(props) {
             }
         };
     });
-    const items = (0, _indexMjs.eagerComputed)(()=>{
+    const items = (0, _vue.computed)(()=>{
         return layers.value.slice(1).map((_ref, index)=>{
             let { id } = _ref;
             const { layer } = layers.value[index];
@@ -22624,7 +22781,10 @@ function createLayout(props) {
         return items.value.find((item)=>item.id === id);
     };
     const rootVm = (0, _indexMjs.getCurrentInstance)("createLayout");
-    const layoutIsReady = (0, _vue.nextTick)();
+    const isMounted = (0, _vue.shallowRef)(false);
+    (0, _vue.onMounted)(()=>{
+        isMounted.value = true;
+    });
     (0, _vue.provide)(VuetifyLayoutKey, {
         register: (vm, _ref2)=>{
             let { id, order, position, layoutSize, elementSize, active, disableTransitions, absolute } = _ref2;
@@ -22654,9 +22814,11 @@ function createLayout(props) {
                         transition: "none"
                     }
                 };
-                if (index.value < 0) throw new Error(`Layout item "${id}" is missing`);
+                if (!isMounted.value) return styles;
                 const item = items.value[index.value];
                 if (!item) throw new Error(`[Vuetify] Could not find layout item "${id}"`);
+                const overlap = computedOverlaps.value.get(id);
+                if (overlap) item[overlap.position] += overlap.amount;
                 return {
                     ...styles,
                     height: isHorizontal ? `calc(100% - ${item.top}px - ${item.bottom}px)` : elementSize.value ? `${elementSize.value}px` : undefined,
@@ -22689,8 +22851,7 @@ function createLayout(props) {
         getLayoutItem,
         items,
         layoutRect,
-        rootZIndex,
-        layoutIsReady
+        rootZIndex
     });
     const layoutClasses = (0, _vue.computed)(()=>[
             "v-layout",
@@ -22709,7 +22870,6 @@ function createLayout(props) {
         getLayoutItem,
         items,
         layoutRect,
-        layoutIsReady,
         layoutRef: resizeRef
     };
 }
@@ -22987,13 +23147,7 @@ const VApp = (0, _indexMjs.genericComponent)()({
                 (0, _vue.createVNode)("div", {
                     "class": "v-application__wrap"
                 }, [
-                    (0, _vue.createVNode)((0, _vue.Suspense), null, {
-                        default: ()=>[
-                                (0, _vue.createVNode)((0, _vue.Fragment), null, [
-                                    slots.default?.()
-                                ])
-                            ]
-                    })
+                    slots.default?.()
                 ])
             ]));
         return {
@@ -23089,8 +23243,9 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
         const isFlat = (0, _vue.computed)(()=>props.flat || scrollBehavior.value.fullyHide && !isActive.value || scrollBehavior.value.elevate && (scrollBehavior.value.inverted ? currentScroll.value > 0 : currentScroll.value === 0));
         const opacity = (0, _vue.computed)(()=>scrollBehavior.value.fadeImage ? scrollBehavior.value.inverted ? 1 - scrollRatio.value : scrollRatio.value : undefined);
         const height = (0, _vue.computed)(()=>{
-            const height = Number(vToolbarRef.value?.contentHeight ?? props.height);
-            const extensionHeight = Number(vToolbarRef.value?.extensionHeight ?? 0);
+            if (scrollBehavior.value.hide && scrollBehavior.value.inverted) return 0;
+            const height = vToolbarRef.value?.contentHeight ?? 0;
+            const extensionHeight = vToolbarRef.value?.extensionHeight ?? 0;
             if (!canHide.value) return height + extensionHeight;
             return currentScroll.value < scrollThreshold.value || scrollBehavior.value.fullyHide ? height + extensionHeight : height;
         });
@@ -23103,7 +23258,7 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
             });
         });
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
-        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.toRef)(props, "location"),
@@ -23137,7 +23292,7 @@ const VAppBar = (0, _indexMjs.genericComponent)()({
                 "flat": isFlat.value
             }), slots);
         });
-        return layoutIsReady;
+        return {};
     }
 });
 
@@ -23807,6 +23962,7 @@ var _indexMjs = require("../../directives/intersect/index.mjs"); // Utilities
 var _indexMjsDefault = parcelHelpers.interopDefault(_indexMjs);
 var _indexMjs1 = require("../../util/index.mjs"); // Types
 const makeVImgProps = (0, _indexMjs1.propsFactory)({
+    absolute: Boolean,
     alt: String,
     cover: Boolean,
     color: String,
@@ -24080,6 +24236,7 @@ const VImg = (0, _indexMjs1.genericComponent)()({
                 "class": [
                     "v-img",
                     {
+                        "v-img--absolute": props.absolute,
                         "v-img--booting": !isBooted.value
                     },
                     backgroundColorClasses.value,
@@ -24682,6 +24839,7 @@ const makeVBtnProps = (0, _indexMjs4.propsFactory)({
         type: Boolean,
         default: undefined
     },
+    activeColor: String,
     baseColor: String,
     symbol: {
         type: null,
@@ -24753,10 +24911,11 @@ const VBtn = (0, _indexMjs4.genericComponent)()({
             if (link.isLink.value) return link.isActive?.value;
             return group?.isSelected.value;
         });
+        const color = (0, _vue.computed)(()=>isActive.value ? props.activeColor ?? props.color : props.color);
         const variantProps = (0, _vue.computed)(()=>{
             const showColor = group?.isSelected.value && (!link.isLink.value || link.isActive?.value) || !group || link.isActive?.value;
             return {
-                color: showColor ? props.color ?? props.baseColor : props.baseColor,
+                color: showColor ? color.value ?? props.baseColor : props.baseColor,
                 variant: props.variant
             };
         });
@@ -26806,7 +26965,7 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
                 _menu.value = v;
             }
         });
@@ -26840,7 +26999,7 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
         });
         const menuDisabled = (0, _vue.computed)(()=>props.hideNoData && !displayItems.value.length || props.readonly || form?.isReadonly.value);
         const listRef = (0, _vue.ref)();
-        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             if (props.openOnClear) menu.value = true;
             search.value = "";
@@ -26856,6 +27015,9 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                 e.stopPropagation();
             }
             menu.value = !menu.value;
+        }
+        function onListKeydown(e) {
+            if ((0, _indexMjs8.checkPrintable)(e)) vTextFieldRef.value?.focus();
         }
         function onKeydown(e) {
             if (props.readonly || form?.isReadonly.value) return;
@@ -26917,6 +27079,9 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                 const item = items.value.find((item)=>item.title === e.target.value);
                 if (item) select(item);
             }
+        }
+        function onAfterEnter() {
+            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) {
@@ -27054,6 +27219,7 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
+                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, props.menuProps), {
                             default: ()=>[
@@ -27065,11 +27231,10 @@ const VAutocomplete = (0, _indexMjs8.genericComponent)()({
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
                                         "onFocusout": onFocusout,
-                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, props.listProps), {
+                                    }, listEvents, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs5.VListItem), {
@@ -27243,6 +27408,7 @@ var _vavatarCss = require("./VAvatar.css");
 var _indexMjs = require("../VDefaultsProvider/index.mjs");
 var _indexMjs1 = require("../VIcon/index.mjs");
 var _indexMjs2 = require("../VImg/index.mjs"); // Composables
+var _borderMjs = require("../../composables/border.mjs");
 var _componentMjs = require("../../composables/component.mjs");
 var _densityMjs = require("../../composables/density.mjs");
 var _iconsMjs = require("../../composables/icons.mjs");
@@ -27258,6 +27424,7 @@ const makeVAvatarProps = (0, _indexMjs3.propsFactory)({
     icon: (0, _iconsMjs.IconValue),
     image: String,
     text: String,
+    ...(0, _borderMjs.makeBorderProps)(),
     ...(0, _componentMjs.makeComponentProps)(),
     ...(0, _densityMjs.makeDensityProps)(),
     ...(0, _roundedMjs.makeRoundedProps)(),
@@ -27274,6 +27441,7 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { themeClasses } = (0, _themeMjs.provideTheme)(props);
+        const { borderClasses } = (0, _borderMjs.useBorder)(props);
         const { colorClasses, colorStyles, variantClasses } = (0, _variantMjs.useVariant)(props);
         const { densityClasses } = (0, _densityMjs.useDensity)(props);
         const { roundedClasses } = (0, _roundedMjs.useRounded)(props);
@@ -27286,6 +27454,7 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
                         "v-avatar--end": props.end
                     },
                     themeClasses.value,
+                    borderClasses.value,
                     colorClasses.value,
                     densityClasses.value,
                     roundedClasses.value,
@@ -27331,7 +27500,7 @@ const VAvatar = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./VAvatar.css":"kBiid","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../VImg/index.mjs":"dbGJJ","../../composables/component.mjs":"4YAxs","../../composables/density.mjs":"kOsEB","../../composables/icons.mjs":"g4kLv","../../composables/rounded.mjs":"1RfhA","../../composables/size.mjs":"2PnSq","../../composables/tag.mjs":"3LqcC","../../composables/theme.mjs":"c9HGg","../../composables/variant.mjs":"ivQo4","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"kBiid":[function() {},{}],"c1Gdu":[function(require,module,exports) {
+},{"vue":"gCTam","./VAvatar.css":"kBiid","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../VImg/index.mjs":"dbGJJ","../../composables/border.mjs":"iYaxw","../../composables/component.mjs":"4YAxs","../../composables/density.mjs":"kOsEB","../../composables/icons.mjs":"g4kLv","../../composables/rounded.mjs":"1RfhA","../../composables/size.mjs":"2PnSq","../../composables/tag.mjs":"3LqcC","../../composables/theme.mjs":"c9HGg","../../composables/variant.mjs":"ivQo4","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"kBiid":[function() {},{}],"c1Gdu":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VCheckbox", ()=>(0, _vcheckboxMjs.VCheckbox));
@@ -28209,12 +28378,14 @@ function useValidation(props) {
     const validateOn = (0, _vue.computed)(()=>{
         let value = (props.validateOn ?? form?.validateOn.value) || "input";
         if (value === "lazy") value = "input lazy";
+        if (value === "eager") value = "input eager";
         const set = new Set(value?.split(" ") ?? []);
         return {
-            blur: set.has("blur") || set.has("input"),
             input: set.has("input"),
-            submit: set.has("submit"),
-            lazy: set.has("lazy")
+            blur: set.has("blur") || set.has("input") || set.has("invalid-input"),
+            invalidInput: set.has("invalid-input"),
+            lazy: set.has("lazy"),
+            eager: set.has("eager")
         };
     });
     const isValid = (0, _vue.computed)(()=>{
@@ -28247,10 +28418,10 @@ function useValidation(props) {
         form?.unregister(uid.value);
     });
     (0, _vue.onMounted)(async ()=>{
-        if (!validateOn.value.lazy) await validate(true);
+        if (!validateOn.value.lazy) await validate(!validateOn.value.eager);
         form?.update(uid.value, isValid.value, errorMessages.value);
     });
-    (0, _toggleScopeMjs.useToggleScope)(()=>validateOn.value.input, ()=>{
+    (0, _toggleScopeMjs.useToggleScope)(()=>validateOn.value.input || validateOn.value.invalidInput && isValid.value === false, ()=>{
         (0, _vue.watch)(validationModel, ()=>{
             if (validationModel.value != null) validate();
             else if (props.focused) {
@@ -28279,7 +28450,7 @@ function useValidation(props) {
     }
     async function resetValidation() {
         isPristine.value = true;
-        if (!validateOn.value.lazy) await validate(true);
+        if (!validateOn.value.lazy) await validate(!validateOn.value.eager);
         else internalErrorMessages.value = [];
     }
     async function validate() {
@@ -29217,7 +29388,9 @@ const VSlideGroup = (0, _indexMjs2.genericComponent)()({
             selected: group.selected,
             scrollTo,
             scrollOffset,
-            focus
+            focus,
+            hasPrev,
+            hasNext
         };
     }
 });
@@ -29836,7 +30009,7 @@ const useNested = (props)=>{
     let isUnmounted = false;
     const children = (0, _vue.ref)(new Map());
     const parents = (0, _vue.ref)(new Map());
-    const opened = (0, _proxiedModelMjs.useProxiedModel)(props, "opened", props.opened, (v)=>new Set(v), (v)=>[
+    const opened = (0, _proxiedModelMjs.useProxiedModel)(props, "opened", props.opened, (v)=>new Set((0, _vue.toRaw)(v)), (v)=>[
             ...v.values()
         ]);
     const activeStrategy = (0, _vue.computed)(()=>{
@@ -30008,9 +30181,9 @@ const useNestedItem = (id, isGroup)=>{
     const item = {
         ...parent,
         id: computedId,
-        open: (open, e)=>parent.root.open(computedId.value, open, e),
+        open: (open, e)=>parent.root.open((0, _vue.toRaw)(computedId.value), open, e),
         openOnSelect: (open, e)=>parent.root.openOnSelect(computedId.value, open, e),
-        isOpen: (0, _vue.computed)(()=>parent.root.opened.value.has(computedId.value)),
+        isOpen: (0, _vue.computed)(()=>parent.root.opened.value.has((0, _vue.toRaw)(computedId.value))),
         parent: (0, _vue.computed)(()=>parent.root.parents.value.get(computedId.value)),
         activate: (activated, e)=>parent.root.activate(computedId.value, activated, e),
         isActivated: (0, _vue.computed)(()=>parent.root.activated.value.has((0, _vue.toRaw)(computedId.value))),
@@ -30143,11 +30316,13 @@ const leafSingleActiveStrategy = (mandatory)=>{
 };
 
 },{"vue":"gCTam","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"fDDlS":[function(require,module,exports) {
+// Utilities
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "singleOpenStrategy", ()=>singleOpenStrategy);
 parcelHelpers.export(exports, "multipleOpenStrategy", ()=>multipleOpenStrategy);
 parcelHelpers.export(exports, "listOpenStrategy", ()=>listOpenStrategy);
+var _vue = require("vue");
 const singleOpenStrategy = {
     open: (_ref)=>{
         let { id, value, opened, parents } = _ref;
@@ -30171,11 +30346,11 @@ const multipleOpenStrategy = {
     open: (_ref2)=>{
         let { id, value, opened, parents } = _ref2;
         if (value) {
-            let parent = parents.get(id);
+            let parent = (0, _vue.toRaw)(parents.get(id));
             opened.add(id);
             while(parent != null && parent !== id){
                 opened.add(parent);
-                parent = parents.get(parent);
+                parent = (0, _vue.toRaw)(parents.get(parent));
             }
             return opened;
         } else opened.delete(id);
@@ -30198,7 +30373,7 @@ const listOpenStrategy = {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9zzs8":[function(require,module,exports) {
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9zzs8":[function(require,module,exports) {
 /* eslint-disable sonarjs/no-identical-functions */ // Utilities
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -30323,16 +30498,16 @@ const classicSelectStrategy = (mandatory)=>{
             ];
             while(items.length){
                 const item = items.shift();
-                selected.set(item, value ? "on" : "off");
+                selected.set((0, _vue.toRaw)(item), value ? "on" : "off");
                 if (children.has(item)) items.push(...children.get(item));
             }
-            let parent = parents.get(id);
+            let parent = (0, _vue.toRaw)(parents.get(id));
             while(parent){
                 const childrenIds = children.get(parent);
-                const everySelected = childrenIds.every((cid)=>selected.get(cid) === "on");
-                const noneSelected = childrenIds.every((cid)=>!selected.has(cid) || selected.get(cid) === "off");
+                const everySelected = childrenIds.every((cid)=>selected.get((0, _vue.toRaw)(cid)) === "on");
+                const noneSelected = childrenIds.every((cid)=>!selected.has((0, _vue.toRaw)(cid)) || selected.get((0, _vue.toRaw)(cid)) === "off");
                 selected.set(parent, everySelected ? "on" : noneSelected ? "off" : "indeterminate");
-                parent = parents.get(parent);
+                parent = (0, _vue.toRaw)(parents.get(parent));
             }
             // If mandatory and planned deselect results in no selected
             // items then we can't do it, so return original state
@@ -30462,7 +30637,7 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         let { attrs, slots, emit } = _ref;
         const link = (0, _routerMjs.useLink)(props, attrs);
         const id = (0, _vue.computed)(()=>props.value === undefined ? link.href.value : props.value);
-        const { activate, isActivated, select, isSelected, isIndeterminate, isGroupActivator, root, parent, openOnSelect } = (0, _nestedMjs.useNestedItem)(id, false);
+        const { activate, isActivated, select, isOpen, isSelected, isIndeterminate, isGroupActivator, root, parent, openOnSelect } = (0, _nestedMjs.useNestedItem)(id, false);
         const list = (0, _listMjs.useList)();
         const isActive = (0, _vue.computed)(()=>props.active !== false && (props.active || link.isActive?.value || (root.activatable.value ? isActivated.value : isSelected.value)));
         const isLink = (0, _vue.computed)(()=>props.link !== false && link.isLink.value);
@@ -30490,6 +30665,7 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         const slotProps = (0, _vue.computed)(()=>({
                 isActive: isActive.value,
                 select,
+                isOpen: isOpen.value,
                 isSelected: isSelected.value,
                 isIndeterminate: isIndeterminate.value
             }));
@@ -30505,7 +30681,7 @@ const VListItem = (0, _indexMjs4.genericComponent)()({
         function onKeyDown(e) {
             if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                onClick(e);
+                e.target.dispatchEvent(new MouseEvent("click", e));
             }
         }
         (0, _indexMjs4.useRender)(()=>{
@@ -31091,6 +31267,7 @@ var _indexMjs1 = require("../VDefaultsProvider/index.mjs");
 var _indexMjs2 = require("../VOverlay/index.mjs");
 var _voverlayMjs = require("../VOverlay/VOverlay.mjs"); // Composables
 var _forwardRefsMjs = require("../../composables/forwardRefs.mjs");
+var _localeMjs = require("../../composables/locale.mjs");
 var _proxiedModelMjs = require("../../composables/proxiedModel.mjs");
 var _scopeIdMjs = require("../../composables/scopeId.mjs"); // Utilities
 var _sharedMjs = require("./shared.mjs");
@@ -31099,10 +31276,12 @@ const makeVMenuProps = (0, _indexMjs3.propsFactory)({
     // TODO
     // disableKeys: Boolean,
     id: String,
+    submenu: Boolean,
     ...(0, _indexMjs3.omit)((0, _voverlayMjs.makeVOverlayProps)({
         closeDelay: 250,
         closeOnContentClick: true,
         locationStrategy: "connected",
+        location: undefined,
         openDelay: 300,
         scrim: false,
         scrollStrategy: "reposition",
@@ -31123,27 +31302,30 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
         let { slots } = _ref;
         const isActive = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const { scopeId } = (0, _scopeIdMjs.useScopeId)();
+        const { isRtl } = (0, _localeMjs.useRtl)();
         const uid = (0, _indexMjs3.getUid)();
         const id = (0, _vue.computed)(()=>props.id || `v-menu-${uid}`);
         const overlay = (0, _vue.ref)();
         const parent = (0, _vue.inject)((0, _sharedMjs.VMenuSymbol), null);
-        const openChildren = (0, _vue.shallowRef)(0);
+        const openChildren = (0, _vue.shallowRef)(new Set());
         (0, _vue.provide)((0, _sharedMjs.VMenuSymbol), {
             register () {
-                ++openChildren.value;
+                openChildren.value.add(uid);
             },
             unregister () {
-                --openChildren.value;
+                openChildren.value.delete(uid);
             },
             closeParents (e) {
                 setTimeout(()=>{
-                    if (!openChildren.value && !props.persistent && (e == null || overlay.value?.contentEl && !(0, _indexMjs3.isClickInsideElement)(e, overlay.value.contentEl))) {
+                    if (!openChildren.value.size && !props.persistent && (e == null || overlay.value?.contentEl && !(0, _indexMjs3.isClickInsideElement)(e, overlay.value.contentEl))) {
                         isActive.value = false;
                         parent?.closeParents();
                     }
                 }, 40);
             }
         });
+        (0, _vue.onBeforeUnmount)(()=>parent?.unregister());
+        (0, _vue.onDeactivated)(()=>isActive.value = false);
         async function onFocusIn(e) {
             const before = e.relatedTarget;
             const after = e.target;
@@ -31183,12 +31365,9 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
                     isActive.value = false;
                     overlay.value?.activatorEl?.focus();
                 }
-            } else if ([
-                "Enter",
-                " "
-            ].includes(e.key) && props.closeOnContentClick) {
+            } else if (props.submenu && e.key === (isRtl.value ? "ArrowRight" : "ArrowLeft")) {
                 isActive.value = false;
-                parent?.closeParents();
+                overlay.value?.activatorEl?.focus();
             }
         }
         function onActivatorKeydown(e) {
@@ -31197,12 +31376,20 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
             if (el && isActive.value) {
                 if (e.key === "ArrowDown") {
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     (0, _indexMjs3.focusChild)(el, "next");
                 } else if (e.key === "ArrowUp") {
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     (0, _indexMjs3.focusChild)(el, "prev");
+                } else if (props.submenu) {
+                    if (e.key === (isRtl.value ? "ArrowRight" : "ArrowLeft")) isActive.value = false;
+                    else if (e.key === (isRtl.value ? "ArrowLeft" : "ArrowRight")) {
+                        e.preventDefault();
+                        (0, _indexMjs3.focusChild)(el, "first");
+                    }
                 }
-            } else if ([
+            } else if (props.submenu ? e.key === (isRtl.value ? "ArrowLeft" : "ArrowRight") : [
                 "ArrowDown",
                 "ArrowUp"
             ].includes(e.key)) {
@@ -31232,6 +31419,7 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
                 "onUpdate:modelValue": ($event)=>isActive.value = $event,
                 "absolute": true,
                 "activatorProps": activatorProps.value,
+                "location": props.location ?? (props.submenu ? "end" : "bottom"),
                 "onClick:outside": onClickOutside,
                 "onKeydown": onKeydown
             }, scopeId), {
@@ -31255,7 +31443,7 @@ const VMenu = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./VMenu.css":"4KSmC","../transitions/index.mjs":"3ybHr","../VDefaultsProvider/index.mjs":"eFFvH","../VOverlay/index.mjs":"seRqS","../VOverlay/VOverlay.mjs":"2XVbS","../../composables/forwardRefs.mjs":"2TNTP","../../composables/proxiedModel.mjs":"huwLk","../../composables/scopeId.mjs":"1zMgM","./shared.mjs":"1ZaHA","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4KSmC":[function() {},{}],"seRqS":[function(require,module,exports) {
+},{"vue":"gCTam","./VMenu.css":"4KSmC","../transitions/index.mjs":"3ybHr","../VDefaultsProvider/index.mjs":"eFFvH","../VOverlay/index.mjs":"seRqS","../VOverlay/VOverlay.mjs":"2XVbS","../../composables/forwardRefs.mjs":"2TNTP","../../composables/locale.mjs":"9rJP0","../../composables/proxiedModel.mjs":"huwLk","../../composables/scopeId.mjs":"1zMgM","./shared.mjs":"1ZaHA","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4KSmC":[function() {},{}],"seRqS":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VOverlay", ()=>(0, _voverlayMjs.VOverlay));
@@ -31369,6 +31557,10 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
     },
     setup (props, _ref) {
         let { slots, attrs, emit } = _ref;
+        const vm = (0, _indexMjs1.getCurrentInstance)("VOverlay");
+        const root = (0, _vue.ref)();
+        const scrimEl = (0, _vue.ref)();
+        const contentEl = (0, _vue.ref)();
         const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const isActive = (0, _vue.computed)({
             get: ()=>model.value,
@@ -31385,12 +31577,13 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         const { globalTop, localTop, stackStyles } = (0, _stackMjs.useStack)(isActive, (0, _vue.toRef)(props, "zIndex"), props._disableGlobalStack);
         const { activatorEl, activatorRef, target, targetEl, targetRef, activatorEvents, contentEvents, scrimEvents } = (0, _useActivatorMjs.useActivator)(props, {
             isActive,
-            isTop: localTop
+            isTop: localTop,
+            contentEl
         });
         const { teleportTarget } = (0, _teleportMjs.useTeleport)(()=>{
             const target = props.attach || props.contained;
             if (target) return target;
-            const rootNode = activatorEl?.value?.getRootNode();
+            const rootNode = activatorEl?.value?.getRootNode() || vm.proxy?.$el?.getRootNode();
             if (rootNode instanceof ShadowRoot) return rootNode;
             return false;
         });
@@ -31400,9 +31593,6 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         (0, _vue.watch)(()=>props.disabled, (v)=>{
             if (v) isActive.value = false;
         });
-        const root = (0, _vue.ref)();
-        const scrimEl = (0, _vue.ref)();
-        const contentEl = (0, _vue.ref)();
         const { contentStyles, updateLocation } = (0, _locationStrategiesMjs.useLocationStrategies)(props, {
             isRtl,
             contentEl,
@@ -31423,7 +31613,7 @@ const VOverlay = (0, _indexMjs1.genericComponent)()({
         }
         function closeConditional(e) {
             return isActive.value && globalTop.value && // If using scrim, only close if clicking on it rather than anything opened on top
-            (!props.scrim || e.target === scrimEl.value);
+            (!props.scrim || e.target === scrimEl.value || e instanceof MouseEvent && e.shadowTarget === scrimEl.value);
         }
         (0, _indexMjs1.IN_BROWSER) && (0, _vue.watch)(isActive, (val)=>{
             if (val) window.addEventListener("keydown", onKeydown);
@@ -31661,8 +31851,6 @@ function staticLocationStrategy() {
     // const initialMaxHeight = el.style.maxHeight
     // el.style.removeProperty('max-width')
     // el.style.removeProperty('max-height')
-    if (isRtl) el.style.removeProperty("left");
-    else el.style.removeProperty("right");
     /* eslint-disable-next-line sonarjs/prefer-immediate-return */ const contentBox = (0, _indexMjs.nullifyTransforms)(el);
     if (isRtl) contentBox.x += parseFloat(el.style.right || 0);
     else contentBox.x -= parseFloat(el.style.left || 0);
@@ -32205,7 +32393,7 @@ const makeActivatorProps = (0, _indexMjs.propsFactory)({
     ...(0, _delayMjs.makeDelayProps)()
 }, "VOverlay-activator");
 function useActivator(props, _ref) {
-    let { isActive, isTop } = _ref;
+    let { isActive, isTop, contentEl } = _ref;
     const vm = (0, _indexMjs.getCurrentInstance)("useActivator");
     const activatorEl = (0, _vue.ref)();
     let isHovered = false;
@@ -32315,7 +32503,7 @@ function useActivator(props, _ref) {
         return events;
     });
     (0, _vue.watch)(isTop, (val)=>{
-        if (val && (props.openOnHover && !isHovered && (!openOnFocus.value || !isFocused) || openOnFocus.value && !isFocused && (!props.openOnHover || !isHovered))) isActive.value = false;
+        if (val && (props.openOnHover && !isHovered && (!openOnFocus.value || !isFocused) || openOnFocus.value && !isFocused && (!props.openOnHover || !isHovered)) && !contentEl.value?.contains(document.activeElement)) isActive.value = false;
     });
     (0, _vue.watch)(isActive, (val)=>{
         if (!val) setTimeout(()=>{
@@ -32598,7 +32786,9 @@ function useTeleport(target) {
             (0, _vue.warn)(`Unable to locate target ${_target}`);
             return undefined;
         }
-        let container = targetElement.querySelector(":scope > .v-overlay-container");
+        let container = [
+            ...targetElement.children
+        ].find((el)=>el.matches(".v-overlay-container"));
         if (!container) {
             container = document.createElement("div");
             container.className = "v-overlay-container";
@@ -32649,6 +32839,8 @@ function checkIsActive(e, binding) {
 }
 function directive(e, el, binding) {
     const handler = typeof binding.value === "function" ? binding.value : binding.value.handler;
+    // Clicks in the Shadow DOM change their target while using setTimeout, so the original target is saved here
+    e.shadowTarget = e.target;
     el._clickOutside.lastMousedownWasOutside && checkEvent(e, el, binding) && setTimeout(()=>{
         checkIsActive(e, binding) && handler && handler(e);
     }, 0);
@@ -32681,7 +32873,7 @@ const ClickOutside = {
             onMousedown
         };
     },
-    unmounted (el, binding) {
+    beforeUnmount (el, binding) {
         if (!el._clickOutside) return;
         handleShadow(el, (app)=>{
             if (!app || !el._clickOutside?.[binding.instance.$.uid]) return;
@@ -32868,7 +33060,7 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
                 _menu.value = v;
             }
         });
@@ -32903,13 +33095,16 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
             };
         });
         const listRef = (0, _vue.ref)();
-        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             if (props.openOnClear) menu.value = true;
         }
         function onMousedownControl() {
             if (menuDisabled.value) return;
             menu.value = !menu.value;
+        }
+        function onListKeydown(e) {
+            if ((0, _indexMjs9.checkPrintable)(e)) onKeydown(e);
         }
         function onKeydown(e) {
             if (!e.key || props.readonly || form?.isReadonly.value) return;
@@ -32934,12 +33129,7 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
             else if (e.key === "End") listRef.value?.focus("last");
             // html select hotkeys
             const KEYBOARD_LOOKUP_THRESHOLD = 1000; // milliseconds
-            function checkPrintable(e) {
-                const isPrintableChar = e.key.length === 1;
-                const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey;
-                return isPrintableChar && noModifier;
-            }
-            if (props.multiple || !checkPrintable(e)) return;
+            if (props.multiple || !(0, _indexMjs9.checkPrintable)(e)) return;
             const now = performance.now();
             if (now - keyboardLookupLastTime > KEYBOARD_LOOKUP_THRESHOLD) keyboardLookupPrefix = "";
             keyboardLookupPrefix += e.key.toLowerCase();
@@ -32986,6 +33176,9 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
         }
         function onBlur(e) {
             if (!listRef.value?.$el.contains(e.relatedTarget)) menu.value = false;
+        }
+        function onAfterEnter() {
+            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) vTextFieldRef.value?.focus();
@@ -33063,6 +33256,7 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
+                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, computedMenuProps.value), {
                             default: ()=>[
@@ -33073,11 +33267,10 @@ const VSelect = (0, _indexMjs9.genericComponent)()({
                                         "onMousedown": (e)=>e.preventDefault(),
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
-                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, props.listProps), {
+                                    }, listEvents, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs6.VListItem), {
@@ -33984,7 +34177,7 @@ const VVirtualScroll = (0, _indexMjs.genericComponent)()({
         let { slots } = _ref;
         const vm = (0, _indexMjs.getCurrentInstance)("VVirtualScroll");
         const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
-        const { containerRef, markerRef, handleScroll, handleScrollend, handleItemResize, scrollToIndex, paddingTop, paddingBottom, computedItems } = (0, _virtualMjs.useVirtual)(props, (0, _vue.toRef)(props, "items"));
+        const { calculateVisibleItems, containerRef, markerRef, handleScroll, handleScrollend, handleItemResize, scrollToIndex, paddingTop, paddingBottom, computedItems } = (0, _virtualMjs.useVirtual)(props, (0, _vue.toRef)(props, "items"));
         (0, _toggleScopeMjs.useToggleScope)(()=>props.renderless, ()=>{
             function handleListeners() {
                 let add = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
@@ -34060,6 +34253,7 @@ const VVirtualScroll = (0, _indexMjs.genericComponent)()({
             ]);
         });
         return {
+            calculateVisibleItems,
             scrollToIndex
         };
     }
@@ -34304,6 +34498,7 @@ function useVirtual(props, items) {
         deep: true
     });
     return {
+        calculateVisibleItems,
         containerRef,
         markerRef,
         computedItems,
@@ -34401,9 +34596,9 @@ function useScrolling(listRef, textFieldRef) {
         }
     }
     return {
-        onListScroll,
-        onListKeydown
-    };
+        onScrollPassive: onListScroll,
+        onKeydown: onListKeydown
+    }; // typescript doesn't know about vue's event merging
 }
 
 },{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eW6zz":[function(require,module,exports) {
@@ -34973,7 +35168,7 @@ const VBottomNavigation = (0, _indexMjs.genericComponent)()({
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
         const height = (0, _vue.computed)(()=>Number(props.height) - (props.density === "comfortable" ? 8 : 0) - (props.density === "compact" ? 16 : 0));
         const isActive = (0, _proxiedModelMjs.useProxiedModel)(props, "active", props.active);
-        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.computed)(()=>"bottom"),
@@ -35030,7 +35225,7 @@ const VBottomNavigation = (0, _indexMjs.genericComponent)()({
                     ]
             });
         });
-        return layoutIsReady;
+        return {};
     }
 });
 
@@ -38866,7 +39061,7 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
         const menu = (0, _vue.computed)({
             get: ()=>_menu.value,
             set: (v)=>{
-                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren) return;
+                if (_menu.value && !v && vMenuRef.value?.\u03A8openChildren.size) return;
                 _menu.value = v;
             }
         });
@@ -38932,7 +39127,7 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
         });
         const menuDisabled = (0, _vue.computed)(()=>props.hideNoData && !displayItems.value.length || props.readonly || form?.isReadonly.value);
         const listRef = (0, _vue.ref)();
-        const { onListScroll, onListKeydown } = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
+        const listEvents = (0, _useScrollingMjs.useScrolling)(listRef, vTextFieldRef);
         function onClear(e) {
             cleared = true;
             if (props.openOnClear) menu.value = true;
@@ -38948,6 +39143,9 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                 e.stopPropagation();
             }
             menu.value = !menu.value;
+        }
+        function onListKeydown(e) {
+            if ((0, _indexMjs9.checkPrintable)(e)) vTextFieldRef.value?.focus();
         }
         // eslint-disable-next-line complexity
         function onKeydown(e) {
@@ -39015,6 +39213,9 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                     vTextFieldRef.value.setSelectionRange(0, 0);
                 }
             }
+        }
+        function onAfterEnter() {
+            if (props.eager) vVirtualScrollRef.value?.calculateVisibleItems();
         }
         function onAfterLeave() {
             if (isFocused.value) {
@@ -39145,6 +39346,7 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                             "openOnClick": false,
                             "closeOnContentClick": false,
                             "transition": props.transition,
+                            "onAfterEnter": onAfterEnter,
                             "onAfterLeave": onAfterLeave
                         }, props.menuProps), {
                             default: ()=>[
@@ -39156,11 +39358,10 @@ const VCombobox = (0, _indexMjs9.genericComponent)()({
                                         "onKeydown": onListKeydown,
                                         "onFocusin": onFocusin,
                                         "onFocusout": onFocusout,
-                                        "onScrollPassive": onListScroll,
                                         "tabindex": "-1",
                                         "aria-live": "polite",
                                         "color": props.itemColor ?? props.color
-                                    }, props.listProps), {
+                                    }, listEvents, props.listProps), {
                                         default: ()=>[
                                                 slots["prepend-item"]?.(),
                                                 !displayItems.value.length && !props.hideNoData && (slots["no-data"]?.() ?? (0, _vue.createVNode)((0, _indexMjs5.VListItem), {
@@ -42984,6 +43185,7 @@ var _vue = require("vue");
 var _vgridCss = require("./VGrid.css");
 // Composables
 var _componentMjs = require("../../composables/component.mjs");
+var _dimensionsMjs = require("../../composables/dimensions.mjs");
 var _localeMjs = require("../../composables/locale.mjs");
 var _tagMjs = require("../../composables/tag.mjs"); // Utilities
 var _indexMjs = require("../../util/index.mjs");
@@ -42993,6 +43195,7 @@ const makeVContainerProps = (0, _indexMjs.propsFactory)({
         default: false
     },
     ...(0, _componentMjs.makeComponentProps)(),
+    ...(0, _dimensionsMjs.makeDimensionProps)(),
     ...(0, _tagMjs.makeTagProps)()
 }, "VContainer");
 const VContainer = (0, _indexMjs.genericComponent)()({
@@ -43001,6 +43204,7 @@ const VContainer = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { rtlClasses } = (0, _localeMjs.useRtl)();
+        const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
                 "class": [
                     "v-container",
@@ -43010,13 +43214,16 @@ const VContainer = (0, _indexMjs.genericComponent)()({
                     rtlClasses.value,
                     props.class
                 ],
-                "style": props.style
+                "style": [
+                    dimensionStyles.value,
+                    props.style
+                ]
             }, slots));
         return {};
     }
 });
 
-},{"vue":"gCTam","./VGrid.css":"eRXN2","../../composables/component.mjs":"4YAxs","../../composables/locale.mjs":"9rJP0","../../composables/tag.mjs":"3LqcC","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eRXN2":[function() {},{}],"8cMC5":[function(require,module,exports) {
+},{"vue":"gCTam","./VGrid.css":"eRXN2","../../composables/component.mjs":"4YAxs","../../composables/dimensions.mjs":"daVmy","../../composables/locale.mjs":"9rJP0","../../composables/tag.mjs":"3LqcC","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"eRXN2":[function() {},{}],"8cMC5":[function(require,module,exports) {
 // Styles
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -44583,6 +44790,7 @@ var _indexMjs = require("../VDefaultsProvider/index.mjs");
 var _indexMjs1 = require("../VIcon/index.mjs"); // Composables
 var _colorMjs = require("../../composables/color.mjs");
 var _componentMjs = require("../../composables/component.mjs");
+var _dimensionsMjs = require("../../composables/dimensions.mjs");
 var _iconsMjs = require("../../composables/icons.mjs"); // Directives
 var _indexMjs2 = require("../../directives/ripple/index.mjs"); // Utilities
 var _indexMjs3 = require("../../util/index.mjs"); // Types
@@ -44607,7 +44815,8 @@ const makeVExpansionPanelTitleProps = (0, _indexMjs3.propsFactory)({
         default: false
     },
     readonly: Boolean,
-    ...(0, _componentMjs.makeComponentProps)()
+    ...(0, _componentMjs.makeComponentProps)(),
+    ...(0, _dimensionsMjs.makeDimensionProps)()
 }, "VExpansionPanelTitle");
 const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
     name: "VExpansionPanelTitle",
@@ -44620,6 +44829,7 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
         const expansionPanel = (0, _vue.inject)((0, _sharedMjs.VExpansionPanelSymbol));
         if (!expansionPanel) throw new Error("[Vuetify] v-expansion-panel-title needs to be placed inside v-expansion-panel");
         const { backgroundColorClasses, backgroundColorStyles } = (0, _colorMjs.useBackgroundColor)(props, "color");
+        const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
         const slotProps = (0, _vue.computed)(()=>({
                 collapseIcon: props.collapseIcon,
                 disabled: expansionPanel.disabled.value,
@@ -44641,6 +44851,7 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
                 ],
                 "style": [
                     backgroundColorStyles.value,
+                    dimensionStyles.value,
                     props.style
                 ],
                 "type": "button",
@@ -44678,7 +44889,7 @@ const VExpansionPanelTitle = (0, _indexMjs3.genericComponent)()({
     }
 });
 
-},{"vue":"gCTam","./shared.mjs":"8Mgp0","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../../composables/color.mjs":"6TeQR","../../composables/component.mjs":"4YAxs","../../composables/icons.mjs":"g4kLv","../../directives/ripple/index.mjs":"41ncU","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"8qxjp":[function(require,module,exports) {
+},{"vue":"gCTam","./shared.mjs":"8Mgp0","../VDefaultsProvider/index.mjs":"eFFvH","../VIcon/index.mjs":"5Yjjr","../../composables/color.mjs":"6TeQR","../../composables/component.mjs":"4YAxs","../../composables/dimensions.mjs":"daVmy","../../composables/icons.mjs":"g4kLv","../../directives/ripple/index.mjs":"41ncU","../../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"8qxjp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "VFab", ()=>(0, _vfabMjs.VFab));
@@ -44905,7 +45116,7 @@ const VFileInput = (0, _indexMjs3.genericComponent)()({
     setup (props, _ref) {
         let { attrs, emit, slots } = _ref;
         const { t } = (0, _localeMjs.useLocale)();
-        const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue", props.modelValue, (val)=>(0, _indexMjs3.wrapInArray)(val), (val)=>props.multiple || Array.isArray(props.modelValue) ? val : val[0] ?? null);
+        const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue", props.modelValue, (val)=>(0, _indexMjs3.wrapInArray)(val), (val)=>!props.multiple && Array.isArray(val) ? val[0] : val);
         const { isFocused, focus, blur } = (0, _focusMjs.useFocus)(props);
         const base = (0, _vue.computed)(()=>typeof props.showSize !== "boolean" ? props.showSize : undefined);
         const totalBytes = (0, _vue.computed)(()=>(model.value ?? []).reduce((bytes, _ref2)=>{
@@ -45112,7 +45323,6 @@ const VFooter = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const layoutItemStyles = (0, _vue.ref)();
-        const layoutIsReady = (0, _vue.shallowRef)();
         const { themeClasses } = (0, _themeMjs.provideTheme)(props);
         const { backgroundColorClasses, backgroundColorStyles } = (0, _colorMjs.useBackgroundColor)((0, _vue.toRef)(props, "color"));
         const { borderClasses } = (0, _borderMjs.useBorder)(props);
@@ -45136,7 +45346,6 @@ const VFooter = (0, _indexMjs.genericComponent)()({
             });
             (0, _vue.watchEffect)(()=>{
                 layoutItemStyles.value = layout.layoutItemStyles.value;
-                layoutIsReady.value = layout.layoutIsReady;
             });
         });
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
@@ -45158,7 +45367,7 @@ const VFooter = (0, _indexMjs.genericComponent)()({
                     props.style
                 ]
             }, slots));
-        return props.app ? layoutIsReady.value : {};
+        return {};
     }
 });
 
@@ -45683,13 +45892,7 @@ const VLayout = (0, _indexMjs.genericComponent)()({
                     props.style
                 ]
             }, [
-                (0, _vue.createVNode)((0, _vue.Suspense), null, {
-                    default: ()=>[
-                            (0, _vue.createVNode)((0, _vue.Fragment), null, [
-                                slots.default?.()
-                            ])
-                        ]
-                })
+                slots.default?.()
             ]));
         return {
             getLayoutItem,
@@ -45731,7 +45934,7 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
     props: makeVLayoutItemProps(),
     setup (props, _ref) {
         let { slots } = _ref;
-        const { layoutItemStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: (0, _vue.toRef)(props, "position"),
@@ -45740,7 +45943,7 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
             active: (0, _vue.toRef)(props, "modelValue"),
             absolute: (0, _vue.toRef)(props, "absolute")
         });
-        (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)("div", {
+        return ()=>(0, _vue.createVNode)("div", {
                 "class": [
                     "v-layout-item",
                     props.class
@@ -45751,8 +45954,7 @@ const VLayoutItem = (0, _indexMjs.genericComponent)()({
                 ]
             }, [
                 slots.default?.()
-            ]));
-        return layoutIsReady;
+            ]);
     }
 });
 
@@ -45930,7 +46132,7 @@ const VMain = (0, _indexMjs.genericComponent)()({
     setup (props, _ref) {
         let { slots } = _ref;
         const { dimensionStyles } = (0, _dimensionsMjs.useDimension)(props);
-        const { mainStyles, layoutIsReady } = (0, _layoutMjs.useLayout)();
+        const { mainStyles } = (0, _layoutMjs.useLayout)();
         const { ssrBootStyles } = (0, _ssrBootMjs.useSsrBoot)();
         (0, _indexMjs.useRender)(()=>(0, _vue.createVNode)(props.tag, {
                 "class": [
@@ -45955,7 +46157,7 @@ const VMain = (0, _indexMjs.genericComponent)()({
                         ]) : slots.default?.()
                     ]
             }));
-        return layoutIsReady;
+        return {};
     }
 });
 
@@ -46133,7 +46335,7 @@ const VNavigationDrawer = (0, _indexMjs3.genericComponent)()({
                 "top",
                 "bottom"
             ].includes(props.location) ? 0 : width.value);
-        const { layoutItemStyles, layoutItemScrimStyles, layoutIsReady } = (0, _layoutMjs.useLayoutItem)({
+        const { layoutItemStyles, layoutItemScrimStyles } = (0, _layoutMjs.useLayoutItem)({
             id: props.name,
             order: (0, _vue.computed)(()=>parseInt(props.order, 10)),
             position: location,
@@ -46269,9 +46471,9 @@ const VNavigationDrawer = (0, _indexMjs3.genericComponent)()({
                 })
             ]);
         });
-        return layoutIsReady.then(()=>({
-                isStuck
-            }));
+        return {
+            isStuck
+        };
     }
 });
 
@@ -47986,6 +48188,9 @@ const VSnackbar = (0, _indexMjs4.genericComponent)()({
         function onTouchend(event) {
             if (Math.abs(startY.value - event.changedTouches[0].clientY) > 50) isActive.value = false;
         }
+        function onAfterLeave() {
+            if (isHovering.value) onPointerleave();
+        }
         const locationClasses = (0, _vue.computed)(()=>{
             return props.location.split(" ").reduce((acc, loc)=>{
                 acc[`v-snackbar--${loc}`] = true;
@@ -48036,7 +48241,8 @@ const VSnackbar = (0, _indexMjs4.genericComponent)()({
                 "scrollStrategy": "none",
                 "_disableGlobalStack": true,
                 "onTouchstartPassive": onTouchstart,
-                "onTouchend": onTouchend
+                "onTouchend": onTouchend,
+                "onAfterLeave": onAfterLeave
             }, scopeId), {
                 default: ()=>[
                         (0, _variantMjs.genOverlays)(false, "v-snackbar"),
@@ -48647,7 +48853,7 @@ const VSpeedDial = (0, _indexMjs1.genericComponent)()({
         const model = (0, _proxiedModelMjs.useProxiedModel)(props, "modelValue");
         const menuRef = (0, _vue.ref)();
         const location = (0, _vue.computed)(()=>{
-            const [y, x = "center"] = props.location.split(" ");
+            const [y, x = "center"] = props.location?.split(" ") ?? [];
             return `${y} ${x}`;
         });
         const locationClasses = (0, _vue.computed)(()=>({
@@ -48662,7 +48868,8 @@ const VSpeedDial = (0, _indexMjs1.genericComponent)()({
                 "style": props.style,
                 "contentClass": [
                     "v-speed-dial__content",
-                    locationClasses.value
+                    locationClasses.value,
+                    props.contentClass
                 ],
                 "location": location.value,
                 "ref": menuRef,
