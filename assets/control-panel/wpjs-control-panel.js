@@ -17563,6 +17563,8 @@ exports.default = {
         const noticePage = (0, _vue.ref)(0);
         const refreshActive = (0, _vue.ref)(false);
         const refreshNeeded = (0, _vue.ref)(true);
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
         let infiniteScrollEvents;
         const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
@@ -17604,11 +17606,10 @@ exports.default = {
                 const result = await response.json();
                 return result;
             } catch (error) {
-                throw error;
+                throw new Error("No response from the WP Juggler Server");
             }
         }
         async function loadNoticeHistory({ done }) {
-            // Perform API call
             infiniteScrollEvents = done;
             const res = await getNoticeHistory();
             if (res.length == 0) done("empty");
@@ -17621,28 +17622,36 @@ exports.default = {
         async function refreshNotices() {
             refreshActive.value = true;
             let ret = {};
-            const response = await doAjax({
-                action: "wpjs-refresh-notices",
-                siteId: store.activatedSite.id
-            });
-            ret = response.data;
-            refreshNeeded.value = false;
-            noticeHistoryItems.value = [];
-            noticePage.value = 0;
-            queryClient.invalidateQueries({
-                queryKey: [
-                    "wpjs-notices-panel",
-                    store.activatedSite.id
-                ]
-            });
-            queryClient.invalidateQueries({
-                queryKey: [
-                    "wpjs-control-panel"
-                ]
-            });
-            refreshNeeded.value = true;
-            refreshActive.value = false;
-            if (infiniteScrollEvents) infiniteScrollEvents("ok");
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-notices",
+                    siteId: store.activatedSite.id
+                });
+                if (response.success) {
+                    ret = response.data;
+                    refreshNeeded.value = false;
+                    noticeHistoryItems.value = [];
+                    noticePage.value = 0;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-notices-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshNeeded.value = true;
+                    refreshActive.value = false;
+                    if (infiniteScrollEvents) infiniteScrollEvents("ok");
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshActive.value = false;
+            }
         }
         const organizeByMonth = (0, _vue.computed)(()=>{
             const months = [
@@ -17686,6 +17695,8 @@ exports.default = {
             noticePage,
             refreshActive,
             refreshNeeded,
+            ajaxError,
+            ajaxErrorText,
             get infiniteScrollEvents () {
                 return infiniteScrollEvents;
             },
@@ -17785,11 +17796,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedNotices,
-            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.store.activatedNotices = $event),
+            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.store.activatedNotices = $event),
             transition: "dialog-bottom-transition",
             fullscreen: ""
         }, {
@@ -18044,7 +18056,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }))
                             ]),
                         _: 1 /* STABLE */ 
-                    })
+                    }),
+                    (0, _vue.createVNode)(_component_v_snackbar, {
+                        modelValue: $setup.ajaxError,
+                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.ajaxError = $event),
+                        color: "red-lighten-2"
+                    }, {
+                        actions: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_btn, {
+                                    color: "red-lighten-4",
+                                    variant: "text",
+                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.ajaxError = false)
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createTextVNode)(" Close ")
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                            ]),
+                        _: 1 /* STABLE */ 
+                    }, 8 /* PROPS */ , [
+                        "modelValue"
+                    ])
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [

@@ -18,6 +18,8 @@ const noticePage = ref(0);
 
 const refreshActive = ref(false)
 const refreshNeeded = ref(true)
+const ajaxError = ref(false);
+const ajaxErrorText = ref('');
 
 let infiniteScrollEvents
 
@@ -60,16 +62,20 @@ async function doAjax(args) {
       },
       body: new URLSearchParams(args),
     });
+
     const result = await response.json();
-    return result;
+
+    return result
+
   } catch (error) {
-    throw error;
+    throw new Error('No response from the WP Juggler Server');
   }
 }
 
 async function loadNoticeHistory({ done }) {
-  // Perform API call
+
   infiniteScrollEvents = done;
+
   const res = await getNoticeHistory();
   if (res.length == 0) {
     done("empty");
@@ -79,36 +85,54 @@ async function loadNoticeHistory({ done }) {
       noticeHistoryItems.value[noticeHistoryItems.value.length - 1].ID;
     done("ok");
   }
+
 }
 
 async function refreshNotices() {
   refreshActive.value = true
 
   let ret = {};
-  const response = await doAjax({
-    action: "wpjs-refresh-notices", // the action to fire in the server
-    siteId: store.activatedSite.id
-  });
 
-  ret = response.data;
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-notices", // the action to fire in the server
+      siteId: store.activatedSite.id
+    });
 
-  refreshNeeded.value = false
+    if (response.success) {
 
-  noticeHistoryItems.value=[]
-  noticePage.value = 0
-  
-  queryClient.invalidateQueries({
-    queryKey: ["wpjs-notices-panel", store.activatedSite.id],
-  })
-  queryClient.invalidateQueries({
-    queryKey: ["wpjs-control-panel"],
-  })
+      ret = response.data;
 
-  refreshNeeded.value = true
-  refreshActive.value = false
-  if (infiniteScrollEvents) {
+      refreshNeeded.value = false
+
+      noticeHistoryItems.value = []
+      noticePage.value = 0
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-notices-panel", store.activatedSite.id],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      })
+
+      refreshNeeded.value = true
+
+      refreshActive.value = false
+
+      if (infiniteScrollEvents) {
         infiniteScrollEvents('ok');
+      }
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message
+    refreshActive.value = false
   }
+
 }
 
 const organizeByMonth = computed(() => {
@@ -206,7 +230,8 @@ const organizeByMonth = computed(() => {
                 <v-sheet v-if="data.wp_juggler_history_count > 0" class="align-left justify-left text-left px-5 mb-15">
                   <div class="text-h6 mt-15">Notices History:</div>
 
-                  <v-infinite-scroll v-if="refreshNeeded" :height="600" :items="organizeByMonth" :onLoad="loadNoticeHistory">
+                  <v-infinite-scroll v-if="refreshNeeded" :height="600" :items="organizeByMonth"
+                    :onLoad="loadNoticeHistory">
                     <template v-for="(item, name) in organizeByMonth" :key="item.ID">
                       <div v-if="item.length == 0" class="mt-10">
                         <div class="text-h6">{{ name }}</div>
@@ -257,6 +282,18 @@ const organizeByMonth = computed(() => {
         </v-card-text>
 
       </v-card>
+
+      <v-snackbar v-model="ajaxError" color="red-lighten-2">
+
+        {{ ajaxErrorText }}
+
+        <template v-slot:actions>
+          <v-btn color="red-lighten-4" variant="text" @click="ajaxError = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
     </v-dialog>
   </div>
 </template>

@@ -1130,11 +1130,25 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
-		$response = WPJS_Service::check_notices_api( $site_id );
+		$response_api = WPJS_Service::check_notices_api( $site_id );
 
-		$data = [];
+		if(is_wp_error($response_api)){
 
-		wp_send_json_success($data, 200);
+			$response = [
+				'code' => $response_api->get_error_code(),
+				//'message' => $response_api->get_error_message(),
+				'message' => 'No valid response from client WP Juggler Instance',
+				'data' => $response_api->get_error_data(),
+			];
+			
+			wp_send_json_error($response);
+
+		} else {
+
+			$data = [];
+			wp_send_json_success($data, 200);
+
+		}
 
 	}
 }
