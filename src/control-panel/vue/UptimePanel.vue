@@ -37,10 +37,13 @@ async function doAjax(args) {
       },
       body: new URLSearchParams(args),
     });
+
     const result = await response.json();
-    return result;
+
+    return result
+
   } catch (error) {
-    throw error;
+    throw new Error('No response from the WP Juggler Server');
   }
 }
 
@@ -192,8 +195,6 @@ const organizeByMonth = computed(() => {
   sortedMonths.forEach((monthYear) => {
     result[monthYear] = groupedLogs[monthYear];
   });
-
-  console.log(result)
 
   return result;
 });

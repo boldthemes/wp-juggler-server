@@ -15466,7 +15466,7 @@ exports.default = {
                 action: "wpjs-get-plugins-panel",
                 siteId: store.activatedSite.id
             });
-            ret = response.data[0];
+            ret = response.data;
             return ret;
         }
         async function doAjax(args) {
@@ -15486,16 +15486,12 @@ exports.default = {
             }
         }
         const plugins_data = (0, _vue.computed)(()=>{
-            if (data.value) {
-                console.log(Object.values(data.value.plugins_data));
-                return Object.values(data.value.plugins_data);
-            } else return [];
+            if (data.value) return Object.values(data.value.plugins_data);
+            else return [];
         });
         const themes_data = (0, _vue.computed)(()=>{
-            if (data.value) {
-                console.log(Object.values(data.value.themes_data));
-                return Object.values(data.value.themes_data);
-            } else return [];
+            if (data.value) return Object.values(data.value.themes_data);
+            else return [];
         });
         const plugin_headers = [
             {
@@ -15598,6 +15594,7 @@ exports.default = {
                     action: "wpjs-refresh-plugins",
                     siteId: store.activatedSite.id
                 });
+                console.log(response);
                 if (response.success) {
                     ret = response.data;
                     queryClient.invalidateQueries({
@@ -15614,6 +15611,7 @@ exports.default = {
                     refreshActive.value = false;
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
             } catch (error) {
+                console.log(error);
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
                 refreshActive.value = false;
@@ -15768,12 +15766,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
-    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedThemes,
-            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.store.activatedThemes = $event),
+            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event)=>$setup.store.activatedThemes = $event),
             transition: "dialog-bottom-transition",
             fullscreen: ""
         }, {
@@ -15835,13 +15833,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             }),
                                                             (0, _vue.createTextVNode)(" Never "),
                                                             (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption"
+                                                                class: "ml-3 text-none text-caption",
+                                                                loading: $setup.refreshActive,
+                                                                onClick: $setup.refreshPlugins
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createTextVNode)("Refresh ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
-                                                            })
+                                                            }, 8 /* PROPS */ , [
+                                                                "loading"
+                                                            ])
                                                         ]))
                                                     ]),
                                                 _: 1 /* STABLE */ 
@@ -16177,7 +16179,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }))
                             ]),
                         _: 1 /* STABLE */ 
-                    })
+                    }),
+                    (0, _vue.createVNode)(_component_v_snackbar, {
+                        modelValue: $setup.ajaxError,
+                        "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.ajaxError = $event),
+                        color: "red-lighten-2"
+                    }, {
+                        actions: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_btn, {
+                                    color: "red-lighten-4",
+                                    variant: "text",
+                                    onClick: _cache[7] || (_cache[7] = ($event)=>$setup.ajaxError = false)
+                                }, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createTextVNode)(" Close ")
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                            ]),
+                        _: 1 /* STABLE */ 
+                    }, 8 /* PROPS */ , [
+                        "modelValue"
+                    ])
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
@@ -16195,7 +16221,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     default: (0, _vue.withCtx)(()=>[
                                             (0, _vue.createVNode)(_component_v_btn, {
                                                 icon: "mdi-close",
-                                                onClick: _cache[8] || (_cache[8] = ($event)=>$setup.dialogInner = false)
+                                                onClick: _cache[10] || (_cache[10] = ($event)=>$setup.dialogInner = false)
                                             }),
                                             (0, _vue.createVNode)(_component_v_toolbar_title, null, {
                                                 default: (0, _vue.withCtx)(()=>[
@@ -16243,31 +16269,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 })
                             ]),
                         _: 1 /* STABLE */ 
-                    }),
-                    (0, _vue.createVNode)(_component_v_snackbar, {
-                        modelValue: $setup.ajaxError,
-                        "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event)=>$setup.ajaxError = $event),
-                        color: "red-lighten-2"
-                    }, {
-                        actions: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_btn, {
-                                    color: "red-lighten-4",
-                                    variant: "text",
-                                    onClick: _cache[9] || (_cache[9] = ($event)=>$setup.ajaxError = false)
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createTextVNode)(" Close ")
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })
-                            ]),
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
-                            ]),
-                        _: 1 /* STABLE */ 
-                    }, 8 /* PROPS */ , [
-                        "modelValue"
-                    ])
+                    })
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
@@ -16359,7 +16361,7 @@ exports.default = {
                 const result = await response.json();
                 return result;
             } catch (error) {
-                throw error;
+                throw new Error("No response from the WP Juggler Server");
             }
         }
         const recommendations = (0, _vue.computed)(()=>{
@@ -16503,6 +16505,36 @@ const _hoisted_14 = {
 const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
 }, "No Recorded Site Health Info", -1 /* HOISTED */ );
+const _hoisted_16 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "WordPress Core Files", -1 /* HOISTED */ );
+const _hoisted_17 = {
+    key: 0,
+    class: "text-h7 mb-4 mt-4"
+};
+const _hoisted_18 = {
+    key: 1,
+    class: "text-h7 mb-4 mt-4"
+};
+const _hoisted_19 = {
+    key: 2,
+    class: "text-h7 mb-4 mt-4"
+};
+const _hoisted_20 = {
+    key: 4,
+    class: "text-h7 mb-4 mt-10"
+};
+const _hoisted_21 = {
+    key: 5,
+    class: "text-h7 mb-4 mt-10"
+};
+const _hoisted_22 = {
+    key: 6,
+    class: "text-h7 mb-4 mt-4"
+};
+const _hoisted_23 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "No Recorded Core Files Report", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -16519,6 +16551,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_expansion_panels = (0, _vue.resolveComponent)("v-expansion-panels");
     const _component_v_tabs_window_item = (0, _vue.resolveComponent)("v-tabs-window-item");
     const _component_v_table = (0, _vue.resolveComponent)("v-table");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
     const _component_v_tabs_window = (0, _vue.resolveComponent)("v-tabs-window");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
@@ -16590,13 +16625,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             }),
                                                             (0, _vue.createTextVNode)(" Never "),
                                                             (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption"
+                                                                class: "ml-3 text-none text-caption",
+                                                                loading: $setup.refreshActive,
+                                                                onClick: $setup.refreshHealth
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createTextVNode)("Refresh ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
-                                                            })
+                                                            }, 8 /* PROPS */ , [
+                                                                "loading"
+                                                            ])
                                                         ]))
                                                     ]),
                                                 _: 1 /* STABLE */ 
@@ -16622,6 +16661,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                 (0, _vue.createTextVNode)("Info")
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    }),
+                                                                    (0, _vue.createVNode)(_component_v_tab, {
+                                                                        value: "core"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                (0, _vue.createTextVNode)("WP Core Files")
                                                                             ]),
                                                                         _: 1 /* STABLE */ 
                                                                     })
@@ -16874,6 +16921,138 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                             }))
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
+                                                                                }),
+                                                                                (0, _vue.createVNode)(_component_v_tabs_window_item, {
+                                                                                    value: "core",
+                                                                                    transition: "false",
+                                                                                    "reverse-transition": "false"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            $setup.data.wp_juggler_health_data_core ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 0,
+                                                                                                "max-width": "1200",
+                                                                                                class: "align-center justify-center text-center mx-auto px-4 pb-4"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                                            class: "align-left justify-left text-left mb-10"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    _hoisted_16,
+                                                                                                                    !$setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" WordPress installation verifies against checksums ")
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "error",
+                                                                                                                            icon: "mdi-alert-outline",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" WordPress installation does not verify against checksums ")
+                                                                                                                    ])),
+                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                        class: "mb-4"
+                                                                                                                    }),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, "These core files don't verify against checksum:")) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                                        key: 3
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data.wp_juggler_health_data_core.error_files, (item)=>{
+                                                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                                                        class: "wpjs-debug-table-row pl-5"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                    class: "text-left"
+                                                                                                                                                }, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item), 1 /* TEXT */ )
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !$setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "success",
+                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" WordPress installation does not contain additional files ")
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "error",
+                                                                                                                            icon: "mdi-alert-outline",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" WordPress installation contains additional files ")
+                                                                                                                    ])),
+                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                        class: "mb-4"
+                                                                                                                    }),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, "These files should not exist:")) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                                        key: 7
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data.wp_juggler_health_data_core.additional, (item)=>{
+                                                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                                                        class: "wpjs-debug-table-row pl-5"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                    class: "text-left"
+                                                                                                                                                }, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item), 1 /* TEXT */ )
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                                key: 1,
+                                                                                                "max-width": "1200",
+                                                                                                class: "align-center justify-center text-center mx-auto px-4 pb-4"
+                                                                                            }, {
+                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                                            class: "align-left justify-left text-left mb-10"
+                                                                                                        }, {
+                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                    _hoisted_23
+                                                                                                                ]),
+                                                                                                            _: 1 /* STABLE */ 
+                                                                                                        })
+                                                                                                    ]),
+                                                                                                _: 1 /* STABLE */ 
+                                                                                            }))
+                                                                                        ]),
+                                                                                    _: 1 /* STABLE */ 
                                                                                 })
                                                                             ]),
                                                                         _: 1 /* STABLE */ 
@@ -17013,7 +17192,7 @@ exports.default = {
                 const result = await response.json();
                 return result;
             } catch (error) {
-                throw error;
+                throw new Error("No response from the WP Juggler Server");
             }
         }
         function graphApiMouseOver(index) {
@@ -17135,7 +17314,6 @@ exports.default = {
             sortedMonths.forEach((monthYear)=>{
                 result[monthYear] = groupedLogs[monthYear];
             });
-            console.log(result);
             return result;
         });
         const __returned__ = {

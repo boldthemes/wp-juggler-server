@@ -26,7 +26,8 @@ async function getPluginsPanel() {
     action: "wpjs-get-plugins-panel", // the action to fire in the server
     siteId: store.activatedSite.id,
   });
-  ret = response.data[0];
+
+  ret = response.data;
   return ret;
 }
 
@@ -53,7 +54,6 @@ async function doAjax(args) {
 
 const plugins_data = computed(() => {
   if (data.value) {
-    console.log(Object.values(data.value.plugins_data));
     return Object.values(data.value.plugins_data);
   } else {
     return [];
@@ -62,7 +62,6 @@ const plugins_data = computed(() => {
 
 const themes_data = computed(() => {
   if (data.value) {
-    console.log(Object.values(data.value.themes_data));
     return Object.values(data.value.themes_data);
   } else {
     return [];
@@ -152,6 +151,8 @@ async function refreshPlugins() {
       siteId: store.activatedSite.id,
     });
 
+    console.log(response)
+
     if (response.success) {
       ret = response.data;
 
@@ -168,6 +169,7 @@ async function refreshPlugins() {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
+    console.log(error)
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
     refreshActive.value = false;
@@ -214,7 +216,7 @@ async function refreshPlugins() {
             <div v-else>
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
-              <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshPlugins">Refresh </v-btn>
             </div>
           </v-sheet>
 
@@ -478,6 +480,21 @@ async function refreshPlugins() {
           <v-skeleton-loader type="table" class="mt-15"> </v-skeleton-loader>
         </v-card-text>
       </v-card>
+
+      <v-snackbar v-model="ajaxError" color="red-lighten-2">
+        {{ ajaxErrorText }}
+
+        <template v-slot:actions>
+          <v-btn
+            color="red-lighten-4"
+            variant="text"
+            @click="ajaxError = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+      
     </v-dialog>
 
     <v-dialog v-model="dialogInner" min-width="600">
@@ -518,19 +535,6 @@ async function refreshPlugins() {
         </v-card-text>
       </v-card>
 
-      <v-snackbar v-model="ajaxError" color="red-lighten-2">
-        {{ ajaxErrorText }}
-
-        <template v-slot:actions>
-          <v-btn
-            color="red-lighten-4"
-            variant="text"
-            @click="ajaxError = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
     </v-dialog>
   </div>
 </template>

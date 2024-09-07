@@ -44,10 +44,13 @@ async function doAjax(args) {
       },
       body: new URLSearchParams(args),
     });
+
     const result = await response.json();
-    return result;
+
+    return result
+
   } catch (error) {
-    throw error;
+    throw new Error('No response from the WP Juggler Server');
   }
 }
 
@@ -139,7 +142,7 @@ async function refreshHealth() {
             <div v-else>
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
-              <v-btn class="ml-3 text-none text-caption">Refresh </v-btn>
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth">Refresh </v-btn>
             </div>
           </v-sheet>
 
@@ -147,6 +150,7 @@ async function refreshHealth() {
             <v-tabs v-model="tab" bg-color="surface">
               <v-tab value="status">Status</v-tab>
               <v-tab value="info">Info</v-tab>
+              <v-tab value="core">WP Core Files</v-tab>
             </v-tabs>
 
             <v-card-text class="mt-10">
@@ -262,6 +266,63 @@ async function refreshHealth() {
                     </v-sheet>
                   </v-sheet>
                 </v-tabs-window-item>
+
+                <v-tabs-window-item value="core" transition="false" reverse-transition="false">
+                  <v-sheet v-if="data.wp_juggler_health_data_core" max-width="1200"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
+                    <v-sheet class="align-left justify-left text-left mb-10">
+                      <div class="text-h6">WordPress Core Files</div>
+
+                      <div v-if="!data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-4">
+                        <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"></v-icon>
+                        WordPress installation verifies against checksums
+                      </div>
+                      <div v-else class="text-h7 mb-4 mt-4">
+                        <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
+                        WordPress installation does not verify against checksums
+                      </div>
+                        <v-divider class="mb-4"></v-divider>
+
+                        <div  v-if="data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-4">These core files don't verify against checksum:</div>
+                        <v-sheet v-if="data.wp_juggler_health_data_core.errors">
+                          <v-row class="wpjs-debug-table-row pl-5" v-for="item in data.wp_juggler_health_data_core.error_files">
+                            <v-col class="text-left">
+                              {{ item }}
+                            </v-col>
+                          </v-row>
+                        </v-sheet>
+
+
+                      <div v-if="!data.wp_juggler_health_data_core.additional.length > 0" class="text-h7 mb-4 mt-10">
+                        <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"></v-icon>
+                        WordPress installation does not contain additional files
+                      </div>
+                      <div v-else class="text-h7 mb-4 mt-10">
+                        <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
+                        WordPress installation contains additional files
+                      </div>
+                        <v-divider class="mb-4"></v-divider>
+
+                        <div  v-if="data.wp_juggler_health_data_core.additional.length > 0" class="text-h7 mb-4 mt-4">These files should not exist:</div>
+                        <v-sheet v-if="data.wp_juggler_health_data_core.additional.length > 0">
+                          <v-row class="wpjs-debug-table-row pl-5" v-for="item in data.wp_juggler_health_data_core.additional">
+                            <v-col class="text-left">
+                              {{ item }}
+                            </v-col>
+                          </v-row>
+                        </v-sheet>
+
+                      
+                    </v-sheet>
+                  </v-sheet>
+
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
+                    <v-sheet class="align-left justify-left text-left mb-10">
+                      <div class="text-h6">No Recorded Core Files Report</div>
+                    </v-sheet>
+                  </v-sheet>
+                </v-tabs-window-item>
+
               </v-tabs-window>
             </v-card-text>
           </v-card>
