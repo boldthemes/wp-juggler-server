@@ -14761,20 +14761,28 @@ exports.default = {
             selectedUptimePeriod.value = ind;
         }
         function openThemesPlugins(site) {
-            store.activatedSite = site;
-            store.activatedThemes = true;
+            if (site.wp_juggler_site_activation) {
+                store.activatedSite = site;
+                store.activatedThemes = true;
+            }
         }
         function openHealth(site) {
-            store.activatedSite = site;
-            store.activatedHealth = true;
+            if (site.wp_juggler_site_activation) {
+                store.activatedSite = site;
+                store.activatedHealth = true;
+            }
         }
         function openUptime(site) {
-            store.activatedSite = site;
-            store.activatedUptime = true;
+            if (site.wp_juggler_site_activation) {
+                store.activatedSite = site;
+                store.activatedUptime = true;
+            }
         }
         function openNotices(site) {
-            store.activatedSite = site;
-            store.activatedNotices = true;
+            if (site.wp_juggler_site_activation) {
+                store.activatedSite = site;
+                store.activatedNotices = true;
+            }
         }
         const themesButton = (0, _vue.ref)(null);
         const noticesButton = (0, _vue.ref)(null);
@@ -14909,6 +14917,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_list_item_title = (0, _vue.resolveComponent)("v-list-item-title");
     const _component_v_list_item = (0, _vue.resolveComponent)("v-list-item");
@@ -15029,7 +15038,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 ])
                                                             ]),
                                                             (0, _vue.createElementVNode)("div", _hoisted_9, [
-                                                                $setup.props.item.wp_juggler_wordpress_version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, "WordPress version: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_wordpress_version), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "WordPress version: ?")),
+                                                                $setup.props.item.wp_juggler_wordpress_version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, " WordPress version: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_wordpress_version), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "WordPress version: ?")),
                                                                 $setup.props.item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
                                                                     (0, _vue.createTextVNode)(" Checksum "),
                                                                     !$setup.props.item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
@@ -15051,11 +15060,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     _: 1 /* STABLE */ 
                                                 }),
                                                 (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    text: "Full Report",
-                                                    "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                    onClick: _cache[0] || (_cache[0] = ($event)=>$setup.openHealth($setup.props.item))
+                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                    class: "pr-10"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                text: "Full Report",
+                                                                "append-icon": "mdi-chevron-right",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.openHealth($setup.props.item)),
+                                                                block: ""
+                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 1,
+                                                                text: "Site is not activated",
+                                                                "append-icon": "mdi-alert-outline",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                block: "",
+                                                                readonly: "",
+                                                                color: "error",
+                                                                variant: "plain"
+                                                            }))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
                                                 })
                                             ]),
                                         _: 1 /* STABLE */ 
@@ -15163,16 +15190,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     })
                                                                 ])
                                                             ]),
-                                                            (0, _vue.createElementVNode)("div", null, "Total failed checks: " + (0, _vue.toDisplayString)(parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front) + parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api)), 1 /* TEXT */ )
+                                                            (0, _vue.createElementVNode)("div", null, " Total failed checks: " + (0, _vue.toDisplayString)(parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front) + parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api)), 1 /* TEXT */ )
                                                         ]),
                                                     _: 1 /* STABLE */ 
                                                 }),
                                                 (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    text: "Full Report",
-                                                    "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openUptime($setup.props.item))
+                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                    class: "pr-10"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                text: "Full Report",
+                                                                "append-icon": "mdi-chevron-right",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openUptime($setup.props.item)),
+                                                                block: ""
+                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 1,
+                                                                text: "Site is not activated",
+                                                                "append-icon": "mdi-alert-outline",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                block: "",
+                                                                readonly: "",
+                                                                color: "error",
+                                                                variant: "plain"
+                                                            }))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
                                                 })
                                             ]),
                                         _: 1 /* STABLE */ 
@@ -15276,7 +15321,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 ])
                                                             ]),
                                                             (0, _vue.createElementVNode)("div", _hoisted_23, [
-                                                                $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, "Recorded vulnerabilities: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.vulnerabilities_num), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, "Recorded vulnerabilities: ?")),
+                                                                $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, " Recorded vulnerabilities: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.vulnerabilities_num), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, "Recorded vulnerabilities: ?")),
                                                                 $setup.props.item.wp_juggler_plugins_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, [
                                                                     (0, _vue.createTextVNode)(" Checksum "),
                                                                     $setup.props.item.wp_juggler_plugins_checksum.failures == 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
@@ -15298,13 +15343,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     _: 1 /* STABLE */ 
                                                 }),
                                                 (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    text: "Manage Themes & Plugins",
-                                                    "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                    onClick: _cache[2] || (_cache[2] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
-                                                    ref: "themesButton"
-                                                }, null, 512 /* NEED_PATCH */ )
+                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                    class: "pr-10"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                text: "Manage Themes & Plugins",
+                                                                "append-icon": "mdi-chevron-right",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                onClick: _cache[2] || (_cache[2] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
+                                                                ref: "themesButton",
+                                                                block: ""
+                                                            }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 1,
+                                                                text: "Site is not activated",
+                                                                "append-icon": "mdi-alert-outline",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                block: "",
+                                                                readonly: "",
+                                                                color: "error",
+                                                                variant: "plain"
+                                                            }))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
                                             ]),
                                         _: 1 /* STABLE */ 
                                     })
@@ -15381,13 +15444,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     _: 1 /* STABLE */ 
                                                 }),
                                                 (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_btn, {
-                                                    text: "All notices",
-                                                    "append-icon": "mdi-chevron-right",
-                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                    onClick: _cache[3] || (_cache[3] = ($event)=>$setup.openNotices($setup.props.item)),
-                                                    ref: "noticesButton"
-                                                }, null, 512 /* NEED_PATCH */ )
+                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                    class: "pr-10"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                text: "All notices",
+                                                                "append-icon": "mdi-chevron-right",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                onClick: _cache[3] || (_cache[3] = ($event)=>$setup.openNotices($setup.props.item)),
+                                                                ref: "noticesButton",
+                                                                block: ""
+                                                            }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 1,
+                                                                text: "Site is not activated",
+                                                                "append-icon": "mdi-alert-outline",
+                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                block: "",
+                                                                readonly: "",
+                                                                color: "error",
+                                                                variant: "plain"
+                                                            }))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
                                             ]),
                                         _: 1 /* STABLE */ 
                                     })

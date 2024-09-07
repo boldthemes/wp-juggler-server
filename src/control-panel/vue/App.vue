@@ -215,6 +215,7 @@ onMounted(() => {
   <HealthPanel v-if="store.activatedHealth"></HealthPanel>
   <UptimePanel v-if="store.activatedUptime"></UptimePanel>
   <NoticesPanel v-if="store.activatedNotices"></NoticesPanel>
+
 </template>
 
 <style>
