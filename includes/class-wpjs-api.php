@@ -234,7 +234,8 @@ class WPJS_Api
 			if ( ! is_wp_error($response) ) {
 
 				update_post_meta($site_id, 'wp_juggler_site_activation', 'on');
-				if( $multisite == 'true' ){
+
+				if( $multisite == '1' ){
 					update_post_meta($site_id, 'wp_juggler_multisite', 'on');
 				} else {
 					delete_post_meta($site_id, 'wp_juggler_multisite');

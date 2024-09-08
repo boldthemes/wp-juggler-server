@@ -65,6 +65,17 @@ const recommendations = computed(() => {
   }
 });
 
+const criticals = computed(() => {
+  if (data.value.wp_juggler_health_data_status) {
+    return data.value.wp_juggler_health_data_status.filter(
+      (item) =>
+        item.status === "critical" && item.test !== "rest_availability"
+    );
+  } else {
+    return [];
+  }
+});
+
 const goods = computed(() => {
   if (data.value.wp_juggler_health_data_status) {
     return data.value.wp_juggler_health_data_status.filter(
@@ -156,6 +167,7 @@ async function refreshHealth() {
             <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="status" transition="false" reverse-transition="false">
+                  
                   <v-sheet v-if="recommendations.length > 0" max-width="1200"
                     class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
@@ -194,7 +206,7 @@ async function refreshHealth() {
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
-                    </v-sheet>
+                  </v-sheet>
 
                     <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon"
                       @click="passedOpen = !passedOpen">Passed tests</v-btn>

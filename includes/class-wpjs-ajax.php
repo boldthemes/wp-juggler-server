@@ -310,7 +310,7 @@ class WPJS_AJAX
 				SELECT * 
 				FROM wp_wpjs_cron_log 
 				WHERE wpjugglersites_id = %s 
-					AND log_type = 'checkThemes' 
+					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
 				ORDER BY log_time DESC 
 				LIMIT 1
@@ -327,7 +327,7 @@ class WPJS_AJAX
 		$log_data_array = json_decode($result['log_data'], true);
 
 		return [
-			'data' => $log_data_array,
+			'data' => $log_data_array['themes_data'],
 			'timestamp' => strtotime($result['log_time'])
 		];
 	}
@@ -754,15 +754,9 @@ class WPJS_AJAX
 
 		$updates_num = 0;
 
-		if (isset($themes_array['active']['Update']) && $themes_array['active']['Update']) {
-			$updates_num++;
-		}
-
-		if (isset($themes_array['inactive'])) {
-			foreach ($themes_array['inactive'] as $item) {
-				if (isset($item['Update']) && $item['Update']) {
-					$updates_num++;
-				}
+		foreach ($themes_array as $item) {
+			if (isset($item['Update']) && $item['Update']) {
+				$updates_num++;
 			}
 		}
 
@@ -1205,6 +1199,59 @@ class WPJS_AJAX
 
 			$data = [];
 			wp_send_json_success($data, 200);
+
+		}
+
+	}
+
+	public function ajax_update_plugin(){
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		if (isset($_POST['pluginSlug'])) {
+			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
+		}
+
+		$response_api = WPJS_Service::update_plugin( $site_id, $plugin_slug );
+
+		if(is_wp_error($response_api)){
+
+			$response = [
+				'code' => $response_api->get_error_code(),
+				//'message' => $response_api->get_error_message(),
+				'message' => 'No valid response from client WP Juggler Instance',
+				'data' => $response_api->get_error_data(),
+			];
+			
+			wp_send_json_error($response);
+
+		} else {
+
+			$response_api = WPJS_Service::check_plugins_api( $site_id );
+
+			if(is_wp_error($response_api)){
+
+				$response = [
+					'code' => $response_api->get_error_code(),
+					//'message' => $response_api->get_error_message(),
+					'message' => 'No valid response from client WP Juggler Instance',
+					'data' => $response_api->get_error_data(),
+				];
+				
+				wp_send_json_error($response);
+			} else {
+
+				$data = [];
+				wp_send_json_success($data, 200);
+
+			}
 
 		}
 

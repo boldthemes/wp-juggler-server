@@ -15266,7 +15266,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         "no-gutters": ""
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item?.wp_juggler_themes_summary ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                $setup.props.item?.wp_juggler_themes_summary !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
                                                                                     key: 0,
                                                                                     class: "text-h2",
                                                                                     cols: "12"
@@ -15415,7 +15415,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         "no-gutters": ""
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item?.wp_juggler_notices_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                $setup.props.item?.wp_juggler_notices_count !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
                                                                                     key: 0,
                                                                                     class: "text-h2",
                                                                                     cols: "12"
@@ -15531,6 +15531,7 @@ exports.default = {
         const dialogInner = (0, _vue.ref)(false);
         const vulnerabilitiesItem = (0, _vue.ref)(null);
         const refreshActive = (0, _vue.ref)(false);
+        const updateActive = (0, _vue.ref)("");
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
         const queryClient = (0, _vueQuery.useQueryClient)();
@@ -15698,12 +15699,45 @@ exports.default = {
                 refreshActive.value = false;
             }
         }
+        async function updatePlugin(pluginSlug) {
+            updateActive.value = pluginSlug;
+            console.log(pluginSlug);
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-update-plugin",
+                    siteId: store.activatedSite.id,
+                    pluginSlug: pluginSlug
+                });
+                console.log(response);
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-plugins-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    updateActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                updateActive.value = "";
+            }
+        }
         const __returned__ = {
             store,
             search,
             dialogInner,
             vulnerabilitiesItem,
             refreshActive,
+            updateActive,
             ajaxError,
             ajaxErrorText,
             queryClient,
@@ -15722,6 +15756,7 @@ exports.default = {
             tab,
             openVulnerabilities,
             refreshPlugins,
+            updatePlugin,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -16133,6 +16168,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     })) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                     item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                         key: 3,
+                                                                                                                        loading: item.Slug == $setup.updateActive,
+                                                                                                                        onClick: ($event)=>$setup.updatePlugin(item.Slug),
                                                                                                                         color: "#2196f3",
                                                                                                                         variant: "elevated",
                                                                                                                         class: "text-none text-caption ml-3"
@@ -16140,8 +16177,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                                                                 (0, _vue.createTextVNode)("Update ")
                                                                                                                             ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         }, 8 /* PROPS */ , [
@@ -16449,6 +16489,10 @@ exports.default = {
             if (data.value.wp_juggler_health_data_status) return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "recommended" && item.test !== "rest_availability");
             else return [];
         });
+        const criticals = (0, _vue.computed)(()=>{
+            if (data.value.wp_juggler_health_data_status) return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "critical" && item.test !== "rest_availability");
+            else return [];
+        });
         const goods = (0, _vue.computed)(()=>{
             if (data.value.wp_juggler_health_data_status) return data.value.wp_juggler_health_data_status.filter((item)=>item.status === "good" && item.test !== "rest_availability");
             else return [];
@@ -16508,6 +16552,7 @@ exports.default = {
             getHealthPanel,
             doAjax,
             recommendations,
+            criticals,
             goods,
             openIcon,
             debugFields,
@@ -18630,7 +18675,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.events": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                item.wp_juggler_notices_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
                                                     (0, _vue.createVNode)(_component_v_icon, {
                                                         color: "#2196f3",
                                                         icon: "mdi-email-alert-outline",

@@ -299,7 +299,7 @@ const noticesButton = ref(null);
                     <v-col
                       class="text-h2"
                       cols="12"
-                      v-if="props.item?.wp_juggler_themes_summary"
+                      v-if="props.item?.wp_juggler_themes_summary !== false"
                     >
                       {{ props.item.wp_juggler_themes_summary.updates_num }}
                     </v-col>
@@ -405,7 +405,7 @@ const noticesButton = ref(null);
                     <v-col
                       class="text-h2"
                       cols="12"
-                      v-if="props.item?.wp_juggler_notices_count"
+                      v-if="props.item?.wp_juggler_notices_count !== false"
                     >
                       {{ props.item.wp_juggler_notices_count }}
                     </v-col>

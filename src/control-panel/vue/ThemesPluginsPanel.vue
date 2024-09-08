@@ -11,6 +11,8 @@ const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
 const refreshActive = ref(false);
+const updateActive = ref('');
+
 const ajaxError = ref(false);
 const ajaxErrorText = ref("");
 
@@ -173,6 +175,47 @@ async function refreshPlugins() {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
     refreshActive.value = false;
+  }
+}
+
+async function updatePlugin( pluginSlug ) {
+  
+  updateActive.value = pluginSlug;
+
+  console.log(pluginSlug)
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-update-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug
+    });
+
+    console.log(response)
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      updateActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    updateActive.value = '';
   }
 }
 </script>
@@ -390,6 +433,8 @@ async function refreshPlugins() {
                         </v-btn>
                         <v-btn
                           v-if="item.Update"
+                          :loading="item.Slug == updateActive"
+                          @click="updatePlugin( item.Slug )"
                           color="#2196f3"
                           variant="elevated"
                           class="text-none text-caption ml-3"

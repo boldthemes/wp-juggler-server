@@ -118,7 +118,7 @@ onMounted(() => {
           </template>
 
           <template v-slot:item.events="{ item }">
-            <div v-if="item.wp_juggler_automatic_login">
+            <div v-if="item.wp_juggler_notices_count > 0">
               <v-icon color="#2196f3" icon="mdi-email-alert-outline" size="large" class="rm-4"></v-icon>
             </div>
           </template>
