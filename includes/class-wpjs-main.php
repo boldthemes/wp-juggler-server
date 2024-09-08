@@ -178,7 +178,8 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs-refresh-notices', $plugin_ajax, 'ajax_refresh_notices' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-update-plugin', $plugin_ajax, 'ajax_update_plugin' );
-
+		$this->loader->add_action( 'wp_ajax_wpjs-deactivate-plugin', $plugin_ajax, 'ajax_deactivate_plugin' );
+		$this->loader->add_action( 'wp_ajax_wpjs-activate-plugin', $plugin_ajax, 'ajax_activate_plugin' );
 		
 
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );

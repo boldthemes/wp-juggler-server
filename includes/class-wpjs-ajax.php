@@ -1256,4 +1256,114 @@ class WPJS_AJAX
 		}
 
 	}
+
+	public function ajax_deactivate_plugin(){
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		if (isset($_POST['pluginSlug'])) {
+			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
+		}
+
+		$response_api = WPJS_Service::deactivate_plugin( $site_id, $plugin_slug );
+
+		if(is_wp_error($response_api)){
+
+			$response = [
+				'code' => $response_api->get_error_code(),
+				//'message' => $response_api->get_error_message(),
+				'message' => 'No valid response from client WP Juggler Instance',
+				'data' => $response_api->get_error_data(),
+			];
+			
+			wp_send_json_error($response);
+
+		} else {
+
+			$response_api = WPJS_Service::check_plugins_api( $site_id );
+
+			if(is_wp_error($response_api)){
+
+				$response = [
+					'code' => $response_api->get_error_code(),
+					//'message' => $response_api->get_error_message(),
+					'message' => 'No valid response from client WP Juggler Instance',
+					'data' => $response_api->get_error_data(),
+				];
+				
+				wp_send_json_error($response);
+			} else {
+
+				$data = [];
+				wp_send_json_success($data, 200);
+
+			}
+
+		}
+
+	}
+
+	public function ajax_activate_plugin(){
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		if (isset($_POST['pluginSlug'])) {
+			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
+		}
+
+		if (isset($_POST['networkWide'])) {
+			$network_wide = filter_var($_POST['networkWide'], FILTER_VALIDATE_BOOLEAN);
+		}
+
+		$response_api = WPJS_Service::activate_plugin( $site_id, $plugin_slug, $network_wide );
+
+		if(is_wp_error($response_api)){
+
+			$response = [
+				'code' => $response_api->get_error_code(),
+				//'message' => $response_api->get_error_message(),
+				'message' => 'No valid response from client WP Juggler Instance',
+				'data' => $response_api->get_error_data(),
+			];
+			
+			wp_send_json_error($response);
+
+		} else {
+
+			$response_api = WPJS_Service::check_plugins_api( $site_id );
+
+			if(is_wp_error($response_api)){
+
+				$response = [
+					'code' => $response_api->get_error_code(),
+					//'message' => $response_api->get_error_message(),
+					'message' => 'No valid response from client WP Juggler Instance',
+					'data' => $response_api->get_error_data(),
+				];
+				
+				wp_send_json_error($response);
+			} else {
+
+				$data = [];
+				wp_send_json_success($data, 200);
+
+			}
+
+		}
+
+	}
 }

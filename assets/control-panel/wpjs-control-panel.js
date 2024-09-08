@@ -15532,6 +15532,9 @@ exports.default = {
         const vulnerabilitiesItem = (0, _vue.ref)(null);
         const refreshActive = (0, _vue.ref)(false);
         const updateActive = (0, _vue.ref)("");
+        const deactivateActive = (0, _vue.ref)("");
+        const activateActive = (0, _vue.ref)("");
+        const activateNetworkActive = (0, _vue.ref)("");
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
         const queryClient = (0, _vueQuery.useQueryClient)();
@@ -15701,7 +15704,6 @@ exports.default = {
         }
         async function updatePlugin(pluginSlug) {
             updateActive.value = pluginSlug;
-            console.log(pluginSlug);
             let ret = {};
             try {
                 const response = await doAjax({
@@ -15709,7 +15711,6 @@ exports.default = {
                     siteId: store.activatedSite.id,
                     pluginSlug: pluginSlug
                 });
-                console.log(response);
                 if (response.success) {
                     ret = response.data;
                     queryClient.invalidateQueries({
@@ -15731,6 +15732,70 @@ exports.default = {
                 updateActive.value = "";
             }
         }
+        async function deactivatePlugin(pluginSlug) {
+            deactivateActive.value = pluginSlug;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-deactivate-plugin",
+                    siteId: store.activatedSite.id,
+                    pluginSlug: pluginSlug
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-plugins-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    deactivateActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                deactivateActive.value = "";
+            }
+        }
+        async function activatePlugin(pluginSlug, networkWide) {
+            if (networkWide) activateNetworkActive.value = pluginSlug;
+            else activateActive.value = pluginSlug;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-activate-plugin",
+                    siteId: store.activatedSite.id,
+                    pluginSlug: pluginSlug,
+                    networkWide: networkWide
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-plugins-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    activateActive.value = "";
+                    activateNetworkActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                activateActive.value = "";
+                activateNetworkActive.value = "";
+            }
+        }
         const __returned__ = {
             store,
             search,
@@ -15738,6 +15803,9 @@ exports.default = {
             vulnerabilitiesItem,
             refreshActive,
             updateActive,
+            deactivateActive,
+            activateActive,
+            activateNetworkActive,
             ajaxError,
             ajaxErrorText,
             queryClient,
@@ -15757,6 +15825,8 @@ exports.default = {
             openVulnerabilities,
             refreshPlugins,
             updatePlugin,
+            deactivatePlugin,
+            activatePlugin,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -16139,35 +16209,78 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     ]))
                                                                                                                 ]),
                                                                                                             "item.actions": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.Active ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                    item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                         key: 0,
+                                                                                                                        loading: item.Slug == $setup.deactivateActive,
+                                                                                                                        onClick: ($event)=>$setup.deactivatePlugin(item.Slug),
                                                                                                                         class: "ml-3 text-none text-caption"
                                                                                                                     }, {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                                                                 (0, _vue.createTextVNode)("Deactivate ")
                                                                                                                             ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.Active ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                         key: 1,
+                                                                                                                        loading: item.Slug == $setup.activateActive,
+                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
                                                                                                                         class: "ml-3 text-none text-caption"
                                                                                                                     }, {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                                                                 (0, _vue.createTextVNode)("Activate ")
                                                                                                                             ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                         key: 2,
+                                                                                                                        loading: item.Slug == $setup.activateActive,
+                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
+                                                                                                                        class: "ml-3 text-none text-caption"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Activate ")
+                                                                                                                            ]),
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 3,
+                                                                                                                        loading: item.Slug == $setup.activateNetworkActive,
+                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
                                                                                                                         class: "ml-3 text-none text-caption"
                                                                                                                     }, {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
                                                                                                                                 (0, _vue.createTextVNode)("Network Activate ")
                                                                                                                             ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                        key: 4,
+                                                                                                                        loading: item.Slug == $setup.activateNetworkActive,
+                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
+                                                                                                                        class: "ml-3 text-none text-caption"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                                                                                            ]),
+                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                        "loading",
+                                                                                                                        "onClick"
+                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                     item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                        key: 3,
+                                                                                                                        key: 5,
                                                                                                                         loading: item.Slug == $setup.updateActive,
                                                                                                                         onClick: ($event)=>$setup.updatePlugin(item.Slug),
                                                                                                                         color: "#2196f3",

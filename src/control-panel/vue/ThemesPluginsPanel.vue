@@ -12,6 +12,9 @@ const vulnerabilitiesItem = ref(null);
 
 const refreshActive = ref(false);
 const updateActive = ref('');
+const deactivateActive = ref('');
+const activateActive = ref('');
+const activateNetworkActive = ref('');
 
 const ajaxError = ref(false);
 const ajaxErrorText = ref("");
@@ -182,8 +185,6 @@ async function updatePlugin( pluginSlug ) {
   
   updateActive.value = pluginSlug;
 
-  console.log(pluginSlug)
-
   let ret = {};
 
   try {
@@ -192,8 +193,6 @@ async function updatePlugin( pluginSlug ) {
       siteId: store.activatedSite.id,
       pluginSlug: pluginSlug
     });
-
-    console.log(response)
 
     if (response.success) {
       ret = response.data;
@@ -216,6 +215,87 @@ async function updatePlugin( pluginSlug ) {
     ajaxErrorText.value = error.message;
 
     updateActive.value = '';
+  }
+}
+
+async function deactivatePlugin( pluginSlug ) {
+  
+  deactivateActive.value = pluginSlug;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-deactivate-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      deactivateActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    deactivateActive.value = '';
+  }
+}
+
+async function activatePlugin( pluginSlug, networkWide ) {
+  
+  if(networkWide){
+    activateNetworkActive.value = pluginSlug;
+  } else {
+    activateActive.value = pluginSlug;
+  }
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-activate-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug,
+      networkWide: networkWide
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      activateActive.value = '';
+      activateNetworkActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    activateActive.value = '';
+    activateNetworkActive.value = '';
   }
 }
 </script>
@@ -417,17 +497,37 @@ async function updatePlugin( pluginSlug ) {
                       </template>
                       <template v-slot:item.actions="{ item }">
                         <v-btn
-                          v-if="item.Active"
+                          v-if="item.Active || item.NetworkActive"
+                          :loading="item.Slug == deactivateActive"
+                          @click="deactivatePlugin( item.Slug )"
                           class="ml-3 text-none text-caption"
                           >Deactivate
                         </v-btn>
                         <v-btn
-                          v-if="!item.Active"
+                          v-if="!item.Active && !item.Multisite"
+                           :loading="item.Slug == activateActive"
+                          @click="activatePlugin( item.Slug, false )"
                           class="ml-3 text-none text-caption"
                           >Activate
                         </v-btn>
                         <v-btn
-                          v-if="!item.Active && item.Network"
+                          v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
+                           :loading="item.Slug == activateActive"
+                          @click="activatePlugin( item.Slug, false )"
+                          class="ml-3 text-none text-caption"
+                          >Activate
+                        </v-btn>
+                        <v-btn
+                          v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
+                           :loading="item.Slug == activateNetworkActive"
+                          @click="activatePlugin( item.Slug, true )"
+                          class="ml-3 text-none text-caption"
+                          >Network Activate
+                        </v-btn>
+                        <v-btn
+                          v-if="!item.Active && !item.NetworkActive && item.Multisite && item.Network"
+                           :loading="item.Slug == activateNetworkActive"
+                          @click="activatePlugin( item.Slug, true )"
                           class="ml-3 text-none text-caption"
                           >Network Activate
                         </v-btn>
