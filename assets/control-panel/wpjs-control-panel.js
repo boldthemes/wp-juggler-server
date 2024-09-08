@@ -16715,11 +16715,12 @@ const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-3 mb-4"
 }, " The site health check shows information about your WordPress configuration and items that may need your attention. ", -1 /* HOISTED */ );
 const _hoisted_6 = {
+    key: 0,
     class: "text-h6"
 };
 const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-3 mb-4"
-}, " Recommended items are considered beneficial to your site, although not as important to prioritize as a critical issue, they may include improvements to things such as; Performance, user experience, and more. ", -1 /* HOISTED */ );
+}, " Critical issues are items that may have a high impact on your sites performance or security, and resolving these issues should be prioritized. ", -1 /* HOISTED */ );
 const _hoisted_8 = [
     "innerHTML"
 ];
@@ -16729,49 +16730,61 @@ const _hoisted_9 = [
 const _hoisted_10 = {
     class: "text-h6"
 };
-const _hoisted_11 = [
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "mt-3 mb-4"
+}, " Recommended items are considered beneficial to your site, although not as important to prioritize as a critical issue, they may include improvements to things such as; Performance, user experience, and more. ", -1 /* HOISTED */ );
+const _hoisted_12 = [
     "innerHTML"
 ];
-const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "text-h6"
-}, "No Recorded Site Health Status", -1 /* HOISTED */ );
-const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
-    class: "text-h6"
-}, "Site Health Info", -1 /* HOISTED */ );
+const _hoisted_13 = [
+    "innerHTML"
+];
 const _hoisted_14 = {
-    class: "wpjs-debug-table-row"
-};
-const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
-}, "No Recorded Site Health Info", -1 /* HOISTED */ );
+};
+const _hoisted_15 = [
+    "innerHTML"
+];
 const _hoisted_16 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
+}, "No Recorded Site Health Status", -1 /* HOISTED */ );
+const _hoisted_17 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "Site Health Info", -1 /* HOISTED */ );
+const _hoisted_18 = {
+    class: "wpjs-debug-table-row"
+};
+const _hoisted_19 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
+}, "No Recorded Site Health Info", -1 /* HOISTED */ );
+const _hoisted_20 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "text-h6"
 }, "WordPress Core Files", -1 /* HOISTED */ );
-const _hoisted_17 = {
+const _hoisted_21 = {
     key: 0,
     class: "text-h7 mb-4 mt-4"
 };
-const _hoisted_18 = {
+const _hoisted_22 = {
     key: 1,
     class: "text-h7 mb-4 mt-4"
 };
-const _hoisted_19 = {
+const _hoisted_23 = {
     key: 2,
     class: "text-h7 mb-4 mt-4"
 };
-const _hoisted_20 = {
+const _hoisted_24 = {
     key: 4,
     class: "text-h7 mb-4 mt-10"
 };
-const _hoisted_21 = {
+const _hoisted_25 = {
     key: 5,
     class: "text-h7 mb-4 mt-10"
 };
-const _hoisted_22 = {
+const _hoisted_26 = {
     key: 6,
     class: "text-h7 mb-4 mt-4"
 };
-const _hoisted_23 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+const _hoisted_27 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
 }, "No Recorded Core Files Report", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -16931,7 +16944,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                     "reverse-transition": "false"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            $setup.recommendations.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                            $setup.goods.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
                                                                                                 key: 0,
                                                                                                 "max-width": "1200",
                                                                                                 class: "align-center justify-center text-center mx-auto px-4 pb-4"
@@ -16943,9 +16956,54 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             default: (0, _vue.withCtx)(()=>[
                                                                                                                     _hoisted_4,
                                                                                                                     _hoisted_5,
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_6, (0, _vue.toDisplayString)($setup.recommendations.length) + " recommended improvements ", 1 /* TEXT */ ),
+                                                                                                                    $setup.criticals.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, (0, _vue.toDisplayString)($setup.criticals.length) + " critical issue ", 1 /* TEXT */ )) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                     _hoisted_7,
-                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panels, {
+                                                                                                                    $setup.criticals.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_expansion_panels, {
+                                                                                                                        key: 1,
+                                                                                                                        class: "mt-8 mb-10",
+                                                                                                                        variant: "accordion"
+                                                                                                                    }, {
+                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.criticals, (critical)=>{
+                                                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_expansion_panel, null, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createVNode)(_component_v_expansion_panel_title, null, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(critical.label) + " ", 1 /* TEXT */ ),
+                                                                                                                                                            (0, _vue.createVNode)(_component_v_spacer),
+                                                                                                                                                            (0, _vue.createElementVNode)("div", {
+                                                                                                                                                                class: (0, _vue.normalizeClass)([
+                                                                                                                                                                    "mr-3 pa-2 wpjs-health-badge-label",
+                                                                                                                                                                    critical.badge.color
+                                                                                                                                                                ])
+                                                                                                                                                            }, (0, _vue.toDisplayString)(critical.badge.label), 3 /* TEXT, CLASS */ )
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                                                                                                (0, _vue.createVNode)(_component_v_expansion_panel_text, null, {
+                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                            (0, _vue.createElementVNode)("div", {
+                                                                                                                                                                class: "wpjs-health-panel-description",
+                                                                                                                                                                innerHTML: critical.description
+                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_8),
+                                                                                                                                                            (0, _vue.createElementVNode)("div", {
+                                                                                                                                                                class: "wpjs-health-panel-actions",
+                                                                                                                                                                innerHTML: critical.actions
+                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_9)
+                                                                                                                                                        ]),
+                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                                                            ]),
+                                                                                                                        _: 1 /* STABLE */ 
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_10, (0, _vue.toDisplayString)($setup.recommendations.length) + " recommended improvements ", 1 /* TEXT */ ),
+                                                                                                                    _hoisted_11,
+                                                                                                                    $setup.recommendations.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_expansion_panels, {
+                                                                                                                        key: 2,
                                                                                                                         class: "mt-8",
                                                                                                                         variant: "accordion"
                                                                                                                     }, {
@@ -16971,11 +17029,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                             (0, _vue.createElementVNode)("div", {
                                                                                                                                                                 class: "wpjs-health-panel-description",
                                                                                                                                                                 innerHTML: recommendation.description
-                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_8),
+                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_12),
                                                                                                                                                             (0, _vue.createElementVNode)("div", {
                                                                                                                                                                 class: "wpjs-health-panel-actions",
                                                                                                                                                                 innerHTML: recommendation.actions
-                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_9)
+                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_13)
                                                                                                                                                         ]),
                                                                                                                                                     _: 2 /* DYNAMIC */ 
                                                                                                                                                 }, 1024 /* DYNAMIC_SLOTS */ )
@@ -16985,7 +17043,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                 }), 256 /* UNKEYED_FRAGMENT */ ))
                                                                                                                             ]),
                                                                                                                         _: 1 /* STABLE */ 
-                                                                                                                    })
+                                                                                                                    })) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         }),
@@ -17006,7 +17064,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left my-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_10, (0, _vue.toDisplayString)($setup.goods.length) + " items with no issues detected ", 1 /* TEXT */ ),
+                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_14, (0, _vue.toDisplayString)($setup.goods.length) + " items with no issues detected ", 1 /* TEXT */ ),
                                                                                                                     (0, _vue.createVNode)(_component_v_expansion_panels, {
                                                                                                                         class: "mt-8",
                                                                                                                         variant: "accordion"
@@ -17033,7 +17091,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                             (0, _vue.createElementVNode)("div", {
                                                                                                                                                                 class: "wpjs-health-panel-description",
                                                                                                                                                                 innerHTML: good.description
-                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_11)
+                                                                                                                                                            }, null, 8 /* PROPS */ , _hoisted_15)
                                                                                                                                                         ]),
                                                                                                                                                     _: 2 /* DYNAMIC */ 
                                                                                                                                                 }, 1024 /* DYNAMIC_SLOTS */ )
@@ -17059,7 +17117,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_12
+                                                                                                                    _hoisted_16
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         })
@@ -17085,7 +17143,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_13,
+                                                                                                                    _hoisted_17,
                                                                                                                     (0, _vue.createVNode)(_component_v_expansion_panels, {
                                                                                                                         class: "mt-8",
                                                                                                                         variant: "accordion"
@@ -17117,7 +17175,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                                                 default: (0, _vue.withCtx)(()=>[
                                                                                                                                                                         (0, _vue.createElementVNode)("tbody", null, [
                                                                                                                                                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.debugFields(debug.fields), (field)=>{
-                                                                                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_14, [
+                                                                                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_18, [
                                                                                                                                                                                     (0, _vue.createElementVNode)("td", null, (0, _vue.toDisplayString)(field.label), 1 /* TEXT */ ),
                                                                                                                                                                                     (0, _vue.createElementVNode)("td", null, (0, _vue.toDisplayString)(field.value), 1 /* TEXT */ )
                                                                                                                                                                                 ]);
@@ -17151,7 +17209,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_15
+                                                                                                                    _hoisted_19
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         })
@@ -17177,8 +17235,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_16,
-                                                                                                                    !$setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                                                                                    _hoisted_20,
+                                                                                                                    !$setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-bold",
@@ -17186,7 +17244,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             class: "mr-1"
                                                                                                                         }),
                                                                                                                         (0, _vue.createTextVNode)(" WordPress installation verifies against checksums ")
-                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "error",
                                                                                                                             icon: "mdi-alert-outline",
@@ -17198,7 +17256,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     (0, _vue.createVNode)(_component_v_divider, {
                                                                                                                         class: "mb-4"
                                                                                                                     }),
-                                                                                                                    $setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, "These core files don't verify against checksum:")) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, "These core files don't verify against checksum:")) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                     $setup.data.wp_juggler_health_data_core.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
                                                                                                                         key: 3
                                                                                                                     }, {
@@ -17223,7 +17281,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             ]),
                                                                                                                         _: 1 /* STABLE */ 
                                                                                                                     })) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    !$setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
+                                                                                                                    !$setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-bold",
@@ -17231,7 +17289,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             class: "mr-1"
                                                                                                                         }),
                                                                                                                         (0, _vue.createTextVNode)(" WordPress installation does not contain additional files ")
-                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "error",
                                                                                                                             icon: "mdi-alert-outline",
@@ -17243,7 +17301,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     (0, _vue.createVNode)(_component_v_divider, {
                                                                                                                         class: "mb-4"
                                                                                                                     }),
-                                                                                                                    $setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, "These files should not exist:")) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                    $setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, "These files should not exist:")) : (0, _vue.createCommentVNode)("v-if", true),
                                                                                                                     $setup.data.wp_juggler_health_data_core.additional.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
                                                                                                                         key: 7
                                                                                                                     }, {
@@ -17283,7 +17341,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             class: "align-left justify-left text-left mb-10"
                                                                                                         }, {
                                                                                                             default: (0, _vue.withCtx)(()=>[
-                                                                                                                    _hoisted_23
+                                                                                                                    _hoisted_27
                                                                                                                 ]),
                                                                                                             _: 1 /* STABLE */ 
                                                                                                         })

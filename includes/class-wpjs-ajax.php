@@ -874,6 +874,20 @@ class WPJS_AJAX
 		} else {
 			$health_data_status = $health_data['data']['site_status']['direct'];
 
+			$automatic_logon = get_post_meta($site_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
+			$access_user = get_post_meta($site_id, 'wp_juggler_login_username', true);
+			$api_key = get_post_meta($site_id, 'wp_juggler_api_key', true);
+			$site_url = get_post_meta($site_id, 'wp_juggler_server_site_url', true);
+
+
+			if ($automatic_logon && $access_user && $api_key) {
+
+				$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+				$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
+				
+				$health_data_status = $this->replaceHref($health_data_status, parse_url($site_url, PHP_URL_HOST), $final_url);
+			}
+
 			$final_debug_array = array();
 
 			foreach ($health_data['data']['debug'] as $key => $value) {
@@ -911,6 +925,30 @@ class WPJS_AJAX
 
 		wp_send_json_success($data, 200);
 	}
+
+	private function replaceHref($array, $domain, $final_url) {
+		foreach ($array as &$item) {
+			if (array_key_exists('actions', $item)) {
+				$item['actions'] = preg_replace_callback(
+					'/<a[^>]*href=["\'](https?:\/\/(?:www\.)?' . preg_quote($domain, '/') . '\/[^"\']+)["\'][^>]*>/i',
+					function($matches) use ($final_url) {
+						return str_replace($matches[1], $this->addTokenToUrl($matches[1], $final_url), $matches[0]);
+					},
+					$item['actions']
+				);
+			}
+		}
+		return $array;
+	}
+	
+	private function addTokenToUrl($currentHref, $final_url) {
+
+		$tempurl = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', $currentHref);
+		
+		return $tempurl;
+
+	}
+	
 
 	public function ajax_get_control_panel()
 	{
@@ -981,6 +1019,7 @@ class WPJS_AJAX
 					$core_checksum = false;
 				} else {
 					$core_checksum = $health_data['data']['core_checksum'];
+					// TODO zameniti sledeci red prebrajanjem statusa
 					$health_data_issues = $health_data['data']['site_status']['issues'];
 					$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
 				}

@@ -168,7 +168,8 @@ async function refreshHealth() {
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="status" transition="false" reverse-transition="false">
                   
-                  <v-sheet v-if="recommendations.length > 0" max-width="1200"
+                  <v-sheet max-width="1200"
+                    v-if="goods.length > 0"
                     class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Status</div>
@@ -177,6 +178,32 @@ async function refreshHealth() {
                         WordPress configuration and items that may need your
                         attention.
                       </div>
+
+                      <div v-if="criticals.length > 0" class="text-h6">
+                        {{ criticals.length }} critical issue
+                      </div>
+                      <div class="mt-3 mb-4">
+                        Critical issues are items that may have a high impact on your sites performance or security, and resolving these issues should be prioritized.
+                      </div>
+
+                      <v-expansion-panels v-if="criticals.length > 0" class="mt-8 mb-10" variant="accordion">
+                        <v-expansion-panel v-for="critical in criticals">
+                          <v-expansion-panel-title>
+                            {{ critical.label }}
+                            <v-spacer></v-spacer>
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              critical.badge.color,
+                            ]">
+                              {{ critical.badge.label }}
+                            </div>
+                          </v-expansion-panel-title>
+                          <v-expansion-panel-text>
+                            <div class="wpjs-health-panel-description" v-html="critical.description"></div>
+                            <div class="wpjs-health-panel-actions" v-html="critical.actions"></div>
+                          </v-expansion-panel-text>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
 
                       <div class="text-h6">
                         {{ recommendations.length }} recommended improvements
@@ -188,7 +215,7 @@ async function refreshHealth() {
                         such as; Performance, user experience, and more.
                       </div>
 
-                      <v-expansion-panels class="mt-8" variant="accordion">
+                      <v-expansion-panels v-if="recommendations.length > 0" class="mt-8" variant="accordion">
                         <v-expansion-panel v-for="recommendation in recommendations">
                           <v-expansion-panel-title>
                             {{ recommendation.label }}
