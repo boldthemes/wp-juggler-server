@@ -658,12 +658,12 @@ class WPJS_Admin
 		</p>
 
 		<p>
-			<label for="wp_juggler_plugin_donate_link">Plugin Author Profile</label><br>
+			<label for="wp_juggler_plugin_donate_link">Plugin Donate Link</label><br>
 			<input type="text" name="wp_juggler_plugin_donate_link" id="wp_juggler_plugin_donate_link" value="<?php echo esc_attr($wp_juggler_plugin_donate_link); ?>" size="60" />
 		</p>
 
 		<p>
-			<label for="wp_juggler_plugin_homepage">Plugin Author Profile</label><br>
+			<label for="wp_juggler_plugin_homepage">Plugin Homepage</label><br>
 			<input type="text" name="wp_juggler_plugin_homepage" id="wp_juggler_plugin_homepage" value="<?php echo esc_attr($wp_juggler_plugin_homepage); ?>" size="60" />
 		</p>
 
@@ -793,7 +793,13 @@ class WPJS_Admin
 			}
 			?>
 		</div>
-		<button type="button" class="button" id="juggler-add-user">Add User</button>
+		<button type="button" class="button juggler-add-user" id="juggler-add-user">Add User</button>
+
+		<style>
+			.juggler-user-autocomplete, .juggler-remove-user, .juggler-add-user {
+				margin:4px !important;
+			}
+		</style>
 
 		<script>
 			jQuery(document).ready(function($) {

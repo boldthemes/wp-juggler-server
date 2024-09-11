@@ -86,19 +86,16 @@ class WPJS_AJAX
 
 		$wpjs_cron_schedules = $this->get_wpjs_cron_schedules();
 
-		$wpjs_cp_slug = get_option('wpjs_cp_slug');
-
 		$wpjs_uptime_cron_interval = get_option('wpjs_uptime_cron_interval');
 		$wpjs_health_cron_interval = get_option('wpjs_health_cron_interval');
 		$wpjs_plugins_cron_interval = get_option('wpjs_plugins_cron_interval');
-		$wpjs_checksum_cron_interval = get_option('wpjs_checksum_cron_interval');
+		$wpjs_notices_cron_interval = get_option('wpjs_notices_cron_interval');
 
 		$data = array(
-			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr($wpjs_cp_slug) : '',
 			'wpjs_uptime_cron_interval' => $wpjs_uptime_cron_interval ? esc_attr($wpjs_uptime_cron_interval) : 'wpjs_5min',
 			'wpjs_health_cron_interval' => $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'daily',
 			'wpjs_plugins_cron_interval' => $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'daily',
-			'wpjs_checksum_cron_interval' => $wpjs_checksum_cron_interval ? esc_attr($wpjs_checksum_cron_interval) : 'daily',
+			'wpjs_notices_cron_interval' => $wpjs_notices_cron_interval ? esc_attr($wpjs_notices_cron_interval) : 'daily',
 
 			'wpjs_cron_schedules' => $wpjs_cron_schedules
 		);
@@ -113,22 +110,14 @@ class WPJS_AJAX
 			return;
 		}
 
-		$wpjs_cp_slug = (isset($_POST['wpjs_cp_slug'])) ? sanitize_text_field($_POST['wpjs_cp_slug']) : false;
-
 		$wpjs_uptime_cron_interval = (isset($_POST['wpjs_uptime_cron_interval'])) ? sanitize_text_field($_POST['wpjs_uptime_cron_interval']) : false;
 		$wpjs_health_cron_interval = (isset($_POST['wpjs_health_cron_interval'])) ? sanitize_text_field($_POST['wpjs_health_cron_interval']) : false;
 		$wpjs_plugins_cron_interval = (isset($_POST['wpjs_plugins_cron_interval'])) ? sanitize_text_field($_POST['wpjs_plugins_cron_interval']) : false;
-		$wpjs_checksum_cron_interval = (isset($_POST['wpjs_checksum_cron_interval'])) ? sanitize_text_field($_POST['wpjs_checksum_cron_interval']) : false;
+		$wpjs_notices_cron_interval = (isset($_POST['wpjs_notices_cron_interval'])) ? sanitize_text_field($_POST['wpjs_notices_cron_interval']) : false;
 
 		if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], $this->plugin_name . '-settings')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Nonce is not valid'), 401);
 			exit;
-		}
-
-		if ($wpjs_cp_slug) {
-			update_option('wpjs_cp_slug',  $wpjs_cp_slug);
-		} else {
-			delete_option('wpjs_cp_slug');
 		}
 
 		if ($wpjs_uptime_cron_interval) {
@@ -149,10 +138,10 @@ class WPJS_AJAX
 			delete_option('wpjs_plugins_cron_interval');
 		}
 
-		if ($wpjs_checksum_cron_interval) {
-			update_option('wpjs_checksum_cron_interval',  $wpjs_checksum_cron_interval);
+		if ($wpjs_notices_cron_interval) {
+			update_option('wpjs_notices_cron_interval',  $wpjs_notices_cron_interval);
 		} else {
-			delete_option('wpjs_checksum_cron_interval');
+			delete_option('wpjs_notices_cron_interval');
 		}
 
 		$data = array();

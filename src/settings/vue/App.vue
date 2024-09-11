@@ -10,11 +10,10 @@ const store = useWpjsStore()
 
 const nonce = ref(wpjs_settings_object.nonce)
 
-const wpjs_cp_slug = ref('')
 const wpjs_uptime_cron_interval = ref('')
 const wpjs_health_cron_interval = ref('')
 const wpjs_plugins_cron_interval = ref('')
-const wpjs_checksum_cron_interval = ref('')
+const wpjs_notices_cron_interval = ref('')
 
 const save_loading = ref(false)
 
@@ -26,7 +25,8 @@ const snack_succ_text = 'WP Juggler Settings Saved'
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ['wpjs-settings'],
-  queryFn: getSettings
+  queryFn: getSettings,
+  refetchOnWindowFocus: false
 })
 
 const mutation = useMutation({
@@ -74,11 +74,10 @@ async function getSettings() {
   )
   ret = response.data
 
-  wpjs_cp_slug.value = response.data.wpjs_cp_slug
   wpjs_uptime_cron_interval.value = response.data.wpjs_uptime_cron_interval
   wpjs_health_cron_interval.value = response.data.wpjs_health_cron_interval
   wpjs_plugins_cron_interval.value = response.data.wpjs_plugins_cron_interval
-  wpjs_checksum_cron_interval.value = response.data.wpjs_checksum_cron_interval
+  wpjs_notices_cron_interval.value = response.data.wpjs_notices_cron_interval
 
   return ret
 }
@@ -86,11 +85,10 @@ async function getSettings() {
 function clickSaveSettings() {
   save_loading.value = true
   mutation.mutate({
-    wpjs_cp_slug: wpjs_cp_slug.value,
     wpjs_uptime_cron_interval: wpjs_uptime_cron_interval.value,
     wpjs_health_cron_interval: wpjs_health_cron_interval.value,
     wpjs_plugins_cron_interval: wpjs_plugins_cron_interval.value,
-    wpjs_checksum_cron_interval: wpjs_checksum_cron_interval.value
+    wpjs_notices_cron_interval: wpjs_notices_cron_interval.value
   })
 
 }
@@ -114,12 +112,6 @@ async function saveSettings(obj) {
     <table class="form-table" role="presentation">
 
       <tbody v-if="data">
-        <tr>
-          <th scope="row"><label for="wpjscpslug">Page Slug of Control Panel</label></th>
-          <td>
-            <input type="text" name="wpjscpslug" id="wpjscpslug" size="50" placeholder="" v-model="wpjs_cp_slug">
-          </td>
-        </tr>
         <tr>
           <th scope="row"><label for="wpjs_uptime_cron_interval">Uptime Cron Interval</label></th>
           <td>
@@ -155,9 +147,9 @@ async function saveSettings(obj) {
         </tr>
 
         <tr>
-          <th scope="row"><label for="wpjs_checksum_cron_interval">Checksum Cron Interval</label></th>
+          <th scope="row"><label for="wpjs_notices_cron_interval">Notices Cron Interval</label></th>
           <td>
-            <select name="wpjs_checksum_cron_interval" id="wpjs_checksum_cron_interval" v-model="wpjs_checksum_cron_interval" >
+            <select name="wpjs_notices_cron_interval" id="wpjs_notices_cron_interval" v-model="wpjs_notices_cron_interval" >
               <option value="twicedaily">Twice Daily</option>
               <option value="daily">Once Daily</option>
               <option value="weekly">Once Weekly</option>
