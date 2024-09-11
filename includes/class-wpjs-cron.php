@@ -58,10 +58,13 @@ class WPJS_Cron
 		add_filter('cron_schedules', [$this, 'wpjs_add_schedules']);
 
 		add_action('wpjs_check_client_api', [$this, 'check_client_api']);
-		add_action('wpjs_check_checksum_api', [$this, 'check_all_checksum_api']);
+		add_action('wpjs_check_health_api', [$this, 'check_all_health_api']);
+		add_action('wpjs_check_plugins_api', [$this, 'check_all_plugins_api']);
+		add_action('wpjs_check_notices_api', [$this, 'check_all_notices_api']);
 
-		//uptime scheduler
-
+		
+		// Uptime scheduler
+		
 		$wpjs_uptime_cron_interval = get_option('wpjs_uptime_cron_interval');
 		$wpjs_uptime_cron_interval_chk = $wpjs_uptime_cron_interval ? esc_attr($wpjs_uptime_cron_interval) : 'wpjs_5min';
 
@@ -71,7 +74,40 @@ class WPJS_Cron
 			wp_schedule_event(time(), $wpjs_uptime_cron_interval_chk, 'wpjs_check_client_api');
 		}
 
-		//TODO checksum scheduler
+		// Health scheduler
+
+		$wpjs_health_cron_interval = get_option('wpjs_health_cron_interval');
+		$wpjs_health_cron_interval_chk = $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_health_api', $wpjs_health_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_health_api')) {
+			wp_schedule_event(time(), $wpjs_health_cron_interval_chk, 'wpjs_check_health_api');
+		}
+
+		// Plugins scheduler
+
+		$wpjs_plugins_cron_interval = get_option('wpjs_plugins_cron_interval');
+		$wpjs_plugins_cron_interval_chk = $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_plugins_api', $wpjs_plugins_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_plugins_api')) {
+			wp_schedule_event(time(), $wpjs_plugins_cron_interval_chk, 'wpjs_check_plugins_api');
+		}
+
+		// Notices scheduler
+
+		$wpjs_notices_cron_interval = get_option('wpjs_notices_cron_interval');
+		$wpjs_notices_cron_interval_chk = $wpjs_notices_cron_interval ? esc_attr($wpjs_notices_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_notices_api', $wpjs_notices_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_notices_api')) {
+			wp_schedule_event(time(), $wpjs_notices_cron_interval_chk, 'wpjs_check_notices_api');
+		}
+
+		
 	}
 
 	private function unschedule_specific_cron_events($hook_name, $interval)
@@ -87,7 +123,6 @@ class WPJS_Cron
 			if (isset($cron[$hook_name]) && is_array($cron[$hook_name])) {
 				foreach ($cron[$hook_name] as $hook => $event_data) {
 					if (isset($event_data['schedule']) && $event_data['schedule'] !== $interval) {
-						$tr = 5;
 						wp_unschedule_event($time, $hook_name, $event_data['args']);
 					}
 				}

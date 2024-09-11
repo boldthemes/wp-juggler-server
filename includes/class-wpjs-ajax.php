@@ -123,9 +123,9 @@ class WPJS_AJAX
 		$data = array(
 			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr($wpjs_cp_slug) : '',
 			'wpjs_uptime_cron_interval' => $wpjs_uptime_cron_interval ? esc_attr($wpjs_uptime_cron_interval) : 'wpjs_5min',
-			'wpjs_health_cron_interval' => $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'daily',
-			'wpjs_plugins_cron_interval' => $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'daily',
-			'wpjs_notices_cron_interval' => $wpjs_notices_cron_interval ? esc_attr($wpjs_notices_cron_interval) : 'daily',
+			'wpjs_health_cron_interval' => $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'wpjs_daily',
+			'wpjs_plugins_cron_interval' => $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'wpjs_daily',
+			'wpjs_notices_cron_interval' => $wpjs_notices_cron_interval ? esc_attr($wpjs_notices_cron_interval) : 'wpjs_daily',
 
 			'wpjs_cron_schedules' => $wpjs_cron_schedules
 		);
