@@ -1111,11 +1111,28 @@ class WPJS_AJAX
 					$health_data_issues = false;
 					$health_data_timestamp = false;
 					$core_checksum = false;
+					$health_data_count = false;
 				} else {
+
 					$core_checksum = $health_data['data']['core_checksum'];
 					// TODO zameniti sledeci red prebrajanjem statusa
 					$health_data_issues = $health_data['data']['site_status']['issues'];
 					$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
+
+					$health_data_count = [
+						"good" => 0,
+						"recommended" => 0,
+						"critical" => 0
+					];
+
+					foreach ($health_data['data']['site_status']['direct'] as $obj) {
+						if (isset($health_data_count[$obj['status']])) {
+							$health_data_count[$obj['status']]++;
+						} else {
+							$health_data_count[$obj['status']] = 1;
+						}
+					}
+
 				}
 
 				$notices_data = $this->get_latest_notices($site->ID);
@@ -1144,7 +1161,8 @@ class WPJS_AJAX
 					'wp_juggler_plugins_checksum' => $plugins_checksum,
 					//'wp_juggler_plugins_checksum_timestamp' => $plugins_checksum_timestamp,
 					'wp_juggler_core_checksum' => $core_checksum,
-					'wp_juggler_health_data' => $health_data_issues,
+					'wp_juggler_health_data_issues' => $health_data_issues,
+					'wp_juggler_health_data_count' => $health_data_count,
 					'wp_juggler_health_data_timestamp' => $health_data_timestamp,
 					'wp_juggler_notices_timestamp' => $notices_data_timestamp,
 					'wp_juggler_notices_count' => $notices_data_number

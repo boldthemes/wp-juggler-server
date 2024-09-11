@@ -101,9 +101,9 @@ const noticesButton = ref(null);
                     <v-col
                       class="text-h2"
                       cols="12"
-                      v-if="props.item.wp_juggler_health_data"
+                      v-if="props.item.wp_juggler_health_data_count"
                     >
-                      {{ props.item.wp_juggler_health_data.critical }}
+                      {{ props.item.wp_juggler_health_data_count.critical }}
                     </v-col>
                     <v-col class="text-h2" cols="12" v-else> ? </v-col>
                   </v-row>
@@ -114,9 +114,9 @@ const noticesButton = ref(null);
                     <v-col
                       class="text-h2"
                       cols="12"
-                      v-if="props.item.wp_juggler_health_data"
+                      v-if="props.item.wp_juggler_health_data_count"
                     >
-                      {{ props.item.wp_juggler_health_data.recommended }}
+                      {{ props.item.wp_juggler_health_data_count.recommended }}
                     </v-col>
                     <v-col class="text-h2" cols="12" v-else> ? </v-col>
                   </v-row>

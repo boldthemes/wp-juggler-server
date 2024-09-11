@@ -14981,13 +14981,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         "no-gutters": ""
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item.wp_juggler_health_data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
                                                                                     key: 0,
                                                                                     class: "text-h2",
                                                                                     cols: "12"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data.critical), 1 /* TEXT */ )
+                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.critical), 1 /* TEXT */ )
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
@@ -15011,13 +15011,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         "no-gutters": ""
                                                                     }, {
                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item.wp_juggler_health_data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
                                                                                     key: 0,
                                                                                     class: "text-h2",
                                                                                     cols: "12"
                                                                                 }, {
                                                                                     default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data.recommended), 1 /* TEXT */ )
+                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.recommended), 1 /* TEXT */ )
                                                                                         ]),
                                                                                     _: 1 /* STABLE */ 
                                                                                 })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
