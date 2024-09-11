@@ -9136,7 +9136,10 @@ exports.default = {
             const newWindow = window.open(url, "_blank", "noopener,noreferrer");
             if (newWindow) newWindow.opener = null;
         };
-        (0, _vue.onMounted)(()=>{});
+        (0, _vue.onMounted)(()=>{
+            store.nonce = wpjs_dashboard_object.nonce;
+            store.ajaxUrl = wpjs_dashboard_object.ajaxurl;
+        });
         const __returned__ = {
             queryClient,
             store,
@@ -9182,14 +9185,16 @@ parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
 var _pinia = require("pinia");
 var _vue = require("vue");
 const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
-    const initial = (0, _vue.ref)("Dashboard");
+    const nonce = (0, _vue.ref)("");
+    const ajaxUrl = (0, _vue.ref)("");
     /* watch(activetab, (newactivetab, prevactivetab) => {
       
     }) */ /* function increment() {
       count.value++
     } */ //return { zoomlevel, doubleCount, increment }
     return {
-        initial
+        nonce,
+        ajaxUrl
     };
 });
 

@@ -41,11 +41,9 @@ async function doAjax(args) {
 async function getDashboard() {
 
   let ret = {}
-  const response = await doAjax(
-    {
+  const response = await doAjax({
       action: "wpjs_get_dashboard",  // the action to fire in the server
-    }
-  )
+  })
   ret = response.data
   //api_key.value = response.data.api_key
   activation_status.value = (response.data.activation_status === 'true')
@@ -58,7 +56,8 @@ const openInNewTab = (url) => {
 }
 
 onMounted(() => {
-
+  store.nonce = wpjs_dashboard_object.nonce;
+  store.ajaxUrl = wpjs_dashboard_object.ajaxurl
 })
 
 </script>

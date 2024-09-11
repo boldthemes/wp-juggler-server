@@ -57,22 +57,25 @@ class WPJS_AJAX
 			return;
 		}
 
-		$args = array(
+		/* $args = array(
 			'post_type' => 'wpjugglersites',
 			'post_status' => 'publish',
 			'numberposts' => -1
-		);
+		); */
 
-		$wpjuggler_sites = get_posts($args);
-		$data = array();
+		$hook_slugs = [
+			"wpjs_check_health_api",
+			"wpjs_check_client_api",
+			"wpjs_check_plugins_api",
+			"wpjs_check_notices_api"
+		];
 
-		foreach ($wpjuggler_sites as $site) {
-			$data[] = array(
-				'title' => get_the_title($site->ID),
-				'wp_juggler_automatic_login' => get_post_meta($site->ID, 'wp_juggler_automatic_login', true),
-				'wp_juggler_server_site_url' => get_post_meta($site->ID, 'wp_juggler_server_site_url', true)
-			);
-		}
+		$crons = $this->get_wp_cron_events_info($hook_slugs);
+
+		/* $wpjuggler_sites = get_posts($args);
+		$data = array(); */
+
+		$data = $crons;
 
 		wp_send_json_success($data, 200);
 	}
@@ -87,15 +90,26 @@ class WPJS_AJAX
 		$schedules = wp_get_schedules();
 		$result = array();
 
+		$timezone = wp_timezone();
+
 		foreach ($hook_slugs as $hook_slug) {
 			foreach ($cron_events as $timestamp => $cron) {
 				if (isset($cron[$hook_slug])) {
 					foreach ($cron[$hook_slug] as $key => $event) {
 						$frequency = isset($schedules[$event['schedule']]) ? $schedules[$event['schedule']]['display'] : 'One-time';
+
+						$datetime = new DateTime();
+						$datetime->setTimestamp($timestamp);
+						$datetime->setTimezone($timezone);
+						$crontime = $datetime->format('Y-m-d H:i:s');
+						$label_ago = $this->get_time_to($timestamp); 
+
 						$result[] = (object) array(
 							'hook_slug' => $hook_slug,
 							'timestamp' => $timestamp,
-							'frequency' => $frequency
+							'frequency' => $frequency,
+							'time' => $crontime,
+							'label_ago' => $label_ago
 						);
 					}
 				}
@@ -926,6 +940,32 @@ class WPJS_AJAX
 			if ($d >= 1) {
 				$t = round($d);
 				return $t . ' ' . $str . ($t > 1 ? 's' : '') . ' ago';
+			}
+		}
+	}
+
+	private function get_time_to($time)
+	{
+		$time_difference = $time - time();
+
+		if ($time_difference < 1) {
+			return 'in less than 1 second';
+		}
+		$condition = array(
+			12 * 30 * 24 * 60 * 60 =>  'year',
+			30 * 24 * 60 * 60       =>  'month',
+			24 * 60 * 60            =>  'day',
+			60 * 60                 =>  'hour',
+			60                      =>  'minute',
+			1                       =>  'second'
+		);
+
+		foreach ($condition as $secs => $str) {
+			$d = $time_difference / $secs;
+
+			if ($d >= 1) {
+				$t = round($d);
+				return 'in ' . $t . ' ' . $str . ($t > 1 ? 's' : '');
 			}
 		}
 	}
