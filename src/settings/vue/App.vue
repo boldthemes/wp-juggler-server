@@ -10,6 +10,19 @@ const store = useWpjsStore()
 
 const nonce = ref(wpjs_settings_object.nonce)
 
+const short_schedules = {
+    'wpjs_5min': 'Once every 5 minutes',
+    'wpjs_10min': 'Once every 10 minutes',
+    'wpjs_30min': 'Once every 30 minutes',
+    'wpjs_hourly': 'Once Hourly'
+}
+
+const long_schedules = {
+    'wpjs_twicedaily': 'Twice Daily',
+    'wpjs_daily': 'Once Daily',
+    'wpjs_weekly': 'Once Weekly'
+  }
+
 const wpjs_uptime_cron_interval = ref('')
 const wpjs_health_cron_interval = ref('')
 const wpjs_plugins_cron_interval = ref('')
@@ -116,10 +129,7 @@ async function saveSettings(obj) {
           <th scope="row"><label for="wpjs_uptime_cron_interval">Uptime Cron Interval</label></th>
           <td>
             <select name="wpjs_uptime_cron_interval" id="wpjs_uptime_cron_interval" v-model="wpjs_uptime_cron_interval" >
-              <option value="wpjs_5min">Once every 5 minutes</option>
-              <option value="wpjs_10min">Once every 10 minutes</option>
-              <option value="wpjs_30min">Once every 30 minutes</option>
-              <option value="hourly">Once Hourly</option>
+              <option v-for=" item, slug in short_schedules" :value="slug">{{ item }}</option>
             </select>
           </td>
         </tr>
@@ -128,9 +138,7 @@ async function saveSettings(obj) {
           <th scope="row"><label for="wpjs_health_cron_interval">Site Health Cron Interval</label></th>
           <td>
             <select name="wpjs_health_cron_interval" id="wpjs_health_cron_interval" v-model="wpjs_health_cron_interval" >
-              <option value="twicedaily">Twice Daily</option>
-              <option value="daily">Once Daily</option>
-              <option value="weekly">Once Weekly</option>
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
             </select>
           </td>
         </tr>
@@ -139,9 +147,7 @@ async function saveSettings(obj) {
           <th scope="row"><label for="wpjs_plugins_cron_interval">Plugins and Themes Cron Interval</label></th>
           <td>
             <select name="wpjs_plugins_cron_interval" id="wpjs_plugins_cron_interval" v-model="wpjs_plugins_cron_interval" >
-              <option value="twicedaily">Twice Daily</option>
-              <option value="daily">Once Daily</option>
-              <option value="weekly">Once Weekly</option>
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
             </select>
           </td>
         </tr>
@@ -150,9 +156,7 @@ async function saveSettings(obj) {
           <th scope="row"><label for="wpjs_notices_cron_interval">Notices Cron Interval</label></th>
           <td>
             <select name="wpjs_notices_cron_interval" id="wpjs_notices_cron_interval" v-model="wpjs_notices_cron_interval" >
-              <option value="twicedaily">Twice Daily</option>
-              <option value="daily">Once Daily</option>
-              <option value="weekly">Once Weekly</option>
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
             </select>
           </td>
         </tr>

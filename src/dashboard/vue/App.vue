@@ -19,15 +19,22 @@ const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
 
 async function doAjax(args) {
   let result;
+
   try {
-    result = await jQuery.ajax({
-      url: wpjs_dashboard_object.ajaxurl,
-      type: 'POST',
-      data: args
+    const response = await fetch(store.ajaxUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(args),
     });
-    return result;
+
+    const result = await response.json();
+
+    return result
+
   } catch (error) {
-    throw (error)
+    throw new Error('No response from the WP Juggler Server');
   }
 }
 

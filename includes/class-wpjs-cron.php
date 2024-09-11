@@ -115,6 +115,30 @@ class WPJS_Cron
 				'display' => __('Once every 30 minutes')
 			);
 		}
+		if (!isset($schedules["wpjs_hourly"])) {
+			$schedules["wpjs_hourly"] = array(
+				'interval' => 60 * 60,
+				'display' => __('Once Hourly')
+			);
+		}
+		if (!isset($schedules["wpjs_twicedaily"])) {
+			$schedules["wpjs_twicedaily"] = array(
+				'interval' => 12 * 60 * 60,
+				'display' => __('Twice Daily')
+			);
+		}
+		if (!isset($schedules["wpjs_daily"])) {
+			$schedules["wpjs_daily"] = array(
+				'interval' => 24 * 60 * 60,
+				'display' => __('Once Daily')
+			);
+		}
+		if (!isset($schedules["wpjs_weekly"])) {
+			$schedules["wpjs_weekly"] = array(
+				'interval' => 7 * 24 * 60 * 60,
+				'display' => __('Once Weekly')
+			);
+		}
 		return $schedules;
 	}
 

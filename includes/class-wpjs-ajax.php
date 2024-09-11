@@ -77,6 +77,33 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
+	function get_wp_cron_events_info($hook_slugs) {
+		if (!is_array($hook_slugs)) {
+			return false;
+		}
+	
+		$cron_events = _get_cron_array();
+		$schedules = wp_get_schedules();
+		$result = array();
+	
+		foreach ($hook_slugs as $hook_slug) {
+			foreach ($cron_events as $timestamp => $cron) {
+				if (isset($cron[$hook_slug])) {
+					foreach ($cron[$hook_slug] as $key => $event) {
+						$frequency = isset($schedules[$event['schedule']]) ? $schedules[$event['schedule']]['display'] : 'One-time';
+						$result[] = (object) array(
+							'hook_slug' => $hook_slug,
+							'timestamp' => $timestamp,
+							'frequency' => $frequency
+						);
+					}
+				}
+			}
+		}
+	
+		return $result;
+	}
+
 	public function ajax_get_settings()
 	{
 		if (!current_user_can('manage_options')) {
@@ -86,12 +113,15 @@ class WPJS_AJAX
 
 		$wpjs_cron_schedules = $this->get_wpjs_cron_schedules();
 
+		$wpjs_cp_slug = get_option('wpjs_cp_slug');
+
 		$wpjs_uptime_cron_interval = get_option('wpjs_uptime_cron_interval');
 		$wpjs_health_cron_interval = get_option('wpjs_health_cron_interval');
 		$wpjs_plugins_cron_interval = get_option('wpjs_plugins_cron_interval');
 		$wpjs_notices_cron_interval = get_option('wpjs_notices_cron_interval');
 
 		$data = array(
+			'wpjs_cp_slug' => $wpjs_cp_slug ? esc_attr($wpjs_cp_slug) : '',
 			'wpjs_uptime_cron_interval' => $wpjs_uptime_cron_interval ? esc_attr($wpjs_uptime_cron_interval) : 'wpjs_5min',
 			'wpjs_health_cron_interval' => $wpjs_health_cron_interval ? esc_attr($wpjs_health_cron_interval) : 'daily',
 			'wpjs_plugins_cron_interval' => $wpjs_plugins_cron_interval ? esc_attr($wpjs_plugins_cron_interval) : 'daily',
@@ -110,6 +140,8 @@ class WPJS_AJAX
 			return;
 		}
 
+		$wpjs_cp_slug = (isset($_POST['wpjs_cp_slug'])) ? sanitize_text_field($_POST['wpjs_cp_slug']) : false;
+
 		$wpjs_uptime_cron_interval = (isset($_POST['wpjs_uptime_cron_interval'])) ? sanitize_text_field($_POST['wpjs_uptime_cron_interval']) : false;
 		$wpjs_health_cron_interval = (isset($_POST['wpjs_health_cron_interval'])) ? sanitize_text_field($_POST['wpjs_health_cron_interval']) : false;
 		$wpjs_plugins_cron_interval = (isset($_POST['wpjs_plugins_cron_interval'])) ? sanitize_text_field($_POST['wpjs_plugins_cron_interval']) : false;
@@ -118,6 +150,12 @@ class WPJS_AJAX
 		if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], $this->plugin_name . '-settings')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Nonce is not valid'), 401);
 			exit;
+		}
+
+		if ($wpjs_cp_slug) {
+			update_option('wpjs_cp_slug',  $wpjs_cp_slug);
+		} else {
+			delete_option('wpjs_cp_slug');
 		}
 
 		if ($wpjs_uptime_cron_interval) {
