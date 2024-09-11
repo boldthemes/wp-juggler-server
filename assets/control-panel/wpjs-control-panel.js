@@ -15321,9 +15321,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             ]),
                                                             (0, _vue.createElementVNode)("div", _hoisted_23, [
                                                                 $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, " Recorded vulnerabilities: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.vulnerabilities_num), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, "Recorded vulnerabilities: ?")),
-                                                                $setup.props.item.wp_juggler_plugins_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, [
+                                                                $setup.props.item.wp_juggler_plugins_checksum !== false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, [
                                                                     (0, _vue.createTextVNode)(" Checksum "),
-                                                                    $setup.props.item.wp_juggler_plugins_checksum.failures == 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                    $setup.props.item.wp_juggler_plugins_checksum == 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
                                                                         key: 0,
                                                                         color: "success",
                                                                         icon: "mdi-check-bold",
@@ -15898,39 +15898,42 @@ const _hoisted_14 = {
     key: 2
 };
 const _hoisted_15 = {
-    key: 0
+    key: 3
 };
 const _hoisted_16 = {
-    key: 1
+    key: 0
 };
 const _hoisted_17 = {
-    key: 0
+    key: 1
 };
 const _hoisted_18 = {
     key: 0
 };
 const _hoisted_19 = {
-    class: "text-h7"
+    key: 0
 };
 const _hoisted_20 = {
+    class: "text-h7"
+};
+const _hoisted_21 = {
     key: 0,
     class: "ml-6 mt-2 wpjs-plugin-vul"
 };
-const _hoisted_21 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+const _hoisted_22 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "mt-4 ml-6"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Sources:")
 ], -1 /* HOISTED */ );
-const _hoisted_22 = {
+const _hoisted_23 = {
     class: "mt-2 ml-6 wpjs-plugin-vul"
 };
-const _hoisted_23 = {
+const _hoisted_24 = {
     class: "ml-4"
 };
-const _hoisted_24 = [
+const _hoisted_25 = [
     "href"
 ];
-const _hoisted_25 = {
+const _hoisted_26 = {
     class: "ml-4"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -16184,12 +16187,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     ]))
                                                                                                                 ]),
                                                                                                             "item.source": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.Wporg && !item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                                                                    item.Tgmpa ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "grey-lighten-1",
-                                                                                                                            icon: "mdi-wordpress",
+                                                                                                                            icon: "mdi-package-variant-closed",
                                                                                                                             size: "large",
-                                                                                                                            class: "mr-1"
+                                                                                                                            class: "rm-4"
                                                                                                                         })
                                                                                                                     ])) : item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
@@ -16198,7 +16201,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             size: "large",
                                                                                                                             class: "rm-4"
                                                                                                                         })
-                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                                                                                    ])) : item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                            color: "grey-lighten-1",
+                                                                                                                            icon: "mdi-wordpress",
+                                                                                                                            size: "large",
+                                                                                                                            class: "mr-1"
+                                                                                                                        })
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "blue-lighten-5",
                                                                                                                             icon: "mdi-help",
@@ -16337,7 +16347,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                             "item-key": "id"
                                                                                                         }, {
                                                                                                             "item.active": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.Active && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
+                                                                                                                    item.Active && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-bold",
@@ -16345,7 +16355,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             class: "rm-4"
                                                                                                                         })
                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                    item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
+                                                                                                                    item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-network-outline",
@@ -16355,7 +16365,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             "item.child": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.IsChildTheme ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                                                                                    item.IsChildTheme ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-bold",
@@ -16365,7 +16375,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                                                                 ]),
                                                                                                             "item.update": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                                                                                             color: "success",
                                                                                                                             icon: "mdi-check-bold",
@@ -16470,24 +16480,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
                                                 return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
                                                     default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_19, [
+                                                            (0, _vue.createElementVNode)("div", _hoisted_20, [
                                                                 (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
                                                             ]),
-                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
+                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
                                                                 (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
                                                                 (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
                                                             ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                            _hoisted_21,
+                                                            _hoisted_22,
                                                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
-                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, [
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_23, [
+                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, [
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_24, [
                                                                         (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
                                                                         (0, _vue.createElementVNode)("a", {
                                                                             href: src.link,
                                                                             target: "_blank"
-                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_24)
+                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_25)
                                                                     ]),
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_25, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_26, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
                                                                 ]);
                                                             }), 256 /* UNKEYED_FRAGMENT */ )),
                                                             (0, _vue.createVNode)(_component_v_divider, {
@@ -17507,9 +17517,8 @@ exports.default = {
             const incidentsLast90Days = Array.from({
                 length: 90
             }, ()=>[]);
-            const now = Math.floor(Date.now() / 1000);
-            const startOfToday = new Date();
-            startOfToday.setUTCHours(0, 0, 0, 0);
+            const now = new Date();
+            const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0, 0));
             const startOfTodayTimestamp = Math.floor(startOfToday.getTime() / 1000);
             data.value.wp_juggler_api_downs.forEach((incident)=>{
                 const daysAgo = Math.floor((startOfTodayTimestamp - incident.log_timestamp) / 86400);
@@ -18727,7 +18736,7 @@ const _hoisted_5 = {
     key: 1
 };
 const _hoisted_6 = {
-    key: 0
+    key: 1
 };
 const _hoisted_7 = {
     key: 0
@@ -18736,19 +18745,19 @@ const _hoisted_8 = {
     key: 1
 };
 const _hoisted_9 = {
-    key: 1
+    key: 0
 };
 const _hoisted_10 = {
     key: 0
 };
 const _hoisted_11 = {
-    key: 0
+    key: 1
 };
 const _hoisted_12 = {
     key: 1
 };
 const _hoisted_13 = {
-    key: 1
+    key: 0
 };
 const _hoisted_14 = {
     key: 0
@@ -18757,12 +18766,21 @@ const _hoisted_15 = {
     key: 1
 };
 const _hoisted_16 = {
-    key: 0
-};
-const _hoisted_17 = {
     key: 1
 };
+const _hoisted_17 = {
+    key: 0
+};
 const _hoisted_18 = {
+    key: 1
+};
+const _hoisted_19 = {
+    key: 0
+};
+const _hoisted_20 = {
+    key: 1
+};
+const _hoisted_21 = {
     key: 2
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -18845,17 +18863,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.events": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_notices_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
-                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                        color: "#2196f3",
-                                                        icon: "mdi-email-alert-outline",
-                                                        size: "large",
-                                                        class: "rm-4"
-                                                    })
-                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                    item.wp_juggler_notices_count === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "blue-lighten-5",
+                                                            icon: "mdi-help",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : item.wp_juggler_notices_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "#2196f3",
+                                                            icon: "mdi-email-alert-outline",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.uptime": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
                                                     ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_uptime_stats.uptime_timeline, (day)=>{
                                                         return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
                                                             color: $setup.calculateColor(day),
@@ -18867,11 +18895,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         ]);
                                                     }), 256 /* UNKEYED_FRAGMENT */ ))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.updates": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
-                                                    item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                    item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
                                                         item.wp_juggler_plugins_summary.vulnerabilities_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
                                                             key: 0,
                                                             color: "error",
@@ -18885,7 +18913,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             size: "large",
                                                             class: "rm-4"
                                                         })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "blue-lighten-5",
                                                             icon: "mdi-help",
@@ -18894,31 +18922,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ]))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.checksum": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
-                                                    item.wp_juggler_plugins_checksum && item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
-                                                        item.wp_juggler_plugins_checksum.failures > 0 || item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                            key: 0,
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
+                                                    item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 || item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "error",
                                                             icon: "mdi-alert-outline",
                                                             size: "large",
                                                             class: "rm-4"
-                                                        })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                        })
+                                                    ])) : item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "blue-lighten-5",
                                                             icon: "mdi-help",
                                                             size: "large",
                                                             class: "rm-4"
                                                         })
-                                                    ]))
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.links": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
                                                     ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_login_tools, (button)=>{
                                                         return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                             variant: "elevated",
@@ -18934,10 +18961,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         ]);
                                                     }), 256 /* UNKEYED_FRAGMENT */ ))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.wp_admin": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
+                                                item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
                                                     (0, _vue.createVNode)(_component_v_btn, {
                                                         color: "#2196f3",
                                                         variant: "elevated",
@@ -18953,7 +18980,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "onClick"
                                                     ])
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
                                                     (0, _vue.createVNode)(_component_v_btn, {
                                                         color: "#2196f3",
                                                         variant: "elevated",
@@ -18969,7 +18996,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "onClick"
                                                     ])
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
                                                 (0, _vue.createVNode)($setup["ExpandedRow"], {

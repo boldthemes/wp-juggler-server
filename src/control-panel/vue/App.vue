@@ -118,9 +118,15 @@ onMounted(() => {
           </template>
 
           <template v-slot:item.events="{ item }">
-            <div v-if="item.wp_juggler_notices_count > 0">
-              <v-icon color="#2196f3" icon="mdi-email-alert-outline" size="large" class="rm-4"></v-icon>
+            <div v-if="item.wp_juggler_site_activation">
+              <div v-if="item.wp_juggler_notices_count === false">
+                <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+              </div>
+              <div v-else-if="item.wp_juggler_notices_count > 0">
+                <v-icon color="#2196f3" icon="mdi-email-alert-outline" size="large" class="rm-4"></v-icon>
+              </div>
             </div>
+            <div v-if="!item.wp_juggler_site_activation">Inactive</div>
           </template>
 
           <template v-slot:item.uptime="{ item }">
@@ -150,19 +156,17 @@ onMounted(() => {
 
           <template v-slot:item.checksum="{ item }">
             <div v-if="item.wp_juggler_site_activation">
+
               <div v-if="
-                item.wp_juggler_plugins_checksum &&
-                item.wp_juggler_core_checksum
+                ( item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 ) || ( item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true )
               ">
-                <v-icon v-if="
-                  item.wp_juggler_plugins_checksum.failures > 0 ||
-                  item.wp_juggler_core_checksum.errors
-                " color="error" icon="mdi-alert-outline" size="large" class="rm-4"></v-icon>
+                <v-icon color="error" icon="mdi-alert-outline" size="large" class="rm-4"></v-icon>
               </div>
-              <div v-else>
+              <div v-else-if = " item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false">
                 <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
               </div>
             </div>
+
             <div v-if="!item.wp_juggler_site_activation">Inactive</div>
           </template>
 
@@ -198,9 +202,7 @@ onMounted(() => {
         </v-data-table>
       </v-card>
       <v-card flat v-else>
-        <v-skeleton-loader
-        type="table"
-        >
+        <v-skeleton-loader type="table">
 
         </v-skeleton-loader>
       </v-card>

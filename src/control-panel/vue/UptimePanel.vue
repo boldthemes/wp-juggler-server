@@ -67,13 +67,20 @@ const apidowns = computed(() => {
 
   const incidentsLast90Days = Array.from({ length: 90 }, () => [])
 
-  const now = Math.floor(Date.now() / 1000);
-  const startOfToday = new Date();
-  startOfToday.setUTCHours(0, 0, 0, 0);
+  const now = new Date()
+  const startOfToday = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0, 0, 0, 0
+    ))
+  
   const startOfTodayTimestamp = Math.floor(startOfToday.getTime() / 1000);
 
   data.value.wp_juggler_api_downs.forEach(incident => {
+
     const daysAgo = Math.floor((startOfTodayTimestamp - incident.log_timestamp) / 86400);
+
     if (daysAgo >= 0 && daysAgo < 90) {
       incidentsLast90Days[89 - daysAgo].push(incident);
     }

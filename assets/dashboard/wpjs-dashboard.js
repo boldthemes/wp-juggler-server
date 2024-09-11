@@ -14612,10 +14612,7 @@ const _hoisted_2 = {
     class: "form-table",
     role: "presentation"
 };
-const _hoisted_3 = {
-    key: 0
-};
-const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("tr", null, [
+const _hoisted_3 = /*#__PURE__*/ (0, _vue.createElementVNode)("tr", null, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("th", null, [
         /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Title ")
     ]),
@@ -14623,70 +14620,72 @@ const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("tr", null, [
         /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, " Url ")
     ])
 ], -1 /* HOISTED */ );
-const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "blogname"
     }, "Activation status:")
 ], -1 /* HOISTED */ );
-const _hoisted_6 = {
+const _hoisted_5 = {
     key: 0
 };
-const _hoisted_7 = {
+const _hoisted_6 = {
     key: 1
 };
-const _hoisted_8 = {
+const _hoisted_7 = {
     key: 0
 };
-const _hoisted_9 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_8 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "blogname"
     }, "Registered domain:")
 ], -1 /* HOISTED */ );
-const _hoisted_10 = {
+const _hoisted_9 = {
     key: 0
 };
-const _hoisted_11 = {
+const _hoisted_10 = {
     key: 1
 };
-const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "blogname"
     }, "Channel Id:")
 ], -1 /* HOISTED */ );
-const _hoisted_13 = {
+const _hoisted_12 = {
     key: 0
 };
-const _hoisted_14 = {
+const _hoisted_13 = {
     key: 2
 };
-const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_14 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "blogname"
     }, "Channel title:")
 ], -1 /* HOISTED */ );
-const _hoisted_16 = {
+const _hoisted_15 = {
     key: 0
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
         _hoisted_1,
-        (0, _vue.createVNode)(_component_v_card, {
+        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+            key: 0,
             class: "pa-4 mr-4"
         }, {
             default: (0, _vue.withCtx)(()=>[
                     (0, _vue.createElementVNode)("table", _hoisted_2, [
-                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tbody", _hoisted_3, [
-                            _hoisted_4,
+                        (0, _vue.createElementVNode)("tbody", null, [
+                            _hoisted_3,
                             ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data, (item)=>{
                                 return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", null, [
                                     (0, _vue.createElementVNode)("td", null, [
@@ -14698,9 +14697,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ]);
                             }), 256 /* UNKEYED_FRAGMENT */ )),
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_5,
+                                _hoisted_4,
                                 (0, _vue.createElementVNode)("td", null, [
-                                    !$setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                    !$setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
                                         (0, _vue.createVNode)(_component_v_icon, {
                                             color: "error",
                                             icon: "mdi-alert-outline",
@@ -14709,7 +14708,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         }),
                                         (0, _vue.createTextVNode)(" Not activated ")
                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
+                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
                                         (0, _vue.createVNode)(_component_v_icon, {
                                             color: "success",
                                             icon: "mdi-check-bold",
@@ -14720,29 +14719,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                 ])
                             ]),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_8, [
-                                _hoisted_9,
+                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_7, [
+                                _hoisted_8,
                                 (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, " dsadasdas ")) : (0, _vue.createCommentVNode)("v-if", true)
+                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, " dsadasdas ")) : (0, _vue.createCommentVNode)("v-if", true)
                                 ])
                             ])) : (0, _vue.createCommentVNode)("v-if", true),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_11, [
-                                _hoisted_12,
+                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_10, [
+                                _hoisted_11,
                                 (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, " dasdasdas ")) : (0, _vue.createCommentVNode)("v-if", true)
+                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, " dasdasdas ")) : (0, _vue.createCommentVNode)("v-if", true)
                                 ])
                             ])) : (0, _vue.createCommentVNode)("v-if", true),
-                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_14, [
-                                _hoisted_15,
+                            $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", _hoisted_13, [
+                                _hoisted_14,
                                 (0, _vue.createElementVNode)("td", null, [
-                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, " dsadsadasadsa ")) : (0, _vue.createCommentVNode)("v-if", true)
+                                    $setup.activation_status ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, " dsadsadasadsa ")) : (0, _vue.createCommentVNode)("v-if", true)
                                 ])
                             ])) : (0, _vue.createCommentVNode)("v-if", true)
-                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                        ])
                     ])
                 ]),
             _: 1 /* STABLE */ 
-        })
+        })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+            key: 1,
+            class: "pa-4 mr-4"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                        type: "table-tbody"
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }))
     ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{

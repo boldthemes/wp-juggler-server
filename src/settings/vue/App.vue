@@ -120,11 +120,11 @@ async function saveSettings(obj) {
 
   <h1>WP Juggler Server Settings</h1>
 
-  <v-card class="pa-4 mr-4">
+  <v-card class="pa-4 mr-4" v-if="data">
 
     <table class="form-table" role="presentation">
 
-      <tbody v-if="data">
+      <tbody>
         <tr>
           <th scope="row"><label for="wpjs_uptime_cron_interval">Uptime Cron Interval</label></th>
           <td>
@@ -182,6 +182,9 @@ async function saveSettings(obj) {
       </template>
     </v-snackbar>
 
+  </v-card>
+  <v-card class="pa-4 mr-4" v-else>
+    <v-skeleton-loader type="table-tbody" > </v-skeleton-loader>
   </v-card>
 </template>
 

@@ -66,11 +66,11 @@ onMounted(() => {
 <template>
    <h1>WP Juggler Server Dashboard</h1>
 
-<v-card class="pa-4 mr-4">
+<v-card class="pa-4 mr-4"  v-if="data">
 
   <table class="form-table" role="presentation">
 
-    <tbody v-if="data">
+    <tbody>
 
       <tr>
         <th>
@@ -142,6 +142,10 @@ onMounted(() => {
   </table>
 
 </v-card>
+
+<v-card class="pa-4 mr-4" v-else>
+    <v-skeleton-loader type="table-tbody" > </v-skeleton-loader>
+  </v-card>
 </template>
 
 <style></style>

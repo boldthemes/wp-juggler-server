@@ -14678,66 +14678,65 @@ const _hoisted_2 = {
     class: "form-table",
     role: "presentation"
 };
-const _hoisted_3 = {
-    key: 0
-};
-const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_3 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "wpjs_uptime_cron_interval"
     }, "Uptime Cron Interval")
 ], -1 /* HOISTED */ );
-const _hoisted_5 = [
+const _hoisted_4 = [
     "value"
 ];
-const _hoisted_6 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_5 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "wpjs_health_cron_interval"
     }, "Site Health Cron Interval")
 ], -1 /* HOISTED */ );
-const _hoisted_7 = [
+const _hoisted_6 = [
     "value"
 ];
-const _hoisted_8 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "wpjs_plugins_cron_interval"
     }, "Plugins and Themes Cron Interval")
 ], -1 /* HOISTED */ );
-const _hoisted_9 = [
+const _hoisted_8 = [
     "value"
 ];
-const _hoisted_10 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+const _hoisted_9 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
         for: "wpjs_notices_cron_interval"
     }, "Notices Cron Interval")
 ], -1 /* HOISTED */ );
-const _hoisted_11 = [
+const _hoisted_10 = [
     "value"
 ];
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
 const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
-const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
         _hoisted_1,
-        (0, _vue.createVNode)(_component_v_card, {
+        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+            key: 0,
             class: "pa-4 mr-4"
         }, {
             default: (0, _vue.withCtx)(()=>[
                     (0, _vue.createElementVNode)("table", _hoisted_2, [
-                        $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("tbody", _hoisted_3, [
+                        (0, _vue.createElementVNode)("tbody", null, [
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_4,
+                                _hoisted_3,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
                                         name: "wpjs_uptime_cron_interval",
@@ -14747,7 +14746,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.short_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
-                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_5);
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_4);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14758,7 +14757,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ])
                             ]),
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_6,
+                                _hoisted_5,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
                                         name: "wpjs_health_cron_interval",
@@ -14768,7 +14767,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
-                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_7);
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_6);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14779,7 +14778,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ])
                             ]),
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_8,
+                                _hoisted_7,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
                                         name: "wpjs_plugins_cron_interval",
@@ -14789,7 +14788,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
-                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_9);
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_8);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14800,7 +14799,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ])
                             ]),
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_10,
+                                _hoisted_9,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
                                         name: "wpjs_notices_cron_interval",
@@ -14810,7 +14809,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
-                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_11);
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_10);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14820,13 +14819,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                     ])
                                 ])
                             ])
-                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                        ])
                     ]),
-                    _hoisted_12,
+                    _hoisted_11,
                     (0, _vue.createVNode)(_component_v_divider, {
                         class: "border-opacity-100"
                     }),
-                    _hoisted_13,
+                    _hoisted_12,
                     (0, _vue.createVNode)(_component_v_btn, {
                         variant: "flat",
                         class: "text-none text-caption",
@@ -14868,7 +14867,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ])
                 ]),
             _: 1 /* STABLE */ 
-        })
+        })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+            key: 1,
+            class: "pa-4 mr-4"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                        type: "table-tbody"
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }))
     ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{

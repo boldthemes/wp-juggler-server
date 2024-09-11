@@ -77,15 +77,16 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
-	function get_wp_cron_events_info($hook_slugs) {
+	function get_wp_cron_events_info($hook_slugs)
+	{
 		if (!is_array($hook_slugs)) {
 			return false;
 		}
-	
+
 		$cron_events = _get_cron_array();
 		$schedules = wp_get_schedules();
 		$result = array();
-	
+
 		foreach ($hook_slugs as $hook_slug) {
 			foreach ($cron_events as $timestamp => $cron) {
 				if (isset($cron[$hook_slug])) {
@@ -100,7 +101,7 @@ class WPJS_AJAX
 				}
 			}
 		}
-	
+
 		return $result;
 	}
 
@@ -369,7 +370,7 @@ class WPJS_AJAX
 				SELECT * 
 				FROM wp_wpjs_cron_log 
 				WHERE wpjugglersites_id = %s 
-					AND log_type = 'checkPluginChecksum' 
+					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
 				ORDER BY log_time DESC 
 				LIMIT 1
@@ -384,6 +385,7 @@ class WPJS_AJAX
 		}
 
 		$log_data_array = json_decode($result['log_data'], true);
+		$plugins_data = $log_data_array['plugins_data'];
 
 		return [
 			'data' => $log_data_array,
@@ -495,7 +497,8 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
-	private function get_latest_notices( $site_id ) {
+	private function get_latest_notices($site_id)
+	{
 
 		global $wpdb;
 
@@ -543,6 +546,7 @@ class WPJS_AJAX
 
 			$wp_juggler_notices = json_decode($result['log_data'], true);
 
+
 			$automatic_logon = get_post_meta($site_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 			$access_user = get_post_meta($site_id, 'wp_juggler_login_username', true);
 			$api_key = get_post_meta($site_id, 'wp_juggler_api_key', true);
@@ -552,7 +556,7 @@ class WPJS_AJAX
 
 				$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
 				$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
-				
+
 				$wp_juggler_notices = $this->replaceNoticeHref($wp_juggler_notices, parse_url($site_url, PHP_URL_HOST), $final_url);
 			}
 
@@ -564,12 +568,11 @@ class WPJS_AJAX
 		}
 
 		return $ret_obj;
-
 	}
 
 	public function ajax_get_latest_notices()
 	{
-		
+
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
 			return;
@@ -579,7 +582,7 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
-		$data[] = $this->get_latest_notices( $site_id );
+		$data[] = $this->get_latest_notices($site_id);
 
 		wp_send_json_success($data, 200);
 	}
@@ -710,9 +713,22 @@ class WPJS_AJAX
 			);
 		}
 
+		//$wp_juggler_notices = $this->replaceNoticeTimestamp($wp_juggler_notices);
+
 		foreach ($results as &$item) {
+
 			if (isset($item['log_time'])) {
-				$item['log_timestamp'] = strtotime($item['log_time']);
+
+				$unix_timestamp = strtotime($item['log_time']);
+				$timezone = wp_timezone();
+
+				$datetime = new DateTime();
+				$datetime->setTimestamp($unix_timestamp);
+				$datetime->setTimezone($timezone);
+				$logtime = $datetime->format('Y-m-d H:i:s');
+
+				$item['log_time'] = $logtime;
+				$item['log_timestamp'] = $unix_timestamp;
 			}
 		}
 		unset($item);
@@ -778,8 +794,19 @@ class WPJS_AJAX
 		}
 
 		foreach ($results as &$item) {
+
 			if (isset($item['log_time'])) {
-				$item['log_timestamp'] = strtotime($item['log_time']);
+
+				$unix_timestamp = strtotime($item['log_time']);
+				$timezone = wp_timezone();
+
+				$datetime = new DateTime();
+				$datetime->setTimestamp($unix_timestamp);
+				$datetime->setTimezone($timezone);
+				$logtime = $datetime->format('Y-m-d H:i:s');
+
+				$item['log_time'] = $logtime;
+				$item['log_timestamp'] = $unix_timestamp;
 			}
 		}
 		unset($item);
@@ -926,7 +953,7 @@ class WPJS_AJAX
 
 				$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
 				$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
-				
+
 				$health_data_status = $this->replaceHealthHref($health_data_status, parse_url($site_url, PHP_URL_HOST), $final_url);
 			}
 
@@ -968,12 +995,13 @@ class WPJS_AJAX
 		wp_send_json_success($data, 200);
 	}
 
-	private function replaceHealthHref($array, $domain, $final_url) {
+	private function replaceHealthHref($array, $domain, $final_url)
+	{
 		foreach ($array as &$item) {
 			if (array_key_exists('actions', $item)) {
 				$item['actions'] = preg_replace_callback(
 					'/<a[^>]*href=["\'](https?:\/\/(?:www\.)?' . preg_quote($domain, '/') . '\/[^"\']+)["\'][^>]*>/i',
-					function($matches) use ($final_url) {
+					function ($matches) use ($final_url) {
 						return str_replace($matches[1], $this->addTokenToUrl($matches[1], $final_url), $matches[0]);
 					},
 					$item['actions']
@@ -983,12 +1011,13 @@ class WPJS_AJAX
 		return $array;
 	}
 
-	private function replaceNoticeHref($array, $domain, $final_url) {
+	private function replaceNoticeHref($array, $domain, $final_url)
+	{
 		foreach ($array as &$item) {
 			if (array_key_exists('NoticeHTML', $item)) {
 				$item['NoticeHTML'] = preg_replace_callback(
 					'/<a[^>]*href=["\'](https?:\/\/(?:www\.)?' . preg_quote($domain, '/') . '\/[^"\']+)["\'][^>]*>/i',
-					function($matches) use ($final_url) {
+					function ($matches) use ($final_url) {
 						return str_replace($matches[1], $this->addTokenToUrl($matches[1], $final_url), $matches[0]);
 					},
 					$item['NoticeHTML']
@@ -997,15 +1026,15 @@ class WPJS_AJAX
 		}
 		return $array;
 	}
-	
-	private function addTokenToUrl($currentHref, $final_url) {
+
+	private function addTokenToUrl($currentHref, $final_url)
+	{
 
 		$tempurl = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', $currentHref);
-		
-		return $tempurl;
 
+		return $tempurl;
 	}
-	
+
 
 	public function ajax_get_control_panel()
 	{
@@ -1052,20 +1081,20 @@ class WPJS_AJAX
 
 				if (!$themes_data) {
 					$themes_array = false;
-					$themes_timestamp = false;
 				} else {
 					$themes_array = $this->get_theme_updates($themes_data['data']);
-					$themes_timestamp = $this->get_time_ago($themes_data['timestamp']);
 				}
 
-				$plugins_checksum_data = $this->get_plugin_checksum_data($site->ID);
-
-				if (!$plugins_checksum_data) {
+				if (!$plugins_data) {
 					$plugins_checksum = false;
-					$plugins_checksum_timestamp = false;
 				} else {
-					$plugins_checksum = $plugins_checksum_data['data'];
-					$plugins_checksum_timestamp = $this->get_time_ago($plugins_checksum_data['timestamp']);
+
+					$plugins_checksum = 0;
+					foreach ($plugins_data['data'] as $plugin) {
+						if (isset($plugin['Checksum']) && !$plugin['Checksum']) {
+							$plugins_checksum++;
+						}
+					}
 				}
 
 				$health_data = $this->get_health_data($site->ID);
@@ -1201,7 +1230,8 @@ class WPJS_AJAX
 		return $wpjs_schedules;
 	}
 
-	public function ajax_refresh_plugins(){
+	public function ajax_refresh_plugins()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1212,9 +1242,9 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
-		$response_api = WPJS_Service::check_plugins_api( $site_id );
+		$response_api = WPJS_Service::check_plugins_api($site_id);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1222,19 +1252,17 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
 			$data = [];
 			wp_send_json_success($data, 200);
-
 		}
-
 	}
 
-	public function ajax_refresh_health(){
+	public function ajax_refresh_health()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1245,9 +1273,9 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
-		$response_api = WPJS_Service::check_health_api( $site_id );
+		$response_api = WPJS_Service::check_health_api($site_id);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1255,19 +1283,17 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
 			$data = [];
 			wp_send_json_success($data, 200);
-
 		}
-
 	}
 
-	public function ajax_refresh_notices(){
+	public function ajax_refresh_notices()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1278,9 +1304,9 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
-		$response_api = WPJS_Service::check_notices_api( $site_id );
+		$response_api = WPJS_Service::check_notices_api($site_id);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1288,19 +1314,17 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
 			$data = [];
 			wp_send_json_success($data, 200);
-
 		}
-
 	}
 
-	public function ajax_update_plugin(){
+	public function ajax_update_plugin()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1315,9 +1339,9 @@ class WPJS_AJAX
 			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
 		}
 
-		$response_api = WPJS_Service::update_plugin( $site_id, $plugin_slug );
+		$response_api = WPJS_Service::update_plugin($site_id, $plugin_slug);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1325,14 +1349,13 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
-			$response_api = WPJS_Service::check_plugins_api( $site_id );
+			$response_api = WPJS_Service::check_plugins_api($site_id);
 
-			if(is_wp_error($response_api)){
+			if (is_wp_error($response_api)) {
 
 				$response = [
 					'code' => $response_api->get_error_code(),
@@ -1340,20 +1363,18 @@ class WPJS_AJAX
 					'message' => 'No valid response from client WP Juggler Instance',
 					'data' => $response_api->get_error_data(),
 				];
-				
+
 				wp_send_json_error($response);
 			} else {
 
 				$data = [];
 				wp_send_json_success($data, 200);
-
 			}
-
 		}
-
 	}
 
-	public function ajax_deactivate_plugin(){
+	public function ajax_deactivate_plugin()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1368,9 +1389,9 @@ class WPJS_AJAX
 			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
 		}
 
-		$response_api = WPJS_Service::deactivate_plugin( $site_id, $plugin_slug );
+		$response_api = WPJS_Service::deactivate_plugin($site_id, $plugin_slug);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1378,14 +1399,13 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
-			$response_api = WPJS_Service::check_plugins_api( $site_id );
+			$response_api = WPJS_Service::check_plugins_api($site_id);
 
-			if(is_wp_error($response_api)){
+			if (is_wp_error($response_api)) {
 
 				$response = [
 					'code' => $response_api->get_error_code(),
@@ -1393,20 +1413,18 @@ class WPJS_AJAX
 					'message' => 'No valid response from client WP Juggler Instance',
 					'data' => $response_api->get_error_data(),
 				];
-				
+
 				wp_send_json_error($response);
 			} else {
 
 				$data = [];
 				wp_send_json_success($data, 200);
-
 			}
-
 		}
-
 	}
 
-	public function ajax_activate_plugin(){
+	public function ajax_activate_plugin()
+	{
 
 		if (!current_user_can('manage_options')) {
 			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
@@ -1425,9 +1443,9 @@ class WPJS_AJAX
 			$network_wide = filter_var($_POST['networkWide'], FILTER_VALIDATE_BOOLEAN);
 		}
 
-		$response_api = WPJS_Service::activate_plugin( $site_id, $plugin_slug, $network_wide );
+		$response_api = WPJS_Service::activate_plugin($site_id, $plugin_slug, $network_wide);
 
-		if(is_wp_error($response_api)){
+		if (is_wp_error($response_api)) {
 
 			$response = [
 				'code' => $response_api->get_error_code(),
@@ -1435,14 +1453,13 @@ class WPJS_AJAX
 				'message' => 'No valid response from client WP Juggler Instance',
 				'data' => $response_api->get_error_data(),
 			];
-			
-			wp_send_json_error($response);
 
+			wp_send_json_error($response);
 		} else {
 
-			$response_api = WPJS_Service::check_plugins_api( $site_id );
+			$response_api = WPJS_Service::check_plugins_api($site_id);
 
-			if(is_wp_error($response_api)){
+			if (is_wp_error($response_api)) {
 
 				$response = [
 					'code' => $response_api->get_error_code(),
@@ -1450,16 +1467,13 @@ class WPJS_AJAX
 					'message' => 'No valid response from client WP Juggler Instance',
 					'data' => $response_api->get_error_data(),
 				];
-				
+
 				wp_send_json_error($response);
 			} else {
 
 				$data = [];
 				wp_send_json_success($data, 200);
-
 			}
-
 		}
-
 	}
 }

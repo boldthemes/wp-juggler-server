@@ -470,12 +470,12 @@ async function activatePlugin( pluginSlug, networkWide ) {
                       </template>
 
                       <template v-slot:item.source="{ item }">
-                        <div v-if="item.Wporg && !item.WpJuggler">
+                        <div v-if="item.Tgmpa">
                           <v-icon
                             color="grey-lighten-1"
-                            icon="mdi-wordpress"
+                            icon="mdi-package-variant-closed"
                             size="large"
-                            class="mr-1"
+                            class="rm-4"
                           ></v-icon>
                         </div>
                         <div v-else-if="item.WpJuggler">
@@ -484,6 +484,14 @@ async function activatePlugin( pluginSlug, networkWide ) {
                             icon="mdi-lan"
                             size="large"
                             class="rm-4"
+                          ></v-icon>
+                        </div>
+                        <div v-else-if="item.Wporg">
+                          <v-icon
+                            color="grey-lighten-1"
+                            icon="mdi-wordpress"
+                            size="large"
+                            class="mr-1"
                           ></v-icon>
                         </div>
                         <div v-else>

@@ -328,14 +328,14 @@ const noticesButton = ref(null);
                   }}
                 </div>
                 <div v-else>Recorded vulnerabilities: ?</div>
-                <div v-if="props.item.wp_juggler_plugins_checksum">
+                <div v-if="props.item.wp_juggler_plugins_checksum !== false">
                   Checksum
                   <v-icon
                     color="success"
                     icon="mdi-check-bold"
                     size="large"
                     class="rm-4"
-                    v-if="props.item.wp_juggler_plugins_checksum.failures == 0"
+                    v-if="props.item.wp_juggler_plugins_checksum == 0"
                   ></v-icon>
                   <v-icon
                     color="error"
