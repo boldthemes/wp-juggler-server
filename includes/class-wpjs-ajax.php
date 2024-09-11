@@ -244,8 +244,16 @@ class WPJS_AJAX
 			}
 		}
 
+		foreach ($results as $index => &$day) {
+			$timestamp = strtotime("-$index days");
+			$day_label = date('D, M j', $timestamp);
+			$day['day_label'] = $day_label;
+		}
+
+		$results_rev = array_reverse($results);
+
 		$final_res = [
-			'uptime_timeline' => $results
+			'uptime_timeline' => $results_rev
 		];
 
 		$final_res['summary'] = array();

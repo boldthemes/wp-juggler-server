@@ -9201,7 +9201,6 @@ exports.default = {
             window.location.href = wpjs_control_panel_object.adminurl;
         }
         function calculateColor(day) {
-            if (day.total_num == 0) return "blue-lighten-5";
             if (day.fail_num == 0) return "success";
             return "error";
         }
@@ -18742,45 +18741,48 @@ const _hoisted_7 = {
     key: 0
 };
 const _hoisted_8 = {
-    key: 1
+    class: "wpjs-timeline-icon"
 };
 const _hoisted_9 = {
-    key: 0
+    key: 1
 };
 const _hoisted_10 = {
     key: 0
 };
 const _hoisted_11 = {
-    key: 1
+    key: 0
 };
 const _hoisted_12 = {
     key: 1
 };
 const _hoisted_13 = {
-    key: 0
+    key: 1
 };
 const _hoisted_14 = {
     key: 0
 };
 const _hoisted_15 = {
-    key: 1
+    key: 0
 };
 const _hoisted_16 = {
     key: 1
 };
 const _hoisted_17 = {
-    key: 0
+    key: 1
 };
 const _hoisted_18 = {
-    key: 1
-};
-const _hoisted_19 = {
     key: 0
 };
-const _hoisted_20 = {
+const _hoisted_19 = {
     key: 1
 };
+const _hoisted_20 = {
+    key: 0
+};
 const _hoisted_21 = {
+    key: 1
+};
+const _hoisted_22 = {
     key: 2
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -18790,6 +18792,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
     const _component_v_card_title = (0, _vue.resolveComponent)("v-card-title");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_tooltip = (0, _vue.resolveComponent)("v-tooltip");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
@@ -18885,21 +18888,44 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         "item.uptime": (0, _vue.withCtx)(({ item })=>[
                                                 item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
                                                     ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_uptime_stats.uptime_timeline, (day)=>{
-                                                        return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                            color: $setup.calculateColor(day),
-                                                            icon: "mdi-square",
-                                                            size: "large",
-                                                            class: "rm-4"
-                                                        }, null, 8 /* PROPS */ , [
-                                                            "color"
+                                                        return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                            day.fail_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_tooltip, {
+                                                                key: 0,
+                                                                text: day.day_label + " - " + day.fail_num + " incidents",
+                                                                location: "top"
+                                                            }, {
+                                                                activator: (0, _vue.withCtx)(({ props })=>[
+                                                                        (0, _vue.createVNode)(_component_v_icon, (0, _vue.mergeProps)({
+                                                                            ref_for: true
+                                                                        }, props, {
+                                                                            color: $setup.calculateColor(day),
+                                                                            icon: "mdi-square",
+                                                                            size: "large",
+                                                                            class: "rm-4"
+                                                                        }), null, 16 /* FULL_PROPS */ , [
+                                                                            "color"
+                                                                        ])
+                                                                    ]),
+                                                                _: 2 /* DYNAMIC */ 
+                                                            }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                "text"
+                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                key: 1,
+                                                                color: $setup.calculateColor(day),
+                                                                icon: "mdi-square",
+                                                                size: "large",
+                                                                class: "rm-4"
+                                                            }, null, 8 /* PROPS */ , [
+                                                                "color"
+                                                            ]))
                                                         ]);
                                                     }), 256 /* UNKEYED_FRAGMENT */ ))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.updates": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
-                                                    item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                    item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
                                                         item.wp_juggler_plugins_summary.vulnerabilities_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
                                                             key: 0,
                                                             color: "error",
@@ -18913,7 +18939,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             size: "large",
                                                             class: "rm-4"
                                                         })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
+                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "blue-lighten-5",
                                                             icon: "mdi-help",
@@ -18922,18 +18948,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ]))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.checksum": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
-                                                    item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 || item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                    item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 || item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "error",
                                                             icon: "mdi-alert-outline",
                                                             size: "large",
                                                             class: "rm-4"
                                                         })
-                                                    ])) : item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
+                                                    ])) : item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "blue-lighten-5",
                                                             icon: "mdi-help",
@@ -18942,10 +18968,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         })
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.links": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
                                                     ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_login_tools, (button)=>{
                                                         return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                             variant: "elevated",
@@ -18961,10 +18987,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         ]);
                                                     }), 256 /* UNKEYED_FRAGMENT */ ))
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "item.wp_admin": (0, _vue.withCtx)(({ item })=>[
-                                                item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
+                                                item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
                                                     (0, _vue.createVNode)(_component_v_btn, {
                                                         color: "#2196f3",
                                                         variant: "elevated",
@@ -18980,7 +19006,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "onClick"
                                                     ])
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, [
+                                                item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
                                                     (0, _vue.createVNode)(_component_v_btn, {
                                                         color: "#2196f3",
                                                         variant: "elevated",
@@ -18996,7 +19022,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "onClick"
                                                     ])
                                                 ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
                                             ]),
                                         "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
                                                 (0, _vue.createVNode)($setup["ExpandedRow"], {

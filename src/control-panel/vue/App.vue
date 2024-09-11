@@ -74,7 +74,6 @@ function backToDashboard() {
 }
 
 function calculateColor(day) {
-  if (day.total_num == 0) return "blue-lighten-5";
   if (day.fail_num == 0) return "success";
   return "error";
 }
@@ -131,8 +130,16 @@ onMounted(() => {
 
           <template v-slot:item.uptime="{ item }">
             <div v-if="item.wp_juggler_site_activation">
-              <v-icon v-for="day in item.wp_juggler_uptime_stats.uptime_timeline" :color="calculateColor(day)"
-                icon="mdi-square" size="large" class="rm-4"></v-icon>
+              <div v-for="day in item.wp_juggler_uptime_stats.uptime_timeline" class="wpjs-timeline-icon">
+                <v-tooltip :text=" day.day_label + ' - ' + day.fail_num + ' incidents' " location="top" v-if="day.fail_num > 0">
+                  <template v-slot:activator="{ props }">
+                    <v-icon v-bind="props" :color="calculateColor(day)" icon="mdi-square" size="large"
+                      class="rm-4"></v-icon>
+                  </template>
+                </v-tooltip>
+                <v-icon v-else :color="calculateColor(day)" icon="mdi-square" size="large" class="rm-4"></v-icon>
+              </div>
+
             </div>
             <div v-if="!item.wp_juggler_site_activation">Inactive</div>
           </template>
@@ -158,11 +165,11 @@ onMounted(() => {
             <div v-if="item.wp_juggler_site_activation">
 
               <div v-if="
-                ( item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 ) || ( item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true )
+                (item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0) || (item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true)
               ">
                 <v-icon color="error" icon="mdi-alert-outline" size="large" class="rm-4"></v-icon>
               </div>
-              <div v-else-if = " item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false">
+              <div v-else-if="item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false">
                 <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
               </div>
             </div>
@@ -228,5 +235,9 @@ html {
 
 .wpjs-cp-table td {
   padding: 15px 0px;
+}
+
+.wpjs-timeline-icon{
+  display:inline;
 }
 </style>
