@@ -758,6 +758,86 @@ class WPJS_AJAX
 		wp_send_json_success($results, 200);
 	}
 
+	public function ajax_get_dashboard_history()
+	{
+		global $wpdb;
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
+
+		if (intval($page) == 0) {
+
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE log_type IN (%s, %s, %s) 
+					AND log_result IN (%s, %s)
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					'checkPlugins',
+					'checkNotices',
+					'checkHealth',
+					'error',
+					'fail',
+				),
+				ARRAY_A
+			);
+		} else {
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE log_type IN (%s, %s, %s) 
+					AND log_result IN (%s, %s)
+					AND ID < %s 
+				ORDER BY ID DESC 
+				LIMIT 20
+				",
+					'checkPlugins',
+					'checkNotices',
+					'checkHealth',
+					'error',
+					'fail',
+					intval($page)
+				),
+				ARRAY_A
+			);
+		}
+
+		foreach ($results as &$item) {
+
+			if (isset($item['log_time'])) {
+
+				$site_title = get_the_title($item['wpjugglersites_id']);
+				$site_url = get_post_meta($item['wpjugglersites_id'], 'wp_juggler_server_site_url', true);
+
+				$unix_timestamp = strtotime($item['log_time']);
+				$timezone = wp_timezone();
+
+				$datetime = new DateTime();
+				$datetime->setTimestamp($unix_timestamp);
+				$datetime->setTimezone($timezone);
+				$logtime = $datetime->format('Y-m-d H:i:s');
+
+				$item['log_time'] = $logtime;
+				$item['log_timestamp'] = $unix_timestamp;
+				$item['site_name'] = $site_title;
+				$item['site_url'] = $site_url;
+			}
+		}
+		unset($item);
+
+		wp_send_json_success($results, 200);
+	}
+
 	public function ajax_get_uptime_history()
 	{
 		global $wpdb;
