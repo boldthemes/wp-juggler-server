@@ -434,7 +434,7 @@ class WPJS_Cron_Log
   			log_result varchar(256) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
 			log_value varchar(256) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   			log_data json DEFAULT NULL,
-  			log_time timestamp NOT NULL,
+  			log_time timestamp NULL DEFAULT NULL,
   			PRIMARY KEY  (ID),
 			KEY wpjugglersites_id (wpjugglersites_id),
   			KEY log_type (log_type),
