@@ -479,7 +479,7 @@ class WPJS_Cron_Log
 			}
 		}
 
-		$event_fil["log_time"] = gmdate('Y-m-d H:i:s');
+		$event_fil["log_time"] = current_time('mysql', true);
 
 		$wpdb->insert(
 			$table_name,
