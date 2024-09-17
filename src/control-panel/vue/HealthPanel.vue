@@ -312,11 +312,11 @@ async function refreshHealth() {
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">WordPress Core Files</div>
 
-                      <div v-if="!data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-4">
+                      <div v-if="!data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-10">
                         <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"></v-icon>
                         WordPress installation verifies against checksums
                       </div>
-                      <div v-else class="text-h7 mb-4 mt-4">
+                      <div v-else class="text-h7 mb-4 mt-10">
                         <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
                         WordPress installation does not verify against checksums
                       </div>

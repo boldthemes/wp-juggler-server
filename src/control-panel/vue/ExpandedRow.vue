@@ -55,7 +55,7 @@ const noticesButton = ref(null);
   <tr>
     <td :colspan="props.columns?.length + 1">
       <div class="text-h5 font-weight-bold mt-5 mb-3">
-        {{ props.item?.id }} {{ props.item?.title }}
+        {{ props.item?.title }}
       </div>
 
       <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
