@@ -516,6 +516,8 @@ class WPJS_AJAX
 			$data = json_decode($result['log_data'], true);
 			$data['wp_juggler_plugins_timestamp'] = $this->get_time_ago(strtotime($result['log_time']));
 		}
+
+
 		wp_send_json_success($data, 200);
 	}
 

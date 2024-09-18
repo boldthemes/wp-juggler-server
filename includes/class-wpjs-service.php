@@ -16,6 +16,8 @@ use Tmeister\Firebase\JWT\Key;
 // Prevent direct access.
 if (! defined('WPJS_PATH')) exit;
 
+require_once WPJS_PATH . 'includes/api-classes/class-wpjs-plugin-checksum.php';
+
 class WPJS_Service
 {
 
@@ -39,6 +41,8 @@ class WPJS_Service
 
 	private $plugin_name;
 
+	public static $plugin_checksum;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -51,6 +55,7 @@ class WPJS_Service
 		$this->wp_juggler_server = $wp_juggler_server;
 		$this->version = $version;
 		$this->plugin_name = 'wpjs';
+		WPJS_Service::$plugin_checksum = new WPJSPluginChecksum();
 	}
 
 	public static function wpjs_generate_login_token($username, $wpjs_api_key)
@@ -422,6 +427,39 @@ class WPJS_Service
 			$plugins = $body['data']['plugins_data'];
 			$themes = $body['data']['themes_data'];
 
+			// Added to calculate stuff
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				if( $plugininfo['ChecksumFiles'] ){
+					$cf = base64_decode($plugininfo['ChecksumFiles']);
+					$unzipped = gzuncompress($cf);
+					$plugins[$plugin]['ChecksumFiles'] = json_decode( $unzipped, true );
+				} else {
+					$plugins[$plugin]['ChecksumFiles'] = false;
+				}
+			}
+
+			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum( $plugins );
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				$plugins[$plugin]['ChecksumDetails'] = [];
+				unset($plugins[$plugin]['ChecksumFiles']);
+				if( in_array( $plugininfo['Slug'], $data_checksum['failures_list'] )){
+					$plugins[$plugin]['Checksum'] = false;
+				} else {
+					$plugins[$plugin]['Checksum'] = true;
+				}
+			}
+
+			foreach ($data_checksum['failures_details'] as $failure){
+				$plugin_file = WPJS_Service::findElementByAttribute($plugins, 'Slug', $failure['plugin_name']);
+				$plugins[$plugin_file]['ChecksumDetails'][] = $failure;
+			}
+
+
+
+			// finished
+
 			foreach ($plugins as $plugin => $plugininfo) {
 				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
 				$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
@@ -443,6 +481,15 @@ class WPJS_Service
 		}
 
 		return $response;
+	}
+
+	static function findElementByAttribute($array, $attribute, $value) {
+		foreach ($array as $key => $element) {
+			if (isset($element[$attribute]) && $element[$attribute] == $value) {
+				return $key;
+			}
+		}
+		return null;
 	}
 
 	static function check_themes_api($site_id)

@@ -162,8 +162,8 @@ class WPJS_Api
 		//$response = WPJS_Service::check_core_checksum_api(5);
 		//$response = WPJS_Service::check_plugin_checksum_api(37);
 		//$response = WPJS_Service::check_health_api(5);
-		$response = WPJS_Service::check_notices_api(37);
-		//$response = WPJS_Service::check_plugins_api(5);
+		//$response = WPJS_Service::check_notices_api(37);
+		$response = WPJS_Service::check_plugins_api(5);
 		//$response = WPJS_Service::check_themes_api(37);
 
 		//mac 5
@@ -193,8 +193,8 @@ class WPJS_Api
 		//$this->cron->check_all_core_checksum_api();
 		//$this->cron->check_all_plugin_checksum_api();
 		//$this->cron->check_all_health_api();
-		$this->cron->check_all_notices_api();
-		//$this->cron->check_all_plugins_api();
+		//$this->cron->check_all_notices_api();
+		$this->cron->check_all_plugins_api();
 		//$this->cron->check_all_themes_api();
 
 		$data = [];

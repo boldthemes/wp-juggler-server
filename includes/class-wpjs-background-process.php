@@ -204,6 +204,33 @@ class WPJS_Background_Process extends WP_Background_Process
 					$themes = $body['data']['themes_data'];
 
 					foreach ($plugins as $plugin => $plugininfo) {
+						if( $plugininfo['ChecksumFiles'] ){
+							$cf = base64_decode($plugininfo['ChecksumFiles']);
+							$unzipped = gzuncompress($cf);
+							$plugins[$plugin]['ChecksumFiles'] = json_decode( $unzipped, true );
+						} else {
+							$plugins[$plugin]['ChecksumFiles'] = false;
+						}
+					}
+		
+					$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum( $plugins );
+		
+					foreach ($plugins as $plugin => $plugininfo) {
+						$plugins[$plugin]['ChecksumDetails'] = [];
+						unset($plugins[$plugin]['ChecksumFiles']);
+						if( in_array( $plugininfo['Slug'], $data_checksum['failures_list'] )){
+							$plugins[$plugin]['Checksum'] = false;
+						} else {
+							$plugins[$plugin]['Checksum'] = true;
+						}
+					}
+		
+					foreach ($data_checksum['failures_details'] as $failure){
+						$plugin_file = WPJS_Service::findElementByAttribute($plugins, 'Slug', $failure['plugin_name']);
+						$plugins[$plugin_file]['ChecksumDetails'][] = $failure;
+					}
+
+					foreach ($plugins as $plugin => $plugininfo) {
 						$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
 						$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
 					}
