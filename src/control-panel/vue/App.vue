@@ -109,7 +109,7 @@ onMounted(() => {
 
         <v-divider></v-divider>
         <v-data-table v-model:search="search" :items="data" :headers="headers" item-key="id" v-model:expanded="expanded"
-          show-expand>
+          show-expand items-per-page="50">
           <template v-slot:item.network="{ item }">
             <div v-if="item.wp_juggler_multisite">
               <v-icon color="#2196f3" icon="mdi-checkbox-multiple-blank-outline" size="large" class="rm-4"></v-icon>
@@ -131,7 +131,8 @@ onMounted(() => {
           <template v-slot:item.uptime="{ item }">
             <div v-if="item.wp_juggler_site_activation">
               <div v-for="day in item.wp_juggler_uptime_stats.uptime_timeline" class="wpjs-timeline-icon">
-                <v-tooltip :text=" day.day_label + ' - ' + day.fail_num + ' incidents' " location="top" v-if="day.fail_num > 0">
+                <v-tooltip :text="day.day_label + ' - ' + day.fail_num + ' incidents'" location="top"
+                  v-if="day.fail_num > 0">
                   <template v-slot:activator="{ props }">
                     <v-icon v-bind="props" :color="calculateColor(day)" icon="mdi-square" size="large"
                       class="rm-4"></v-icon>
@@ -237,7 +238,7 @@ html {
   padding: 15px 0px;
 }
 
-.wpjs-timeline-icon{
-  display:inline;
+.wpjs-timeline-icon {
+  display: inline;
 }
 </style>

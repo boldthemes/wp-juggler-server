@@ -377,6 +377,7 @@ async function activatePlugin( pluginSlug, networkWide ) {
                       :items="plugins_data"
                       :headers="plugin_headers"
                       item-key="id"
+                      items-per-page="50"
                     >
                       <template v-slot:item.active="{ item }">
                         <div v-if="item.Active && !item.NetworkActive">
@@ -579,6 +580,7 @@ async function activatePlugin( pluginSlug, networkWide ) {
                       :items="themes_data"
                       :headers="theme_headers"
                       item-key="id"
+                      items-per-page="50"
                     >
                       <template v-slot:item.active="{ item }">
                         <div v-if="item.Active && !item.Network">

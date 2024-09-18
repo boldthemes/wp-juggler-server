@@ -562,7 +562,7 @@ class WPJS_AJAX
 			$ret_obj = array(
 				'wp_juggler_notices' => false,
 				'wp_juggler_notices_timestamp' =>  false,
-				'wp_juggler_history_count' => 0
+				'wp_juggler_history_count' => $result1['log_count']
 			);
 		} else {
 
@@ -585,7 +585,7 @@ class WPJS_AJAX
 			$ret_obj = array(
 				'wp_juggler_notices' => $wp_juggler_notices,
 				'wp_juggler_notices_timestamp' =>  $this->get_time_ago(strtotime($result['log_time'])),
-				'wp_juggler_history_count' => $result1['log_count'] - 1
+				'wp_juggler_history_count' => $result1['log_count']
 			);
 		}
 
