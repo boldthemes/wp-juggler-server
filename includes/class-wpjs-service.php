@@ -184,7 +184,10 @@ class WPJS_Service
 			return new WP_Error('Front End Check Failed', 'Domains must match');
 		}
 
-		$response = wp_remote_get($url, ['sslverify'   => false]);
+		$response = wp_remote_get($url, [
+			'sslverify' => false,
+			'timeout' 	=> 10
+		]);
 
 		if (is_wp_error($response)) {
 			return $response;
@@ -619,7 +622,9 @@ class WPJS_Service
 	static function get_plugin_vulnerabilities($plugin_name, $version) {
 		
 		$api_url = "https://www.wpvulnerability.net/plugin/{$plugin_name}";
-		$response = wp_remote_get($api_url);
+		$response = wp_remote_get($api_url, [
+			'timeout' => 10
+		]);
 	
 		if (is_wp_error($response)) {
 			return [];  // Return an empty array on error.

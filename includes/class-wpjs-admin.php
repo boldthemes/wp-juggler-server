@@ -172,38 +172,37 @@ class WPJS_Admin
 	//TODO ostalo kao referenca verovatno treba da se ukloni
 	public function enqueue_control_panel_assets($suffix)
 	{
-		
-		
-			wp_enqueue_script(
-				$this->plugin_name . '-control-panel',
-				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.js',
-				array('jquery'),
-				'',
-				[]
-			);
 
-			wp_enqueue_style(
-				$this->plugin_name . '-control-panel',
-				plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.css',
-				[],
-				''
-			);
 
-			$nonce = wp_create_nonce($this->plugin_name . '-control-panel');
+		wp_enqueue_script(
+			$this->plugin_name . '-control-panel',
+			plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.js',
+			array('jquery'),
+			'',
+			[]
+		);
 
-			wp_localize_script(
-				$this->plugin_name . '-control-panel',
-				$this->plugin_name . '_control_panel_object',
-				array(
-					'ajaxurl' => admin_url('admin-ajax.php'),
-					'nonce' => $nonce,
-					'adminurl' => admin_url()
-				)
-			);
+		wp_enqueue_style(
+			$this->plugin_name . '-control-panel',
+			plugin_dir_url(__DIR__) . 'assets/control-panel/wpjs-control-panel.css',
+			[],
+			''
+		);
 
-			wp_dequeue_style('admin-bar');
-    		wp_deregister_style('admin-bar');
-	
+		$nonce = wp_create_nonce($this->plugin_name . '-control-panel');
+
+		wp_localize_script(
+			$this->plugin_name . '-control-panel',
+			$this->plugin_name . '_control_panel_object',
+			array(
+				'ajaxurl' => admin_url('admin-ajax.php'),
+				'nonce' => $nonce,
+				'adminurl' => admin_url()
+			)
+		);
+
+		wp_dequeue_style('admin-bar');
+		wp_deregister_style('admin-bar');
 	}
 
 	public function register_menu_page()
@@ -503,6 +502,8 @@ class WPJS_Admin
 		$frontend_ping_url = get_post_meta($post->ID, 'wp_juggler_frontend_ping_url', true);
 		$frontend_ping_string = get_post_meta($post->ID, 'wp_juggler_frontend_ping_string', true);
 		$multisite = get_post_meta($post->ID, 'wp_juggler_multisite', true);
+
+		$status_label = !empty($activation_status) && $activation_status === 'on' ? 'Activated' : 'Not Activated';
 	?>
 
 		<p>
@@ -518,10 +519,6 @@ class WPJS_Admin
 			<?php endif; ?>
 		</p>
 		<p>
-			<label for="wp_juggler_multisite">Multisite</label><br>
-			<input type="checkbox" name="wp_juggler_multisite" id="wp_juggler_multisite" <?php checked($multisite, 'on'); ?> />
-		</p>
-		<p>
 			<label for="wp_juggler_automatic_login">Automatic Login</label><br>
 			<input type="checkbox" name="wp_juggler_automatic_login" id="wp_juggler_automatic_login" <?php checked($automatic_login, 'on'); ?> />
 		</p>
@@ -530,16 +527,23 @@ class WPJS_Admin
 			<input type="text" name="wp_juggler_login_username" id="wp_juggler_login_username" value="<?php echo esc_attr($login_username); ?>" size="60" />
 		</p>
 		<p>
-			<label for="wp_juggler_site_activation">Activation Status</label><br>
-			<input type="checkbox" name="wp_juggler_site_activation" id="wp_juggler_site_activation" <?php checked($activation_status, 'on'); ?> />
-		</p>
-		<p>
 			<label for="wp_juggler_frontend_ping_url">Frontend url to ping (if any) - by default frontpage will be used</label><br>
 			<input type="text" name="wp_juggler_frontend_ping_url" id="wp_juggler_frontend_ping_url" value="<?php echo esc_attr($frontend_ping_url); ?>" size="60" />
 		</p>
 		<p>
 			<label for="wp_juggler_frontend_ping_string">String to look for on the page(if any) - by default only response code will be checked (200 or 201)</label><br>
 			<input type="text" name="wp_juggler_frontend_ping_string" id="wp_juggler_frontend_ping_string" value="<?php echo esc_attr($frontend_ping_string); ?>" size="60" />
+		</p>
+		<p style="margin-top:40px;">
+			<label>Activation Status: <span id="activation-status-label" style="margin-right:20px;"><strong><?php echo esc_html($status_label) ?></strong></span></label>
+			<button type="button" id="change-status-button" onclick="toggleActivationStatusCheckbox()" class="button">Change Status Manually</button>
+		<div id="activation-status-wrapper" style="display: none;">
+			<label for="wp_juggler_site_activation">The status of the site is meant to be set through activation in the WP Juggler Settings on the client side, but if you wish, you can set the status manually here. <br>
+				Remember to Save the Changes if you change the value:</label><br>
+			<div style="margin-top:20px;"><label for="wp_juggler_site_activation">Activation status:</label>
+				<input type="checkbox" name="wp_juggler_site_activation" id="wp_juggler_site_activation" <?php checked($activation_status, 'on'); ?> style="margin-left:10px;" />
+			</div>
+		</div>
 		</p>
 
 		<style>
@@ -551,6 +555,11 @@ class WPJS_Admin
 			document.getElementById('wp_juggler_automatic_login').addEventListener('change', function() {
 				document.getElementById('wp_juggler_login_username_paragraph').style.display = this.checked ? 'block' : 'none';
 			});
+
+			function toggleActivationStatusCheckbox() {
+				var wrapper = document.getElementById("activation-status-wrapper");
+				wrapper.style.display = wrapper.style.display === "none" ? "block" : "none";
+			}
 		</script>
 
 	<?php
@@ -757,18 +766,18 @@ class WPJS_Admin
 		<h3>Select the sites to show the button on:</h3>
 
 		<?php
-			 $related_sites = get_post_meta($post->ID, 'wp_juggler_related_sites', true) ?: [];
-			 $sites = get_posts([
-				'post_type' => 'wpjugglersites',
-				'post_status' => 'publish',
-				'numberposts' => -1
-			]);
+		$related_sites = get_post_meta($post->ID, 'wp_juggler_related_sites', true) ?: [];
+		$sites = get_posts([
+			'post_type' => 'wpjugglersites',
+			'post_status' => 'publish',
+			'numberposts' => -1
+		]);
 
-			foreach ($sites as $site) {
-				$checked = in_array($site->ID, $related_sites) ? 'checked' : '';
-				$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true); 
-				echo '<p><label><input type="checkbox" name="wp_juggler_related_sites[]" value="' . $site->ID . '" ' . $checked . '> <strong>' . esc_html($site->post_title) . '</strong> - ' . esc_html($site_url) . '</label></p>';
-			}
+		foreach ($sites as $site) {
+			$checked = in_array($site->ID, $related_sites) ? 'checked' : '';
+			$site_url = get_post_meta($site->ID, 'wp_juggler_server_site_url', true);
+			echo '<p><label><input type="checkbox" name="wp_juggler_related_sites[]" value="' . $site->ID . '" ' . $checked . '> <strong>' . esc_html($site->post_title) . '</strong> - ' . esc_html($site_url) . '</label></p>';
+		}
 		?>
 
 
@@ -796,8 +805,10 @@ class WPJS_Admin
 		<button type="button" class="button juggler-add-user" id="juggler-add-user">Add User</button>
 
 		<style>
-			.juggler-user-autocomplete, .juggler-remove-user, .juggler-add-user {
-				margin:4px !important;
+			.juggler-user-autocomplete,
+			.juggler-remove-user,
+			.juggler-add-user {
+				margin: 4px !important;
 			}
 		</style>
 
@@ -1089,13 +1100,12 @@ class WPJS_Admin
 			delete_post_meta($post_id, 'wp_juggler_tool_url');
 		}
 
-		if (isset($_POST['wp_juggler_related_sites'])){
+		if (isset($_POST['wp_juggler_related_sites'])) {
 			$related_sites = array_map('intval', $_POST['wp_juggler_related_sites']);
 			update_post_meta($post_id, 'wp_juggler_related_sites', $related_sites);
 		} else {
 			delete_post_meta($post_id, 'wp_juggler_related_sites');
 		}
-		
 	}
 
 	public function wpjs_add_custom_column($columns)
@@ -1114,37 +1124,41 @@ class WPJS_Admin
 		}
 	}
 
-	public function wpjs_cp_query_vars($vars) {
+	public function wpjs_cp_query_vars($vars)
+	{
 		$vars[] = 'wpjs_cp';
 		return $vars;
 	}
 
-	public function wpjs_cp_rewrite_rule() {
+	public function wpjs_cp_rewrite_rule()
+	{
 		//add_rewrite_rule('^wpjs-control-panel/?$', 'index.php?wpjs_cp=1', 'top');
 		add_rewrite_rule('^wp-admin/wpjs-control-panel/?$', 'index.php?wpjs_cp=1', 'top');
 	}
 
-	public function wpjs_cp_template_redirect() {
+	public function wpjs_cp_template_redirect()
+	{
 		global $wp_query;
-	
+
 		if (isset($wp_query->query_vars['wpjs_cp'])) {
 			$template = plugin_dir_path(__FILE__) . '../templates/cp-template.php';
 
 			if (file_exists($template)) {
-				show_admin_bar( false );
+				show_admin_bar(false);
 				include($template);
 				exit;
 			}
 		}
 	}
 
-	public function wpjs_plugin_activation() {
+	public function wpjs_plugin_activation()
+	{
 		$this->wpjs_cp_rewrite_rule();
 		flush_rewrite_rules();
 	}
 
-	public function wpjs_plugin_deactivation() {
+	public function wpjs_plugin_deactivation()
+	{
 		flush_rewrite_rules();
 	}
-	
 }
