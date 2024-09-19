@@ -10,6 +10,9 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
+const dialogChecksum = ref(false);
+const checksumItem = ref(null);
+
 const refreshActive = ref(false);
 const updateActive = ref('');
 const deactivateActive = ref('');
@@ -143,6 +146,11 @@ const tab = ref(0);
 function openVulnerabilities(item) {
   vulnerabilitiesItem.value = item;
   dialogInner.value = true;
+}
+
+function openChecksum(item) {
+  checksumItem.value = item;
+  dialogChecksum.value = true;
 }
 
 async function refreshPlugins() {
@@ -451,6 +459,11 @@ async function activatePlugin( pluginSlug, networkWide ) {
                             size="large"
                             class="mr-1"
                           ></v-icon>
+                          <v-btn
+                            class="ml-3 text-none text-caption"
+                            @click="openChecksum(item)"
+                            >Details
+                          </v-btn>
                         </div>
                         <div v-else-if="!item.Wporg || item.WpJuggler">
                           <v-icon
@@ -657,7 +670,7 @@ async function activatePlugin( pluginSlug, networkWide ) {
         <v-toolbar>
           <v-btn icon="mdi-close" @click="dialogInner = false"></v-btn>
 
-          <v-toolbar-title>List of vulnerabilities </v-toolbar-title>
+          <v-toolbar-title>List of vulnerabilities - {{ vulnerabilitiesItem.Name }} - {{ vulnerabilitiesItem.Version }}</v-toolbar-title>
         </v-toolbar>
 
         <v-card-text>
@@ -687,6 +700,38 @@ async function activatePlugin( pluginSlug, networkWide ) {
             </div>
             <v-divider class="mt-4 mb-4"></v-divider>
           </v-sheet>
+        </v-card-text>
+      </v-card>
+
+    </v-dialog>
+
+    <v-dialog v-model="dialogChecksum" min-width="600">
+      <v-card>
+        <v-toolbar>
+          <v-btn icon="mdi-close" @click="dialogChecksum = false"></v-btn>
+
+          <v-toolbar-title>List of Checksum Errors - {{ checksumItem.Name }} - {{ checksumItem.Version }}</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-sheet v-if="checksumItem.ChecksumDetails.length > 0">
+            <v-row class="wpjs-debug-table-row pl-5">
+                            <v-col class="text-left">
+                              <strong>File</strong>
+                            </v-col>
+                            <v-col class="text-left">
+                              <strong>Checksum problem</strong>
+                            </v-col>
+                          </v-row>
+                          <v-row class="wpjs-debug-table-row pl-5" v-for="item in checksumItem.ChecksumDetails">
+                            <v-col class="text-left">
+                              <div class="wpjs-plugin-vul">{{ item.file }}</div>
+                            </v-col>
+                            <v-col class="text-left">
+                              <div class="wpjs-plugin-vul"> {{ item.message }}</div>
+                            </v-col>
+                          </v-row>
+                        </v-sheet>
         </v-card-text>
       </v-card>
 

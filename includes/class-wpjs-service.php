@@ -430,28 +430,28 @@ class WPJS_Service
 			// Added to calculate stuff
 
 			foreach ($plugins as $plugin => $plugininfo) {
-				if( $plugininfo['ChecksumFiles'] ){
+				if ($plugininfo['ChecksumFiles']) {
 					$cf = base64_decode($plugininfo['ChecksumFiles']);
 					$unzipped = gzuncompress($cf);
-					$plugins[$plugin]['ChecksumFiles'] = json_decode( $unzipped, true );
+					$plugins[$plugin]['ChecksumFiles'] = json_decode($unzipped, true);
 				} else {
 					$plugins[$plugin]['ChecksumFiles'] = false;
 				}
 			}
 
-			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum( $plugins );
+			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum($plugins);
 
 			foreach ($plugins as $plugin => $plugininfo) {
 				$plugins[$plugin]['ChecksumDetails'] = [];
 				unset($plugins[$plugin]['ChecksumFiles']);
-				if( in_array( $plugininfo['Slug'], $data_checksum['failures_list'] )){
+				if (in_array($plugininfo['Slug'], $data_checksum['failures_list'])) {
 					$plugins[$plugin]['Checksum'] = false;
 				} else {
 					$plugins[$plugin]['Checksum'] = true;
 				}
 			}
 
-			foreach ($data_checksum['failures_details'] as $failure){
+			foreach ($data_checksum['failures_details'] as $failure) {
 				$plugin_file = WPJS_Service::findElementByAttribute($plugins, 'Slug', $failure['plugin_name']);
 				$plugins[$plugin_file]['ChecksumDetails'][] = $failure;
 			}
@@ -461,7 +461,7 @@ class WPJS_Service
 			// finished
 
 			foreach ($plugins as $plugin => $plugininfo) {
-				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities( $plugininfo['Slug'], $plugininfo['Version']);
+				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities($plugininfo['Slug'], $plugininfo['Version']);
 				$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
 			}
 
@@ -483,7 +483,8 @@ class WPJS_Service
 		return $response;
 	}
 
-	static function findElementByAttribute($array, $attribute, $value) {
+	static function findElementByAttribute($array, $attribute, $value)
+	{
 		foreach ($array as $key => $element) {
 			if (isset($element[$attribute]) && $element[$attribute] == $value) {
 				return $key;
@@ -666,38 +667,44 @@ class WPJS_Service
 		return $response;
 	}
 
-	static function get_plugin_vulnerabilities($plugin_name, $version) {
-		
-		$api_url = "https://www.wpvulnerability.net/plugin/{$plugin_name}";
-		$response = wp_remote_get($api_url, [
-			'timeout' => 10
-		]);
+	static function get_plugin_vulnerabilities($plugin_slug, $plugin_version)
+	{
+		$cache_key = 'vulnerabilities/' . $plugin_slug . '/' . $plugin_version;
+
+		$relevant_vulnerabilities = get_transient($cache_key);
+
+		if (false === $relevant_vulnerabilities) {
+
+			$api_url = "https://www.wpvulnerability.net/plugin/{$plugin_slug}";
+			$response = wp_remote_get($api_url, [
+				'timeout' => 10
+			]);
+
+			if (is_wp_error($response)) {
+				return [];  // Return an empty array on error.
+			}
+
+			$body = wp_remote_retrieve_body($response);
+			$data = json_decode($body, true);
+
+			if (!isset($data['data']['vulnerability'])) {
+				return [];  // Return an empty array if no vulnerabilities are found.
+			}
+
+			$vulnerabilities = $data['data']['vulnerability'];
+			$relevant_vulnerabilities = [];
+
+			foreach ($vulnerabilities as $vulnerability) {
+				$max_version = $vulnerability['operator']['max_version'] ?? null;
+				$max_operator = $vulnerability['operator']['max_operator'] ?? null;
 	
-		if (is_wp_error($response)) {
-			return [];  // Return an empty array on error.
-		}
-	
-		$body = wp_remote_retrieve_body($response);
-		$data = json_decode($body, true);
-	
-		if (!isset($data['data']['vulnerability'])) {
-			return [];  // Return an empty array if no vulnerabilities are found.
-		}
-	
-		$vulnerabilities = $data['data']['vulnerability'];
-		$relevant_vulnerabilities = [];
-	
-		foreach ($vulnerabilities as $vulnerability) {
-			$max_version = $vulnerability['operator']['max_version'] ?? null;
-			$max_operator = $vulnerability['operator']['max_operator'] ?? null;
-	
-			if ($max_version && version_compare($version, $max_version, $max_operator)) {
-				$relevant_vulnerabilities[] = $vulnerability;
+				if ($max_version && version_compare($plugin_version, $max_version, $max_operator)) {
+					$relevant_vulnerabilities[] = $vulnerability;
+				}
 			}
 		}
-	
+
 		return $relevant_vulnerabilities;
 	}
 
-	
 }
