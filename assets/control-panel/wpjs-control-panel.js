@@ -15535,6 +15535,7 @@ exports.default = {
         const vulnerabilitiesItem = (0, _vue.ref)(null);
         const dialogChecksum = (0, _vue.ref)(false);
         const checksumItem = (0, _vue.ref)(null);
+        const dialogBulkAction = (0, _vue.ref)(false);
         const refreshActive = (0, _vue.ref)(false);
         const updateActive = (0, _vue.ref)("");
         const deactivateActive = (0, _vue.ref)("");
@@ -15543,6 +15544,9 @@ exports.default = {
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
         const selectedPlugins = (0, _vue.ref)([]);
+        const bulkActionError = (0, _vue.ref)(false);
+        const bulkActionText = (0, _vue.ref)(false);
+        const actionArrayFiltered = (0, _vue.ref)([]);
         const bulkActionsPlugins = [
             {
                 text: "Update Plugins",
@@ -15825,6 +15829,40 @@ exports.default = {
                 activateNetworkActive.value = "";
             }
         }
+        async function doBulkAction() {
+            bulkActionError.value = false;
+            bulkActionText.value = false;
+            actionArrayFiltered.value = [];
+            if (!selectedActionPlugins.value) bulkActionError.value = "No action selected";
+            else if (selectedPlugins.value.length == 0) bulkActionError.value = "No plugin selected";
+            else {
+                let actionArray = [];
+                selectedPlugins.value.forEach((plugin)=>{
+                    const maybePlugin = plugins_data.value.find((element)=>element.File === plugin);
+                    if (maybePlugin !== undefined) actionArray.push(maybePlugin);
+                });
+                if (selectedActionPlugins.value.value == "update") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Update != false);
+                    bulkActionText.value = "update";
+                }
+                if (selectedActionPlugins.value.value == "activate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.Multisite != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true);
+                    bulkActionText.value = "activate";
+                }
+                if (selectedActionPlugins.value.value == "network_activate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true);
+                    bulkActionText.value = "network activate";
+                }
+                if (selectedActionPlugins.value.value == "deactivate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active == true || element.NetworkActive == true);
+                    bulkActionText.value = "deactivate";
+                }
+            }
+            if (actionArrayFiltered.value.length == 0) bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`;
+            else bulkActionText.value = `You are going to ${bulkActionText.value} these plugins:`;
+            console.log(actionArrayFiltered.value);
+            dialogBulkAction.value = true;
+        }
         const __returned__ = {
             store,
             search,
@@ -15832,6 +15870,7 @@ exports.default = {
             vulnerabilitiesItem,
             dialogChecksum,
             checksumItem,
+            dialogBulkAction,
             refreshActive,
             updateActive,
             deactivateActive,
@@ -15840,6 +15879,9 @@ exports.default = {
             ajaxError,
             ajaxErrorText,
             selectedPlugins,
+            bulkActionError,
+            bulkActionText,
+            actionArrayFiltered,
             bulkActionsPlugins,
             selectedActionPlugins,
             queryClient,
@@ -15862,6 +15904,7 @@ exports.default = {
             updatePlugin,
             deactivatePlugin,
             activatePlugin,
+            doBulkAction,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -15978,6 +16021,12 @@ const _hoisted_29 = {
     class: "wpjs-plugin-vul"
 };
 const _hoisted_30 = {
+    class: "wpjs-plugin-vul"
+};
+const _hoisted_31 = {
+    class: "my-8"
+};
+const _hoisted_32 = {
     class: "wpjs-plugin-vul"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -16156,7 +16205,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                     ]),
                                                                                                                     (0, _vue.createVNode)(_component_v_btn, {
                                                                                                                         class: "ml-3 text-none text-caption",
-                                                                                                                        onClick: _cache[3] || (_cache[3] = ()=>{}),
+                                                                                                                        onClick: _cache[3] || (_cache[3] = ($event)=>$setup.doBulkAction()),
                                                                                                                         variant: "outlined"
                                                                                                                     }, {
                                                                                                                         default: (0, _vue.withCtx)(()=>[
@@ -16723,6 +16772,98 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogBulkAction,
+            "onUpdate:modelValue": _cache[18] || (_cache[18] = ($event)=>$setup.dialogBulkAction = $event),
+            width: "800"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[17] || (_cache[17] = ($event)=>$setup.dialogBulkAction = false)
+                                            }),
+                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("Bulk Action")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                key: 1
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionPlugins.text), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }))
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createElementVNode)("div", _hoisted_31, (0, _vue.toDisplayString)($setup.bulkActionText), 1 /* TEXT */ ),
+                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.actionArrayFiltered, (item)=>{
+                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                class: "wpjs-debug-table-row pl-5"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createElementVNode)("div", _hoisted_32, (0, _vue.toDisplayString)(item.Name), 1 /* TEXT */ )
+                                                                                ]),
+                                                                            _: 2 /* DYNAMIC */ 
+                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                    ]),
+                                                                _: 2 /* DYNAMIC */ 
+                                                            }, 1024 /* DYNAMIC_SLOTS */ );
+                                                        }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                        $setup.actionArrayFiltered.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                            key: 0,
+                                                            class: "ml-3 mt-10 text-none text-caption",
+                                                            loading: $setup.refreshActive,
+                                                            onClick: $setup.refreshPlugins,
+                                                            variant: "outlined"
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createTextVNode)("Confirm ")
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "loading"
+                                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }))
                                         ]),
                                     _: 1 /* STABLE */ 
                                 })
