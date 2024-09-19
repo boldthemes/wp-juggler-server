@@ -15547,6 +15547,11 @@ exports.default = {
         const bulkActionError = (0, _vue.ref)(false);
         const bulkActionText = (0, _vue.ref)(false);
         const actionArrayFiltered = (0, _vue.ref)([]);
+        const bulkActionInProgress = (0, _vue.ref)(false);
+        const bulkActionFinished = (0, _vue.ref)(false);
+        const bulkActionsNumber = (0, _vue.ref)(0);
+        const currentAction = (0, _vue.ref)(null);
+        const progressIndicator = (0, _vue.ref)(0);
         const bulkActionsPlugins = [
             {
                 text: "Update Plugins",
@@ -15860,9 +15865,27 @@ exports.default = {
             }
             if (actionArrayFiltered.value.length == 0) bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`;
             else bulkActionText.value = `You are going to ${bulkActionText.value} these plugins:`;
-            console.log(actionArrayFiltered.value);
+            bulkActionInProgress.value = false;
             dialogBulkAction.value = true;
         }
+        async function InitiateAction() {
+            bulkActionsNumber.value = actionArrayFiltered.value.length;
+            bulkActionInProgress.value = true;
+            bulkActionFinished.value = false;
+            processAction();
+        }
+        async function processAction() {
+            if (actionArrayFiltered.value.length > 0) {
+                currentAction.value = actionArrayFiltered.value.shift();
+                progressIndicator.value = Math.ceil((bulkActionsNumber.value - actionArrayFiltered.value.length) / bulkActionsNumber.value * 100);
+                console.log(progressIndicator.value);
+                setTimeout(processAction, 2000);
+            } else bulkActionFinished.value = true;
+        }
+        //
+        const persistDialog = (0, _vue.computed)(()=>{
+            return bulkActionInProgress.value && !bulkActionFinished.value;
+        });
         const __returned__ = {
             store,
             search,
@@ -15882,6 +15905,11 @@ exports.default = {
             bulkActionError,
             bulkActionText,
             actionArrayFiltered,
+            bulkActionInProgress,
+            bulkActionFinished,
+            bulkActionsNumber,
+            currentAction,
+            progressIndicator,
             bulkActionsPlugins,
             selectedActionPlugins,
             queryClient,
@@ -15905,6 +15933,9 @@ exports.default = {
             deactivatePlugin,
             activatePlugin,
             doBulkAction,
+            InitiateAction,
+            processAction,
+            persistDialog,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -16029,6 +16060,15 @@ const _hoisted_31 = {
 const _hoisted_32 = {
     class: "wpjs-plugin-vul"
 };
+const _hoisted_33 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Bulk action in progress - do not close the window, you will interrupt the progress:", -1 /* HOISTED */ );
+const _hoisted_34 = {
+    class: "my-8"
+};
+const _hoisted_35 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Bulk action finished", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -16052,6 +16092,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedThemes,
@@ -16785,27 +16826,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.dialogBulkAction,
-            "onUpdate:modelValue": _cache[18] || (_cache[18] = ($event)=>$setup.dialogBulkAction = $event),
-            width: "800"
+            "onUpdate:modelValue": _cache[19] || (_cache[19] = ($event)=>$setup.dialogBulkAction = $event),
+            width: "800",
+            persistent: $setup.persistDialog
         }, {
             default: (0, _vue.withCtx)(()=>[
                     (0, _vue.createVNode)(_component_v_card, null, {
                         default: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createVNode)(_component_v_toolbar, null, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_btn, {
+                                            !($setup.bulkActionInProgress && !$setup.bulkActionFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
                                                 icon: "mdi-close",
                                                 onClick: _cache[17] || (_cache[17] = ($event)=>$setup.dialogBulkAction = false)
-                                            }),
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
                                             $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
-                                                key: 0
+                                                key: 1
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createTextVNode)("Bulk Action")
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
-                                                key: 1
+                                                key: 2
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
                                                         (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionPlugins.text), 1 /* TEXT */ )
@@ -16824,7 +16867,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                            })) : !$setup.bulkActionInProgress ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
                                                 key: 1,
                                                 class: "mb-4"
                                             }, {
@@ -16850,20 +16893,51 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         $setup.actionArrayFiltered.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                             key: 0,
                                                             class: "ml-3 mt-10 text-none text-caption",
-                                                            loading: $setup.refreshActive,
-                                                            onClick: $setup.refreshPlugins,
+                                                            onClick: _cache[18] || (_cache[18] = ($event)=>$setup.InitiateAction()),
                                                             variant: "outlined"
                                                         }, {
                                                             default: (0, _vue.withCtx)(()=>[
                                                                     (0, _vue.createTextVNode)("Confirm ")
                                                                 ]),
                                                             _: 1 /* STABLE */ 
-                                                        }, 8 /* PROPS */ , [
-                                                            "loading"
-                                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                        })) : (0, _vue.createCommentVNode)("v-if", true)
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            }))
+                                            })) : $setup.bulkActionInProgress && !$setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 2,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_33,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_34, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.Name), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.progressIndicator,
+                                                            striped: ""
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.bulkActionsNumber - $setup.actionArrayFiltered.length) + "/" + (0, _vue.toDisplayString)($setup.bulkActionsNumber), 1 /* TEXT */ )
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.bulkActionInProgress && $setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 3,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_35
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     _: 1 /* STABLE */ 
                                 })
@@ -16873,7 +16947,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
-            "modelValue"
+            "modelValue",
+            "persistent"
         ])
     ]);
 }

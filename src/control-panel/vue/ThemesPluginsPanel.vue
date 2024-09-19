@@ -28,6 +28,11 @@ const selectedPlugins = ref([]);
 const bulkActionError = ref(false);
 const bulkActionText = ref(false);
 const actionArrayFiltered = ref([]);
+const bulkActionInProgress = ref(false);
+const bulkActionFinished = ref(false)
+const bulkActionsNumber = ref(0)
+const currentAction = ref(null)
+const progressIndicator = ref(0);
 
 const bulkActionsPlugins = [
   {
@@ -348,46 +353,69 @@ async function doBulkAction() {
   } else {
     let actionArray = []
     selectedPlugins.value.forEach(plugin => {
-      const maybePlugin = plugins_data.value.find( element => element.File === plugin )
-      if( maybePlugin !== undefined ){
+      const maybePlugin = plugins_data.value.find(element => element.File === plugin)
+      if (maybePlugin !== undefined) {
         actionArray.push(maybePlugin)
       }
     });
-    
-    if(selectedActionPlugins.value.value == 'update'){
+
+    if (selectedActionPlugins.value.value == 'update') {
       actionArrayFiltered.value = actionArray.filter(element => element.Update != false);
       bulkActionText.value = 'update';
     }
 
-    if(selectedActionPlugins.value.value == 'activate'){
-      actionArrayFiltered.value = actionArray.filter(element => ( element.Active != true && element.Multisite != true ) || ( element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true ) );
+    if (selectedActionPlugins.value.value == 'activate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active != true && element.Multisite != true) || (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true));
       bulkActionText.value = 'activate';
     }
 
-    if(selectedActionPlugins.value.value == 'network_activate'){
-      actionArrayFiltered.value = actionArray.filter(element => ( element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true ) || ( element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true ) );
+    if (selectedActionPlugins.value.value == 'network_activate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true) || (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true));
       bulkActionText.value = 'network activate';
     }
 
-    if(selectedActionPlugins.value.value == 'deactivate'){
-      actionArrayFiltered.value = actionArray.filter(element => ( element.Active == true || element.NetworkActive == true ) );
+    if (selectedActionPlugins.value.value == 'deactivate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active == true || element.NetworkActive == true));
       bulkActionText.value = 'deactivate';
     }
 
   }
 
-  if( actionArrayFiltered.value.length == 0 ){
+  if (actionArrayFiltered.value.length == 0) {
     bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`
   } else {
     bulkActionText.value = `You are going to ${bulkActionText.value} these plugins:`
   }
 
-  console.log(actionArrayFiltered.value);
-
+  bulkActionInProgress.value = false
   dialogBulkAction.value = true;
 
 }
 
+async function InitiateAction() {
+  bulkActionsNumber.value = actionArrayFiltered.value.length
+  bulkActionInProgress.value = true
+  bulkActionFinished.value = false
+  
+  processAction()
+}
+
+async function processAction() {
+  if (actionArrayFiltered.value.length > 0) {
+    currentAction.value = actionArrayFiltered.value.shift()
+    progressIndicator.value = Math.ceil(((bulkActionsNumber.value - actionArrayFiltered.value.length)/bulkActionsNumber.value) * 100)
+    console.log(progressIndicator.value)
+    setTimeout(processAction, 2000); 
+  } else {
+    bulkActionFinished.value = true
+  }
+}
+
+//
+
+const persistDialog = computed(() => {
+  return bulkActionInProgress.value && !bulkActionFinished.value;
+})
 
 </script>
 
@@ -679,10 +707,10 @@ async function doBulkAction() {
 
     </v-dialog>
 
-    <v-dialog v-model="dialogBulkAction" width="800">
+    <v-dialog v-model="dialogBulkAction" width="800" :persistent="persistDialog">
       <v-card>
         <v-toolbar>
-          <v-btn icon="mdi-close" @click="dialogBulkAction = false"></v-btn>
+          <v-btn v-if="!(bulkActionInProgress && !bulkActionFinished)" icon="mdi-close" @click="dialogBulkAction = false"></v-btn>
 
           <v-toolbar-title v-if="bulkActionError">Bulk Action</v-toolbar-title>
           <v-toolbar-title v-else>{{ selectedActionPlugins.text }}</v-toolbar-title>
@@ -693,19 +721,32 @@ async function doBulkAction() {
           <v-sheet v-if="bulkActionError">
             {{ bulkActionError }}
           </v-sheet>
-          <v-sheet v-else class="mb-4">
+          <v-sheet v-else-if="!bulkActionInProgress" class="mb-4">
             <div class="my-8">{{ bulkActionText }}</div>
-            
+
             <v-row class="wpjs-debug-table-row pl-5" v-for="item in actionArrayFiltered">
               <v-col class="text-left">
                 <div class="wpjs-plugin-vul">{{ item.Name }}</div>
               </v-col>
             </v-row>
-            <v-btn v-if="actionArrayFiltered.length > 0" class="ml-3 mt-10 text-none text-caption" :loading="refreshActive" @click="refreshPlugins"
-                variant="outlined">Confirm
-              </v-btn>
+
+            <v-btn v-if="actionArrayFiltered.length > 0" class="ml-3 mt-10 text-none text-caption"
+              @click="InitiateAction()" variant="outlined">Confirm
+            </v-btn>
 
           </v-sheet>
+          <v-sheet v-else-if="bulkActionInProgress && !bulkActionFinished" class="mb-4" height="200">
+            <div class="my-8">Bulk action in progress - do not close the window, you will interrupt the progress:</div>
+            <div class="my-8"><strong>{{ currentAction.Name }}</strong></div>
+            <v-progress-linear color="light-blue" height="30" :model-value="progressIndicator" striped>
+              <strong>{{ bulkActionsNumber - actionArrayFiltered.length }}/{{ bulkActionsNumber }}</strong>
+            </v-progress-linear>
+          </v-sheet>
+
+          <v-sheet v-else-if="bulkActionInProgress && bulkActionFinished" class="mb-4" height="200">
+            <div class="my-8">Bulk action finished</div>
+          </v-sheet>
+
         </v-card-text>
       </v-card>
 
