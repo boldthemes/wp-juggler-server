@@ -147,13 +147,13 @@ async function refreshHealth() {
             <div v-if="data.wp_juggler_health_data_timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               {{ data.wp_juggler_health_data_timestamp }}
-              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth">Refresh </v-btn>
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth" variant="outlined">Refresh </v-btn>
             </div>
 
             <div v-else>
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
-              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth">Refresh </v-btn>
+              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshHealth" variant="outlined">Refresh </v-btn>
             </div>
           </v-sheet>
 
@@ -236,7 +236,7 @@ async function refreshHealth() {
                   </v-sheet>
 
                     <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon"
-                      @click="passedOpen = !passedOpen">Passed tests</v-btn>
+                      @click="passedOpen = !passedOpen" variant="outlined">Passed tests</v-btn>
 
                     <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10">
                       <div class="text-h6">

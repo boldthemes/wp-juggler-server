@@ -159,6 +159,7 @@ const noticesButton = ref(null);
                 class="mb-5 ml-5 mt-4 text-none text-caption"
                 @click="openHealth(props.item)"
                 block
+                variant="outlined"
               ></v-btn>
               <v-btn
                 v-else
@@ -182,7 +183,7 @@ const noticesButton = ref(null);
               <div class="mr-5">
                 <v-menu open-on-hover>
                   <template v-slot:activator="{ props }">
-                    <v-btn v-bind="props" class="text-none text-caption">
+                    <v-btn v-bind="props" class="text-none text-caption" variant="outlined">
                       {{ uptimePeriods[selectedUptimePeriod].title }}
                     </v-btn>
                   </template>
@@ -253,6 +254,7 @@ const noticesButton = ref(null);
                 class="mb-5 ml-5 mt-4 text-none text-caption"
                 @click="openUptime(props.item)"
                 block
+                variant="outlined"
               ></v-btn>
               <v-btn
                 v-else
@@ -358,6 +360,7 @@ const noticesButton = ref(null);
                 @click="openThemesPlugins(props.item)"
                 ref="themesButton"
                 block
+                variant="outlined"
               ></v-btn>
 
               <v-btn
@@ -428,6 +431,7 @@ const noticesButton = ref(null);
                 @click="openNotices(props.item)"
                 ref="noticesButton"
                 block
+                variant="outlined"
               ></v-btn>
               <v-btn
                 v-else

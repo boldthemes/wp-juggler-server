@@ -199,14 +199,14 @@ const organizeByMonth = computed(() => {
                 <div v-if="data.wp_juggler_notices_timestamp">
                   <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
                   {{ data.wp_juggler_notices_timestamp }}
-                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices">Refresh
+                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices" variant="outlined">Refresh
                   </v-btn>
                 </div>
 
                 <div v-else>
                   <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
                   Never
-                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices">Refresh
+                  <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshNotices" variant="outlined">Refresh
                   </v-btn>
                 </div>
               </v-sheet>

@@ -91,7 +91,7 @@ onMounted(() => {
 
 <template>
   <div class="mt-4 ml-4 mb-4">
-    <v-btn color="#2196f3" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to
+    <v-btn color="#2196f3" variant="outlined" class="text-none text-caption" @click="backToDashboard">Back to
       Dashboard</v-btn>
     <v-spacer></v-spacer>
 
@@ -104,7 +104,7 @@ onMounted(() => {
           <v-spacer></v-spacer>
 
           <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-            variant="solo-filled" flat hide-details single-line></v-text-field>
+          variant="outlined" flat hide-details single-line max-width="800"></v-text-field>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -180,7 +180,7 @@ onMounted(() => {
 
           <template v-slot:item.links="{ item }">
             <div v-if="item.wp_juggler_site_activation">
-              <v-btn v-for="button in item.wp_juggler_login_tools" variant="elevated"
+              <v-btn v-for="button in item.wp_juggler_login_tools" variant="outlined"
                 @click="gotoUrl(button.wp_juggler_tool_url)" class="text-none text-caption mr-1 ml-1">{{
                   button.wp_juggler_tool_label }}</v-btn>
             </div>
@@ -191,14 +191,14 @@ onMounted(() => {
             <div v-if="
               item.wp_juggler_site_activation && item.wp_juggler_automatic_login
             ">
-              <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-login"
+              <v-btn color="#2196f3" variant="outlined" class="text-none text-caption" prepend-icon="mdi-login"
                 @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
             </div>
             <div v-if="
               item.wp_juggler_site_activation &&
               !item.wp_juggler_automatic_login
             ">
-              <v-btn color="#2196f3" variant="elevated" class="text-none text-caption" prepend-icon="mdi-account-remove"
+              <v-btn color="#2196f3" variant="outlined" class="text-none text-caption" prepend-icon="mdi-account-remove"
                 @click="gotoUrl(item.wp_juggler_login_url)">Login</v-btn>
             </div>
             <div v-if="!item.wp_juggler_site_activation">Inactive</div>
@@ -218,7 +218,7 @@ onMounted(() => {
 
 
 
-    <v-btn color="#2196f3" variant="flat" class="text-none text-caption" @click="backToDashboard">Back to
+    <v-btn color="#2196f3" variant="outlined" class="text-none text-caption" @click="backToDashboard">Back to
       Dashboard</v-btn>
   </div>
   <ThemesPluginsPanel v-if="store.activatedThemes"></ThemesPluginsPanel>
