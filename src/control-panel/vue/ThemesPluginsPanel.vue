@@ -110,7 +110,7 @@ const themes_data = computed(() => {
 });
 
 const plugin_headers = [
-  { title: "Name", value: "Name", align: "start", sortable: true },
+  { title: "Plugin Name", value: "Name", align: "start", sortable: true },
   {
     title: "Active",
     key: "active",
@@ -151,7 +151,7 @@ const plugin_headers = [
 ];
 
 const theme_headers = [
-  { title: "Name", value: "Name", align: "start", sortable: true },
+  { title: "Themes Name", value: "Name", align: "start", sortable: true },
   { title: "Author", value: "Author", align: "left", sortable: true },
   {
     title: "Active",

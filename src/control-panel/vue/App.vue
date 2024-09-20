@@ -19,6 +19,7 @@ const searchSites = ref("");
 const searchPlugins = ref("");
 
 const expanded = ref([]);
+const expandedPlugins = ref([]);
 const headersSites = [
   { title: "", key: "network", align: "center", sortable: false },
   { title: "Title", value: "title", align: "start", sortable: true },
@@ -42,8 +43,9 @@ const headersSites = [
 ];
 
 const headersPlugins = [
-  { title: "Name", value: "Name", align: "start", sortable: true },
-  { title: "Version", value: "Version", align: "center", sortable: true },
+  { title: "Plugin Name", value: "Name", align: "start", sortable: true },
+  { title: "Latest Version", value: "Version", align: "center", sortable: true },
+  { title: "Number of Installations", key: "installations", align: "center", sortable: true },
 ];
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
@@ -147,9 +149,9 @@ onMounted(() => {
             <v-divider></v-divider>
             <v-data-table
               v-model:search="searchSites"
-              :items="data"
+              :items="data.sites_view"
               :headers="headersSites"
-              item-key="id"
+              item-value="id"
               v-model:expanded="expanded"
               show-expand
               items-per-page="50"
@@ -374,16 +376,20 @@ onMounted(() => {
             <v-divider></v-divider>
             <v-data-table
               v-model:search="searchPlugins"
-              :items="data"
+              :items="data.plugins_view.plugins"
               :headers="headersPlugins"
-              item-key="id"
-              v-model:expanded="expanded"
+              item-value="Name"
+              v-model:expanded="expandedPlugins"
               show-expand
               items-per-page="50"
             >
+
+            <template v-slot:item.installations="{ item }">
+                <div>{{ item.Sites.length }}</div>
+              </template>
               
               <template v-slot:expanded-row="{ columns, item }">
-                <ExpandedRowPlugins :columns="columns" :item="item"></ExpandedRowPlugins>
+                <ExpandedRowPlugins :columns="columns" :items="item.Sites" :name="item.Name"></ExpandedRowPlugins>
               </template>
 
             </v-data-table>

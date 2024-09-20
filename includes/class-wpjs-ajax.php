@@ -102,7 +102,7 @@ class WPJS_AJAX
 						$datetime->setTimestamp($timestamp);
 						$datetime->setTimezone($timezone);
 						$crontime = $datetime->format('Y-m-d H:i:s');
-						$label_ago = $this->get_time_to($timestamp); 
+						$label_ago = $this->get_time_to($timestamp);
 
 						$result[] = (object) array(
 							'hook_slug' => $hook_slug,
@@ -592,6 +592,83 @@ class WPJS_AJAX
 		}
 
 		return $ret_obj;
+	}
+
+	private function get_plugin_view()
+	{
+		global $wpdb;
+
+		$log_entries = $wpdb->get_results(
+			$wpdb->prepare(
+				"
+					SELECT t1.*
+					FROM wp_wpjs_cron_log t1
+					INNER JOIN (
+						SELECT wpjugglersites_id, MAX(log_time) as latest_log_time
+						FROM wp_wpjs_cron_log
+						WHERE log_type = %s 
+						GROUP BY wpjugglersites_id
+					) t2
+					ON t1.wpjugglersites_id = t2.wpjugglersites_id AND t1.log_time = t2.latest_log_time
+					WHERE t1.log_type = %s
+				",
+				'checkPlugins',
+				'checkPlugins',
+			)
+		);
+
+		// Initialize arrays to hold installed plugins and themes
+		$installed_plugins = [];
+		$installed_themes = [];
+
+		// Utility function to merge theme/plugin info
+		function merge_info(&$array, $name, $version, $site_info)
+		{
+			foreach ($array as &$item) {
+				if ($item['Name'] === $name && $item['Version'] === $version) {
+					$item['Sites'][] = $site_info;
+					return;
+				}
+			}
+			$array[] = [
+				'Name' => $name,
+				'Version' => $version,
+				'Sites' => [$site_info]
+			];
+		}
+
+		// Process each log entry
+		foreach ($log_entries as $entry) {
+			$log_data = json_decode($entry->log_data, true);
+			$site_info = [
+				'wpjugglersites_id' => $entry->wpjugglersites_id,
+				'site_name' => get_the_title($entry->wpjugglersites_id)
+			];
+
+			// Process themes data
+			if (isset($log_data['themes_data'])) {
+				foreach ($log_data['themes_data'] as $theme) {
+					$version = !empty($theme['UpdateVersion']) ? $theme['UpdateVersion'] : $theme['Version'];
+					$site_info = array_merge($site_info, $theme);
+					merge_info($installed_themes, $theme['Name'], $version, $site_info);
+				}
+			}
+
+			// Process plugins data
+			if (isset($log_data['plugins_data'])) {
+				foreach ($log_data['plugins_data'] as $plugin) {
+					$version = !empty($plugin['UpdateVersion']) ? $plugin['UpdateVersion'] : $plugin['Version'];
+					$site_info = array_merge($site_info, $plugin);
+					merge_info($installed_plugins, $plugin['Name'], $version, $site_info);
+				}
+			}
+		}
+
+		return array(
+			'plugins' => $installed_plugins,
+			'themes' => $installed_themes
+		);
+
 	}
 
 	public function ajax_get_latest_notices()
@@ -1182,6 +1259,7 @@ class WPJS_AJAX
 
 		$wpjuggler_sites = get_posts($args);
 		$data = array();
+		$data['sites_view'] = array();
 
 		$tools_array = $this->load_wpjugglertools();
 
@@ -1254,7 +1332,6 @@ class WPJS_AJAX
 							$health_data_count[$obj['status']] = 1;
 						}
 					}
-
 				}
 
 				$notices_data = $this->get_latest_notices($site->ID);
@@ -1327,9 +1404,11 @@ class WPJS_AJAX
 					}
 				}
 
-				$data[] = $newsite;
+				$data['sites_view'][] = $newsite;
 			}
 		}
+
+		$data['plugins_view'] = $this->get_plugin_view();
 
 		wp_send_json_success($data, 200);
 	}

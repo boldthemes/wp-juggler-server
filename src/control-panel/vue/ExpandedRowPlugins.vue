@@ -5,450 +5,561 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 
 const store = useWpjsStore();
 
-const props = defineProps(["columns", "item"]);
+const props = defineProps(["name", "columns", "items"]);
 
-const uptimePeriods = [
-  { title: "Last 24 hours" },
-  { title: "Last 7 days" },
-  { title: "Last 30 days" },
-  { title: "Last 3 months" },
+const search = ref("");
+
+const dialogInner = ref(false);
+const vulnerabilitiesItem = ref(null);
+
+const dialogChecksum = ref(false);
+const checksumItem = ref(null);
+
+const dialogBulkAction = ref(false);
+
+const refreshActive = ref(false);
+const updateActive = ref('');
+const deactivateActive = ref('');
+const activateActive = ref('');
+const activateNetworkActive = ref('');
+
+const ajaxError = ref(false);
+const ajaxErrorText = ref("");
+
+const selectedPlugins = ref([]);
+const bulkActionError = ref(false);
+const bulkActionText = ref(false);
+const actionArrayFiltered = ref([]);
+const bulkActionInProgress = ref(false);
+const bulkActionFinished = ref(false)
+const bulkActionsNumber = ref(0)
+const currentAction = ref(null)
+const progressIndicator = ref(0);
+
+const bulkActionsPlugins = [
+  {
+    text: 'Update Plugins',
+    value: 'update'
+  },
+  {
+    text: 'Activate Plugins',
+    value: 'activate'
+  },
+  {
+    text: 'Network Activate Plugins',
+    value: 'network_activate'
+  },
+  {
+    text: 'Deactivate Plugins',
+    value: 'deactivate'
+  }
+]
+
+const selectedActionPlugins = ref(null);
+
+async function doAjax(args) {
+  let result;
+
+  try {
+    const response = await fetch(store.ajaxUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(args),
+    });
+
+    const result = await response.json();
+
+    return result
+
+  } catch (error) {
+    throw new Error('No response from the WP Juggler Server');
+  }
+}
+
+const plugin_headers = [
+  { title: "Site Name", value: "site_name", align: "start", sortable: true },
+  {
+    title: "Active",
+    key: "active",
+    align: "center",
+    sortable: false,
+  },
+  { title: "Version", value: "Version", align: "center", sortable: true },
+  {
+    title: "Update",
+    key: "update",
+    align: "center",
+    sortable: false,
+  },
+  {
+    title: "Vulnerabilities",
+    key: "vulnerabilities",
+    align: "center",
+    sortable: true,
+  },
+  {
+    title: "Cheksum",
+    key: "checksum",
+    align: "start",
+    sortable: true,
+  },
+  {
+    title: "Source",
+    key: "source",
+    align: "start",
+    sortable: true,
+  },
+  {
+    title: "Actions",
+    key: "actions",
+    align: "start",
+    sortable: true,
+  },
 ];
 
-const selectedUptimePeriod = ref(0);
+const tab = ref(0);
 
-function selectUptimePeriod(ind) {
-  selectedUptimePeriod.value = ind;
+function openVulnerabilities(item) {
+  vulnerabilitiesItem.value = item;
+  dialogInner.value = true;
 }
 
-function openThemesPlugins(site) {
-  if (site.wp_juggler_site_activation) {
-    store.activatedSite = site;
-    store.activatedThemes = true;
+function openChecksum(item) {
+  checksumItem.value = item;
+  dialogChecksum.value = true;
+}
+
+async function updatePlugin(pluginSlug) {
+
+  updateActive.value = pluginSlug;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-update-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      updateActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    updateActive.value = '';
   }
 }
 
-function openHealth(site) {
-  if (site.wp_juggler_site_activation) {
-    store.activatedSite = site;
-    store.activatedHealth = true;
+async function deactivatePlugin(pluginSlug) {
+
+  deactivateActive.value = pluginSlug;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-deactivate-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      deactivateActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    deactivateActive.value = '';
   }
 }
 
-function openUptime(site) {
-  if (site.wp_juggler_site_activation) {
-    store.activatedSite = site;
-    store.activatedUptime = true;
+async function activatePlugin(pluginSlug, networkWide) {
+
+  if (networkWide) {
+    activateNetworkActive.value = pluginSlug;
+  } else {
+    activateActive.value = pluginSlug;
   }
-}
-function openNotices(site) {
-  if (site.wp_juggler_site_activation) {
-    store.activatedSite = site;
-    store.activatedNotices = true;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-activate-plugin", // the action to fire in the server
+      siteId: store.activatedSite.id,
+      pluginSlug: pluginSlug,
+      networkWide: networkWide
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      activateActive.value = '';
+      activateNetworkActive.value = '';
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+
+    activateActive.value = '';
+    activateNetworkActive.value = '';
   }
 }
 
-const themesButton = ref(null);
-const noticesButton = ref(null);
+async function doBulkAction() {
+
+  bulkActionError.value = false
+  bulkActionText.value = false
+  actionArrayFiltered.value = []
+
+  if (!selectedActionPlugins.value) {
+    bulkActionError.value = 'No action selected';
+  } else if (selectedPlugins.value.length == 0) {
+    bulkActionError.value = 'No plugin selected';
+  } else {
+    let actionArray = []
+    selectedPlugins.value.forEach(plugin => {
+      const maybePlugin = props.items.find(element => element.wpjugglersites_id === plugin)
+      if (maybePlugin !== undefined) {
+        actionArray.push(maybePlugin)
+      }
+    });
+
+    if (selectedActionPlugins.value.value == 'update') {
+      actionArrayFiltered.value = actionArray.filter(element => element.Update != false);
+      bulkActionText.value = 'update';
+    }
+
+    if (selectedActionPlugins.value.value == 'activate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active != true && element.Multisite != true) || (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true));
+      bulkActionText.value = 'activate';
+    }
+
+    if (selectedActionPlugins.value.value == 'network_activate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true) || (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true));
+      bulkActionText.value = 'network activate';
+    }
+
+    if (selectedActionPlugins.value.value == 'deactivate') {
+      actionArrayFiltered.value = actionArray.filter(element => (element.Active == true || element.NetworkActive == true));
+      bulkActionText.value = 'deactivate';
+    }
+
+  }
+
+  if (actionArrayFiltered.value.length == 0) {
+    bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`
+  } else {
+    bulkActionText.value = `You are going to ${bulkActionText.value} ${props.name} plugin on these sites:`
+  }
+
+  bulkActionInProgress.value = false
+  dialogBulkAction.value = true;
+
+}
+
+async function InitiateAction() {
+  bulkActionsNumber.value = actionArrayFiltered.value.length
+  bulkActionInProgress.value = true
+  bulkActionFinished.value = false
+
+  processAction()
+}
+
+async function processAction() {
+  if (actionArrayFiltered.value.length > 0) {
+    currentAction.value = actionArrayFiltered.value.shift()
+    progressIndicator.value = Math.ceil(((bulkActionsNumber.value - actionArrayFiltered.value.length) / bulkActionsNumber.value) * 100)
+    console.log(progressIndicator.value)
+    setTimeout(processAction, 2000);
+  } else {
+    bulkActionFinished.value = true
+  }
+}
+
+//
+
+const persistDialog = computed(() => {
+  return bulkActionInProgress.value && !bulkActionFinished.value;
+})
+
 </script>
 
 <template>
-  <tr>
-    <td :colspan="props.columns?.length + 1">
-      <div class="text-h5 font-weight-bold mt-5 mb-3">
-        {{ props.item?.title }}
+<tr>
+  <td :colspan="props.columns?.length + 1" class="wp-juggler-expanded-panel">
+    <div class="text-h5 font-weight-bold mt-5 mb-3">
+        {{ props.name }}
       </div>
+  <v-sheet class="mt-10 pb-4">
+    <v-row align="center" justify="center" alignContent="center" class="px-4">
+      <v-select v-model="selectedActionPlugins" :items="bulkActionsPlugins" item-title="text" item-value="value"
+        return-object single-line density="compact" label="Bulk Actions" max-width="300" variant="outlined"
+        class="mt-6">
+      </v-select>
+      <v-btn class="ml-3 text-none text-caption" @click="doBulkAction()" variant="outlined">Apply
+      </v-btn>
+      <v-spacer></v-spacer>
 
-      <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
-        <v-icon
-          v-if="props.item.wp_juggler_multisite"
-          color="#2196f3"
-          icon="mdi-checkbox-multiple-blank-outline"
-          size="large"
-          class="rm-4 mr-4"
-        ></v-icon>
-        {{ props.item.wp_juggler_server_site_url }}
-      </div>
+      <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
+        variant="outlined" flat hide-details single-line max-width="800"></v-text-field>
+    </v-row>
+    <v-row>
 
-      <v-row class="mb-4">
-        <v-col cols="12" md="3">
-          <v-card>
-            <v-card-item title="Site Health">
-              <template v-slot:subtitle>
-                <div v-if="props.item.wp_juggler_health_data_timestamp">
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  {{ props.item.wp_juggler_health_data_timestamp }}
-                </div>
-                <div v-else>
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  Never
-                </div>
-              </template>
-            </v-card-item>
+      <v-data-table v-model:search="search" :items="props.items" :headers="plugin_headers" item-value="wpjugglersites_id"
+        items-per-page="50" show-select v-model="selectedPlugins" class="pb-4">
+        <template v-slot:item.active="{ item }">
+          <div v-if="item.Active && !item.NetworkActive">
+            
+            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+          </div>
+          <div v-if="item.NetworkActive">
+            <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+          </div>
+        </template>
 
-            <v-card-text class="text-medium-emphasis">
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div>
-                  <div>Critical Improvements</div>
-                  <v-row align="center" no-gutters>
-                    <v-col
-                      class="text-h2"
-                      cols="12"
-                      v-if="props.item.wp_juggler_health_data_count"
-                    >
-                      {{ props.item.wp_juggler_health_data_count.critical }}
-                    </v-col>
-                    <v-col class="text-h2" cols="12" v-else> ? </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <div>Recommended Improvements</div>
-                  <v-row align="center" no-gutters>
-                    <v-col
-                      class="text-h2"
-                      cols="12"
-                      v-if="props.item.wp_juggler_health_data_count"
-                    >
-                      {{ props.item.wp_juggler_health_data_count.recommended }}
-                    </v-col>
-                    <v-col class="text-h2" cols="12" v-else> ? </v-col>
-                  </v-row>
-                </div>
+        <template v-slot:item.update="{ item }">
+          <div v-if="item.Update">
+            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+            {{ item.UpdateVersion }}
+          </div>
+        </template>
+
+        <template v-slot:item.vulnerabilities="{ item }">
+          <div v-if="
+            item.Vulnerabilities.length > 0 &&
+            item.Wporg &&
+            !item.WpJuggler
+          ">
+            <v-icon color="error" icon="mdi-bug-check-outline" size="large" class="mr-1"></v-icon>
+            {{ item.Vulnerabilities.length }}
+            <v-btn class="ml-3 text-none text-caption" @click="openVulnerabilities(item)" variant="outlined">Details
+            </v-btn>
+          </div>
+          <div v-else-if="!item.Wporg || item.WpJuggler">
+            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+          </div>
+        </template>
+
+        <template v-slot:item.checksum="{ item }">
+          <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
+            <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
+            <v-btn class="ml-3 text-none text-caption" @click="openChecksum(item)" variant="outlined">Details
+            </v-btn>
+          </div>
+          <div v-else-if="!item.Wporg || item.WpJuggler">
+            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+          </div>
+          <div v-else>
+            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+          </div>
+        </template>
+
+        <template v-slot:item.source="{ item }">
+          <div v-if="item.Tgmpa">
+            <v-icon color="grey-lighten-1" icon="mdi-package-variant-closed" size="large" class="rm-4"></v-icon>
+          </div>
+          <div v-else-if="item.WpJuggler">
+            <v-icon color="grey-lighten-1" icon="mdi-lan" size="large" class="rm-4"></v-icon>
+          </div>
+          <div v-else-if="item.Wporg">
+            <v-icon color="grey-lighten-1" icon="mdi-wordpress" size="large" class="mr-1"></v-icon>
+          </div>
+          <div v-else>
+            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+          </div>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn v-if="item.Active || item.NetworkActive" :loading="item.Slug == deactivateActive"
+            @click="deactivatePlugin(item.Slug)" class="ml-3 text-none text-caption" variant="outlined">Deactivate
+          </v-btn>
+          <v-btn v-if="!item.Active && !item.Multisite" :loading="item.Slug == activateActive"
+            @click="activatePlugin(item.Slug, false)" class="ml-3 text-none text-caption" variant="outlined">Activate
+          </v-btn>
+          <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
+            :loading="item.Slug == activateActive" @click="activatePlugin(item.Slug, false)"
+            class="ml-3 text-none text-caption" variant="outlined">Activate
+          </v-btn>
+          <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
+            :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
+            class="ml-3 text-none text-caption" variant="outlined">Network Activate
+          </v-btn>
+          <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && item.Network"
+            :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
+            class="ml-3 text-none text-caption" variant="outlined">Network Activate
+          </v-btn>
+          <v-btn v-if="item.Update" :loading="item.Slug == updateActive" @click="updatePlugin(item.Slug)"
+            color="#2196f3" class="text-none text-caption ml-3" variant="outlined">Update
+          </v-btn>
+        </template>
+      </v-data-table>
+    </v-row>
+  </v-sheet>
+</td>
+</tr>
+
+<v-dialog v-model="dialogInner" min-width="600">
+      <v-card>
+        <v-toolbar>
+          <v-btn icon="mdi-close" @click="dialogInner = false"></v-btn>
+
+          <v-toolbar-title>List of vulnerabilities - {{ vulnerabilitiesItem.Name }} - {{ vulnerabilitiesItem.Version
+            }}</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-sheet v-for="vul in vulnerabilitiesItem.Vulnerabilities">
+            <div class="text-h7">
+              <strong>{{ vul.name }}</strong>
+            </div>
+            <div v-if="'cwe' in vul.impact" class="ml-6 mt-2 wpjs-plugin-vul">
+              <div>
+                {{ vul.impact.cwe[0].name }}
               </div>
-
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div v-if="props.item.wp_juggler_wordpress_version">
-                  WordPress version:
-                  {{ props.item.wp_juggler_wordpress_version }}
-                </div>
-                <div v-else>WordPress version: ?</div>
-                <div v-if="props.item.wp_juggler_core_checksum">
-                  Checksum
-                  <v-icon
-                    color="success"
-                    icon="mdi-check-bold"
-                    size="large"
-                    class="mr-1"
-                    v-if="!props.item.wp_juggler_core_checksum.errors"
-                  ></v-icon>
-                  <v-icon
-                    color="error"
-                    icon="mdi-alert-outline"
-                    size="large"
-                    class="mr-1"
-                    v-else
-                  ></v-icon>
-                </div>
-              </div>
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-sheet class="pr-10">
-              <v-btn
-              v-if="props.item.wp_juggler_site_activation"
-                text="Full Report"
-                append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                @click="openHealth(props.item)"
-                block
-                variant="outlined"
-              ></v-btn>
-              <v-btn
-                v-else
-                text="Site is not activated"
-                append-icon="mdi-alert-outline"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                block
-                readonly
-                color="error"
-                variant="plain"
-              ></v-btn>
-            </v-sheet>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" md="3">
-          <v-card>
-            <div class="d-flex py-3 justify-space-between pb-0">
-              <v-card-item title="Uptime Cron"> </v-card-item>
-
-              <div class="mr-5">
-                <v-menu open-on-hover>
-                  <template v-slot:activator="{ props }">
-                    <v-btn v-bind="props" class="text-none text-caption" variant="outlined">
-                      {{ uptimePeriods[selectedUptimePeriod].title }}
-                    </v-btn>
-                  </template>
-
-                  <v-list>
-                    <v-list-item
-                      v-for="(item, index) in uptimePeriods"
-                      :key="index"
-                      @click="selectUptimePeriod(index)"
-                    >
-                      <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+              <div>
+                {{ vul.impact.cwe[0].description }}
               </div>
             </div>
 
-            <v-card-text class="text-medium-emphasis pt-0 mb-4">
-              <div class="d-flex py-3 justify-space-between">
-                <div>
-                  <div>Failed frontend checks</div>
-                  <v-row align="center" no-gutters>
-                    <v-col class="text-h2" cols="12">
-                      {{
-                        item.wp_juggler_uptime_stats.summary[
-                          selectedUptimePeriod
-                        ].front
-                      }}
-                    </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <div>Failed API checks</div>
-                  <v-row align="center" no-gutters>
-                    <v-col class="text-h2" cols="12">
-                      {{
-                        item.wp_juggler_uptime_stats.summary[
-                          selectedUptimePeriod
-                        ].api
-                      }}
-                    </v-col>
-                  </v-row>
-                </div>
+            <div class="mt-4 ml-6"><strong>Sources:</strong></div>
+
+            <div v-for="src in vul.source" class="mt-2 ml-6 wpjs-plugin-vul">
+              <div class="ml-4">
+                {{ src.date }} -
+                <a :href="src.link" target="_blank">{{ src.name }}</a>
               </div>
-
-              <div>
-                Total failed checks:
-                {{
-                  parseInt(
-                    item.wp_juggler_uptime_stats.summary[selectedUptimePeriod]
-                      .front
-                  ) +
-                  parseInt(
-                    item.wp_juggler_uptime_stats.summary[selectedUptimePeriod]
-                      .api
-                  )
-                }}
+              <div class="ml-4">
+                {{ src.description }}
               </div>
-            </v-card-text>
+            </div>
+            <v-divider class="mt-4 mb-4"></v-divider>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
 
-            <v-divider></v-divider>
+    </v-dialog>
 
-            <v-sheet class="pr-10">
-              <v-btn
-              v-if="props.item.wp_juggler_site_activation"
-                text="Full Report"
-                append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                @click="openUptime(props.item)"
-                block
-                variant="outlined"
-              ></v-btn>
-              <v-btn
-                v-else
-                text="Site is not activated"
-                append-icon="mdi-alert-outline"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                block
-                readonly
-                color="error"
-                variant="plain"
-              ></v-btn>
-            </v-sheet>
-          </v-card>
-        </v-col>
+    <v-dialog v-model="dialogChecksum" min-width="600">
+      <v-card>
+        <v-toolbar>
+          <v-btn icon="mdi-close" @click="dialogChecksum = false"></v-btn>
 
-        <v-col cols="12" md="3">
-          <v-card>
-            <v-card-item title="Themes & Plugins">
-              <template v-slot:subtitle>
-                <div v-if="props.item.wp_juggler_plugins_summary_timestamp">
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  {{ props.item.wp_juggler_plugins_summary_timestamp }}
-                </div>
-                <div v-else>
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  Never
-                </div>
-              </template>
-            </v-card-item>
+          <v-toolbar-title>List of Checksum Errors - {{ checksumItem.Name }} - {{ checksumItem.Version
+            }}</v-toolbar-title>
+        </v-toolbar>
 
-            <v-card-text class="text-medium-emphasis">
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div>
-                  <div>Theme updates available</div>
-                  <v-row align="center" no-gutters>
-                    <v-col
-                      class="text-h2"
-                      cols="12"
-                      v-if="props.item?.wp_juggler_themes_summary !== false"
-                    >
-                      {{ props.item.wp_juggler_themes_summary.updates_num }}
-                    </v-col>
-                    <v-col class="text-h2" cols="12" v-else> ? </v-col>
-                  </v-row>
-                </div>
-                <div>
-                  <div>Plugin updates available</div>
-                  <v-row align="center" no-gutters>
-                    <v-col
-                      class="text-h2"
-                      cols="12"
-                      v-if="props.item?.wp_juggler_plugins_summary"
-                    >
-                      {{ props.item.wp_juggler_plugins_summary.updates_num }}
-                    </v-col>
-                    <v-col class="text-h2" cols="12" v-else> ? </v-col>
-                  </v-row>
-                </div>
-              </div>
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div v-if="props.item?.wp_juggler_plugins_summary">
-                  Recorded vulnerabilities:
-                  {{
-                    props.item.wp_juggler_plugins_summary.vulnerabilities_num
-                  }}
-                </div>
-                <div v-else>Recorded vulnerabilities: ?</div>
-                <div v-if="props.item.wp_juggler_plugins_checksum !== false">
-                  Checksum
-                  <v-icon
-                    color="success"
-                    icon="mdi-check-bold"
-                    size="large"
-                    class="rm-4"
-                    v-if="props.item.wp_juggler_plugins_checksum == 0"
-                  ></v-icon>
-                  <v-icon
-                    color="error"
-                    icon="mdi-alert-outline"
-                    size="large"
-                    class="rm-4"
-                    v-else
-                  ></v-icon>
-                </div>
-              </div>
-            </v-card-text>
+        <v-card-text>
+          <v-sheet v-if="checksumItem.ChecksumDetails.length > 0">
+            <v-row class="wpjs-debug-table-row pl-5">
+              <v-col class="text-left">
+                <strong>File</strong>
+              </v-col>
+              <v-col class="text-left">
+                <strong>Checksum problem</strong>
+              </v-col>
+            </v-row>
+            <v-row class="wpjs-debug-table-row pl-5" v-for="item in checksumItem.ChecksumDetails">
+              <v-col class="text-left">
+                <div class="wpjs-plugin-vul">{{ item.file }}</div>
+              </v-col>
+              <v-col class="text-left">
+                <div class="wpjs-plugin-vul"> {{ item.message }}</div>
+              </v-col>
+            </v-row>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
 
-            <v-divider></v-divider>
-            <v-sheet class="pr-10">
-              <v-btn
-              v-if="props.item.wp_juggler_site_activation"
-                text="Manage Themes & Plugins"
-                append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                @click="openThemesPlugins(props.item)"
-                ref="themesButton"
-                block
-                variant="outlined"
-              ></v-btn>
+    </v-dialog>
 
-              <v-btn
-                v-else
-                text="Site is not activated"
-                append-icon="mdi-alert-outline"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                block
-                readonly
-                color="error"
-                variant="plain"
-              ></v-btn>
-            </v-sheet>
-          </v-card>
-        </v-col>
+    <v-dialog v-model="dialogBulkAction" width="800" :persistent="persistDialog">
+      <v-card>
+        <v-toolbar>
+          <v-btn v-if="!(bulkActionInProgress && !bulkActionFinished)" icon="mdi-close" @click="dialogBulkAction = false"></v-btn>
 
-        <v-col cols="12" md="3">
-          <v-card>
-            <v-card-item title="Notices">
-              <template v-slot:subtitle>
-                <div v-if="props.item.wp_juggler_notices_timestamp">
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  {{ props.item.wp_juggler_notices_timestamp }}
-                </div>
-                <div v-else>
-                  <v-icon
-                    class="me-1 pb-1"
-                    icon="mdi-refresh"
-                    size="18"
-                  ></v-icon>
-                  Never
-                </div>
-              </template>
-            </v-card-item>
+          <v-toolbar-title v-if="bulkActionError">Bulk Action</v-toolbar-title>
+          <v-toolbar-title v-else>{{ selectedActionPlugins.text }}</v-toolbar-title>
 
-            <v-card-text class="text-medium-emphasis">
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div>
-                  <div>Number of notices</div>
-                  <v-row align="center" no-gutters>
-                    <v-col
-                      class="text-h2"
-                      cols="12"
-                      v-if="props.item?.wp_juggler_notices_count !== false"
-                    >
-                      {{ props.item.wp_juggler_notices_count }}
-                    </v-col>
-                    <v-col class="text-h2" cols="12" v-else> ? </v-col>
-                  </v-row>
-                </div>
-              </div>
-              <div class="d-flex py-3 justify-space-between pt-0">
-                <div>&nbsp;</div>
-              </div>
-            </v-card-text>
+        </v-toolbar>
 
-            <v-divider></v-divider>
-            <v-sheet class="pr-10">
-              <v-btn
-                v-if="props.item.wp_juggler_site_activation"
-                text="All notices"
-                append-icon="mdi-chevron-right"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                @click="openNotices(props.item)"
-                ref="noticesButton"
-                block
-                variant="outlined"
-              ></v-btn>
-              <v-btn
-                v-else
-                text="Site is not activated"
-                append-icon="mdi-alert-outline"
-                class="mb-5 ml-5 mt-4 text-none text-caption"
-                block
-                readonly
-                color="error"
-                variant="plain"
-              ></v-btn>
-            </v-sheet>
-          </v-card>
-        </v-col>
-      </v-row>
-    </td>
-  </tr>
+        <v-card-text>
+          <v-sheet v-if="bulkActionError">
+            {{ bulkActionError }}
+          </v-sheet>
+          <v-sheet v-else-if="!bulkActionInProgress" class="mb-4">
+            <div class="my-8">{{ bulkActionText }}</div>
+
+            <v-row class="wpjs-debug-table-row pl-5" v-for="item in actionArrayFiltered">
+              <v-col class="text-left">
+                <div class="wpjs-plugin-vul">{{ item.site_name }}</div>
+              </v-col>
+            </v-row>
+
+            <v-btn v-if="actionArrayFiltered.length > 0" class="ml-3 mt-10 text-none text-caption"
+              @click="InitiateAction()" variant="outlined">Confirm
+            </v-btn>
+
+          </v-sheet>
+          <v-sheet v-else-if="bulkActionInProgress && !bulkActionFinished" class="mb-4" height="200">
+            <div class="my-8">Bulk action in progress - do not close the window, you will interrupt the progress:</div>
+            <div class="my-8"><strong>{{ currentAction.site_name }}</strong></div>
+            <v-progress-linear color="light-blue" height="30" :model-value="progressIndicator" striped>
+              <strong>{{ bulkActionsNumber - actionArrayFiltered.length }}/{{ bulkActionsNumber }}</strong>
+            </v-progress-linear>
+          </v-sheet>
+
+          <v-sheet v-else-if="bulkActionInProgress && bulkActionFinished" class="mb-4" height="200">
+            <div class="my-8">Bulk action finished</div>
+          </v-sheet>
+
+        </v-card-text>
+      </v-card>
+
+    </v-dialog>
+
 </template>
 
 <style>

@@ -52,8 +52,8 @@ const noticesButton = ref(null);
 </script>
 
 <template>
-  <tr>
-    <td :colspan="props.columns?.length + 1">
+  <tr >
+    <td :colspan="props.columns?.length + 1" class="wp-juggler-expanded-panel">
       <div class="text-h5 font-weight-bold mt-5 mb-3">
         {{ props.item?.title }}
       </div>
@@ -452,7 +452,7 @@ const noticesButton = ref(null);
 </template>
 
 <style>
-.wpjs-cp-table td {
-  padding: 15px 0px;
+.wp-juggler-expanded-panel {
+  border: 2px solid rgb(33, 150, 243) !important;
 }
 </style>
