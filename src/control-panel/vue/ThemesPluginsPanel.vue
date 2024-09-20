@@ -186,8 +186,10 @@ function openChecksum(item) {
   dialogChecksum.value = true;
 }
 
-async function refreshPlugins() {
-  refreshActive.value = true;
+async function refreshPlugins( e, withoutIndicator=false ) {
+  
+  console.log(withoutIndicator)
+  refreshActive.value = !withoutIndicator;
 
   let ret = {};
 
@@ -222,9 +224,13 @@ async function refreshPlugins() {
   }
 }
 
-async function updatePlugin(pluginSlug) {
+async function updatePlugin(pluginSlug, withoutRefresh = false) {
 
   updateActive.value = pluginSlug;
+
+  if(withoutRefresh){
+    updateActive.value = '';
+  }
 
   let ret = {};
 
@@ -232,7 +238,8 @@ async function updatePlugin(pluginSlug) {
     const response = await doAjax({
       action: "wpjs-update-plugin", // the action to fire in the server
       siteId: store.activatedSite.id,
-      pluginSlug: pluginSlug
+      pluginSlug: pluginSlug,
+      withoutRefresh: withoutRefresh
     });
 
     if (response.success) {
@@ -259,9 +266,13 @@ async function updatePlugin(pluginSlug) {
   }
 }
 
-async function deactivatePlugin(pluginSlug) {
+async function deactivatePlugin(pluginSlug, withoutRefresh = false) {
 
   deactivateActive.value = pluginSlug;
+
+  if(withoutRefresh){
+    deactivateActive.value = '';
+  }
 
   let ret = {};
 
@@ -269,7 +280,8 @@ async function deactivatePlugin(pluginSlug) {
     const response = await doAjax({
       action: "wpjs-deactivate-plugin", // the action to fire in the server
       siteId: store.activatedSite.id,
-      pluginSlug: pluginSlug
+      pluginSlug: pluginSlug,
+      withoutRefresh: withoutRefresh
     });
 
     if (response.success) {
@@ -296,12 +308,17 @@ async function deactivatePlugin(pluginSlug) {
   }
 }
 
-async function activatePlugin(pluginSlug, networkWide) {
+async function activatePlugin(pluginSlug, networkWide, withoutRefresh = false) {
 
   if (networkWide) {
     activateNetworkActive.value = pluginSlug;
   } else {
     activateActive.value = pluginSlug;
+  }
+
+  if(withoutRefresh){
+    activateActive.value = '';
+    activateNetworkActive.value = '';
   }
 
   let ret = {};
@@ -311,7 +328,8 @@ async function activatePlugin(pluginSlug, networkWide) {
       action: "wpjs-activate-plugin", // the action to fire in the server
       siteId: store.activatedSite.id,
       pluginSlug: pluginSlug,
-      networkWide: networkWide
+      networkWide: networkWide,
+      withoutRefresh: withoutRefresh
     });
 
     if (response.success) {
@@ -404,9 +422,31 @@ async function processAction() {
   if (actionArrayFiltered.value.length > 0) {
     currentAction.value = actionArrayFiltered.value.shift()
     progressIndicator.value = Math.ceil(((bulkActionsNumber.value - actionArrayFiltered.value.length)/bulkActionsNumber.value) * 100)
-    console.log(progressIndicator.value)
-    setTimeout(processAction, 2000); 
+
+    if (selectedActionPlugins.value.value == 'update') {
+      await updatePlugin(currentAction.value.Slug, true)
+    }
+
+    if (selectedActionPlugins.value.value == 'activate') {
+      await activatePlugin(currentAction.value.Slug, false, true)
+    }
+
+    if (selectedActionPlugins.value.value == 'network_activate') {
+      await activatePlugin(currentAction.value.Slug, true, true)
+    }
+
+    if (selectedActionPlugins.value.value == 'deactivate') {
+      await deactivatePlugin(currentAction.value.Slug, true)
+    }
+
+    processAction()
+
   } else {
+    console.log(currentAction.value)
+    currentAction.value = {
+      Name: 'Refreshing plugin data'
+    }
+    await refreshPlugins(null, true)
     bulkActionFinished.value = true
   }
 }
