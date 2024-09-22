@@ -20485,6 +20485,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
             "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_snackbar, {
+            modelValue: _ctx.ajaxSucc,
+            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event)=>_ctx.ajaxSucc = $event),
+            color: "success"
+        }, {
+            actions: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_btn, {
+                        color: "success",
+                        variant: "text",
+                        onClick: _cache[14] || (_cache[14] = ($event)=>_ctx.ajaxSucc = false)
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)(" Close ")
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)(_ctx.ajaxSuccText) + " ", 1 /* TEXT */ )
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
         ])
     ], 64 /* STABLE_FRAGMENT */ );
 }

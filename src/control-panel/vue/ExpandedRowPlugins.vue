@@ -875,6 +875,16 @@ const persistDialog = computed(() => {
       </v-btn>
     </template>
   </v-snackbar>
+
+  <v-snackbar v-model="ajaxSucc" color="success">
+    {{ ajaxSuccText }}
+
+    <template v-slot:actions>
+      <v-btn color="success" variant="text" @click="ajaxSucc = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <style>

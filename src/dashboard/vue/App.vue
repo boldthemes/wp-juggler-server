@@ -15,6 +15,8 @@ const activation_status = ref(false)
 const dashboardHistoryItems = ref([]);
 const dashboardPage = ref(0);
 
+const runCronActive = ref('') 
+
 const ajaxError = ref(false);
 const ajaxErrorText = ref('');
 
@@ -29,6 +31,7 @@ const dashboard_headers = [
   { title: "Event Name", value: "event_name", align: "start", sortable: true },
   { title: "Next Run", value: "next_run", align: "start", sortable: true },
   { title: "Schedule", value: "frequency", align: "start", sortable: true },
+  { title: "Actions", key:"actions", align: "center", sortable: false}
 ];
 
 async function getDashboard() {
@@ -41,6 +44,37 @@ async function getDashboard() {
   //api_key.value = response.data.api_key
   activation_status.value = (response.data.activation_status === 'true')
   return ret
+}
+
+async function startCron(hookSlug) {
+  console.log(hookSlug);
+  runCronActive.value = hookSlug
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-start-cron", // the action to fire in the server
+      hookSlug: hookSlug,
+    });
+
+    console.log(response);
+
+    if (response.success) {
+      ret = response.data;
+
+      //Ovde ispisati succ
+
+      runCronActive.value = false;
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    console.log(error);
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+    runCronActive.value = false;
+  }
 }
 
 async function getDashboardHistory() {
@@ -174,85 +208,11 @@ onMounted(() => {
         <v-spacer></v-spacer>
 
         <v-data-table :items="cron_data" :headers="dashboard_headers" item-key="index" hide-default-footer>
-          <template v-slot:item.active="{ item }">
-            <div v-if="item.Active && !item.NetworkActive">
-              <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
-            </div>
-            <div v-if="item.NetworkActive">
-              <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
-            </div>
-          </template>
-
-          <template v-slot:item.update="{ item }">
-            <div v-if="item.Update">
-              <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
-              {{ item.UpdateVersion }}
-            </div>
-          </template>
-
-          <template v-slot:item.vulnerabilities="{ item }">
-            <div v-if="
-              item.Vulnerabilities.length > 0 &&
-              item.Wporg &&
-              !item.WpJuggler
-            ">
-              <v-icon color="error" icon="mdi-bug-check-outline" size="large" class="mr-1"></v-icon>
-              {{ item.Vulnerabilities.length }}
-              <v-btn class="ml-3 text-none text-caption" @click="openVulnerabilities(item)">Details
-              </v-btn>
-            </div>
-            <div v-else-if="!item.Wporg || item.WpJuggler">
-              <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
-            </div>
-          </template>
-
-          <template v-slot:item.checksum="{ item }">
-            <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
-              <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
-            </div>
-            <div v-else-if="!item.Wporg || item.WpJuggler">
-              <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
-            </div>
-            <div v-else>
-              <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
-            </div>
-          </template>
-
-          <template v-slot:item.source="{ item }">
-            <div v-if="item.Tgmpa">
-              <v-icon color="grey-lighten-1" icon="mdi-package-variant-closed" size="large" class="rm-4"></v-icon>
-            </div>
-            <div v-else-if="item.WpJuggler">
-              <v-icon color="grey-lighten-1" icon="mdi-lan" size="large" class="rm-4"></v-icon>
-            </div>
-            <div v-else-if="item.Wporg">
-              <v-icon color="grey-lighten-1" icon="mdi-wordpress" size="large" class="mr-1"></v-icon>
-            </div>
-            <div v-else>
-              <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
-            </div>
-          </template>
+          
           <template v-slot:item.actions="{ item }">
-            <v-btn v-if="item.Active || item.NetworkActive" :loading="item.Slug == deactivateActive"
-              @click="deactivatePlugin(item.Slug)" class="ml-3 text-none text-caption">Deactivate
-            </v-btn>
-            <v-btn v-if="!item.Active && !item.Multisite" :loading="item.Slug == activateActive"
-              @click="activatePlugin(item.Slug, false)" class="ml-3 text-none text-caption">Activate
-            </v-btn>
-            <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
-              :loading="item.Slug == activateActive" @click="activatePlugin(item.Slug, false)"
-              class="ml-3 text-none text-caption">Activate
-            </v-btn>
-            <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && !item.Network"
-              :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
-              class="ml-3 text-none text-caption">Network Activate
-            </v-btn>
-            <v-btn v-if="!item.Active && !item.NetworkActive && item.Multisite && item.Network"
-              :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
-              class="ml-3 text-none text-caption">Network Activate
-            </v-btn>
-            <v-btn v-if="item.Update" :loading="item.Slug == updateActive" @click="updatePlugin(item.Slug)"
-              color="#2196f3" variant="elevated" class="text-none text-caption ml-3">Update
+            <v-btn :loading="item.hook_slug == runCronActive"
+              @click="startCron(item.hook_slug)" class="ml-3 text-none text-caption" variant="outlined">Run Cron
+
             </v-btn>
           </template>
         </v-data-table>
@@ -320,6 +280,20 @@ onMounted(() => {
   <v-card class="pa-4 mr-4" v-else>
     <v-skeleton-loader type="table-tbody"> </v-skeleton-loader>
   </v-card>
+
+  <v-snackbar v-model="ajaxError" color="red-lighten-2">
+        {{ ajaxErrorText }}
+
+        <template v-slot:actions>
+          <v-btn
+            color="red-lighten-4"
+            variant="text"
+            @click="ajaxError = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
 </template>
 
 <style>

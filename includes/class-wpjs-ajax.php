@@ -36,6 +36,8 @@ class WPJS_AJAX
 
 	private $plugin_name;
 
+	private $cron;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -43,11 +45,12 @@ class WPJS_AJAX
 	 * @var      string    $wp_juggler_server       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
 	 */
-	public function __construct($wp_juggler_server, $version)
+	public function __construct($wp_juggler_server, $version, $cron)
 	{
 		$this->wp_juggler_server = $wp_juggler_server;
 		$this->version = $version;
 		$this->plugin_name = 'wpjs';
+		$this->cron = $cron;
 	}
 
 	public function ajax_get_dashboard()
@@ -1713,5 +1716,35 @@ class WPJS_AJAX
 			$data = [];
 			wp_send_json_success($data, 200);
 		}
+	}
+
+	public function ajax_start_cron()
+	{
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['hookSlug'])) {
+			$hookSlug = sanitize_text_field($_POST['hookSlug']);
+		}
+
+		if ( $hookSlug == "wpjs_check_health_api"){
+			$this->cron->check_all_health_api();
+		}
+
+		if ( $hookSlug == "wpjs_check_plugins_api"){
+			$this->cron->check_all_plugins_api();
+		}
+
+		if ( $hookSlug == "wpjs_check_notices_api"){
+			$this->cron->check_all_notices_api();
+		}
+
+
+		$data = [];
+		wp_send_json_success($data, 200);
+		
 	}
 }

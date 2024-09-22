@@ -116,10 +116,10 @@ class WP_Juggler_Server {
 
 		// Initialize the admin class.
 		$plugin_admin  = new WPJS_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version() );
+		$plugin_cron  = new WPJS_Cron( $this->get_plugin_name(), $this->get_version() );
+		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
 		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
-		$plugin_cron  = new WPJS_Cron( $this->get_plugin_name(), $this->get_version() );
 		$plugin_api  = new WPJS_Api( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
 		$plugin_plugins  = new WPJS_Plugins( $this->get_plugin_name(), $this->get_version() );
 		
@@ -181,6 +181,8 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs-update-plugin', $plugin_ajax, 'ajax_update_plugin' );
 		$this->loader->add_action( 'wp_ajax_wpjs-deactivate-plugin', $plugin_ajax, 'ajax_deactivate_plugin' );
 		$this->loader->add_action( 'wp_ajax_wpjs-activate-plugin', $plugin_ajax, 'ajax_activate_plugin' );
+
+		$this->loader->add_action( 'wp_ajax_wpjs-start-cron', $plugin_ajax, 'ajax_start_cron' );
 		
 
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );
