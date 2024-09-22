@@ -16,6 +16,11 @@ const uptimePeriods = [
 
 const selectedUptimePeriod = ref(0);
 
+const ajaxError = ref(false);
+const ajaxErrorText = ref("");
+
+const refreshAllActive = ref(false);
+
 function selectUptimePeriod(ind) {
   selectedUptimePeriod.value = ind;
 }
@@ -49,15 +54,122 @@ function openNotices(site) {
 
 const themesButton = ref(null);
 const noticesButton = ref(null);
+
+const queryClient = useQueryClient();
+
+async function doAjax(args) {
+  let result;
+
+  try {
+    const response = await fetch(store.ajaxUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(args),
+    });
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    throw new Error("No response from the WP Juggler Server");
+  }
+}
+
+async function refreshPlugins() {
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-plugins", // the action to fire in the server
+      siteId: props.item.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+  }
+}
+
+async function refreshHealth() {
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-health", // the action to fire in the server
+      siteId: props.item.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+  }
+}
+
+async function refreshNotices() {
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-notices", // the action to fire in the server
+      siteId: props.item.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+  }
+}
+
+async function refreshAll() {
+  refreshAllActive.value = true;
+  await refreshHealth();
+  await refreshPlugins();
+  await refreshNotices();
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-control-panel"],
+  });
+  refreshAllActive.value = false;
+}
 </script>
 
 <template>
-  <tr >
+  <tr>
     <td :colspan="props.columns?.length + 1" class="wp-juggler-expanded-panel">
-      <div class="text-h5 font-weight-bold mt-5 mb-3">
-        {{ props.item?.title }}
-      </div>
+      <row class="d-flex align-center">
+        <div class="text-h5 font-weight-bold mt-5 mb-3">
+          {{ props.item?.title }}
+        </div>
 
+        <v-spacer></v-spacer>
+
+        <v-btn
+          class="ml-3 text-none text-caption"
+          :loading="refreshAllActive"
+          @click="refreshAll"
+          variant="outlined"
+          >Refresh All
+        </v-btn>
+      </row>
       <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
         <v-icon
           v-if="props.item.wp_juggler_multisite"
@@ -153,7 +265,7 @@ const noticesButton = ref(null);
 
             <v-sheet class="pr-10">
               <v-btn
-              v-if="props.item.wp_juggler_site_activation"
+                v-if="props.item.wp_juggler_site_activation"
                 text="Full Report"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4 text-none text-caption"
@@ -183,7 +295,11 @@ const noticesButton = ref(null);
               <div class="mr-5">
                 <v-menu open-on-hover>
                   <template v-slot:activator="{ props }">
-                    <v-btn v-bind="props" class="text-none text-caption" variant="outlined">
+                    <v-btn
+                      v-bind="props"
+                      class="text-none text-caption"
+                      variant="outlined"
+                    >
                       {{ uptimePeriods[selectedUptimePeriod].title }}
                     </v-btn>
                   </template>
@@ -248,7 +364,7 @@ const noticesButton = ref(null);
 
             <v-sheet class="pr-10">
               <v-btn
-              v-if="props.item.wp_juggler_site_activation"
+                v-if="props.item.wp_juggler_site_activation"
                 text="Full Report"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4 text-none text-caption"
@@ -353,7 +469,7 @@ const noticesButton = ref(null);
             <v-divider></v-divider>
             <v-sheet class="pr-10">
               <v-btn
-              v-if="props.item.wp_juggler_site_activation"
+                v-if="props.item.wp_juggler_site_activation"
                 text="Manage Themes & Plugins"
                 append-icon="mdi-chevron-right"
                 class="mb-5 ml-5 mt-4 text-none text-caption"
@@ -449,6 +565,15 @@ const noticesButton = ref(null);
       </v-row>
     </td>
   </tr>
+  <v-snackbar v-model="ajaxError" color="red-lighten-2">
+    {{ ajaxErrorText }}
+
+    <template v-slot:actions>
+      <v-btn color="red-lighten-4" variant="text" @click="ajaxError = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <style>

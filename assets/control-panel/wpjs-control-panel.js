@@ -14786,6 +14786,9 @@ exports.default = {
             }
         ];
         const selectedUptimePeriod = (0, _vue.ref)(0);
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
+        const refreshAllActive = (0, _vue.ref)(false);
         function selectUptimePeriod(ind) {
             selectedUptimePeriod.value = ind;
         }
@@ -14815,11 +14818,85 @@ exports.default = {
         }
         const themesButton = (0, _vue.ref)(null);
         const noticesButton = (0, _vue.ref)(null);
+        const queryClient = (0, _vueQuery.useQueryClient)();
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw new Error("No response from the WP Juggler Server");
+            }
+        }
+        async function refreshPlugins() {
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-plugins",
+                    siteId: props.item.id
+                });
+                if (response.success) ret = response.data;
+                else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+            }
+        }
+        async function refreshHealth() {
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-health",
+                    siteId: props.item.id
+                });
+                if (response.success) ret = response.data;
+                else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+            }
+        }
+        async function refreshNotices() {
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-notices",
+                    siteId: props.item.id
+                });
+                if (response.success) ret = response.data;
+                else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+            }
+        }
+        async function refreshAll() {
+            refreshAllActive.value = true;
+            await refreshHealth();
+            await refreshPlugins();
+            await refreshNotices();
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-control-panel"
+                ]
+            });
+            refreshAllActive.value = false;
+        }
         const __returned__ = {
             store,
             props,
             uptimePeriods,
             selectedUptimePeriod,
+            ajaxError,
+            ajaxErrorText,
+            refreshAllActive,
             selectUptimePeriod,
             openThemesPlugins,
             openHealth,
@@ -14827,6 +14904,12 @@ exports.default = {
             openNotices,
             themesButton,
             noticesButton,
+            queryClient,
+            doAjax,
+            refreshPlugins,
+            refreshHealth,
+            refreshNotices,
+            refreshAll,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -14939,582 +15022,632 @@ const _hoisted_31 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "\xa0")
 ], -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_row = (0, _vue.resolveComponent)("row");
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_card_item = (0, _vue.resolveComponent)("v-card-item");
     const _component_v_col = (0, _vue.resolveComponent)("v-col");
     const _component_v_row = (0, _vue.resolveComponent)("v-row");
     const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
-    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
     const _component_v_card = (0, _vue.resolveComponent)("v-card");
     const _component_v_list_item_title = (0, _vue.resolveComponent)("v-list-item-title");
     const _component_v_list_item = (0, _vue.resolveComponent)("v-list-item");
     const _component_v_list = (0, _vue.resolveComponent)("v-list");
     const _component_v_menu = (0, _vue.resolveComponent)("v-menu");
-    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("tr", null, [
-        (0, _vue.createElementVNode)("td", {
-            colspan: $setup.props.columns?.length + 1,
-            class: "wp-juggler-expanded-panel"
-        }, [
-            (0, _vue.createElementVNode)("div", _hoisted_2, (0, _vue.toDisplayString)($setup.props.item?.title), 1 /* TEXT */ ),
-            (0, _vue.createElementVNode)("div", _hoisted_3, [
-                $setup.props.item.wp_juggler_multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                    key: 0,
-                    color: "#2196f3",
-                    icon: "mdi-checkbox-multiple-blank-outline",
-                    size: "large",
-                    class: "rm-4 mr-4"
-                })) : (0, _vue.createCommentVNode)("v-if", true),
-                (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_server_site_url), 1 /* TEXT */ )
-            ]),
-            (0, _vue.createVNode)(_component_v_row, {
-                class: "mb-4"
-            }, {
-                default: (0, _vue.withCtx)(()=>[
-                        (0, _vue.createVNode)(_component_v_col, {
-                            cols: "12",
-                            md: "3"
-                        }, {
-                            default: (0, _vue.withCtx)(()=>[
-                                    (0, _vue.createVNode)(_component_v_card, null, {
-                                        default: (0, _vue.withCtx)(()=>[
-                                                (0, _vue.createVNode)(_component_v_card_item, {
-                                                    title: "Site Health"
-                                                }, {
-                                                    subtitle: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_health_data_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_timestamp), 1 /* TEXT */ )
-                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" Never ")
-                                                            ]))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_card_text, {
-                                                    class: "text-medium-emphasis"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_6, [
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_7,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 0,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.critical), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 1,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" ? ")
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ]),
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_8,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 0,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.recommended), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 1,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" ? ")
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ])
-                                                            ]),
-                                                            (0, _vue.createElementVNode)("div", _hoisted_9, [
-                                                                $setup.props.item.wp_juggler_wordpress_version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, " WordPress version: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_wordpress_version), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "WordPress version: ?")),
-                                                                $setup.props.item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
-                                                                    (0, _vue.createTextVNode)(" Checksum "),
-                                                                    !$setup.props.item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                        key: 0,
-                                                                        color: "success",
-                                                                        icon: "mdi-check-bold",
-                                                                        size: "large",
-                                                                        class: "mr-1"
-                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                        key: 1,
-                                                                        color: "error",
-                                                                        icon: "mdi-alert-outline",
-                                                                        size: "large",
-                                                                        class: "mr-1"
-                                                                    }))
-                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                            ])
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_sheet, {
-                                                    class: "pr-10"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 0,
-                                                                text: "Full Report",
-                                                                "append-icon": "mdi-chevron-right",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.openHealth($setup.props.item)),
-                                                                block: "",
-                                                                variant: "outlined"
-                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 1,
-                                                                text: "Site is not activated",
-                                                                "append-icon": "mdi-alert-outline",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                block: "",
-                                                                readonly: "",
-                                                                color: "error",
-                                                                variant: "plain"
-                                                            }))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                })
-                                            ]),
-                                        _: 1 /* STABLE */ 
-                                    })
-                                ]),
-                            _: 1 /* STABLE */ 
-                        }),
-                        (0, _vue.createVNode)(_component_v_col, {
-                            cols: "12",
-                            md: "3"
-                        }, {
-                            default: (0, _vue.withCtx)(()=>[
-                                    (0, _vue.createVNode)(_component_v_card, null, {
-                                        default: (0, _vue.withCtx)(()=>[
-                                                (0, _vue.createElementVNode)("div", _hoisted_13, [
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createElementVNode)("tr", null, [
+            (0, _vue.createElementVNode)("td", {
+                colspan: $setup.props.columns?.length + 1,
+                class: "wp-juggler-expanded-panel"
+            }, [
+                (0, _vue.createVNode)(_component_row, {
+                    class: "d-flex align-center"
+                }, {
+                    default: (0, _vue.withCtx)(()=>[
+                            (0, _vue.createElementVNode)("div", _hoisted_2, (0, _vue.toDisplayString)($setup.props.item?.title), 1 /* TEXT */ ),
+                            (0, _vue.createVNode)(_component_v_spacer),
+                            (0, _vue.createVNode)(_component_v_btn, {
+                                class: "ml-3 text-none text-caption",
+                                loading: $setup.refreshAllActive,
+                                onClick: $setup.refreshAll,
+                                variant: "outlined"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createTextVNode)("Refresh All ")
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }, 8 /* PROPS */ , [
+                                "loading"
+                            ])
+                        ]),
+                    _: 1 /* STABLE */ 
+                }),
+                (0, _vue.createElementVNode)("div", _hoisted_3, [
+                    $setup.props.item.wp_juggler_multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                        key: 0,
+                        color: "#2196f3",
+                        icon: "mdi-checkbox-multiple-blank-outline",
+                        size: "large",
+                        class: "rm-4 mr-4"
+                    })) : (0, _vue.createCommentVNode)("v-if", true),
+                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_server_site_url), 1 /* TEXT */ )
+                ]),
+                (0, _vue.createVNode)(_component_v_row, {
+                    class: "mb-4"
+                }, {
+                    default: (0, _vue.withCtx)(()=>[
+                            (0, _vue.createVNode)(_component_v_col, {
+                                cols: "12",
+                                md: "3"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                            default: (0, _vue.withCtx)(()=>[
                                                     (0, _vue.createVNode)(_component_v_card_item, {
-                                                        title: "Uptime Cron"
+                                                        title: "Site Health"
+                                                    }, {
+                                                        subtitle: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_health_data_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_timestamp), 1 /* TEXT */ )
+                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" Never ")
+                                                                ]))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
                                                     }),
-                                                    (0, _vue.createElementVNode)("div", _hoisted_14, [
-                                                        (0, _vue.createVNode)(_component_v_menu, {
-                                                            "open-on-hover": ""
-                                                        }, {
-                                                            activator: (0, _vue.withCtx)(({ props })=>[
-                                                                    (0, _vue.createVNode)(_component_v_btn, (0, _vue.mergeProps)(props, {
-                                                                        class: "text-none text-caption",
-                                                                        variant: "outlined"
-                                                                    }), {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.uptimePeriods[$setup.selectedUptimePeriod].title), 1 /* TEXT */ )
-                                                                            ]),
-                                                                        _: 2 /* DYNAMIC */ 
-                                                                    }, 1040 /* FULL_PROPS, DYNAMIC_SLOTS */ )
-                                                                ]),
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_list, null, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.uptimePeriods, (item, index)=>{
-                                                                                    return (0, _vue.createVNode)(_component_v_list_item, {
-                                                                                        key: index,
-                                                                                        onClick: ($event)=>$setup.selectUptimePeriod(index)
+                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                        class: "text-medium-emphasis"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_6, [
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_7,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 0,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
                                                                                     }, {
                                                                                         default: (0, _vue.withCtx)(()=>[
-                                                                                                (0, _vue.createVNode)(_component_v_list_item_title, null, {
-                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
-                                                                                                        ]),
-                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.critical), 1 /* TEXT */ )
                                                                                             ]),
-                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                        "onClick"
-                                                                                    ]);
-                                                                                }), 64 /* STABLE_FRAGMENT */ ))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 1,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)(" ? ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_8,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.props.item.wp_juggler_health_data_count ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 0,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_health_data_count.recommended), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 1,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)(" ? ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ])
                                                                 ]),
-                                                            _: 1 /* STABLE */ 
-                                                        })
-                                                    ])
+                                                                (0, _vue.createElementVNode)("div", _hoisted_9, [
+                                                                    $setup.props.item.wp_juggler_wordpress_version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, " WordPress version: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_wordpress_version), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "WordPress version: ?")),
+                                                                    $setup.props.item.wp_juggler_core_checksum ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                        (0, _vue.createTextVNode)(" Checksum "),
+                                                                        !$setup.props.item.wp_juggler_core_checksum.errors ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                            key: 0,
+                                                                            color: "success",
+                                                                            icon: "mdi-check-bold",
+                                                                            size: "large",
+                                                                            class: "mr-1"
+                                                                        })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                            key: 1,
+                                                                            color: "error",
+                                                                            icon: "mdi-alert-outline",
+                                                                            size: "large",
+                                                                            class: "mr-1"
+                                                                        }))
+                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                ])
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                        class: "pr-10"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 0,
+                                                                    text: "Full Report",
+                                                                    "append-icon": "mdi-chevron-right",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    onClick: _cache[0] || (_cache[0] = ($event)=>$setup.openHealth($setup.props.item)),
+                                                                    block: "",
+                                                                    variant: "outlined"
+                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 1,
+                                                                    text: "Site is not activated",
+                                                                    "append-icon": "mdi-alert-outline",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    block: "",
+                                                                    readonly: "",
+                                                                    color: "error",
+                                                                    variant: "plain"
+                                                                }))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    })
                                                 ]),
-                                                (0, _vue.createVNode)(_component_v_card_text, {
-                                                    class: "text-medium-emphasis pt-0 mb-4"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_15, [
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_16,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createVNode)(_component_v_col, {
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
+                                            _: 1 /* STABLE */ 
+                                        })
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }),
+                            (0, _vue.createVNode)(_component_v_col, {
+                                cols: "12",
+                                md: "3"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                            default: (0, _vue.withCtx)(()=>[
+                                                    (0, _vue.createElementVNode)("div", _hoisted_13, [
+                                                        (0, _vue.createVNode)(_component_v_card_item, {
+                                                            title: "Uptime Cron"
+                                                        }),
+                                                        (0, _vue.createElementVNode)("div", _hoisted_14, [
+                                                            (0, _vue.createVNode)(_component_v_menu, {
+                                                                "open-on-hover": ""
+                                                            }, {
+                                                                activator: (0, _vue.withCtx)(({ props })=>[
+                                                                        (0, _vue.createVNode)(_component_v_btn, (0, _vue.mergeProps)(props, {
+                                                                            class: "text-none text-caption",
+                                                                            variant: "outlined"
+                                                                        }), {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.uptimePeriods[$setup.selectedUptimePeriod].title), 1 /* TEXT */ )
+                                                                                ]),
+                                                                            _: 2 /* DYNAMIC */ 
+                                                                        }, 1040 /* FULL_PROPS, DYNAMIC_SLOTS */ )
+                                                                    ]),
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_list, null, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.uptimePeriods, (item, index)=>{
+                                                                                        return (0, _vue.createVNode)(_component_v_list_item, {
+                                                                                            key: index,
+                                                                                            onClick: ($event)=>$setup.selectUptimePeriod(index)
+                                                                                        }, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createVNode)(_component_v_list_item_title, null, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+                                                                                                            ]),
+                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                ]),
+                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                            "onClick"
+                                                                                        ]);
+                                                                                    }), 64 /* STABLE_FRAGMENT */ ))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })
+                                                        ])
+                                                    ]),
+                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                        class: "text-medium-emphasis pt-0 mb-4"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_15, [
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_16,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_17,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ])
                                                                 ]),
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_17,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createVNode)(_component_v_col, {
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ])
+                                                                (0, _vue.createElementVNode)("div", null, " Total failed checks: " + (0, _vue.toDisplayString)(parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front) + parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api)), 1 /* TEXT */ )
                                                             ]),
-                                                            (0, _vue.createElementVNode)("div", null, " Total failed checks: " + (0, _vue.toDisplayString)(parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].front) + parseInt($props.item.wp_juggler_uptime_stats.summary[$setup.selectedUptimePeriod].api)), 1 /* TEXT */ )
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_sheet, {
-                                                    class: "pr-10"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 0,
-                                                                text: "Full Report",
-                                                                "append-icon": "mdi-chevron-right",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openUptime($setup.props.item)),
-                                                                block: "",
-                                                                variant: "outlined"
-                                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 1,
-                                                                text: "Site is not activated",
-                                                                "append-icon": "mdi-alert-outline",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                block: "",
-                                                                readonly: "",
-                                                                color: "error",
-                                                                variant: "plain"
-                                                            }))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                })
-                                            ]),
-                                        _: 1 /* STABLE */ 
-                                    })
-                                ]),
-                            _: 1 /* STABLE */ 
-                        }),
-                        (0, _vue.createVNode)(_component_v_col, {
-                            cols: "12",
-                            md: "3"
-                        }, {
-                            default: (0, _vue.withCtx)(()=>[
-                                    (0, _vue.createVNode)(_component_v_card, null, {
-                                        default: (0, _vue.withCtx)(()=>[
-                                                (0, _vue.createVNode)(_component_v_card_item, {
-                                                    title: "Themes & Plugins"
-                                                }, {
-                                                    subtitle: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary_timestamp), 1 /* TEXT */ )
-                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" Never ")
-                                                            ]))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_card_text, {
-                                                    class: "text-medium-emphasis"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_20, [
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_21,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item?.wp_juggler_themes_summary !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 0,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_themes_summary.updates_num), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 1,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" ? ")
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                        class: "pr-10"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 0,
+                                                                    text: "Full Report",
+                                                                    "append-icon": "mdi-chevron-right",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.openUptime($setup.props.item)),
+                                                                    block: "",
+                                                                    variant: "outlined"
+                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 1,
+                                                                    text: "Site is not activated",
+                                                                    "append-icon": "mdi-alert-outline",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    block: "",
+                                                                    readonly: "",
+                                                                    color: "error",
+                                                                    variant: "plain"
+                                                                }))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    })
+                                                ]),
+                                            _: 1 /* STABLE */ 
+                                        })
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }),
+                            (0, _vue.createVNode)(_component_v_col, {
+                                cols: "12",
+                                md: "3"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                            default: (0, _vue.withCtx)(()=>[
+                                                    (0, _vue.createVNode)(_component_v_card_item, {
+                                                        title: "Themes & Plugins"
+                                                    }, {
+                                                        subtitle: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_plugins_summary_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary_timestamp), 1 /* TEXT */ )
+                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" Never ")
+                                                                ]))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                        class: "text-medium-emphasis"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_20, [
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_21,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.props.item?.wp_juggler_themes_summary !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 0,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_themes_summary.updates_num), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 1,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)(" ? ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_22,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 0,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.updates_num), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 1,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)(" ? ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ])
                                                                 ]),
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_22,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 0,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.updates_num), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 1,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" ? ")
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
+                                                                (0, _vue.createElementVNode)("div", _hoisted_23, [
+                                                                    $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, " Recorded vulnerabilities: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.vulnerabilities_num), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, "Recorded vulnerabilities: ?")),
+                                                                    $setup.props.item.wp_juggler_plugins_checksum !== false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, [
+                                                                        (0, _vue.createTextVNode)(" Checksum "),
+                                                                        $setup.props.item.wp_juggler_plugins_checksum == 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                            key: 0,
+                                                                            color: "success",
+                                                                            icon: "mdi-check-bold",
+                                                                            size: "large",
+                                                                            class: "rm-4"
+                                                                        })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                            key: 1,
+                                                                            color: "error",
+                                                                            icon: "mdi-alert-outline",
+                                                                            size: "large",
+                                                                            class: "rm-4"
+                                                                        }))
+                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                                 ])
                                                             ]),
-                                                            (0, _vue.createElementVNode)("div", _hoisted_23, [
-                                                                $setup.props.item?.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, " Recorded vulnerabilities: " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_plugins_summary.vulnerabilities_num), 1 /* TEXT */ )) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_25, "Recorded vulnerabilities: ?")),
-                                                                $setup.props.item.wp_juggler_plugins_checksum !== false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_26, [
-                                                                    (0, _vue.createTextVNode)(" Checksum "),
-                                                                    $setup.props.item.wp_juggler_plugins_checksum == 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                        key: 0,
-                                                                        color: "success",
-                                                                        icon: "mdi-check-bold",
-                                                                        size: "large",
-                                                                        class: "rm-4"
-                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
-                                                                        key: 1,
-                                                                        color: "error",
-                                                                        icon: "mdi-alert-outline",
-                                                                        size: "large",
-                                                                        class: "rm-4"
-                                                                    }))
-                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                            ])
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_sheet, {
-                                                    class: "pr-10"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 0,
-                                                                text: "Manage Themes & Plugins",
-                                                                "append-icon": "mdi-chevron-right",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                onClick: _cache[2] || (_cache[2] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
-                                                                ref: "themesButton",
-                                                                block: "",
-                                                                variant: "outlined"
-                                                            }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 1,
-                                                                text: "Site is not activated",
-                                                                "append-icon": "mdi-alert-outline",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                block: "",
-                                                                readonly: "",
-                                                                color: "error",
-                                                                variant: "plain"
-                                                            }))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                })
-                                            ]),
-                                        _: 1 /* STABLE */ 
-                                    })
-                                ]),
-                            _: 1 /* STABLE */ 
-                        }),
-                        (0, _vue.createVNode)(_component_v_col, {
-                            cols: "12",
-                            md: "3"
-                        }, {
-                            default: (0, _vue.withCtx)(()=>[
-                                    (0, _vue.createVNode)(_component_v_card, null, {
-                                        default: (0, _vue.withCtx)(()=>[
-                                                (0, _vue.createVNode)(_component_v_card_item, {
-                                                    title: "Notices"
-                                                }, {
-                                                    subtitle: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_notices_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_27, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_notices_timestamp), 1 /* TEXT */ )
-                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_28, [
-                                                                (0, _vue.createVNode)(_component_v_icon, {
-                                                                    class: "me-1 pb-1",
-                                                                    icon: "mdi-refresh",
-                                                                    size: "18"
-                                                                }),
-                                                                (0, _vue.createTextVNode)(" Never ")
-                                                            ]))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_card_text, {
-                                                    class: "text-medium-emphasis"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_29, [
-                                                                (0, _vue.createElementVNode)("div", null, [
-                                                                    _hoisted_30,
-                                                                    (0, _vue.createVNode)(_component_v_row, {
-                                                                        align: "center",
-                                                                        "no-gutters": ""
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.props.item?.wp_juggler_notices_count !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 0,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_notices_count), 1 /* TEXT */ )
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
-                                                                                    key: 1,
-                                                                                    class: "text-h2",
-                                                                                    cols: "12"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createTextVNode)(" ? ")
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ])
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                        class: "pr-10"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 0,
+                                                                    text: "Manage Themes & Plugins",
+                                                                    "append-icon": "mdi-chevron-right",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    onClick: _cache[2] || (_cache[2] = ($event)=>$setup.openThemesPlugins($setup.props.item)),
+                                                                    ref: "themesButton",
+                                                                    block: "",
+                                                                    variant: "outlined"
+                                                                }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 1,
+                                                                    text: "Site is not activated",
+                                                                    "append-icon": "mdi-alert-outline",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    block: "",
+                                                                    readonly: "",
+                                                                    color: "error",
+                                                                    variant: "plain"
+                                                                }))
                                                             ]),
-                                                            _hoisted_31
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                }),
-                                                (0, _vue.createVNode)(_component_v_divider),
-                                                (0, _vue.createVNode)(_component_v_sheet, {
-                                                    class: "pr-10"
-                                                }, {
-                                                    default: (0, _vue.withCtx)(()=>[
-                                                            $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 0,
-                                                                text: "All notices",
-                                                                "append-icon": "mdi-chevron-right",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                onClick: _cache[3] || (_cache[3] = ($event)=>$setup.openNotices($setup.props.item)),
-                                                                ref: "noticesButton",
-                                                                block: "",
-                                                                variant: "outlined"
-                                                            }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                key: 1,
-                                                                text: "Site is not activated",
-                                                                "append-icon": "mdi-alert-outline",
-                                                                class: "mb-5 ml-5 mt-4 text-none text-caption",
-                                                                block: "",
-                                                                readonly: "",
-                                                                color: "error",
-                                                                variant: "plain"
-                                                            }))
-                                                        ]),
-                                                    _: 1 /* STABLE */ 
-                                                })
-                                            ]),
-                                        _: 1 /* STABLE */ 
-                                    })
-                                ]),
-                            _: 1 /* STABLE */ 
-                        })
-                    ]),
-                _: 1 /* STABLE */ 
-            })
-        ], 8 /* PROPS */ , _hoisted_1)
-    ]);
+                                                        _: 1 /* STABLE */ 
+                                                    })
+                                                ]),
+                                            _: 1 /* STABLE */ 
+                                        })
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }),
+                            (0, _vue.createVNode)(_component_v_col, {
+                                cols: "12",
+                                md: "3"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_card, null, {
+                                            default: (0, _vue.withCtx)(()=>[
+                                                    (0, _vue.createVNode)(_component_v_card_item, {
+                                                        title: "Notices"
+                                                    }, {
+                                                        subtitle: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_notices_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_27, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.props.item.wp_juggler_notices_timestamp), 1 /* TEXT */ )
+                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_28, [
+                                                                    (0, _vue.createVNode)(_component_v_icon, {
+                                                                        class: "me-1 pb-1",
+                                                                        icon: "mdi-refresh",
+                                                                        size: "18"
+                                                                    }),
+                                                                    (0, _vue.createTextVNode)(" Never ")
+                                                                ]))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_card_text, {
+                                                        class: "text-medium-emphasis"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_29, [
+                                                                    (0, _vue.createElementVNode)("div", null, [
+                                                                        _hoisted_30,
+                                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                                            align: "center",
+                                                                            "no-gutters": ""
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.props.item?.wp_juggler_notices_count !== false ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 0,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.props.item.wp_juggler_notices_count), 1 /* TEXT */ )
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_col, {
+                                                                                        key: 1,
+                                                                                        class: "text-h2",
+                                                                                        cols: "12"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createTextVNode)(" ? ")
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ])
+                                                                ]),
+                                                                _hoisted_31
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    }),
+                                                    (0, _vue.createVNode)(_component_v_divider),
+                                                    (0, _vue.createVNode)(_component_v_sheet, {
+                                                        class: "pr-10"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                $setup.props.item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 0,
+                                                                    text: "All notices",
+                                                                    "append-icon": "mdi-chevron-right",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    onClick: _cache[3] || (_cache[3] = ($event)=>$setup.openNotices($setup.props.item)),
+                                                                    ref: "noticesButton",
+                                                                    block: "",
+                                                                    variant: "outlined"
+                                                                }, null, 512 /* NEED_PATCH */ )) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                    key: 1,
+                                                                    text: "Site is not activated",
+                                                                    "append-icon": "mdi-alert-outline",
+                                                                    class: "mb-5 ml-5 mt-4 text-none text-caption",
+                                                                    block: "",
+                                                                    readonly: "",
+                                                                    color: "error",
+                                                                    variant: "plain"
+                                                                }))
+                                                            ]),
+                                                        _: 1 /* STABLE */ 
+                                                    })
+                                                ]),
+                                            _: 1 /* STABLE */ 
+                                        })
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            })
+                        ]),
+                    _: 1 /* STABLE */ 
+                })
+            ], 8 /* PROPS */ , _hoisted_1)
+        ]),
+        (0, _vue.createVNode)(_component_v_snackbar, {
+            modelValue: $setup.ajaxError,
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.ajaxError = $event),
+            color: "red-lighten-2"
+        }, {
+            actions: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_btn, {
+                        color: "red-lighten-4",
+                        variant: "text",
+                        onClick: _cache[4] || (_cache[4] = ($event)=>$setup.ajaxError = false)
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)(" Close ")
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ])
+    ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("ab35b9-hmr", render);
@@ -15602,48 +15735,6 @@ exports.default = {
                 value: "deactivate"
             }
         ];
-        const selectedActionPlugins = (0, _vue.ref)(null);
-        const queryClient = (0, _vueQuery.useQueryClient)();
-        const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
-            queryKey: [
-                "wpjs-plugins-panel",
-                store.activatedSite.id
-            ],
-            queryFn: getPluginsPanel
-        });
-        async function getPluginsPanel() {
-            let ret = {};
-            const response = await doAjax({
-                action: "wpjs-get-plugins-panel",
-                siteId: store.activatedSite.id
-            });
-            ret = response.data;
-            return ret;
-        }
-        async function doAjax(args) {
-            let result;
-            try {
-                const response = await fetch(store.ajaxUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: new URLSearchParams(args)
-                });
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                throw new Error("No response from the WP Juggler Server");
-            }
-        }
-        const plugins_data = (0, _vue.computed)(()=>{
-            if (data.value) return Object.values(data.value.plugins_data);
-            else return [];
-        });
-        const themes_data = (0, _vue.computed)(()=>{
-            if (data.value) return Object.values(data.value.themes_data);
-            else return [];
-        });
         const plugin_headers = [
             {
                 title: "Plugin Name",
@@ -15733,6 +15824,48 @@ exports.default = {
             }
         ];
         const tab = (0, _vue.ref)(0);
+        const selectedActionPlugins = (0, _vue.ref)(null);
+        const queryClient = (0, _vueQuery.useQueryClient)();
+        const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
+            queryKey: [
+                "wpjs-plugins-panel",
+                store.activatedSite.id
+            ],
+            queryFn: getPluginsPanel
+        });
+        async function getPluginsPanel() {
+            let ret = {};
+            const response = await doAjax({
+                action: "wpjs-get-plugins-panel",
+                siteId: store.activatedSite.id
+            });
+            ret = response.data;
+            return ret;
+        }
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw new Error("No response from the WP Juggler Server");
+            }
+        }
+        const plugins_data = (0, _vue.computed)(()=>{
+            if (data.value) return Object.values(data.value.plugins_data);
+            else return [];
+        });
+        const themes_data = (0, _vue.computed)(()=>{
+            if (data.value) return Object.values(data.value.themes_data);
+            else return [];
+        });
         function openVulnerabilities(item) {
             vulnerabilitiesItem.value = item;
             dialogInner.value = true;
@@ -15742,7 +15875,6 @@ exports.default = {
             dialogChecksum.value = true;
         }
         async function refreshPlugins(e, withoutIndicator = false) {
-            console.log(withoutIndicator);
             refreshActive.value = !withoutIndicator;
             let ret = {};
             try {
@@ -15750,7 +15882,6 @@ exports.default = {
                     action: "wpjs-refresh-plugins",
                     siteId: store.activatedSite.id
                 });
-                console.log(response);
                 if (response.success) {
                     ret = response.data;
                     queryClient.invalidateQueries({
@@ -15767,7 +15898,6 @@ exports.default = {
                     refreshActive.value = false;
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
             } catch (error) {
-                console.log(error);
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
                 refreshActive.value = false;
@@ -15786,17 +15916,19 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-plugins-panel",
-                            store.activatedSite.id
-                        ]
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-control-panel"
-                        ]
-                    });
+                    if (!withoutRefresh) {
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-plugins-panel",
+                                store.activatedSite.id
+                            ]
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-control-panel"
+                            ]
+                        });
+                    }
                     updateActive.value = "";
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
             } catch (error) {
@@ -15818,17 +15950,19 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-plugins-panel",
-                            store.activatedSite.id
-                        ]
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-control-panel"
-                        ]
-                    });
+                    if (!withoutRefresh) {
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-plugins-panel",
+                                store.activatedSite.id
+                            ]
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-control-panel"
+                            ]
+                        });
+                    }
                     deactivateActive.value = "";
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
             } catch (error) {
@@ -15855,17 +15989,19 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-plugins-panel",
-                            store.activatedSite.id
-                        ]
-                    });
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-control-panel"
-                        ]
-                    });
+                    if (!withoutRefresh) {
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-plugins-panel",
+                                store.activatedSite.id
+                            ]
+                        });
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                "wpjs-control-panel"
+                            ]
+                        });
+                    }
                     activateActive.value = "";
                     activateNetworkActive.value = "";
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
@@ -15926,7 +16062,6 @@ exports.default = {
                 if (selectedActionPlugins.value.value == "deactivate") await deactivatePlugin(currentAction.value.Slug, true);
                 processAction();
             } else {
-                console.log(currentAction.value);
                 currentAction.value = {
                     Name: "Refreshing plugin data"
                 };
@@ -15963,6 +16098,9 @@ exports.default = {
             currentAction,
             progressIndicator,
             bulkActionsPlugins,
+            plugin_headers,
+            theme_headers,
+            tab,
             selectedActionPlugins,
             queryClient,
             isLoading,
@@ -15975,9 +16113,6 @@ exports.default = {
             doAjax,
             plugins_data,
             themes_data,
-            plugin_headers,
-            theme_headers,
-            tab,
             openVulnerabilities,
             openChecksum,
             refreshPlugins,
@@ -16114,7 +16249,7 @@ const _hoisted_32 = {
 };
 const _hoisted_33 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "my-8"
-}, "Bulk action in progress - do not close the window, you will interrupt the progress:", -1 /* HOISTED */ );
+}, " Bulk action in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
 const _hoisted_34 = {
     class: "my-8"
 };
@@ -16213,7 +16348,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             (0, _vue.createVNode)(_component_v_btn, {
                                                                 class: "ml-3 text-none text-caption",
                                                                 loading: $setup.refreshActive,
-                                                                onClick: $setup.refreshPlugins
+                                                                onClick: $setup.refreshPlugins,
+                                                                variant: "outlined"
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createTextVNode)("Refresh ")
@@ -19268,41 +19404,8 @@ exports.default = {
         const bulkActionsNumber = (0, _vue.ref)(0);
         const currentAction = (0, _vue.ref)(null);
         const progressIndicator = (0, _vue.ref)(0);
-        const bulkActionsPlugins = [
-            {
-                text: "Update Plugins",
-                value: "update"
-            },
-            {
-                text: "Activate Plugins",
-                value: "activate"
-            },
-            {
-                text: "Network Activate Plugins",
-                value: "network_activate"
-            },
-            {
-                text: "Deactivate Plugins",
-                value: "deactivate"
-            }
-        ];
-        const selectedActionPlugins = (0, _vue.ref)(null);
-        async function doAjax(args) {
-            let result;
-            try {
-                const response = await fetch(store.ajaxUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: new URLSearchParams(args)
-                });
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                throw new Error("No response from the WP Juggler Server");
-            }
-        }
+        const queryClient = (0, _vueQuery.useQueryClient)();
+        const tab = (0, _vue.ref)(0);
         const plugin_headers = [
             {
                 title: "Site Name",
@@ -19353,7 +19456,41 @@ exports.default = {
                 sortable: true
             }
         ];
-        const tab = (0, _vue.ref)(0);
+        const bulkActionsPlugins = [
+            {
+                text: "Update Plugins",
+                value: "update"
+            },
+            {
+                text: "Activate Plugins",
+                value: "activate"
+            },
+            {
+                text: "Network Activate Plugins",
+                value: "network_activate"
+            },
+            {
+                text: "Deactivate Plugins",
+                value: "deactivate"
+            }
+        ];
+        const selectedActionPlugins = (0, _vue.ref)(null);
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw new Error("No response from the WP Juggler Server");
+            }
+        }
         function openVulnerabilities(item) {
             vulnerabilitiesItem.value = item;
             dialogInner.value = true;
@@ -19362,23 +19499,51 @@ exports.default = {
             checksumItem.value = item;
             dialogChecksum.value = true;
         }
-        async function updatePlugin(pluginSlug) {
-            updateActive.value = pluginSlug;
+        async function refreshPlugins(siteId, withoutIndicator = false) {
+            console.log(withoutIndicator);
+            refreshActive.value = !withoutIndicator;
             let ret = {};
             try {
                 const response = await doAjax({
-                    action: "wpjs-update-plugin",
-                    siteId: store.activatedSite.id,
-                    pluginSlug: pluginSlug
+                    action: "wpjs-refresh-plugins",
+                    siteId: siteId
                 });
+                console.log(response);
                 if (response.success) {
                     ret = response.data;
                     queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-plugins-panel",
-                            store.activatedSite.id
+                            siteId
                         ]
                     });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                console.log(error);
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshActive.value = false;
+            }
+        }
+        async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
+            updateActive.value = siteId;
+            if (withoutRefresh) updateActive.value = "";
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-update-plugin",
+                    siteId: siteId,
+                    pluginSlug: pluginSlug,
+                    withoutRefresh: false
+                });
+                if (response.success) {
+                    ret = response.data;
                     queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
@@ -19389,26 +19554,28 @@ exports.default = {
             } catch (error) {
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
                 updateActive.value = "";
             }
         }
-        async function deactivatePlugin(pluginSlug) {
-            deactivateActive.value = pluginSlug;
+        async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
+            deactivateActive.value = siteId;
+            if (withoutRefresh) deactivateActive.value = "";
             let ret = {};
             try {
                 const response = await doAjax({
                     action: "wpjs-deactivate-plugin",
-                    siteId: store.activatedSite.id,
-                    pluginSlug: pluginSlug
+                    siteId: siteId,
+                    pluginSlug: pluginSlug,
+                    withoutRefresh: false
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-plugins-panel",
-                            store.activatedSite.id
-                        ]
-                    });
                     queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
@@ -19419,28 +19586,36 @@ exports.default = {
             } catch (error) {
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
                 deactivateActive.value = "";
             }
         }
-        async function activatePlugin(pluginSlug, networkWide) {
-            if (networkWide) activateNetworkActive.value = pluginSlug;
-            else activateActive.value = pluginSlug;
+        async function activatePlugin(pluginSlug, siteId, networkWide, withoutRefresh = false) {
+            if (networkWide) activateNetworkActive.value = siteId;
+            else activateActive.value = siteId;
+            if (withoutRefresh) {
+                activateActive.value = "";
+                activateNetworkActive.value = "";
+            }
             let ret = {};
+            console.log(siteId);
+            console.log(pluginSlug);
+            console.log(networkWide);
             try {
                 const response = await doAjax({
                     action: "wpjs-activate-plugin",
-                    siteId: store.activatedSite.id,
+                    siteId: siteId,
                     pluginSlug: pluginSlug,
-                    networkWide: networkWide
+                    networkWide: networkWide,
+                    withoutRefresh: false
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
-                        queryKey: [
-                            "wpjs-plugins-panel",
-                            store.activatedSite.id
-                        ]
-                    });
                     queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
@@ -19452,6 +19627,12 @@ exports.default = {
             } catch (error) {
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
                 activateActive.value = "";
                 activateNetworkActive.value = "";
             }
@@ -19500,8 +19681,11 @@ exports.default = {
             if (actionArrayFiltered.value.length > 0) {
                 currentAction.value = actionArrayFiltered.value.shift();
                 progressIndicator.value = Math.ceil((bulkActionsNumber.value - actionArrayFiltered.value.length) / bulkActionsNumber.value * 100);
-                console.log(progressIndicator.value);
-                setTimeout(processAction, 2000);
+                if (selectedActionPlugins.value.value == "update") await updatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
+                if (selectedActionPlugins.value.value == "activate") await activatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, false, true);
+                if (selectedActionPlugins.value.value == "network_activate") await activatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true, true);
+                if (selectedActionPlugins.value.value == "deactivate") await deactivatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
+                processAction();
             } else bulkActionFinished.value = true;
         }
         //
@@ -19533,13 +19717,15 @@ exports.default = {
             bulkActionsNumber,
             currentAction,
             progressIndicator,
+            queryClient,
+            tab,
+            plugin_headers,
             bulkActionsPlugins,
             selectedActionPlugins,
             doAjax,
-            plugin_headers,
-            tab,
             openVulnerabilities,
             openChecksum,
+            refreshPlugins,
             updatePlugin,
             deactivatePlugin,
             activatePlugin,
@@ -19659,7 +19845,7 @@ const _hoisted_27 = {
 };
 const _hoisted_28 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "my-8"
-}, "Bulk action in progress - do not close the window, you will interrupt the progress:", -1 /* HOISTED */ );
+}, " Bulk action in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
 const _hoisted_29 = {
     class: "my-8"
 };
@@ -19683,6 +19869,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     const _component_v_col = (0, _vue.resolveComponent)("v-col");
     const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
         (0, _vue.createElementVNode)("tr", null, [
             (0, _vue.createElementVNode)("td", {
@@ -19888,8 +20075,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             "item.actions": (0, _vue.withCtx)(({ item })=>[
                                                     item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 0,
-                                                        loading: item.Slug == $setup.deactivateActive,
-                                                        onClick: ($event)=>$setup.deactivatePlugin(item.Slug),
+                                                        loading: item.wpjugglersites_id == $setup.deactivateActive,
+                                                        onClick: ($event)=>$setup.deactivatePlugin(item.Slug, item.wpjugglersites_id),
                                                         class: "ml-3 text-none text-caption",
                                                         variant: "outlined"
                                                     }, {
@@ -19903,8 +20090,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                     !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 1,
-                                                        loading: item.Slug == $setup.activateActive,
-                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
+                                                        loading: item.wpjugglersites_id == $setup.activateActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
                                                         class: "ml-3 text-none text-caption",
                                                         variant: "outlined"
                                                     }, {
@@ -19918,8 +20105,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                     !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 2,
-                                                        loading: item.Slug == $setup.activateActive,
-                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
+                                                        loading: item.wpjugglersites_id == $setup.activateActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
                                                         class: "ml-3 text-none text-caption",
                                                         variant: "outlined"
                                                     }, {
@@ -19933,8 +20120,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                     !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 3,
-                                                        loading: item.Slug == $setup.activateNetworkActive,
-                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
+                                                        loading: item.wpjugglersites_id == $setup.activateNetworkActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
                                                         class: "ml-3 text-none text-caption",
                                                         variant: "outlined"
                                                     }, {
@@ -19948,8 +20135,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                     !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 4,
-                                                        loading: item.Slug == $setup.activateNetworkActive,
-                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
+                                                        loading: item.wpjugglersites_id == $setup.activateNetworkActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
                                                         class: "ml-3 text-none text-caption",
                                                         variant: "outlined"
                                                     }, {
@@ -19963,8 +20150,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
                                                     item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 5,
-                                                        loading: item.Slug == $setup.updateActive,
-                                                        onClick: ($event)=>$setup.updatePlugin(item.Slug),
+                                                        loading: item.wpjugglersites_id == $setup.updateActive,
+                                                        onClick: ($event)=>$setup.updatePlugin(item.Slug, item.wpjugglersites_id),
                                                         color: "#2196f3",
                                                         class: "text-none text-caption ml-3",
                                                         variant: "outlined"
@@ -20274,6 +20461,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, 8 /* PROPS */ , [
             "modelValue",
             "persistent"
+        ]),
+        (0, _vue.createVNode)(_component_v_snackbar, {
+            modelValue: $setup.ajaxError,
+            "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event)=>$setup.ajaxError = $event),
+            color: "red-lighten-2"
+        }, {
+            actions: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_btn, {
+                        color: "red-lighten-4",
+                        variant: "text",
+                        onClick: _cache[12] || (_cache[12] = ($event)=>$setup.ajaxError = false)
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)(" Close ")
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
         ])
     ], 64 /* STABLE_FRAGMENT */ );
 }
