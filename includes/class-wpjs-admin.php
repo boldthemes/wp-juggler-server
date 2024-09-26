@@ -68,7 +68,7 @@ class WPJS_Admin
 			wp_enqueue_script(
 				$this->plugin_name . '-dashboard',
 				plugin_dir_url(__DIR__) . 'assets/dashboard/wpjs-dashboard.js',
-				array('jquery'),
+				array('jquery', 'wp-i18n'),
 				'',
 				[
 					'in_footer' => true,
@@ -93,6 +93,10 @@ class WPJS_Admin
 					'adminurl' => admin_url()
 				)
 			);
+
+			$blah = 'C:\Users\macak.OMNICOM\Local Sites\wpjugglerserver\app\public\wp-content\plugins\wp-juggler-server\languages';
+
+			wp_set_script_translations($this->plugin_name . '-dashboard', $blah);
 		}
 
 		if (str_ends_with($suffix, 'wpjs-settings')) {

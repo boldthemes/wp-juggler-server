@@ -20,6 +20,8 @@ const runCronActive = ref('')
 const ajaxError = ref(false);
 const ajaxErrorText = ref('');
 
+const { __, _x, _n, sprintf } = wp.i18n;
+
 let infiniteScrollEvents
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
@@ -196,12 +198,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>WP Juggler Server Dashboard</h1>
+  <h1>{{ __( 'WP Juggler Server Dashboard', 'wp-juggler-server' ) }}</h1>
 
   <v-card class="pa-4 mr-4" v-if="data">
 
     <v-sheet class="align-left justify-left text-left mx-auto mt-4 px-4 pb-4 mb-10">
-      <div class="text-h6">WP Juggler Cron Events</div>
+      <div class="text-h6">{{ __( 'WP Juggler Cron Events', 'wp-juggler-server' ) }}</div>
       <v-divider class="mb-10"></v-divider>
 
       <v-sheet>
@@ -211,7 +213,7 @@ onMounted(() => {
           
           <template v-slot:item.actions="{ item }">
             <v-btn :loading="item.hook_slug == runCronActive"
-              @click="startCron(item.hook_slug)" class="ml-3 text-none text-caption" variant="outlined">Run Cron
+              @click="startCron(item.hook_slug)" class="ml-3 text-none text-caption" variant="outlined">{{ __( 'Run Cron', 'wp-juggler-server' ) }}
 
             </v-btn>
           </template>
@@ -219,7 +221,7 @@ onMounted(() => {
       </v-sheet>
 
       <v-sheet v-if="true" class="align-left justify-left text-left mb-15">
-        <div class="text-h6 mt-15">Failed Cron Events History:</div>
+        <div class="text-h6 mt-15">{{ __( 'Failed Cron Events History:', 'wp-juggler-server' ) }}</div>
         <v-divider class="mb-10"></v-divider>
 
         <v-row class="wpjs-debug-table-row">

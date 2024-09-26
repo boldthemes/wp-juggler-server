@@ -580,6 +580,49 @@ class WPJS_Service
 		return $response;
 	}
 
+	static function update_theme($site_id, $theme_slug)
+	{
+
+		/* $log_entry = array(
+			'wpjugglersites_id' => $site_id,
+			'log_type' => 'checkThemes',
+			'log_result' => 'init'
+		); 
+
+		$task_id = WPJS_Cron_Log::insert_log($log_entry); */
+
+		$data = [
+			'themeSlug' => $theme_slug
+		];
+
+		$response = WPJS_Service::call_client_api($site_id, 'updateTheme', $data);
+
+		/* if (is_wp_error($response)) {
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+		} else {
+
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'succ',
+				'log_value' =>  null,
+				'log_data' => json_encode($body['data'])
+			);
+
+			WPJS_Cron_Log::update_log($log_entry);
+		} */
+
+		return $response;
+	}
+
 	static function deactivate_plugin($site_id, $plugin_slug)
 	{
 

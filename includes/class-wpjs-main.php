@@ -182,6 +182,8 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs-deactivate-plugin', $plugin_ajax, 'ajax_deactivate_plugin' );
 		$this->loader->add_action( 'wp_ajax_wpjs-activate-plugin', $plugin_ajax, 'ajax_activate_plugin' );
 
+		$this->loader->add_action( 'wp_ajax_wpjs-update-theme', $plugin_ajax, 'ajax_update_theme' );
+
 		$this->loader->add_action( 'wp_ajax_wpjs-start-cron', $plugin_ajax, 'ajax_start_cron' );
 		
 
