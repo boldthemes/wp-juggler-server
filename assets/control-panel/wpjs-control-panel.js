@@ -9097,6 +9097,8 @@ var _expandedRowVue = require("./ExpandedRow.vue");
 var _expandedRowVueDefault = parcelHelpers.interopDefault(_expandedRowVue);
 var _expandedRowPluginsVue = require("./ExpandedRowPlugins.vue");
 var _expandedRowPluginsVueDefault = parcelHelpers.interopDefault(_expandedRowPluginsVue);
+var _expandedRowThemesVue = require("./ExpandedRowThemes.vue");
+var _expandedRowThemesVueDefault = parcelHelpers.interopDefault(_expandedRowThemesVue);
 var _themesPluginsPanelVue = require("./ThemesPluginsPanel.vue");
 var _themesPluginsPanelVueDefault = parcelHelpers.interopDefault(_themesPluginsPanelVue);
 var _healthPanelVue = require("./HealthPanel.vue");
@@ -9114,8 +9116,10 @@ exports.default = {
         const tab = (0, _vue.ref)(0);
         const searchSites = (0, _vue.ref)("");
         const searchPlugins = (0, _vue.ref)("");
+        const searchThemes = (0, _vue.ref)("");
         const expanded = (0, _vue.ref)([]);
         const expandedPlugins = (0, _vue.ref)([]);
+        const expandedThemes = (0, _vue.ref)([]);
         const headersSites = [
             {
                 title: "",
@@ -9192,6 +9196,26 @@ exports.default = {
                 sortable: true
             }
         ];
+        const headersThemes = [
+            {
+                title: "Theme Name",
+                value: "Name",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Latest Version",
+                value: "Version",
+                align: "center",
+                sortable: true
+            },
+            {
+                title: "Number of Installations",
+                key: "installations",
+                align: "center",
+                sortable: true
+            }
+        ];
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
                 "wpjs-control-panel"
@@ -9243,10 +9267,13 @@ exports.default = {
             tab,
             searchSites,
             searchPlugins,
+            searchThemes,
             expanded,
             expandedPlugins,
+            expandedThemes,
             headersSites,
             headersPlugins,
+            headersThemes,
             isLoading,
             isError,
             isFetching,
@@ -9275,6 +9302,7 @@ exports.default = {
             },
             ExpandedRow: (0, _expandedRowVueDefault.default),
             ExpandedRowPlugins: (0, _expandedRowPluginsVueDefault.default),
+            ExpandedRowThemes: (0, _expandedRowThemesVueDefault.default),
             ThemesPluginsPanel: (0, _themesPluginsPanelVueDefault.default),
             HealthPanel: (0, _healthPanelVueDefault.default),
             UptimePanel: (0, _uptimePanelVueDefault.default),
@@ -9288,7 +9316,7 @@ exports.default = {
     }
 };
 
-},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4","./NoticesPanel.vue":"3sk65","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./ExpandedRowPlugins.vue":"cDWef"}],"7kZ8m":[function(require,module,exports) {
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ThemesPluginsPanel.vue":"9DdWS","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4","./NoticesPanel.vue":"3sk65","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./ExpandedRowPlugins.vue":"cDWef","./ExpandedRowThemes.vue":"7lpdT"}],"7kZ8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
@@ -20675,6 +20703,1188 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"7lpdT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let script;
+let initialize = ()=>{
+    script = require("e5963b361fb95f49");
+    if (script.__esModule) script = script.default;
+    script.render = require("237e468fdbe961c7").render;
+    script.__cssModules = require("3c2be7a8d84a106a").default;
+    require("55bb272f3d76da71").default(script);
+    script.__scopeId = "data-v-7ced65";
+    script.__file = "C:\\Users\\macak.OMNICOM\\Local Sites\\wpjugglerserver\\app\\public\\wp-content\\plugins\\wp-juggler-server\\src\\control-panel\\vue\\ExpandedRowThemes.vue";
+};
+initialize();
+if (module.hot) {
+    script.__hmrId = "7ced65-hmr";
+    module.hot.accept(()=>{
+        setTimeout(()=>{
+            initialize();
+            if (!__VUE_HMR_RUNTIME__.createRecord("7ced65-hmr", script)) __VUE_HMR_RUNTIME__.reload("7ced65-hmr", script);
+        }, 0);
+    });
+}
+exports.default = script;
+
+},{"e5963b361fb95f49":"dAyXI","237e468fdbe961c7":"1NdLj","3c2be7a8d84a106a":"7AbKn","55bb272f3d76da71":"1Q0Zd","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"dAyXI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _storeJs = require("./store.js");
+var _vue = require("vue");
+var _vueQuery = require("@tanstack/vue-query");
+exports.default = {
+    __name: "ExpandedRowThemes",
+    props: [
+        "name",
+        "columns",
+        "items"
+    ],
+    setup (__props, { expose: __expose }) {
+        __expose();
+        const store = (0, _storeJs.useWpjsStore)();
+        const props = __props;
+        const search = (0, _vue.ref)("");
+        const dialogInner = (0, _vue.ref)(false);
+        const vulnerabilitiesItem = (0, _vue.ref)(null);
+        const dialogChecksum = (0, _vue.ref)(false);
+        const checksumItem = (0, _vue.ref)(null);
+        const dialogBulkAction = (0, _vue.ref)(false);
+        const refreshActive = (0, _vue.ref)(false);
+        const updateActive = (0, _vue.ref)("");
+        const deactivateActive = (0, _vue.ref)("");
+        const activateActive = (0, _vue.ref)("");
+        const activateNetworkActive = (0, _vue.ref)("");
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
+        const selectedPlugins = (0, _vue.ref)([]);
+        const bulkActionError = (0, _vue.ref)(false);
+        const bulkActionText = (0, _vue.ref)(false);
+        const actionArrayFiltered = (0, _vue.ref)([]);
+        const bulkActionInProgress = (0, _vue.ref)(false);
+        const bulkActionFinished = (0, _vue.ref)(false);
+        const bulkActionsNumber = (0, _vue.ref)(0);
+        const currentAction = (0, _vue.ref)(null);
+        const progressIndicator = (0, _vue.ref)(0);
+        const queryClient = (0, _vueQuery.useQueryClient)();
+        const tab = (0, _vue.ref)(0);
+        const plugin_headers = [
+            {
+                title: "Site Name",
+                value: "site_name",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Active",
+                key: "active",
+                align: "center",
+                sortable: false
+            },
+            {
+                title: "Version",
+                value: "Version",
+                align: "center",
+                sortable: true
+            },
+            {
+                title: "Update",
+                key: "update",
+                align: "center",
+                sortable: false
+            },
+            {
+                title: "Vulnerabilities",
+                key: "vulnerabilities",
+                align: "center",
+                sortable: true
+            },
+            {
+                title: "Cheksum",
+                key: "checksum",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Source",
+                key: "source",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Actions",
+                key: "actions",
+                align: "start",
+                sortable: true
+            }
+        ];
+        const bulkActionsPlugins = [
+            {
+                text: "Update Plugins",
+                value: "update"
+            },
+            {
+                text: "Activate Plugins",
+                value: "activate"
+            },
+            {
+                text: "Network Activate Plugins",
+                value: "network_activate"
+            },
+            {
+                text: "Deactivate Plugins",
+                value: "deactivate"
+            }
+        ];
+        const selectedActionPlugins = (0, _vue.ref)(null);
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw new Error("No response from the WP Juggler Server");
+            }
+        }
+        function openVulnerabilities(item) {
+            vulnerabilitiesItem.value = item;
+            dialogInner.value = true;
+        }
+        function openChecksum(item) {
+            checksumItem.value = item;
+            dialogChecksum.value = true;
+        }
+        async function refreshPlugins(siteId, withoutIndicator = false) {
+            console.log(withoutIndicator);
+            refreshActive.value = !withoutIndicator;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-plugins",
+                    siteId: siteId
+                });
+                console.log(response);
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-plugins-panel",
+                            siteId
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                console.log(error);
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshActive.value = false;
+            }
+        }
+        async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
+            updateActive.value = siteId;
+            if (withoutRefresh) updateActive.value = "";
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-update-plugin",
+                    siteId: siteId,
+                    pluginSlug: pluginSlug,
+                    withoutRefresh: false
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    updateActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                updateActive.value = "";
+            }
+        }
+        async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
+            deactivateActive.value = siteId;
+            if (withoutRefresh) deactivateActive.value = "";
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-deactivate-plugin",
+                    siteId: siteId,
+                    pluginSlug: pluginSlug,
+                    withoutRefresh: false
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    deactivateActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                deactivateActive.value = "";
+            }
+        }
+        async function activatePlugin(pluginSlug, siteId, networkWide, withoutRefresh = false) {
+            if (networkWide) activateNetworkActive.value = siteId;
+            else activateActive.value = siteId;
+            if (withoutRefresh) {
+                activateActive.value = "";
+                activateNetworkActive.value = "";
+            }
+            let ret = {};
+            console.log(siteId);
+            console.log(pluginSlug);
+            console.log(networkWide);
+            try {
+                const response = await doAjax({
+                    action: "wpjs-activate-plugin",
+                    siteId: siteId,
+                    pluginSlug: pluginSlug,
+                    networkWide: networkWide,
+                    withoutRefresh: false
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    activateActive.value = "";
+                    activateNetworkActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                await refreshPlugins(siteId);
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                activateActive.value = "";
+                activateNetworkActive.value = "";
+            }
+        }
+        async function doBulkAction() {
+            bulkActionError.value = false;
+            bulkActionText.value = false;
+            actionArrayFiltered.value = [];
+            if (!selectedActionPlugins.value) bulkActionError.value = "No action selected";
+            else if (selectedPlugins.value.length == 0) bulkActionError.value = "No plugin selected";
+            else {
+                let actionArray = [];
+                selectedPlugins.value.forEach((plugin)=>{
+                    const maybePlugin = props.items.find((element)=>element.wpjugglersites_id === plugin);
+                    if (maybePlugin !== undefined) actionArray.push(maybePlugin);
+                });
+                if (selectedActionPlugins.value.value == "update") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Update != false);
+                    bulkActionText.value = "update";
+                }
+                if (selectedActionPlugins.value.value == "activate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.Multisite != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true);
+                    bulkActionText.value = "activate";
+                }
+                if (selectedActionPlugins.value.value == "network_activate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true);
+                    bulkActionText.value = "network activate";
+                }
+                if (selectedActionPlugins.value.value == "deactivate") {
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active == true || element.NetworkActive == true);
+                    bulkActionText.value = "deactivate";
+                }
+            }
+            if (actionArrayFiltered.value.length == 0) bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`;
+            else bulkActionText.value = `You are going to ${bulkActionText.value} ${props.name} plugin on these sites:`;
+            bulkActionInProgress.value = false;
+            dialogBulkAction.value = true;
+        }
+        async function InitiateAction() {
+            bulkActionsNumber.value = actionArrayFiltered.value.length;
+            bulkActionInProgress.value = true;
+            bulkActionFinished.value = false;
+            processAction();
+        }
+        async function processAction() {
+            if (actionArrayFiltered.value.length > 0) {
+                currentAction.value = actionArrayFiltered.value.shift();
+                progressIndicator.value = Math.ceil((bulkActionsNumber.value - actionArrayFiltered.value.length) / bulkActionsNumber.value * 100);
+                if (selectedActionPlugins.value.value == "update") await updatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
+                if (selectedActionPlugins.value.value == "activate") await activatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, false, true);
+                if (selectedActionPlugins.value.value == "network_activate") await activatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true, true);
+                if (selectedActionPlugins.value.value == "deactivate") await deactivatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
+                processAction();
+            } else bulkActionFinished.value = true;
+        }
+        //
+        const persistDialog = (0, _vue.computed)(()=>{
+            return bulkActionInProgress.value && !bulkActionFinished.value;
+        });
+        const __returned__ = {
+            store,
+            props,
+            search,
+            dialogInner,
+            vulnerabilitiesItem,
+            dialogChecksum,
+            checksumItem,
+            dialogBulkAction,
+            refreshActive,
+            updateActive,
+            deactivateActive,
+            activateActive,
+            activateNetworkActive,
+            ajaxError,
+            ajaxErrorText,
+            selectedPlugins,
+            bulkActionError,
+            bulkActionText,
+            actionArrayFiltered,
+            bulkActionInProgress,
+            bulkActionFinished,
+            bulkActionsNumber,
+            currentAction,
+            progressIndicator,
+            queryClient,
+            tab,
+            plugin_headers,
+            bulkActionsPlugins,
+            selectedActionPlugins,
+            doAjax,
+            openVulnerabilities,
+            openChecksum,
+            refreshPlugins,
+            updatePlugin,
+            deactivatePlugin,
+            activatePlugin,
+            doBulkAction,
+            InitiateAction,
+            processAction,
+            persistDialog,
+            get useWpjsStore () {
+                return 0, _storeJs.useWpjsStore;
+            },
+            onMounted: (0, _vue.onMounted),
+            computed: (0, _vue.computed),
+            ref: (0, _vue.ref),
+            BaseTransitionPropsValidators: (0, _vue.BaseTransitionPropsValidators),
+            get useQueryClient () {
+                return 0, _vueQuery.useQueryClient;
+            },
+            get useQuery () {
+                return 0, _vueQuery.useQuery;
+            },
+            get useMutation () {
+                return 0, _vueQuery.useMutation;
+            }
+        };
+        Object.defineProperty(__returned__, "__isScriptSetup", {
+            enumerable: false,
+            value: true
+        });
+        return __returned__;
+    }
+};
+
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"1NdLj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "render", ()=>render);
+var _vue = require("vue");
+const _hoisted_1 = [
+    "colspan"
+];
+const _hoisted_2 = {
+    class: "text-h5 font-weight-bold mt-5 mb-3"
+};
+const _hoisted_3 = {
+    key: 0
+};
+const _hoisted_4 = {
+    key: 1
+};
+const _hoisted_5 = {
+    key: 0
+};
+const _hoisted_6 = {
+    key: 0
+};
+const _hoisted_7 = {
+    key: 1
+};
+const _hoisted_8 = {
+    key: 0
+};
+const _hoisted_9 = {
+    key: 1
+};
+const _hoisted_10 = {
+    key: 2
+};
+const _hoisted_11 = {
+    key: 0
+};
+const _hoisted_12 = {
+    key: 1
+};
+const _hoisted_13 = {
+    key: 2
+};
+const _hoisted_14 = {
+    key: 3
+};
+const _hoisted_15 = {
+    class: "text-h7"
+};
+const _hoisted_16 = {
+    key: 0,
+    class: "ml-6 mt-2 wpjs-plugin-vul"
+};
+const _hoisted_17 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "mt-4 ml-6"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Sources:")
+], -1 /* HOISTED */ );
+const _hoisted_18 = {
+    class: "mt-2 ml-6 wpjs-plugin-vul"
+};
+const _hoisted_19 = {
+    class: "ml-4"
+};
+const _hoisted_20 = [
+    "href"
+];
+const _hoisted_21 = {
+    class: "ml-4"
+};
+const _hoisted_22 = /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "File", -1 /* HOISTED */ );
+const _hoisted_23 = /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Checksum problem", -1 /* HOISTED */ );
+const _hoisted_24 = {
+    class: "wpjs-plugin-vul"
+};
+const _hoisted_25 = {
+    class: "wpjs-plugin-vul"
+};
+const _hoisted_26 = {
+    class: "my-8"
+};
+const _hoisted_27 = {
+    class: "wpjs-plugin-vul"
+};
+const _hoisted_28 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Bulk action in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_29 = {
+    class: "my-8"
+};
+const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Bulk action finished", -1 /* HOISTED */ );
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_v_select = (0, _vue.resolveComponent)("v-select");
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
+    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
+    const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
+    const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
+    const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
+    const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
+    const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createElementVNode)("tr", null, [
+            (0, _vue.createElementVNode)("td", {
+                colspan: $setup.props.columns?.length + 1,
+                class: "wp-juggler-expanded-panel"
+            }, [
+                (0, _vue.createElementVNode)("div", _hoisted_2, (0, _vue.toDisplayString)($setup.props.name), 1 /* TEXT */ ),
+                (0, _vue.createVNode)(_component_v_sheet, {
+                    class: "mt-10 pb-4"
+                }, {
+                    default: (0, _vue.withCtx)(()=>[
+                            (0, _vue.createVNode)(_component_v_row, {
+                                align: "center",
+                                justify: "center",
+                                alignContent: "center",
+                                class: "px-4"
+                            }, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_select, {
+                                            modelValue: $setup.selectedActionPlugins,
+                                            "onUpdate:modelValue": _cache[0] || (_cache[0] = ($event)=>$setup.selectedActionPlugins = $event),
+                                            items: $setup.bulkActionsPlugins,
+                                            "item-title": "text",
+                                            "item-value": "value",
+                                            "return-object": "",
+                                            "single-line": "",
+                                            density: "compact",
+                                            label: "Bulk Actions",
+                                            "max-width": "300",
+                                            variant: "outlined",
+                                            class: "mt-6"
+                                        }, null, 8 /* PROPS */ , [
+                                            "modelValue"
+                                        ]),
+                                        (0, _vue.createVNode)(_component_v_btn, {
+                                            class: "ml-3 text-none text-caption",
+                                            onClick: _cache[1] || (_cache[1] = ($event)=>$setup.doBulkAction()),
+                                            variant: "outlined"
+                                        }, {
+                                            default: (0, _vue.withCtx)(()=>[
+                                                    (0, _vue.createTextVNode)("Apply ")
+                                                ]),
+                                            _: 1 /* STABLE */ 
+                                        }),
+                                        (0, _vue.createVNode)(_component_v_spacer),
+                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                            modelValue: $setup.search,
+                                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.search = $event),
+                                            density: "compact",
+                                            label: "Search",
+                                            "prepend-inner-icon": "mdi-magnify",
+                                            variant: "outlined",
+                                            flat: "",
+                                            "hide-details": "",
+                                            "single-line": "",
+                                            "max-width": "800"
+                                        }, null, 8 /* PROPS */ , [
+                                            "modelValue"
+                                        ])
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            }),
+                            (0, _vue.createVNode)(_component_v_row, null, {
+                                default: (0, _vue.withCtx)(()=>[
+                                        (0, _vue.createVNode)(_component_v_data_table, {
+                                            search: $setup.search,
+                                            "onUpdate:search": _cache[3] || (_cache[3] = ($event)=>$setup.search = $event),
+                                            items: $setup.props.items,
+                                            headers: $setup.plugin_headers,
+                                            "item-value": "wpjugglersites_id",
+                                            "items-per-page": "50",
+                                            "show-select": "",
+                                            modelValue: $setup.selectedPlugins,
+                                            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.selectedPlugins = $event),
+                                            class: "pb-4"
+                                        }, {
+                                            "item.active": (0, _vue.withCtx)(({ item })=>[
+                                                    item.Active && !item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "success",
+                                                            icon: "mdi-check-bold",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "success",
+                                                            icon: "mdi-check-network-outline",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                ]),
+                                            "item.update": (0, _vue.withCtx)(({ item })=>[
+                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "success",
+                                                            icon: "mdi-check-bold",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        }),
+                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                ]),
+                                            "item.vulnerabilities": (0, _vue.withCtx)(({ item })=>[
+                                                    item.Vulnerabilities.length > 0 && item.Wporg && !item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "error",
+                                                            icon: "mdi-bug-check-outline",
+                                                            size: "large",
+                                                            class: "mr-1"
+                                                        }),
+                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.Vulnerabilities.length) + " ", 1 /* TEXT */ ),
+                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                            class: "ml-3 text-none text-caption",
+                                                            onClick: ($event)=>$setup.openVulnerabilities(item),
+                                                            variant: "outlined"
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createTextVNode)("Details ")
+                                                                ]),
+                                                            _: 2 /* DYNAMIC */ 
+                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                            "onClick"
+                                                        ])
+                                                    ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "blue-lighten-5",
+                                                            icon: "mdi-help",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                ]),
+                                            "item.checksum": (0, _vue.withCtx)(({ item })=>[
+                                                    !item.Checksum && !item.WpJuggler && item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "error",
+                                                            icon: "mdi-alert-outline",
+                                                            size: "large",
+                                                            class: "mr-1"
+                                                        }),
+                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                            class: "ml-3 text-none text-caption",
+                                                            onClick: ($event)=>$setup.openChecksum(item),
+                                                            variant: "outlined"
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createTextVNode)("Details ")
+                                                                ]),
+                                                            _: 2 /* DYNAMIC */ 
+                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                            "onClick"
+                                                        ])
+                                                    ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "blue-lighten-5",
+                                                            icon: "mdi-help",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "success",
+                                                            icon: "mdi-check-bold",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ]))
+                                                ]),
+                                            "item.source": (0, _vue.withCtx)(({ item })=>[
+                                                    item.Tgmpa ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "grey-lighten-1",
+                                                            icon: "mdi-package-variant-closed",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "grey-lighten-1",
+                                                            icon: "mdi-lan",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ])) : item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "grey-lighten-1",
+                                                            icon: "mdi-wordpress",
+                                                            size: "large",
+                                                            class: "mr-1"
+                                                        })
+                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                            color: "blue-lighten-5",
+                                                            icon: "mdi-help",
+                                                            size: "large",
+                                                            class: "rm-4"
+                                                        })
+                                                    ]))
+                                                ]),
+                                            "item.actions": (0, _vue.withCtx)(({ item })=>[
+                                                    item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 0,
+                                                        loading: item.wpjugglersites_id == $setup.deactivateActive,
+                                                        onClick: ($event)=>$setup.deactivatePlugin(item.Slug, item.wpjugglersites_id),
+                                                        class: "ml-3 text-none text-caption",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Deactivate ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 1,
+                                                        loading: item.wpjugglersites_id == $setup.activateActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
+                                                        class: "ml-3 text-none text-caption",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Activate ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 2,
+                                                        loading: item.wpjugglersites_id == $setup.activateActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
+                                                        class: "ml-3 text-none text-caption",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Activate ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 3,
+                                                        loading: item.wpjugglersites_id == $setup.activateNetworkActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
+                                                        class: "ml-3 text-none text-caption",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 4,
+                                                        loading: item.wpjugglersites_id == $setup.activateNetworkActive,
+                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
+                                                        class: "ml-3 text-none text-caption",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                        key: 5,
+                                                        loading: item.wpjugglersites_id == $setup.updateActive,
+                                                        onClick: ($event)=>$setup.updatePlugin(item.Slug, item.wpjugglersites_id),
+                                                        color: "#2196f3",
+                                                        class: "text-none text-caption ml-3",
+                                                        variant: "outlined"
+                                                    }, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createTextVNode)("Update ")
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                        "loading",
+                                                        "onClick"
+                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                ]),
+                                            _: 1 /* STABLE */ 
+                                        }, 8 /* PROPS */ , [
+                                            "search",
+                                            "items",
+                                            "modelValue"
+                                        ])
+                                    ]),
+                                _: 1 /* STABLE */ 
+                            })
+                        ]),
+                    _: 1 /* STABLE */ 
+                })
+            ], 8 /* PROPS */ , _hoisted_1)
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogInner,
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event)=>$setup.dialogInner = $event),
+            "min-width": "600"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[5] || (_cache[5] = ($event)=>$setup.dialogInner = false)
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("List of vulnerabilities - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Name) + " - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Version), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
+                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createElementVNode)("div", _hoisted_15, [
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
+                                                            ]),
+                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
+                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
+                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
+                                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                            _hoisted_17,
+                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
+                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_19, [
+                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
+                                                                        (0, _vue.createElementVNode)("a", {
+                                                                            href: src.link,
+                                                                            target: "_blank"
+                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_20)
+                                                                    ]),
+                                                                    (0, _vue.createElementVNode)("div", _hoisted_21, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                ]);
+                                                            }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                            (0, _vue.createVNode)(_component_v_divider, {
+                                                                class: "mt-4 mb-4"
+                                                            })
+                                                        ]),
+                                                    _: 2 /* DYNAMIC */ 
+                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogChecksum,
+            "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.dialogChecksum = $event),
+            "min-width": "600"
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                icon: "mdi-close",
+                                                onClick: _cache[7] || (_cache[7] = ($event)=>$setup.dialogChecksum = false)
+                                            }),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("List of Checksum Errors - " + (0, _vue.toDisplayString)($setup.checksumItem.Name) + " - " + (0, _vue.toDisplayString)($setup.checksumItem.Version), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.checksumItem.ChecksumDetails.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createVNode)(_component_v_row, {
+                                                            class: "wpjs-debug-table-row pl-5"
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                        class: "text-left"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                _hoisted_22
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    }),
+                                                                    (0, _vue.createVNode)(_component_v_col, {
+                                                                        class: "text-left"
+                                                                    }, {
+                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                _hoisted_23
+                                                                            ]),
+                                                                        _: 1 /* STABLE */ 
+                                                                    })
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }),
+                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.checksumItem.ChecksumDetails, (item)=>{
+                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                class: "wpjs-debug-table-row pl-5"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createElementVNode)("div", _hoisted_24, (0, _vue.toDisplayString)(item.file), 1 /* TEXT */ )
+                                                                                ]),
+                                                                            _: 2 /* DYNAMIC */ 
+                                                                        }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createElementVNode)("div", _hoisted_25, (0, _vue.toDisplayString)(item.message), 1 /* TEXT */ )
+                                                                                ]),
+                                                                            _: 2 /* DYNAMIC */ 
+                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                    ]),
+                                                                _: 2 /* DYNAMIC */ 
+                                                            }, 1024 /* DYNAMIC_SLOTS */ );
+                                                        }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogBulkAction,
+            "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event)=>$setup.dialogBulkAction = $event),
+            width: "800",
+            persistent: $setup.persistDialog
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            !($setup.bulkActionInProgress && !$setup.bulkActionFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
+                                                icon: "mdi-close",
+                                                onClick: _cache[9] || (_cache[9] = ($event)=>$setup.dialogBulkAction = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
+                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                key: 1
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("Bulk Action")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                key: 2
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionPlugins.text), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            }))
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : !$setup.bulkActionInProgress ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createElementVNode)("div", _hoisted_26, (0, _vue.toDisplayString)($setup.bulkActionText), 1 /* TEXT */ ),
+                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.actionArrayFiltered, (item)=>{
+                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                class: "wpjs-debug-table-row pl-5"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createElementVNode)("div", _hoisted_27, (0, _vue.toDisplayString)(item.site_name), 1 /* TEXT */ )
+                                                                                ]),
+                                                                            _: 2 /* DYNAMIC */ 
+                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                    ]),
+                                                                _: 2 /* DYNAMIC */ 
+                                                            }, 1024 /* DYNAMIC_SLOTS */ );
+                                                        }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                        $setup.actionArrayFiltered.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                            key: 0,
+                                                            class: "ml-3 mt-10 text-none text-caption",
+                                                            onClick: _cache[10] || (_cache[10] = ($event)=>$setup.InitiateAction()),
+                                                            variant: "outlined"
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createTextVNode)("Confirm ")
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.bulkActionInProgress && !$setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 2,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_28,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_29, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.site_name), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.progressIndicator,
+                                                            striped: ""
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.bulkActionsNumber - $setup.actionArrayFiltered.length) + "/" + (0, _vue.toDisplayString)($setup.bulkActionsNumber), 1 /* TEXT */ )
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.bulkActionInProgress && $setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 3,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_30
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue",
+            "persistent"
+        ]),
+        (0, _vue.createVNode)(_component_v_snackbar, {
+            modelValue: $setup.ajaxError,
+            "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event)=>$setup.ajaxError = $event),
+            color: "red-lighten-2"
+        }, {
+            actions: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_btn, {
+                        color: "red-lighten-4",
+                        variant: "text",
+                        onClick: _cache[12] || (_cache[12] = ($event)=>$setup.ajaxError = false)
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)(" Close ")
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_snackbar, {
+            modelValue: _ctx.ajaxSucc,
+            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event)=>_ctx.ajaxSucc = $event),
+            color: "success"
+        }, {
+            actions: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_btn, {
+                        color: "success",
+                        variant: "text",
+                        onClick: _cache[14] || (_cache[14] = ($event)=>_ctx.ajaxSucc = false)
+                    }, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createTextVNode)(" Close ")
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)(_ctx.ajaxSuccText) + " ", 1 /* TEXT */ )
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ])
+    ], 64 /* STABLE_FRAGMENT */ );
+}
+if (module.hot) module.hot.accept(()=>{
+    __VUE_HMR_RUNTIME__.rerender("7ced65-hmr", render);
+});
+
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"7AbKn":[function() {},{}],"1Q0Zd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let NOOP = ()=>{};
+exports.default = (script)=>{};
+
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"e7mfF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -20813,6 +22023,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                 (0, _vue.createTextVNode)("Plugins")
                                             ]),
                                         _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_tab, {
+                                        value: "themes"
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createTextVNode)("Themes")
+                                            ]),
+                                        _: 1 /* STABLE */ 
                                     })
                                 ]),
                             _: 1 /* STABLE */ 
@@ -20821,7 +22039,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ]),
                         (0, _vue.createVNode)(_component_v_tabs_window, {
                             modelValue: $setup.tab,
-                            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.tab = $event)
+                            "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event)=>$setup.tab = $event)
                         }, {
                             default: (0, _vue.withCtx)(()=>[
                                     (0, _vue.createVNode)(_component_v_tabs_window_item, {
@@ -21119,6 +22337,87 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                     ]),
                                                                 "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
                                                                         (0, _vue.createVNode)($setup["ExpandedRowPlugins"], {
+                                                                            columns: columns,
+                                                                            items: item.Sites,
+                                                                            name: item.Name
+                                                                        }, null, 8 /* PROPS */ , [
+                                                                            "columns",
+                                                                            "items",
+                                                                            "name"
+                                                                        ])
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }, 8 /* PROPS */ , [
+                                                                "search",
+                                                                "items",
+                                                                "expanded"
+                                                            ])
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                                                    key: 1,
+                                                    flat: ""
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                                type: "table"
+                                                            })
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }))
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_tabs_window_item, {
+                                        value: "themes",
+                                        transition: "false",
+                                        "reverse-transition": "false"
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card, {
+                                                    key: 0,
+                                                    flat: ""
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_card_title, {
+                                                                class: "d-flex align-center pe-2 mb-6"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_spacer),
+                                                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                                                            modelValue: $setup.searchThemes,
+                                                                            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.searchThemes = $event),
+                                                                            density: "compact",
+                                                                            label: "Search",
+                                                                            "prepend-inner-icon": "mdi-magnify",
+                                                                            variant: "outlined",
+                                                                            flat: "",
+                                                                            "hide-details": "",
+                                                                            "single-line": "",
+                                                                            "max-width": "800"
+                                                                        }, null, 8 /* PROPS */ , [
+                                                                            "modelValue"
+                                                                        ])
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }),
+                                                            (0, _vue.createVNode)(_component_v_divider),
+                                                            (0, _vue.createVNode)(_component_v_data_table, {
+                                                                search: $setup.searchThemes,
+                                                                "onUpdate:search": _cache[8] || (_cache[8] = ($event)=>$setup.searchThemes = $event),
+                                                                items: $setup.data.plugins_view.themes,
+                                                                headers: $setup.headersThemes,
+                                                                "item-value": "Name",
+                                                                expanded: $setup.expandedThemes,
+                                                                "onUpdate:expanded": _cache[9] || (_cache[9] = ($event)=>$setup.expandedThemes = $event),
+                                                                "show-expand": "",
+                                                                "items-per-page": "50"
+                                                            }, {
+                                                                "item.installations": (0, _vue.withCtx)(({ item })=>[
+                                                                        (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.Sites.length), 1 /* TEXT */ )
+                                                                    ]),
+                                                                "expanded-row": (0, _vue.withCtx)(({ columns, item })=>[
+                                                                        (0, _vue.createVNode)($setup["ExpandedRowThemes"], {
                                                                             columns: columns,
                                                                             items: item.Sites,
                                                                             name: item.Name

@@ -4,6 +4,7 @@ import { onMounted, computed, ref } from "vue";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/vue-query";
 import ExpandedRow from "./ExpandedRow.vue";
 import ExpandedRowPlugins from "./ExpandedRowPlugins.vue";
+import ExpandedRowThemes from "./ExpandedRowThemes.vue";
 import ThemesPluginsPanel from "./ThemesPluginsPanel.vue";
 import HealthPanel from "./HealthPanel.vue";
 import UptimePanel from "./UptimePanel.vue";
@@ -17,9 +18,12 @@ const tab = ref(0);
 
 const searchSites = ref("");
 const searchPlugins = ref("");
+const searchThemes = ref("");
 
 const expanded = ref([]);
 const expandedPlugins = ref([]);
+const expandedThemes = ref([]);
+
 const headersSites = [
   { title: "", key: "network", align: "center", sortable: false },
   { title: "Title", value: "title", align: "start", sortable: true },
@@ -44,6 +48,12 @@ const headersSites = [
 
 const headersPlugins = [
   { title: "Plugin Name", value: "Name", align: "start", sortable: true },
+  { title: "Latest Version", value: "Version", align: "center", sortable: true },
+  { title: "Number of Installations", key: "installations", align: "center", sortable: true },
+];
+
+const headersThemes = [
+  { title: "Theme Name", value: "Name", align: "start", sortable: true },
   { title: "Latest Version", value: "Version", align: "center", sortable: true },
   { title: "Number of Installations", key: "installations", align: "center", sortable: true },
 ];
@@ -121,6 +131,7 @@ onMounted(() => {
       <v-tabs v-model="tab" bg-color="surface">
         <v-tab value="sites">Sites</v-tab>
         <v-tab value="plugins">Plugins</v-tab>
+        <v-tab value="themes">Themes</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
@@ -398,6 +409,55 @@ onMounted(() => {
             <v-skeleton-loader type="table"> </v-skeleton-loader>
           </v-card>
         </v-tabs-window-item>
+
+        <v-tabs-window-item
+          value="themes"
+          transition="false"
+          reverse-transition="false"
+        >
+          <v-card flat v-if="data">
+            <v-card-title class="d-flex align-center pe-2 mb-6">
+              <v-spacer></v-spacer>
+
+              <v-text-field
+                v-model="searchThemes"
+                density="compact"
+                label="Search"
+                prepend-inner-icon="mdi-magnify"
+                variant="outlined"
+                flat
+                hide-details
+                single-line
+                max-width="800"
+              ></v-text-field>
+            </v-card-title>
+
+            <v-divider></v-divider>
+            <v-data-table
+              v-model:search="searchThemes"
+              :items="data.plugins_view.themes"
+              :headers="headersThemes"
+              item-value="Name"
+              v-model:expanded="expandedThemes"
+              show-expand
+              items-per-page="50"
+            >
+
+            <template v-slot:item.installations="{ item }">
+                <div>{{ item.Sites.length }}</div>
+              </template>
+              
+              <template v-slot:expanded-row="{ columns, item }">
+                <ExpandedRowThemes :columns="columns" :items="item.Sites" :name="item.Name"></ExpandedRowThemes>
+              </template>
+
+            </v-data-table>
+          </v-card>
+          <v-card flat v-else>
+            <v-skeleton-loader type="table"> </v-skeleton-loader>
+          </v-card>
+        </v-tabs-window-item>
+
       </v-tabs-window>
     </v-card>
 
