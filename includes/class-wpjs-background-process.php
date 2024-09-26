@@ -111,6 +111,12 @@ class WPJS_Background_Process extends WP_Background_Process
 								delete_post_meta($site_id, 'wp_juggler_multisite');
 							}
 
+							if( $body['data']['update_version'] ){
+								update_post_meta($site_id, 'wp_juggler_wordpress_update_version', sanitize_text_field($body['data']['update_version']));
+							} else {
+								delete_post_meta($site_id, 'wp_juggler_wordpress_update_version');
+							}
+
 							update_post_meta($site_id, 'wp_juggler_wordpress_version', $body['data']['wp_version']);
 
 							// Ne upisujemo uspesne checkove

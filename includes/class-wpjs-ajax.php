@@ -1191,13 +1191,32 @@ class WPJS_AJAX
 			$health_data_info = $final_debug_array;
 			$health_data_core = $health_data['data']['core_checksum'];
 			$health_data_timestamp = $this->get_time_ago($health_data['timestamp']);
+			$health_data_upgrade = get_post_meta($site_id, 'wp_juggler_wordpress_update_version', true);
+			$health_data_upgrade = $health_data_upgrade == '' ? false : $health_data_upgrade;
+
+			if( $health_data_upgrade !== false ){
+				$automatic_logon = get_post_meta($site_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
+				$access_user = get_post_meta($site_id, 'wp_juggler_login_username', true);
+				$api_key = get_post_meta($site_id, 'wp_juggler_api_key', true);
+				if ($automatic_logon && $access_user && $api_key) {
+					$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+					$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
+					$health_data_upgrade_url = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/wp-admin/update-core.php');
+				} else {
+					$health_data_upgrade_url = rtrim($site_url, '/') . '/wp-admin/update-core.php';
+				}
+			} else {
+				$health_data_upgrade_url = false;
+			}
 		}
 
 		$newsite = array(
 			'wp_juggler_health_data_status' => $health_data_status,
 			'wp_juggler_health_data_info' => $health_data_info,
 			'wp_juggler_health_data_timestamp' => $health_data_timestamp,
-			'wp_juggler_health_data_core' => $health_data_core
+			'wp_juggler_health_data_core' => $health_data_core,
+			'wp_juggler_health_data_upgrade' => $health_data_upgrade,
+			'wp_juggler_health_data_upgrade_url' => $health_data_upgrade_url
 		);
 
 		$data[] = $newsite;

@@ -49,7 +49,6 @@ async function getDashboard() {
 }
 
 async function startCron(hookSlug) {
-  console.log(hookSlug);
   runCronActive.value = hookSlug
 
   let ret = {};
@@ -59,8 +58,6 @@ async function startCron(hookSlug) {
       action: "wpjs-start-cron", // the action to fire in the server
       hookSlug: hookSlug,
     });
-
-    console.log(response);
 
     if (response.success) {
       ret = response.data;
@@ -72,7 +69,6 @@ async function startCron(hookSlug) {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
-    console.log(error);
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
     runCronActive.value = false;

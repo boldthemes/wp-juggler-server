@@ -133,7 +133,6 @@ function openChecksum(item) {
 }
 
 async function refreshPlugins(siteId, withoutIndicator = false) {
-  console.log(withoutIndicator);
   refreshActive.value = !withoutIndicator;
 
   let ret = {};
@@ -143,8 +142,6 @@ async function refreshPlugins(siteId, withoutIndicator = false) {
       action: "wpjs-refresh-plugins", // the action to fire in the server
       siteId: siteId,
     });
-
-    console.log(response);
 
     if (response.success) {
       ret = response.data;
@@ -161,7 +158,6 @@ async function refreshPlugins(siteId, withoutIndicator = false) {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
-    console.log(error);
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
     refreshActive.value = false;
@@ -270,10 +266,6 @@ async function activatePlugin(
   }
 
   let ret = {};
-
-  console.log(siteId);
-  console.log(pluginSlug);
-  console.log(networkWide);
 
   try {
     const response = await doAjax({
@@ -876,15 +868,6 @@ const persistDialog = computed(() => {
     </template>
   </v-snackbar>
 
-  <v-snackbar v-model="ajaxSucc" color="success">
-    {{ ajaxSuccText }}
-
-    <template v-slot:actions>
-      <v-btn color="success" variant="text" @click="ajaxSucc = false">
-        Close
-      </v-btn>
-    </template>
-  </v-snackbar>
 </template>
 
 <style>

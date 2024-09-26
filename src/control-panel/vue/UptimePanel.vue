@@ -118,8 +118,6 @@ const fedowns = computed(() => {
   data.value.wp_juggler_fe_downs.forEach(incident => {
     const daysAgo = Math.floor((startOfTodayTimestamp - incident.log_timestamp) / 86400);
 
-    console.log(daysAgo)
-
     if (daysAgo >= 0 && daysAgo < 90) {
       incidentsLast90Days[89 - daysAgo].push(incident);
     }

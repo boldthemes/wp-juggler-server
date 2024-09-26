@@ -10,23 +10,17 @@ const props = defineProps(["name", "columns", "items"]);
 const search = ref("");
 
 const dialogInner = ref(false);
-const vulnerabilitiesItem = ref(null);
-
-const dialogChecksum = ref(false);
-const checksumItem = ref(null);
 
 const dialogBulkAction = ref(false);
 
 const refreshActive = ref(false);
-const updateActive = ref("");
-const deactivateActive = ref("");
-const activateActive = ref("");
-const activateNetworkActive = ref("");
+const updateThemeActive = ref("");
 
 const ajaxError = ref(false);
 const ajaxErrorText = ref("");
 
-const selectedPlugins = ref([]);
+const selectedThemes = ref([]);
+
 const bulkActionError = ref(false);
 const bulkActionText = ref(false);
 const actionArrayFiltered = ref([]);
@@ -38,9 +32,7 @@ const progressIndicator = ref(0);
 
 const queryClient = useQueryClient();
 
-const tab = ref(0);
-
-const plugin_headers = [
+const theme_headers = [
   { title: "Site Name", value: "site_name", align: "start", sortable: true },
   {
     title: "Active",
@@ -50,57 +42,33 @@ const plugin_headers = [
   },
   { title: "Version", value: "Version", align: "center", sortable: true },
   {
+    title: "Child Theme",
+    key: "child",
+    align: "center",
+    sortable: false,
+  },
+  {
     title: "Update",
     key: "update",
     align: "center",
     sortable: false,
   },
   {
-    title: "Vulnerabilities",
-    key: "vulnerabilities",
-    align: "center",
-    sortable: true,
-  },
-  {
-    title: "Cheksum",
-    key: "checksum",
-    align: "start",
-    sortable: true,
-  },
-  {
-    title: "Source",
-    key: "source",
-    align: "start",
-    sortable: true,
-  },
-  {
     title: "Actions",
     key: "actions",
     align: "start",
-    sortable: true,
+    sortable: false,
   },
 ];
 
-const bulkActionsPlugins = [
+const bulkActionsThemes = [
   {
-    text: "Update Plugins",
+    text: "Update Themes",
     value: "update",
   },
-  {
-    text: "Activate Plugins",
-    value: "activate",
-  },
-  {
-    text: "Network Activate Plugins",
-    value: "network_activate",
-  },
-  {
-    text: "Deactivate Plugins",
-    value: "deactivate",
-  },
 ];
 
-const selectedActionPlugins = ref(null);
+const selectedActionThemes = ref(null);
 
 async function doAjax(args) {
   let result;
@@ -122,18 +90,7 @@ async function doAjax(args) {
   }
 }
 
-function openVulnerabilities(item) {
-  vulnerabilitiesItem.value = item;
-  dialogInner.value = true;
-}
-
-function openChecksum(item) {
-  checksumItem.value = item;
-  dialogChecksum.value = true;
-}
-
 async function refreshPlugins(siteId, withoutIndicator = false) {
-  console.log(withoutIndicator);
   refreshActive.value = !withoutIndicator;
 
   let ret = {};
@@ -143,8 +100,6 @@ async function refreshPlugins(siteId, withoutIndicator = false) {
       action: "wpjs-refresh-plugins", // the action to fire in the server
       siteId: siteId,
     });
-
-    console.log(response);
 
     if (response.success) {
       ret = response.data;
@@ -161,27 +116,26 @@ async function refreshPlugins(siteId, withoutIndicator = false) {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
-    console.log(error);
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
     refreshActive.value = false;
   }
 }
 
-async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
-  updateActive.value = siteId;
+async function updateTheme(themeSlug, siteId, withoutRefresh = false) {
+  updateThemeActive.value = siteId;
 
   if (withoutRefresh) {
-    updateActive.value = "";
+    updateThemeActive.value = "";
   }
 
   let ret = {};
 
   try {
     const response = await doAjax({
-      action: "wpjs-update-plugin", // the action to fire in the server
+      action: "wpjs-update-theme", // the action to fire in the server
       siteId: siteId,
-      pluginSlug: pluginSlug,
+      themeSlug: themeSlug,
       withoutRefresh: false,
     });
 
@@ -192,7 +146,7 @@ async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
         queryKey: ["wpjs-control-panel"],
       });
 
-      updateActive.value = "";
+      updateThemeActive.value = "";
     } else {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
@@ -206,108 +160,7 @@ async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
       queryKey: ["wpjs-control-panel"],
     });
 
-    updateActive.value = "";
-  }
-}
-
-async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
-  deactivateActive.value = siteId;
-
-  if (withoutRefresh) {
-    deactivateActive.value = "";
-  }
-
-  let ret = {};
-
-  try {
-    const response = await doAjax({
-      action: "wpjs-deactivate-plugin", // the action to fire in the server
-      siteId: siteId,
-      pluginSlug: pluginSlug,
-      withoutRefresh: false,
-    });
-
-    if (response.success) {
-      ret = response.data;
-
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
-
-      deactivateActive.value = "";
-    } else {
-      throw new Error(`${response.data.code} - ${response.data.message}`);
-    }
-  } catch (error) {
-    ajaxError.value = true;
-    ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
-
-    queryClient.invalidateQueries({
-      queryKey: ["wpjs-control-panel"],
-    });
-
-    deactivateActive.value = "";
-  }
-}
-
-async function activatePlugin(
-  pluginSlug,
-  siteId,
-  networkWide,
-  withoutRefresh = false
-) {
-  if (networkWide) {
-    activateNetworkActive.value = siteId;
-  } else {
-    activateActive.value = siteId;
-  }
-
-  if (withoutRefresh) {
-    activateActive.value = "";
-    activateNetworkActive.value = "";
-  }
-
-  let ret = {};
-
-  console.log(siteId);
-  console.log(pluginSlug);
-  console.log(networkWide);
-
-  try {
-    const response = await doAjax({
-      action: "wpjs-activate-plugin", // the action to fire in the server
-      siteId: siteId,
-      pluginSlug: pluginSlug,
-      networkWide: networkWide,
-      withoutRefresh: false,
-    });
-
-    if (response.success) {
-      ret = response.data;
-
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
-
-      activateActive.value = "";
-      activateNetworkActive.value = "";
-    } else {
-      throw new Error(`${response.data.code} - ${response.data.message}`);
-    }
-  } catch (error) {
-    ajaxError.value = true;
-    ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
-
-    queryClient.invalidateQueries({
-      queryKey: ["wpjs-control-panel"],
-    });
-
-    activateActive.value = "";
-    activateNetworkActive.value = "";
+    updateThemeActive.value = "";
   }
 }
 
@@ -316,67 +169,33 @@ async function doBulkAction() {
   bulkActionText.value = false;
   actionArrayFiltered.value = [];
 
-  if (!selectedActionPlugins.value) {
+  if (!selectedActionThemes.value) {
     bulkActionError.value = "No action selected";
-  } else if (selectedPlugins.value.length == 0) {
-    bulkActionError.value = "No plugin selected";
+  } else if (selectedThemes.value.length == 0) {
+    bulkActionError.value = "No theme selected";
   } else {
     let actionArray = [];
-    selectedPlugins.value.forEach((plugin) => {
-      const maybePlugin = props.items.find(
-        (element) => element.wpjugglersites_id === plugin
+    selectedThemes.value.forEach((theme) => {
+      const maybeTheme = props.items.find(
+        (element) => element.wpjugglersites_id === theme
       );
-      if (maybePlugin !== undefined) {
-        actionArray.push(maybePlugin);
+      if (maybeTheme !== undefined) {
+        actionArray.push(maybeTheme);
       }
     });
 
-    if (selectedActionPlugins.value.value == "update") {
+    if (selectedActionThemes.value.value == "update") {
       actionArrayFiltered.value = actionArray.filter(
         (element) => element.Update != false
       );
       bulkActionText.value = "update";
     }
-
-    if (selectedActionPlugins.value.value == "activate") {
-      actionArrayFiltered.value = actionArray.filter(
-        (element) =>
-          (element.Active != true && element.Multisite != true) ||
-          (element.Active != true &&
-            element.NetworkActive != true &&
-            element.Multisite == true &&
-            element.Network != true)
-      );
-      bulkActionText.value = "activate";
-    }
-
-    if (selectedActionPlugins.value.value == "network_activate") {
-      actionArrayFiltered.value = actionArray.filter(
-        (element) =>
-          (element.Active != true &&
-            element.NetworkActive != true &&
-            element.Multisite == true &&
-            element.Network != true) ||
-          (element.Active != true &&
-            element.NetworkActive != true &&
-            element.Multisite == true &&
-            element.Network == true)
-      );
-      bulkActionText.value = "network activate";
-    }
-
-    if (selectedActionPlugins.value.value == "deactivate") {
-      actionArrayFiltered.value = actionArray.filter(
-        (element) => element.Active == true || element.NetworkActive == true
-      );
-      bulkActionText.value = "deactivate";
-    }
   }
 
   if (actionArrayFiltered.value.length == 0) {
-    bulkActionText.value = `There are no plugins to ${bulkActionText.value} in your selection`;
+    bulkActionText.value = `There are no themes to ${bulkActionText.value} in your selection`;
   } else {
-    bulkActionText.value = `You are going to ${bulkActionText.value} ${props.name} plugin on these sites:`;
+    bulkActionText.value = `You are going to ${bulkActionText.value} ${props.name} theme on these sites:`;
   }
 
   bulkActionInProgress.value = false;
@@ -400,34 +219,8 @@ async function processAction() {
         100
     );
 
-    if (selectedActionPlugins.value.value == "update") {
-      await updatePlugin(
-        currentAction.value.Slug,
-        currentAction.value.wpjugglersites_id,
-        true
-      );
-    }
-
-    if (selectedActionPlugins.value.value == "activate") {
-      await activatePlugin(
-        currentAction.value.Slug,
-        currentAction.value.wpjugglersites_id,
-        false,
-        true
-      );
-    }
-
-    if (selectedActionPlugins.value.value == "network_activate") {
-      await activatePlugin(
-        currentAction.value.Slug,
-        currentAction.value.wpjugglersites_id,
-        true,
-        true
-      );
-    }
-
-    if (selectedActionPlugins.value.value == "deactivate") {
-      await deactivatePlugin(
+    if (selectedActionThemes.value.value == "update") {
+      await updateTheme(
         currentAction.value.Slug,
         currentAction.value.wpjugglersites_id,
         true
@@ -439,8 +232,6 @@ async function processAction() {
     bulkActionFinished.value = true;
   }
 }
-
-//
 
 const persistDialog = computed(() => {
   return bulkActionInProgress.value && !bulkActionFinished.value;
@@ -461,8 +252,8 @@ const persistDialog = computed(() => {
           class="px-4"
         >
           <v-select
-            v-model="selectedActionPlugins"
-            :items="bulkActionsPlugins"
+            v-model="selectedActionThemes"
+            :items="bulkActionsThemes"
             item-title="text"
             item-value="value"
             return-object
@@ -498,15 +289,15 @@ const persistDialog = computed(() => {
           <v-data-table
             v-model:search="search"
             :items="props.items"
-            :headers="plugin_headers"
+            :headers="theme_headers"
             item-value="wpjugglersites_id"
             items-per-page="50"
             show-select
-            v-model="selectedPlugins"
+            v-model="selectedThemes"
             class="pb-4"
           >
             <template v-slot:item.active="{ item }">
-              <div v-if="item.Active && !item.NetworkActive">
+              <div v-if="item.Active && !item.Network">
                 <v-icon
                   color="success"
                   icon="mdi-check-bold"
@@ -514,10 +305,21 @@ const persistDialog = computed(() => {
                   class="rm-4"
                 ></v-icon>
               </div>
-              <div v-if="item.NetworkActive">
+              <div v-if="item.Active && item.Network">
                 <v-icon
                   color="success"
                   icon="mdi-check-network-outline"
+                  size="large"
+                  class="rm-4"
+                ></v-icon>
+              </div>
+            </template>
+
+            <template v-slot:item.child="{ item }">
+              <div v-if="item.IsChildTheme">
+                <v-icon
+                  color="success"
+                  icon="mdi-check-bold"
                   size="large"
                   class="rm-4"
                 ></v-icon>
@@ -536,169 +338,11 @@ const persistDialog = computed(() => {
               </div>
             </template>
 
-            <template v-slot:item.vulnerabilities="{ item }">
-              <div
-                v-if="
-                  item.Vulnerabilities.length > 0 &&
-                  item.Wporg &&
-                  !item.WpJuggler
-                "
-              >
-                <v-icon
-                  color="error"
-                  icon="mdi-bug-check-outline"
-                  size="large"
-                  class="mr-1"
-                ></v-icon>
-                {{ item.Vulnerabilities.length }}
-                <v-btn
-                  class="ml-3 text-none text-caption"
-                  @click="openVulnerabilities(item)"
-                  variant="outlined"
-                  >Details
-                </v-btn>
-              </div>
-              <div v-else-if="!item.Wporg || item.WpJuggler">
-                <v-icon
-                  color="blue-lighten-5"
-                  icon="mdi-help"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-            </template>
-
-            <template v-slot:item.checksum="{ item }">
-              <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
-                <v-icon
-                  color="error"
-                  icon="mdi-alert-outline"
-                  size="large"
-                  class="mr-1"
-                ></v-icon>
-                <v-btn
-                  class="ml-3 text-none text-caption"
-                  @click="openChecksum(item)"
-                  variant="outlined"
-                  >Details
-                </v-btn>
-              </div>
-              <div v-else-if="!item.Wporg || item.WpJuggler">
-                <v-icon
-                  color="blue-lighten-5"
-                  icon="mdi-help"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-              <div v-else>
-                <v-icon
-                  color="success"
-                  icon="mdi-check-bold"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-            </template>
-
-            <template v-slot:item.source="{ item }">
-              <div v-if="item.Tgmpa">
-                <v-icon
-                  color="grey-lighten-1"
-                  icon="mdi-package-variant-closed"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-              <div v-else-if="item.WpJuggler">
-                <v-icon
-                  color="grey-lighten-1"
-                  icon="mdi-lan"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-              <div v-else-if="item.Wporg">
-                <v-icon
-                  color="grey-lighten-1"
-                  icon="mdi-wordpress"
-                  size="large"
-                  class="mr-1"
-                ></v-icon>
-              </div>
-              <div v-else>
-                <v-icon
-                  color="blue-lighten-5"
-                  icon="mdi-help"
-                  size="large"
-                  class="rm-4"
-                ></v-icon>
-              </div>
-            </template>
             <template v-slot:item.actions="{ item }">
               <v-btn
-                v-if="item.Active || item.NetworkActive"
-                :loading="item.wpjugglersites_id == deactivateActive"
-                @click="deactivatePlugin(item.Slug, item.wpjugglersites_id)"
-                class="ml-3 text-none text-caption"
-                variant="outlined"
-                >Deactivate
-              </v-btn>
-              <v-btn
-                v-if="!item.Active && !item.Multisite"
-                :loading="item.wpjugglersites_id == activateActive"
-                @click="
-                  activatePlugin(item.Slug, item.wpjugglersites_id, false)
-                "
-                class="ml-3 text-none text-caption"
-                variant="outlined"
-                >Activate
-              </v-btn>
-              <v-btn
-                v-if="
-                  !item.Active &&
-                  !item.NetworkActive &&
-                  item.Multisite &&
-                  !item.Network
-                "
-                :loading="item.wpjugglersites_id == activateActive"
-                @click="
-                  activatePlugin(item.Slug, item.wpjugglersites_id, false)
-                "
-                class="ml-3 text-none text-caption"
-                variant="outlined"
-                >Activate
-              </v-btn>
-              <v-btn
-                v-if="
-                  !item.Active &&
-                  !item.NetworkActive &&
-                  item.Multisite &&
-                  !item.Network
-                "
-                :loading="item.wpjugglersites_id == activateNetworkActive"
-                @click="activatePlugin(item.Slug, item.wpjugglersites_id, true)"
-                class="ml-3 text-none text-caption"
-                variant="outlined"
-                >Network Activate
-              </v-btn>
-              <v-btn
-                v-if="
-                  !item.Active &&
-                  !item.NetworkActive &&
-                  item.Multisite &&
-                  item.Network
-                "
-                :loading="item.wpjugglersites_id == activateNetworkActive"
-                @click="activatePlugin(item.Slug, item.wpjugglersites_id, true)"
-                class="ml-3 text-none text-caption"
-                variant="outlined"
-                >Network Activate
-              </v-btn>
-              <v-btn
                 v-if="item.Update"
-                :loading="item.wpjugglersites_id == updateActive"
-                @click="updatePlugin(item.Slug, item.wpjugglersites_id)"
+                :loading="item.wpjugglersites_id == updateThemeActive"
+                @click="updateTheme(item.Slug, item.wpjugglersites_id)"
                 color="#2196f3"
                 class="text-none text-caption ml-3"
                 variant="outlined"
@@ -753,43 +397,6 @@ const persistDialog = computed(() => {
     </v-card>
   </v-dialog>
 
-  <v-dialog v-model="dialogChecksum" min-width="600">
-    <v-card>
-      <v-toolbar>
-        <v-btn icon="mdi-close" @click="dialogChecksum = false"></v-btn>
-
-        <v-toolbar-title
-          >List of Checksum Errors - {{ checksumItem.Name }} -
-          {{ checksumItem.Version }}</v-toolbar-title
-        >
-      </v-toolbar>
-
-      <v-card-text>
-        <v-sheet v-if="checksumItem.ChecksumDetails.length > 0">
-          <v-row class="wpjs-debug-table-row pl-5">
-            <v-col class="text-left">
-              <strong>File</strong>
-            </v-col>
-            <v-col class="text-left">
-              <strong>Checksum problem</strong>
-            </v-col>
-          </v-row>
-          <v-row
-            class="wpjs-debug-table-row pl-5"
-            v-for="item in checksumItem.ChecksumDetails"
-          >
-            <v-col class="text-left">
-              <div class="wpjs-plugin-vul">{{ item.file }}</div>
-            </v-col>
-            <v-col class="text-left">
-              <div class="wpjs-plugin-vul">{{ item.message }}</div>
-            </v-col>
-          </v-row>
-        </v-sheet>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
-
   <v-dialog v-model="dialogBulkAction" width="800" :persistent="persistDialog">
     <v-card>
       <v-toolbar>
@@ -801,7 +408,7 @@ const persistDialog = computed(() => {
 
         <v-toolbar-title v-if="bulkActionError">Bulk Action</v-toolbar-title>
         <v-toolbar-title v-else>{{
-          selectedActionPlugins.text
+          selectedActionThemes.text
         }}</v-toolbar-title>
       </v-toolbar>
 
@@ -871,16 +478,6 @@ const persistDialog = computed(() => {
 
     <template v-slot:actions>
       <v-btn color="red-lighten-4" variant="text" @click="ajaxError = false">
-        Close
-      </v-btn>
-    </template>
-  </v-snackbar>
-
-  <v-snackbar v-model="ajaxSucc" color="success">
-    {{ ajaxSuccText }}
-
-    <template v-slot:actions>
-      <v-btn color="success" variant="text" @click="ajaxSucc = false">
         Close
       </v-btn>
     </template>
