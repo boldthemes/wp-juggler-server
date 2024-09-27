@@ -335,6 +335,14 @@ class WPJS_Service
 
 			$body = json_decode(wp_remote_retrieve_body($response), true);
 
+			if( $body['data']['update_version'] ){
+				update_post_meta($site_id, 'wp_juggler_wordpress_update_version', sanitize_text_field($body['data']['update_version']));
+			} else {
+				delete_post_meta($site_id, 'wp_juggler_wordpress_update_version');
+			}
+
+			update_post_meta($site_id, 'wp_juggler_wordpress_version',  sanitize_text_field($body['data']['wp_version']));
+
 			$log_entry = array(
 				'ID' => $task_id,
 				'log_result' => 'succ',
@@ -343,6 +351,7 @@ class WPJS_Service
 			);
 
 			WPJS_Cron_Log::update_log($log_entry);
+			
 		}
 
 		return $response;

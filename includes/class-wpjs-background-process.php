@@ -111,14 +111,6 @@ class WPJS_Background_Process extends WP_Background_Process
 								delete_post_meta($site_id, 'wp_juggler_multisite');
 							}
 
-							if( $body['data']['update_version'] ){
-								update_post_meta($site_id, 'wp_juggler_wordpress_update_version', sanitize_text_field($body['data']['update_version']));
-							} else {
-								delete_post_meta($site_id, 'wp_juggler_wordpress_update_version');
-							}
-
-							update_post_meta($site_id, 'wp_juggler_wordpress_version', $body['data']['wp_version']);
-
 							// Ne upisujemo uspesne checkove
 
 							/* $log_entry = array(
@@ -251,6 +243,25 @@ class WPJS_Background_Process extends WP_Background_Process
 								'themes_data' => $themes
 							)
 						)		
+					);
+	
+					WPJS_Cron_Log::update_log($log_entry);
+
+				} else if($data['taskType'] == 'checkHealth'){
+					
+					if( $body['data']['update_version'] ){
+						update_post_meta($site_id, 'wp_juggler_wordpress_update_version', sanitize_text_field($body['data']['update_version']));
+					} else {
+						delete_post_meta($site_id, 'wp_juggler_wordpress_update_version');
+					}
+
+					update_post_meta($site_id, 'wp_juggler_wordpress_version',  sanitize_text_field($body['data']['wp_version']));
+
+					$log_entry = array(
+						'ID' => $task_id,
+						'log_result' => 'succ',
+						'log_value' =>  null,
+						'log_data' => json_encode($body['data'])
 					);
 	
 					WPJS_Cron_Log::update_log($log_entry);
