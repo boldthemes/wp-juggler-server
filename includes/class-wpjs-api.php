@@ -227,6 +227,12 @@ class WPJS_Api
 			wp_send_json_error(new WP_Error('Missing param', 'Multisite param is missing'), 400);
 		}
 
+		if (array_key_exists('wp_version', $parameters)) {
+			$wp_version = sanitize_text_field($parameters['wp_version']);
+		} else {
+			wp_send_json_error(new WP_Error('Missing param', 'WP Version param is missing'), 400);
+		}
+
 		$recorded_site_url = get_post_meta($site_id, 'wp_juggler_server_site_url', true);
 
 		if( untrailingslashit($site_url) == untrailingslashit($recorded_site_url) ) {
@@ -242,6 +248,8 @@ class WPJS_Api
 				} else {
 					delete_post_meta($site_id, 'wp_juggler_multisite');
 				}
+
+				update_post_meta($site_id, 'wp_juggler_wordpress_version',  $wp_version);
 				
 				$data = array( 
 					'site_id' => $site_id
