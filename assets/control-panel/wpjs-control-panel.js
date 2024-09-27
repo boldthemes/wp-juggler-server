@@ -9190,10 +9190,16 @@ exports.default = {
                 sortable: true
             },
             {
+                title: "Updates",
+                key: "updates",
+                align: "center",
+                sortable: false
+            },
+            {
                 title: "Number of Installations",
                 key: "installations",
                 align: "center",
-                sortable: true
+                sortable: false
             }
         ];
         const headersThemes = [
@@ -9210,10 +9216,16 @@ exports.default = {
                 sortable: true
             },
             {
+                title: "Updates",
+                key: "updates",
+                align: "center",
+                sortable: false
+            },
+            {
                 title: "Number of Installations",
                 key: "installations",
                 align: "center",
-                sortable: true
+                sortable: false
             }
         ];
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
@@ -9222,6 +9234,9 @@ exports.default = {
             ],
             queryFn: getDashboard
         });
+        function countUpdates(arr) {
+            return arr.filter((item)=>item.Update === true).length;
+        }
         async function doAjax(args) {
             let result;
             try {
@@ -9280,6 +9295,7 @@ exports.default = {
             data,
             error,
             refetch,
+            countUpdates,
             doAjax,
             getDashboard,
             backToDashboard,
@@ -21502,6 +21518,12 @@ const _hoisted_21 = {
 const _hoisted_22 = {
     key: 2
 };
+const _hoisted_23 = {
+    key: 0
+};
+const _hoisted_24 = {
+    key: 0
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
@@ -21878,6 +21900,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 "show-expand": "",
                                                                 "items-per-page": "50"
                                                             }, {
+                                                                "item.updates": (0, _vue.withCtx)(({ item })=>[
+                                                                        $setup.countUpdates(item.Sites) > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, [
+                                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                                color: "success",
+                                                                                icon: "mdi-check-bold",
+                                                                                size: "large",
+                                                                                class: "rm-4"
+                                                                            })
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
                                                                 "item.installations": (0, _vue.withCtx)(({ item })=>[
                                                                         (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.Sites.length), 1 /* TEXT */ )
                                                                     ]),
@@ -21959,6 +21991,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 "show-expand": "",
                                                                 "items-per-page": "50"
                                                             }, {
+                                                                "item.updates": (0, _vue.withCtx)(({ item })=>[
+                                                                        $setup.countUpdates(item.Sites) > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, [
+                                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                                color: "success",
+                                                                                icon: "mdi-check-bold",
+                                                                                size: "large",
+                                                                                class: "rm-4"
+                                                                            })
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
                                                                 "item.installations": (0, _vue.withCtx)(({ item })=>[
                                                                         (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(item.Sites.length), 1 /* TEXT */ )
                                                                     ]),
