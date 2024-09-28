@@ -41,7 +41,7 @@ const queryClient = useQueryClient();
 const tab = ref(0);
 
 const plugin_headers = [
-  { title: "Site Name", value: "site_name", align: "start", sortable: true },
+  { title: "Site Name", key: "site_name", align: "start", sortable: true },
   {
     title: "Active",
     key: "active",
@@ -64,21 +64,22 @@ const plugin_headers = [
   {
     title: "Cheksum",
     key: "checksum",
-    align: "start",
+    align: "center",
     sortable: true,
   },
   {
     title: "Source",
     key: "source",
-    align: "start",
+    align: "center",
     sortable: true,
   },
   {
     title: "Actions",
     key: "actions",
-    align: "start",
+    align: "center",
     sortable: true,
   },
+  { title: "WP admin", key: "wp_admin", align: "center", sortable: false },
 ];
 
 const bulkActionsPlugins = [
@@ -437,6 +438,12 @@ async function processAction() {
 const persistDialog = computed(() => {
   return bulkActionInProgress.value && !bulkActionFinished.value;
 });
+
+const gotoUrl = (url) => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
+
 </script>
 
 <template>
@@ -497,6 +504,10 @@ const persistDialog = computed(() => {
             v-model="selectedPlugins"
             class="pb-4"
           >
+            <template v-slot:item.site_name="{ item }">
+              <a :href="item.site_url" target="_blank">{{ item.site_name }}</a>
+            </template>
+
             <template v-slot:item.active="{ item }">
               <div v-if="item.Active && !item.NetworkActive">
                 <v-icon
@@ -697,6 +708,39 @@ const persistDialog = computed(() => {
                 >Update
               </v-btn>
             </template>
+
+            <template v-slot:item.wp_admin="{ item }">
+              <div
+                v-if="
+                  item.wp_juggler_site_activation &&
+                  item.wp_juggler_automatic_login
+                "
+              >
+                <v-btn
+                  color="#2196f3"
+                  variant="outlined"
+                  class="text-none text-caption"
+                  prepend-icon="mdi-login"
+                  @click="gotoUrl(item.wp_juggler_login_plugin_url)"
+                  >Plugins</v-btn
+                >
+              </div>
+              <div
+                v-if="
+                  item.wp_juggler_site_activation &&
+                  !item.wp_juggler_automatic_login
+                "
+              >
+                <v-btn
+                  color="#2196f3"
+                  variant="outlined"
+                  class="text-none text-caption"
+                  prepend-icon="mdi-account-remove"
+                  @click="gotoUrl(item.wp_juggler_login_plugin_url)"
+                  >Plugins</v-btn
+                >
+              </div>
+            </template>
           </v-data-table>
         </v-row>
       </v-sheet>
@@ -867,7 +911,6 @@ const persistDialog = computed(() => {
       </v-btn>
     </template>
   </v-snackbar>
-
 </template>
 
 <style>

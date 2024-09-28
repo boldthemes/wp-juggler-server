@@ -33,7 +33,7 @@ const progressIndicator = ref(0);
 const queryClient = useQueryClient();
 
 const theme_headers = [
-  { title: "Site Name", value: "site_name", align: "start", sortable: true },
+  { title: "Site Name", key: "site_name", align: "start", sortable: true },
   {
     title: "Active",
     key: "active",
@@ -56,9 +56,10 @@ const theme_headers = [
   {
     title: "Actions",
     key: "actions",
-    align: "start",
+    align: "center",
     sortable: false,
   },
+  { title: "WP admin", key: "wp_admin", align: "center", sortable: false },
 ];
 
 const bulkActionsThemes = [
@@ -236,6 +237,12 @@ async function processAction() {
 const persistDialog = computed(() => {
   return bulkActionInProgress.value && !bulkActionFinished.value;
 });
+
+const gotoUrl = (url) => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
+
 </script>
 
 <template>
@@ -296,6 +303,10 @@ const persistDialog = computed(() => {
             v-model="selectedThemes"
             class="pb-4"
           >
+            <template v-slot:item.site_name="{ item }">
+              <a :href="item.site_url" target="_blank">{{ item.site_name }}</a>
+            </template>
+
             <template v-slot:item.active="{ item }">
               <div v-if="item.Active && !item.Network">
                 <v-icon
@@ -348,6 +359,39 @@ const persistDialog = computed(() => {
                 variant="outlined"
                 >Update
               </v-btn>
+            </template>
+
+            <template v-slot:item.wp_admin="{ item }">
+              <div
+                v-if="
+                  item.wp_juggler_site_activation &&
+                  item.wp_juggler_automatic_login
+                "
+              >
+                <v-btn
+                  color="#2196f3"
+                  variant="outlined"
+                  class="text-none text-caption"
+                  prepend-icon="mdi-login"
+                  @click="gotoUrl(item.wp_juggler_login_themes_url)"
+                  >Themes</v-btn
+                >
+              </div>
+              <div
+                v-if="
+                  item.wp_juggler_site_activation &&
+                  !item.wp_juggler_automatic_login
+                "
+              >
+                <v-btn
+                  color="#2196f3"
+                  variant="outlined"
+                  class="text-none text-caption"
+                  prepend-icon="mdi-account-remove"
+                  @click="gotoUrl(item.wp_juggler_login_themes_url)"
+                  >Themes</v-btn
+                >
+              </div>
             </template>
           </v-data-table>
         </v-row>

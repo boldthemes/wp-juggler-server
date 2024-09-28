@@ -170,7 +170,7 @@ async function refreshAll() {
         <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
           <v-icon v-if="props.item.wp_juggler_multisite" color="#2196f3" icon="mdi-checkbox-multiple-blank-outline"
             size="large" class="rm-4 mr-4"></v-icon>
-          {{ props.item.wp_juggler_server_site_url }}
+          <a :href="props.item.wp_juggler_server_site_url" target="_blank">{{ props.item.wp_juggler_server_site_url }}</a>
         </div>
 
         <v-row class="mb-4">

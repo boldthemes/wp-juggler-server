@@ -511,13 +511,34 @@ class WPJS_AJAX
 			ARRAY_A
 		);
 
+		$automatic_logon = get_post_meta($site_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
+		$access_user = get_post_meta($site_id, 'wp_juggler_login_username', true);
+		$api_key = get_post_meta($site_id, 'wp_juggler_api_key', true);
+		$site_url = get_post_meta($site_id, 'wp_juggler_server_site_url', true);
+
+
+		if ($automatic_logon && $access_user && $api_key) {
+			$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+			$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
+
+			$wp_juggler_login_plugin_url = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/wp-admin/plugins.php');
+			$wp_juggler_login_themes_url = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/wp-admin/themes.php');
+		} else {
+			$wp_juggler_login_plugin_url = rtrim($site_url, '/') . '/wp-admin/plugins.php';
+			$wp_juggler_login_themes_url = rtrim($site_url, '/') . '/wp-admin/themes.php';
+		}
+
 		if (!$result) {
 			$data['themes_data'] = false;
 			$data['plugins_data'] = false;
 			$data['wp_juggler_plugins_timestamp'] = false;
+			$data['wp_juggler_login_plugin_url'] = $wp_juggler_login_plugin_url;
+			$data['wp_juggler_login_themes_url'] = $wp_juggler_login_themes_url;
 		} else {
 			$data = json_decode($result['log_data'], true);
 			$data['wp_juggler_plugins_timestamp'] = $this->get_time_ago(strtotime($result['log_time']));
+			$data['wp_juggler_login_plugin_url'] = $wp_juggler_login_plugin_url;
+			$data['wp_juggler_login_themes_url'] = $wp_juggler_login_themes_url;
 		}
 
 
@@ -643,9 +664,35 @@ class WPJS_AJAX
 		// Process each log entry
 		foreach ($log_entries as $entry) {
 			$log_data = json_decode($entry->log_data, true);
+
+			$automatic_logon = get_post_meta($entry->wpjugglersites_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
+			$access_user = get_post_meta($entry->wpjugglersites_id, 'wp_juggler_login_username', true);
+			$api_key = get_post_meta($entry->wpjugglersites_id, 'wp_juggler_api_key', true);
+			$site_url = get_post_meta($entry->wpjugglersites_id, 'wp_juggler_server_site_url', true);
+
+
+			if ($automatic_logon && $access_user && $api_key) {
+
+				$access_token = WPJS_Service::wpjs_generate_login_token($access_user, $api_key);
+				$final_url = WPJS_Service::add_query_var_to_url(rtrim($site_url, '/') . '/wpjs/', 'wpjs_token', $access_token);
+
+				$wp_juggler_login_plugin_url = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/wp-admin/plugins.php');
+				$wp_juggler_login_themes_url = WPJS_Service::add_query_var_to_url($final_url, 'wpjs_redirect', rtrim($site_url, '/') . '/wp-admin/themes.php');
+			} else {
+				$wp_juggler_login_plugin_url = rtrim($site_url, '/') . '/wp-admin/plugins.php';
+				$wp_juggler_login_themes_url = rtrim($site_url, '/') . '/wp-admin/themes.php';
+			}
+
+
+
 			$site_info = [
 				'wpjugglersites_id' => $entry->wpjugglersites_id,
-				'site_name' => get_the_title($entry->wpjugglersites_id)
+				'site_name' => get_the_title($entry->wpjugglersites_id),
+				'site_url' => get_post_meta($entry->wpjugglersites_id, 'wp_juggler_server_site_url', true),
+				'wp_juggler_automatic_login' => get_post_meta($entry->wpjugglersites_id, 'wp_juggler_automatic_login', true) == "on" ? true : false,
+				'wp_juggler_login_plugin_url' => $wp_juggler_login_plugin_url,
+				'wp_juggler_login_themes_url' =>  $wp_juggler_login_themes_url,
+				'wp_juggler_site_activation' => get_post_meta($entry->wpjugglersites_id, 'wp_juggler_site_activation', true) == "on" ? true : false
 			];
 
 			// Process themes data

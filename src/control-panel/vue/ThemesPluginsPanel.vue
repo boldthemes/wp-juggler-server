@@ -14,7 +14,7 @@ const dialogChecksum = ref(false);
 const checksumItem = ref(null);
 
 const dialogBulkAction = ref(false);
-const dialogBulkType = ref('');
+const dialogBulkType = ref("");
 
 const refreshActive = ref(false);
 const updateActive = ref("");
@@ -61,7 +61,7 @@ const bulkActionsThemes = [
   {
     text: "Update Themes",
     value: "update",
-  }
+  },
 ];
 
 const plugin_headers = [
@@ -102,7 +102,7 @@ const plugin_headers = [
     key: "actions",
     align: "start",
     sortable: false,
-  }
+  },
 ];
 
 const theme_headers = [
@@ -132,7 +132,7 @@ const theme_headers = [
     key: "actions",
     align: "start",
     sortable: false,
-  }
+  },
 ];
 
 const tab = ref(0);
@@ -319,8 +319,6 @@ async function updateTheme(themeSlug, withoutRefresh = false) {
   }
 }
 
-
-
 async function deactivatePlugin(pluginSlug, withoutRefresh = false) {
   deactivateActive.value = pluginSlug;
 
@@ -481,7 +479,7 @@ async function doBulkAction() {
 
   bulkActionInProgress.value = false;
   dialogBulkAction.value = true;
-  dialogBulkType.value = 'plugins';
+  dialogBulkType.value = "plugins";
 }
 
 async function doBulkActionThemes() {
@@ -520,7 +518,7 @@ async function doBulkActionThemes() {
 
   bulkActionInProgress.value = false;
   dialogBulkAction.value = true;
-  dialogBulkType.value = 'themes';
+  dialogBulkType.value = "themes";
 }
 
 async function InitiateAction() {
@@ -537,11 +535,10 @@ async function processAction() {
     progressIndicator.value = Math.ceil(
       ((bulkActionsNumber.value - actionArrayFiltered.value.length) /
         bulkActionsNumber.value) *
-      100
+        100
     );
 
-    if (dialogBulkType.value == 'plugins') {
-
+    if (dialogBulkType.value == "plugins") {
       if (selectedActionPlugins.value.value == "update") {
         await updatePlugin(currentAction.value.Slug, true);
       }
@@ -557,23 +554,20 @@ async function processAction() {
       if (selectedActionPlugins.value.value == "deactivate") {
         await deactivatePlugin(currentAction.value.Slug, true);
       }
-
-    } else if (dialogBulkType.value == 'themes') 
-    {
+    } else if (dialogBulkType.value == "themes") {
       if (selectedActionThemes.value.value == "update") {
         await updateTheme(currentAction.value.Slug, true);
       }
     }
 
     processAction();
-
   } else {
     currentAction.value = {
       Name: "Refreshing plugin data",
     };
     await refreshPlugins(null, true);
     bulkActionFinished.value = true;
-    dialogBulkType.value = '';
+    dialogBulkType.value = "";
   }
 }
 
@@ -582,14 +576,27 @@ async function processAction() {
 const persistDialog = computed(() => {
   return bulkActionInProgress.value && !bulkActionFinished.value;
 });
+
+const gotoUrl = (url) => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
+
 </script>
 
 <template>
   <div class="text-center pa-4">
-    <v-dialog v-model="store.activatedThemes" transition="dialog-bottom-transition" fullscreen>
+    <v-dialog
+      v-model="store.activatedThemes"
+      transition="dialog-bottom-transition"
+      fullscreen
+    >
       <v-card>
         <v-toolbar>
-          <v-btn icon="mdi-close" @click="store.activatedThemes = false"></v-btn>
+          <v-btn
+            icon="mdi-close"
+            @click="store.activatedThemes = false"
+          ></v-btn>
 
           <v-toolbar-title>{{ store.activatedSite.title }} </v-toolbar-title>
 
@@ -599,20 +606,33 @@ const persistDialog = computed(() => {
         </v-toolbar>
 
         <v-card-text v-if="data">
-          <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
+          <v-sheet
+            class="pa-4 text-right mx-auto"
+            elevation="0"
+            width="100%"
+            rounded="lg"
+          >
             <div v-if="data.wp_juggler_plugins_timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               {{ data.wp_juggler_plugins_timestamp }}
-              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshPlugins"
-                variant="outlined">Refresh
+              <v-btn
+                class="ml-3 text-none text-caption"
+                :loading="refreshActive"
+                @click="refreshPlugins"
+                variant="outlined"
+                >Refresh
               </v-btn>
             </div>
 
             <div v-else>
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
-              <v-btn class="ml-3 text-none text-caption" :loading="refreshActive" @click="refreshPlugins"
-                variant="outlined">Refresh
+              <v-btn
+                class="ml-3 text-none text-caption"
+                :loading="refreshActive"
+                @click="refreshPlugins"
+                variant="outlined"
+                >Refresh
               </v-btn>
             </div>
           </v-sheet>
@@ -625,126 +645,270 @@ const persistDialog = computed(() => {
 
             <v-card-text class="mt-4">
               <v-tabs-window v-model="tab">
-                <v-tabs-window-item value="plugins" transition="false" reverse-transition="false">
+                <v-tabs-window-item
+                  value="plugins"
+                  transition="false"
+                  reverse-transition="false"
+                >
                   <v-divider></v-divider>
 
                   <v-sheet>
-                    <v-row align="center" justify="center" alignContent="center" class="px-4">
-                      <v-select v-model="selectedActionPlugins" :items="bulkActionsPlugins" item-title="text"
-                        item-value="value" return-object single-line density="compact" label="Bulk Actions"
-                        max-width="300" variant="outlined" class="mt-6">
+                    <v-row
+                      align="center"
+                      justify="center"
+                      alignContent="center"
+                      class="px-4"
+                    >
+                      <v-select
+                        v-model="selectedActionPlugins"
+                        :items="bulkActionsPlugins"
+                        item-title="text"
+                        item-value="value"
+                        return-object
+                        single-line
+                        density="compact"
+                        label="Bulk Actions"
+                        max-width="300"
+                        variant="outlined"
+                        class="mt-6"
+                      >
                       </v-select>
-                      <v-btn class="ml-3 text-none text-caption" @click="doBulkAction()" variant="outlined">Apply
+                      <v-btn
+                        class="ml-3 text-none text-caption"
+                        @click="doBulkAction()"
+                        variant="outlined"
+                        >Apply
                       </v-btn>
                       <v-spacer></v-spacer>
 
-                      <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-                        variant="outlined" flat hide-details single-line max-width="800"></v-text-field>
+                      <v-btn
+                        class="ml-3 text-none text-caption mr-3"
+                        @click="gotoUrl(data.wp_juggler_login_plugin_url)"
+                        variant="outlined"
+                        >wp-admin
+                      </v-btn>
+
+                      <v-text-field
+                        v-model="search"
+                        density="compact"
+                        label="Search"
+                        prepend-inner-icon="mdi-magnify"
+                        variant="outlined"
+                        flat
+                        hide-details
+                        single-line
+                        max-width="800"
+                      ></v-text-field>
                     </v-row>
                     <v-row>
-                      <v-data-table v-model:search="search" :items="plugins_data" :headers="plugin_headers"
-                        item-value="File" items-per-page="50" show-select v-model="selectedPlugins" class="pb-4">
+                      <v-data-table
+                        v-model:search="search"
+                        :items="plugins_data"
+                        :headers="plugin_headers"
+                        item-value="File"
+                        items-per-page="50"
+                        show-select
+                        v-model="selectedPlugins"
+                        class="pb-4"
+                      >
                         <template v-slot:item.active="{ item }">
                           <div v-if="item.Active && !item.NetworkActive">
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                           <div v-if="item.NetworkActive">
-                            <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-network-outline"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
 
                         <template v-slot:item.update="{ item }">
                           <div v-if="item.Update">
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                             {{ item.UpdateVersion }}
                           </div>
                         </template>
 
                         <template v-slot:item.vulnerabilities="{ item }">
-                          <div v-if="
-                            item.Vulnerabilities.length > 0 &&
-                            item.Wporg &&
-                            !item.WpJuggler
-                          ">
-                            <v-icon color="error" icon="mdi-bug-check-outline" size="large" class="mr-1"></v-icon>
+                          <div
+                            v-if="
+                              item.Vulnerabilities.length > 0 &&
+                              item.Wporg &&
+                              !item.WpJuggler
+                            "
+                          >
+                            <v-icon
+                              color="error"
+                              icon="mdi-bug-check-outline"
+                              size="large"
+                              class="mr-1"
+                            ></v-icon>
                             {{ item.Vulnerabilities.length }}
-                            <v-btn class="ml-3 text-none text-caption" @click="openVulnerabilities(item)"
-                              variant="outlined">Details
+                            <v-btn
+                              class="ml-3 text-none text-caption"
+                              @click="openVulnerabilities(item)"
+                              variant="outlined"
+                              >Details
                             </v-btn>
                           </div>
                           <div v-else-if="!item.Wporg || item.WpJuggler">
-                            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="blue-lighten-5"
+                              icon="mdi-help"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
 
                         <template v-slot:item.checksum="{ item }">
-                          <div v-if="
-                            !item.Checksum && !item.WpJuggler && item.Wporg
-                          ">
-                            <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
-                            <v-btn class="ml-3 text-none text-caption" @click="openChecksum(item)"
-                              variant="outlined">Details
+                          <div
+                            v-if="
+                              !item.Checksum && !item.WpJuggler && item.Wporg
+                            "
+                          >
+                            <v-icon
+                              color="error"
+                              icon="mdi-alert-outline"
+                              size="large"
+                              class="mr-1"
+                            ></v-icon>
+                            <v-btn
+                              class="ml-3 text-none text-caption"
+                              @click="openChecksum(item)"
+                              variant="outlined"
+                              >Details
                             </v-btn>
                           </div>
                           <div v-else-if="!item.Wporg || item.WpJuggler">
-                            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="blue-lighten-5"
+                              icon="mdi-help"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                           <div v-else>
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
 
                         <template v-slot:item.source="{ item }">
                           <div v-if="item.Tgmpa">
-                            <v-icon color="grey-lighten-1" icon="mdi-package-variant-closed" size="large"
-                              class="rm-4"></v-icon>
+                            <v-icon
+                              color="grey-lighten-1"
+                              icon="mdi-package-variant-closed"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                           <div v-else-if="item.WpJuggler">
-                            <v-icon color="grey-lighten-1" icon="mdi-lan" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="grey-lighten-1"
+                              icon="mdi-lan"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                           <div v-else-if="item.Wporg">
-                            <v-icon color="grey-lighten-1" icon="mdi-wordpress" size="large" class="mr-1"></v-icon>
+                            <v-icon
+                              color="grey-lighten-1"
+                              icon="mdi-wordpress"
+                              size="large"
+                              class="mr-1"
+                            ></v-icon>
                           </div>
                           <div v-else>
-                            <v-icon color="blue-lighten-5" icon="mdi-help" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="blue-lighten-5"
+                              icon="mdi-help"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
                         <template v-slot:item.actions="{ item }">
-                          <v-btn v-if="item.Active || item.NetworkActive" :loading="item.Slug == deactivateActive"
-                            @click="deactivatePlugin(item.Slug)" class="ml-3 text-none text-caption"
-                            variant="outlined">Deactivate
+                          <v-btn
+                            v-if="item.Active || item.NetworkActive"
+                            :loading="item.Slug == deactivateActive"
+                            @click="deactivatePlugin(item.Slug)"
+                            class="ml-3 text-none text-caption"
+                            variant="outlined"
+                            >Deactivate
                           </v-btn>
-                          <v-btn v-if="!item.Active && !item.Multisite" :loading="item.Slug == activateActive"
-                            @click="activatePlugin(item.Slug, false)" class="ml-3 text-none text-caption"
-                            variant="outlined">Activate
+                          <v-btn
+                            v-if="!item.Active && !item.Multisite"
+                            :loading="item.Slug == activateActive"
+                            @click="activatePlugin(item.Slug, false)"
+                            class="ml-3 text-none text-caption"
+                            variant="outlined"
+                            >Activate
                           </v-btn>
-                          <v-btn v-if="
-                            !item.Active &&
-                            !item.NetworkActive &&
-                            item.Multisite &&
-                            !item.Network
-                          " :loading="item.Slug == activateActive" @click="activatePlugin(item.Slug, false)"
-                            class="ml-3 text-none text-caption" variant="outlined">Activate
+                          <v-btn
+                            v-if="
+                              !item.Active &&
+                              !item.NetworkActive &&
+                              item.Multisite &&
+                              !item.Network
+                            "
+                            :loading="item.Slug == activateActive"
+                            @click="activatePlugin(item.Slug, false)"
+                            class="ml-3 text-none text-caption"
+                            variant="outlined"
+                            >Activate
                           </v-btn>
-                          <v-btn v-if="
-                            !item.Active &&
-                            !item.NetworkActive &&
-                            item.Multisite &&
-                            !item.Network
-                          " :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
-                            class="ml-3 text-none text-caption" variant="outlined">Network Activate
+                          <v-btn
+                            v-if="
+                              !item.Active &&
+                              !item.NetworkActive &&
+                              item.Multisite &&
+                              !item.Network
+                            "
+                            :loading="item.Slug == activateNetworkActive"
+                            @click="activatePlugin(item.Slug, true)"
+                            class="ml-3 text-none text-caption"
+                            variant="outlined"
+                            >Network Activate
                           </v-btn>
-                          <v-btn v-if="
-                            !item.Active &&
-                            !item.NetworkActive &&
-                            item.Multisite &&
-                            item.Network
-                          " :loading="item.Slug == activateNetworkActive" @click="activatePlugin(item.Slug, true)"
-                            class="ml-3 text-none text-caption" variant="outlined">Network Activate
+                          <v-btn
+                            v-if="
+                              !item.Active &&
+                              !item.NetworkActive &&
+                              item.Multisite &&
+                              item.Network
+                            "
+                            :loading="item.Slug == activateNetworkActive"
+                            @click="activatePlugin(item.Slug, true)"
+                            class="ml-3 text-none text-caption"
+                            variant="outlined"
+                            >Network Activate
                           </v-btn>
-                          <v-btn v-if="item.Update" :loading="item.Slug == updateActive"
-                            @click="updatePlugin(item.Slug)" color="#2196f3" class="text-none text-caption ml-3"
-                            variant="outlined">Update
+                          <v-btn
+                            v-if="item.Update"
+                            :loading="item.Slug == updateActive"
+                            @click="updatePlugin(item.Slug)"
+                            color="#2196f3"
+                            class="text-none text-caption ml-3"
+                            variant="outlined"
+                            >Update
                           </v-btn>
                         </template>
                       </v-data-table>
@@ -752,56 +916,126 @@ const persistDialog = computed(() => {
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="themes" transition="false" reverse-transition="false">
+                <v-tabs-window-item
+                  value="themes"
+                  transition="false"
+                  reverse-transition="false"
+                >
                   <v-divider></v-divider>
 
                   <v-sheet>
-                    <v-row align="center" justify="center" alignContent="center" class="px-4">
-
-                      <v-select v-model="selectedActionThemes" :items="bulkActionsThemes" item-title="text"
-                        item-value="value" return-object single-line density="compact" label="Bulk Actions"
-                        max-width="300" variant="outlined" class="mt-6">
+                    <v-row
+                      align="center"
+                      justify="center"
+                      alignContent="center"
+                      class="px-4"
+                    >
+                      <v-select
+                        v-model="selectedActionThemes"
+                        :items="bulkActionsThemes"
+                        item-title="text"
+                        item-value="value"
+                        return-object
+                        single-line
+                        density="compact"
+                        label="Bulk Actions"
+                        max-width="300"
+                        variant="outlined"
+                        class="mt-6"
+                      >
                       </v-select>
-                      <v-btn class="ml-3 text-none text-caption" @click="doBulkActionThemes()" variant="outlined">Apply
+                      <v-btn
+                        class="ml-3 text-none text-caption"
+                        @click="doBulkActionThemes()"
+                        variant="outlined"
+                        >Apply
                       </v-btn>
 
                       <v-spacer></v-spacer>
 
-                      <v-text-field v-model="search" density="compact" label="Search" prepend-inner-icon="mdi-magnify"
-                        variant="outlined" flat hide-details single-line max-width="800"></v-text-field>
+                      <v-btn
+                        class="ml-3 text-none text-caption mr-3"
+                        @click="gotoUrl(data.wp_juggler_login_themes_url)"
+                        variant="outlined"
+                        >wp-admin
+                      </v-btn>
+
+                      <v-text-field
+                        v-model="search"
+                        density="compact"
+                        label="Search"
+                        prepend-inner-icon="mdi-magnify"
+                        variant="outlined"
+                        flat
+                        hide-details
+                        single-line
+                        max-width="800"
+                      ></v-text-field>
                     </v-row>
                     <v-row>
-                      <v-data-table v-model:search="search" :items="themes_data" :headers="theme_headers"
-                        item-value="Slug" show-select items-per-page="50" class="pb-4" v-model="selectedThemes">
+                      <v-data-table
+                        v-model:search="search"
+                        :items="themes_data"
+                        :headers="theme_headers"
+                        item-value="Slug"
+                        show-select
+                        items-per-page="50"
+                        class="pb-4"
+                        v-model="selectedThemes"
+                      >
                         <template v-slot:item.active="{ item }">
                           <div v-if="item.Active && !item.Network">
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                           <div v-if="item.Active && item.Network">
-                            <v-icon color="success" icon="mdi-check-network-outline" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-network-outline"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
 
                         <template v-slot:item.child="{ item }">
                           <div v-if="item.IsChildTheme">
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                           </div>
                         </template>
 
                         <template v-slot:item.update="{ item }">
                           <div v-if="item.Update">
-                            <v-icon color="success" icon="mdi-check-bold" size="large" class="rm-4"></v-icon>
+                            <v-icon
+                              color="success"
+                              icon="mdi-check-bold"
+                              size="large"
+                              class="rm-4"
+                            ></v-icon>
                             {{ item.UpdateVersion }}
                           </div>
                         </template>
 
                         <template v-slot:item.actions="{ item }">
-                          <v-btn v-if="item.Update" :loading="item.Slug == updateThemeActive"
-                            @click="updateTheme(item.Slug)" color="#2196f3" class="text-none text-caption ml-3"
-                            variant="outlined">Update
+                          <v-btn
+                            v-if="item.Update"
+                            :loading="item.Slug == updateThemeActive"
+                            @click="updateTheme(item.Slug)"
+                            color="#2196f3"
+                            class="text-none text-caption ml-3"
+                            variant="outlined"
+                            >Update
                           </v-btn>
                         </template>
-
                       </v-data-table>
                     </v-row>
                   </v-sheet>
@@ -820,7 +1054,11 @@ const persistDialog = computed(() => {
         {{ ajaxErrorText }}
 
         <template v-slot:actions>
-          <v-btn color="red-lighten-4" variant="text" @click="ajaxError = false">
+          <v-btn
+            color="red-lighten-4"
+            variant="text"
+            @click="ajaxError = false"
+          >
             Close
           </v-btn>
         </template>
@@ -832,8 +1070,10 @@ const persistDialog = computed(() => {
         <v-toolbar>
           <v-btn icon="mdi-close" @click="dialogInner = false"></v-btn>
 
-          <v-toolbar-title>List of vulnerabilities - {{ vulnerabilitiesItem.Name }} -
-            {{ vulnerabilitiesItem.Version }}</v-toolbar-title>
+          <v-toolbar-title
+            >List of vulnerabilities - {{ vulnerabilitiesItem.Name }} -
+            {{ vulnerabilitiesItem.Version }}</v-toolbar-title
+          >
         </v-toolbar>
 
         <v-card-text>
@@ -872,8 +1112,10 @@ const persistDialog = computed(() => {
         <v-toolbar>
           <v-btn icon="mdi-close" @click="dialogChecksum = false"></v-btn>
 
-          <v-toolbar-title>List of Checksum Errors - {{ checksumItem.Name }} -
-            {{ checksumItem.Version }}</v-toolbar-title>
+          <v-toolbar-title
+            >List of Checksum Errors - {{ checksumItem.Name }} -
+            {{ checksumItem.Version }}</v-toolbar-title
+          >
         </v-toolbar>
 
         <v-card-text>
@@ -886,7 +1128,10 @@ const persistDialog = computed(() => {
                 <strong>Checksum problem</strong>
               </v-col>
             </v-row>
-            <v-row class="wpjs-debug-table-row pl-5" v-for="item in checksumItem.ChecksumDetails">
+            <v-row
+              class="wpjs-debug-table-row pl-5"
+              v-for="item in checksumItem.ChecksumDetails"
+            >
               <v-col class="text-left">
                 <div class="wpjs-plugin-vul">{{ item.file }}</div>
               </v-col>
@@ -899,11 +1144,18 @@ const persistDialog = computed(() => {
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialogBulkAction" width="800" :persistent="persistDialog">
+    <v-dialog
+      v-model="dialogBulkAction"
+      width="800"
+      :persistent="persistDialog"
+    >
       <v-card>
         <v-toolbar>
-          <v-btn v-if="!(bulkActionInProgress && !bulkActionFinished)" icon="mdi-close"
-            @click="dialogBulkAction = false"></v-btn>
+          <v-btn
+            v-if="!(bulkActionInProgress && !bulkActionFinished)"
+            icon="mdi-close"
+            @click="dialogBulkAction = false"
+          ></v-btn>
 
           <v-toolbar-title v-if="bulkActionError">Bulk Action</v-toolbar-title>
           <v-toolbar-title v-else-if="dialogBulkType == 'plugins'">{{
@@ -921,17 +1173,28 @@ const persistDialog = computed(() => {
           <v-sheet v-else-if="!bulkActionInProgress" class="mb-4">
             <div class="my-8">{{ bulkActionText }}</div>
 
-            <v-row class="wpjs-debug-table-row pl-5" v-for="item in actionArrayFiltered">
+            <v-row
+              class="wpjs-debug-table-row pl-5"
+              v-for="item in actionArrayFiltered"
+            >
               <v-col class="text-left">
                 <div class="wpjs-plugin-vul">{{ item.Name }}</div>
               </v-col>
             </v-row>
 
-            <v-btn v-if="actionArrayFiltered.length > 0" class="ml-3 mt-10 text-none text-caption"
-              @click="InitiateAction()" variant="outlined">Confirm
+            <v-btn
+              v-if="actionArrayFiltered.length > 0"
+              class="ml-3 mt-10 text-none text-caption"
+              @click="InitiateAction()"
+              variant="outlined"
+              >Confirm
             </v-btn>
           </v-sheet>
-          <v-sheet v-else-if="bulkActionInProgress && !bulkActionFinished" class="mb-4" height="200">
+          <v-sheet
+            v-else-if="bulkActionInProgress && !bulkActionFinished"
+            class="mb-4"
+            height="200"
+          >
             <div class="my-8">
               Bulk action in progress - do not close the window, you will
               interrupt the progress:
@@ -939,22 +1202,31 @@ const persistDialog = computed(() => {
             <div class="my-8">
               <strong>{{ currentAction.Name }}</strong>
             </div>
-            <v-progress-linear color="light-blue" height="30" :model-value="progressIndicator" striped>
-              <strong>{{ bulkActionsNumber - actionArrayFiltered.length }}/{{
-                bulkActionsNumber
-              }}</strong>
+            <v-progress-linear
+              color="light-blue"
+              height="30"
+              :model-value="progressIndicator"
+              striped
+            >
+              <strong
+                >{{ bulkActionsNumber - actionArrayFiltered.length }}/{{
+                  bulkActionsNumber
+                }}</strong
+              >
             </v-progress-linear>
           </v-sheet>
 
-          <v-sheet v-else-if="bulkActionInProgress && bulkActionFinished" class="mb-4" height="200">
+          <v-sheet
+            v-else-if="bulkActionInProgress && bulkActionFinished"
+            class="mb-4"
+            height="200"
+          >
             <div class="my-8">Bulk action finished</div>
           </v-sheet>
         </v-card-text>
       </v-card>
     </v-dialog>
   </div>
-
-
 </template>
 
 <style>
