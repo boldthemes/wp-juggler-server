@@ -646,17 +646,17 @@ class WPJS_AJAX
 		$installed_themes = [];
 
 		// Utility function to merge theme/plugin info
-		function merge_info(&$array, $name, $version, $site_info)
+		function merge_info(&$array, $name, $slug, $site_info)
 		{
 			foreach ($array as &$item) {
-				if ($item['Name'] === $name && $item['Version'] === $version) {
+				if ($item['Slug'] === $slug) {
 					$item['Sites'][] = $site_info;
 					return;
 				}
 			}
 			$array[] = [
 				'Name' => $name,
-				'Version' => $version,
+				'Slug' => $slug,
 				'Sites' => [$site_info]
 			];
 		}
@@ -698,18 +698,16 @@ class WPJS_AJAX
 			// Process themes data
 			if (isset($log_data['themes_data'])) {
 				foreach ($log_data['themes_data'] as $theme) {
-					$version = !empty($theme['UpdateVersion']) ? $theme['UpdateVersion'] : $theme['Version'];
 					$site_info = array_merge($site_info, $theme);
-					merge_info($installed_themes, $theme['Name'], $version, $site_info);
+					merge_info($installed_themes, $theme['Name'], $theme['Slug'], $site_info);
 				}
 			}
 
 			// Process plugins data
 			if (isset($log_data['plugins_data'])) {
 				foreach ($log_data['plugins_data'] as $plugin) {
-					$version = !empty($plugin['UpdateVersion']) ? $plugin['UpdateVersion'] : $plugin['Version'];
 					$site_info = array_merge($site_info, $plugin);
-					merge_info($installed_plugins, $plugin['Name'], $version, $site_info);
+					merge_info($installed_plugins, $plugin['Name'], $plugin['Slug'], $site_info);
 				}
 			}
 		}

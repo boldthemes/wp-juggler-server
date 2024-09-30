@@ -65,12 +65,6 @@ const headersSites = [
 
 const headersPlugins = [
   { title: "Plugin Name", value: "Name", align: "start", sortable: true },
-  {
-    title: "Latest Version",
-    value: "Version",
-    align: "center",
-    sortable: true,
-  },
   { title: "Updates", key: "updates", align: "center", sortable: false },
   {
     title: "Number of Installations",
@@ -82,12 +76,6 @@ const headersPlugins = [
 
 const headersThemes = [
   { title: "Theme Name", value: "Name", align: "start", sortable: true },
-  {
-    title: "Latest Version",
-    value: "Version",
-    align: "center",
-    sortable: true,
-  },
   { title: "Updates", key: "updates", align: "center", sortable: false },
   {
     title: "Number of Installations",

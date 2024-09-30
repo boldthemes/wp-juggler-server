@@ -542,9 +542,7 @@ const gotoUrl = (url) => {
             <template v-slot:item.vulnerabilities="{ item }">
               <div
                 v-if="
-                  item.Vulnerabilities.length > 0 &&
-                  item.Wporg &&
-                  !item.WpJuggler
+                  item.Vulnerabilities.length > 0
                 "
               >
                 <v-icon

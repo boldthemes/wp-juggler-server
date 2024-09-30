@@ -87,6 +87,7 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-api.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-background-process.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-plugins.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-github-updater.php';
 		
 		$this->loader = new WPJS_Loader();
 	}
@@ -122,6 +123,7 @@ class WP_Juggler_Server {
 		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
 		$plugin_api  = new WPJS_Api( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
 		$plugin_plugins  = new WPJS_Plugins( $this->get_plugin_name(), $this->get_version() );
+		$plugin_github_updater  = new WPJS_Github_Updater( $this->get_plugin_name(), $this->get_version() );
 		
 		/// Register the admin pages and scripts.
 		
@@ -185,6 +187,12 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs-update-theme', $plugin_ajax, 'ajax_update_theme' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-start-cron', $plugin_ajax, 'ajax_start_cron' );
+
+		// Github updater
+
+		$this->loader->add_filter( 'plugins_api', $plugin_github_updater, 'github_info', 20, 3 );
+		$this->loader->add_filter( 'site_transient_update_plugins', $plugin_github_updater, 'github_update');
+		$this->loader->add_filter( 'upgrader_process_complete', $plugin_github_updater, 'purge', 10, 2 );
 		
 
 		register_activation_hook( WP_PLUGIN_DIR . '/wp-juggler-server/wp-juggler-server.php' , array($plugin_admin, 'wpjs_plugin_activation') );
