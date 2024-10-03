@@ -9113,7 +9113,10 @@ exports.default = {
         };
         const wpjs_uptime_cron_interval = (0, _vue.ref)("");
         const wpjs_health_cron_interval = (0, _vue.ref)("");
+        const wpjs_debug_cron_interval = (0, _vue.ref)("");
+        const wpjs_core_checksum_cron_interval = (0, _vue.ref)("");
         const wpjs_plugins_cron_interval = (0, _vue.ref)("");
+        const wpjs_plugins_checksum_cron_interval = (0, _vue.ref)("");
         const wpjs_notices_cron_interval = (0, _vue.ref)("");
         const save_loading = (0, _vue.ref)(false);
         const snackbar = (0, _vue.ref)(false);
@@ -9173,7 +9176,10 @@ exports.default = {
             ret = response.data;
             wpjs_uptime_cron_interval.value = response.data.wpjs_uptime_cron_interval;
             wpjs_health_cron_interval.value = response.data.wpjs_health_cron_interval;
+            wpjs_debug_cron_interval.value = response.data.wpjs_debug_cron_interval;
+            wpjs_core_checksum_cron_interval.value = response.data.wpjs_core_checksum_cron_interval;
             wpjs_plugins_cron_interval.value = response.data.wpjs_plugins_cron_interval;
+            wpjs_plugins_checksum_cron_interval.value = response.data.wpjs_plugins_checksum_cron_interval;
             wpjs_notices_cron_interval.value = response.data.wpjs_notices_cron_interval;
             return ret;
         }
@@ -9182,7 +9188,10 @@ exports.default = {
             mutation.mutate({
                 wpjs_uptime_cron_interval: wpjs_uptime_cron_interval.value,
                 wpjs_health_cron_interval: wpjs_health_cron_interval.value,
+                wpjs_debug_cron_interval: wpjs_debug_cron_interval.value,
+                wpjs_core_checksum_cron_interval: wpjs_core_checksum_cron_interval.value,
                 wpjs_plugins_cron_interval: wpjs_plugins_cron_interval.value,
+                wpjs_plugins_checksum_cron_interval: wpjs_plugins_checksum_cron_interval.value,
                 wpjs_notices_cron_interval: wpjs_notices_cron_interval.value
             });
         }
@@ -9199,7 +9208,10 @@ exports.default = {
             long_schedules,
             wpjs_uptime_cron_interval,
             wpjs_health_cron_interval,
+            wpjs_debug_cron_interval,
+            wpjs_core_checksum_cron_interval,
             wpjs_plugins_cron_interval,
+            wpjs_plugins_checksum_cron_interval,
             wpjs_notices_cron_interval,
             save_loading,
             snackbar,
@@ -14702,8 +14714,8 @@ const _hoisted_7 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "wpjs_plugins_cron_interval"
-    }, "Plugins and Themes Cron Interval")
+        for: "wpjs_debug_cron_interval"
+    }, "Debug Info Cron Interval")
 ], -1 /* HOISTED */ );
 const _hoisted_8 = [
     "value"
@@ -14712,14 +14724,44 @@ const _hoisted_9 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
     scope: "row"
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
-        for: "wpjs_notices_cron_interval"
-    }, "Notices Cron Interval")
+        for: "wpjs_core_checksum_cron_interval"
+    }, "Core Checksum Cron Interval")
 ], -1 /* HOISTED */ );
 const _hoisted_10 = [
     "value"
 ];
-const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
-const _hoisted_12 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+    scope: "row"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
+        for: "wpjs_plugins_cron_interval"
+    }, "Plugins and Themes Cron Interval")
+], -1 /* HOISTED */ );
+const _hoisted_12 = [
+    "value"
+];
+const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+    scope: "row"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
+        for: "wpjs_plugins_checksum_cron_interval"
+    }, "Plugins and Themes Checksum Cron Interval")
+], -1 /* HOISTED */ );
+const _hoisted_14 = [
+    "value"
+];
+const _hoisted_15 = /*#__PURE__*/ (0, _vue.createElementVNode)("th", {
+    scope: "row"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("label", {
+        for: "wpjs_notices_cron_interval"
+    }, "Notices Cron Interval")
+], -1 /* HOISTED */ );
+const _hoisted_16 = [
+    "value"
+];
+const _hoisted_17 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
+const _hoisted_18 = /*#__PURE__*/ (0, _vue.createElementVNode)("p", null, null, -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
@@ -14781,14 +14823,56 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 _hoisted_7,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
-                                        name: "wpjs_plugins_cron_interval",
-                                        id: "wpjs_plugins_cron_interval",
-                                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.wpjs_plugins_cron_interval = $event)
+                                        name: "wpjs_debug_cron_interval",
+                                        id: "wpjs_debug_cron_interval",
+                                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.wpjs_debug_cron_interval = $event)
                                     }, [
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
                                             }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_8);
+                                        }), 64 /* STABLE_FRAGMENT */ ))
+                                    ], 512 /* NEED_PATCH */ ), [
+                                        [
+                                            (0, _vue.vModelSelect),
+                                            $setup.wpjs_debug_cron_interval
+                                        ]
+                                    ])
+                                ])
+                            ]),
+                            (0, _vue.createElementVNode)("tr", null, [
+                                _hoisted_9,
+                                (0, _vue.createElementVNode)("td", null, [
+                                    (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
+                                        name: "wpjs_core_checksum_cron_interval",
+                                        id: "wpjs_core_checksum_cron_interval",
+                                        "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.wpjs_core_checksum_cron_interval = $event)
+                                    }, [
+                                        ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
+                                            return (0, _vue.createElementVNode)("option", {
+                                                value: slug
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_10);
+                                        }), 64 /* STABLE_FRAGMENT */ ))
+                                    ], 512 /* NEED_PATCH */ ), [
+                                        [
+                                            (0, _vue.vModelSelect),
+                                            $setup.wpjs_core_checksum_cron_interval
+                                        ]
+                                    ])
+                                ])
+                            ]),
+                            (0, _vue.createElementVNode)("tr", null, [
+                                _hoisted_11,
+                                (0, _vue.createElementVNode)("td", null, [
+                                    (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
+                                        name: "wpjs_plugins_cron_interval",
+                                        id: "wpjs_plugins_cron_interval",
+                                        "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.wpjs_plugins_cron_interval = $event)
+                                    }, [
+                                        ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
+                                            return (0, _vue.createElementVNode)("option", {
+                                                value: slug
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_12);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14799,17 +14883,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ])
                             ]),
                             (0, _vue.createElementVNode)("tr", null, [
-                                _hoisted_9,
+                                _hoisted_13,
                                 (0, _vue.createElementVNode)("td", null, [
                                     (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
-                                        name: "wpjs_notices_cron_interval",
-                                        id: "wpjs_notices_cron_interval",
-                                        "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.wpjs_notices_cron_interval = $event)
+                                        name: "wpjs_plugins_checksum_cron_interval",
+                                        id: "wpjs_plugins_checksum_cron_interval",
+                                        "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.wpjs_plugins_checksum_cron_interval = $event)
                                     }, [
                                         ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
                                             return (0, _vue.createElementVNode)("option", {
                                                 value: slug
-                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_10);
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_14);
+                                        }), 64 /* STABLE_FRAGMENT */ ))
+                                    ], 512 /* NEED_PATCH */ ), [
+                                        [
+                                            (0, _vue.vModelSelect),
+                                            $setup.wpjs_plugins_checksum_cron_interval
+                                        ]
+                                    ])
+                                ])
+                            ]),
+                            (0, _vue.createElementVNode)("tr", null, [
+                                _hoisted_15,
+                                (0, _vue.createElementVNode)("td", null, [
+                                    (0, _vue.withDirectives)((0, _vue.createElementVNode)("select", {
+                                        name: "wpjs_notices_cron_interval",
+                                        id: "wpjs_notices_cron_interval",
+                                        "onUpdate:modelValue": _cache[6] || (_cache[6] = ($event)=>$setup.wpjs_notices_cron_interval = $event)
+                                    }, [
+                                        ((0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.long_schedules, (item, slug)=>{
+                                            return (0, _vue.createElementVNode)("option", {
+                                                value: slug
+                                            }, (0, _vue.toDisplayString)(item), 9 /* TEXT, PROPS */ , _hoisted_16);
                                         }), 64 /* STABLE_FRAGMENT */ ))
                                     ], 512 /* NEED_PATCH */ ), [
                                         [
@@ -14821,11 +14926,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             ])
                         ])
                     ]),
-                    _hoisted_11,
+                    _hoisted_17,
                     (0, _vue.createVNode)(_component_v_divider, {
                         class: "border-opacity-100"
                     }),
-                    _hoisted_12,
+                    _hoisted_18,
                     (0, _vue.createVNode)(_component_v_btn, {
                         variant: "flat",
                         class: "text-none text-caption",
@@ -14842,14 +14947,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     ]),
                     (0, _vue.createVNode)(_component_v_snackbar, {
                         modelValue: $setup.snackbar,
-                        "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.snackbar = $event),
+                        "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.snackbar = $event),
                         timeout: 3000,
                         color: $setup.snackbar_color
                     }, {
                         actions: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createVNode)(_component_v_btn, {
                                     variant: "text",
-                                    onClick: _cache[4] || (_cache[4] = ($event)=>$setup.snackbar = false)
+                                    onClick: _cache[7] || (_cache[7] = ($event)=>$setup.snackbar = false)
                                 }, {
                                     default: (0, _vue.withCtx)(()=>[
                                             (0, _vue.createTextVNode)(" X ")

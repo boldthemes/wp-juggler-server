@@ -59,7 +59,10 @@ class WPJS_Cron
 
 		add_action('wpjs_check_client_api', [$this, 'check_client_api']);
 		add_action('wpjs_check_health_api', [$this, 'check_all_health_api']);
+		add_action('wpjs_check_debug_api', [$this, 'check_all_debug_api']);
+		add_action('wpjs_check_core_checksum_api', [$this, 'check_all_core_checksum_api']);
 		add_action('wpjs_check_plugins_api', [$this, 'check_all_plugins_api']);
+		add_action('wpjs_check_plugins_checksum_api', [$this, 'check_all_plugins_checksum_api']);
 		add_action('wpjs_check_notices_api', [$this, 'check_all_notices_api']);
 
 		
@@ -85,6 +88,28 @@ class WPJS_Cron
 			wp_schedule_event(time(), $wpjs_health_cron_interval_chk, 'wpjs_check_health_api');
 		}
 
+		// Debug scheduler
+
+		$wpjs_debug_cron_interval = get_option('wpjs_debug_cron_interval');
+		$wpjs_debug_cron_interval_chk = $wpjs_debug_cron_interval ? esc_attr($wpjs_debug_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_debug_api', $wpjs_debug_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_debug_api')) {
+			wp_schedule_event(time(), $wpjs_debug_cron_interval_chk, 'wpjs_check_debug_api');
+		}
+
+		// Core checksum
+
+		$wpjs_core_checksum_cron_interval = get_option('wpjs_core_checksum_cron_interval');
+		$wpjs_core_checksum_cron_interval_chk = $wpjs_core_checksum_cron_interval ? esc_attr($wpjs_core_checksum_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_core_checksum_api', $wpjs_core_checksum_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_core_checksum_api')) {
+			wp_schedule_event(time(), $wpjs_core_checksum_cron_interval_chk, 'wpjs_check_core_checksum_api');
+		}
+
 		// Plugins scheduler
 
 		$wpjs_plugins_cron_interval = get_option('wpjs_plugins_cron_interval');
@@ -94,6 +119,17 @@ class WPJS_Cron
 
 		if (!wp_next_scheduled('wpjs_check_plugins_api')) {
 			wp_schedule_event(time(), $wpjs_plugins_cron_interval_chk, 'wpjs_check_plugins_api');
+		}
+
+		// Plugins checksum
+
+		$wpjs_plugins_checksum_cron_interval = get_option('wpjs_plugins_checksum_cron_interval');
+		$wpjs_plugins_checksum_cron_interval_chk = $wpjs_plugins_checksum_cron_interval ? esc_attr($wpjs_plugins_checksum_cron_interval) : 'wpjs_daily';
+
+		$this->unschedule_specific_cron_events('wpjs_check_plugins_checksum_api', $wpjs_plugins_checksum_cron_interval_chk);
+
+		if (!wp_next_scheduled('wpjs_check_plugins_checksum_api')) {
+			wp_schedule_event(time(), $wpjs_plugins_checksum_cron_interval_chk, 'wpjs_check_plugins_checksum_api');
 		}
 
 		// Notices scheduler
@@ -177,62 +213,6 @@ class WPJS_Cron
 		return $schedules;
 	}
 
-	public function check_all_core_checksum_api() {
-
-		$args = array(
-			'post_type'  => 'wpjugglersites',
-			'post_status' => 'publish',
-			'meta_key'   => 'wp_juggler_site_activation',
-			'meta_value' => 'on',
-			'fields'     => 'ids',
-			'numberposts' => -1
-		);
-
-		$site_ids = get_posts($args);
-
-		foreach ($site_ids as $site_id) {
-
-			$this->bg_process->push_to_queue(array(
-				'siteId' => $site_id,
-				'endpoint' => 'initiateTask',
-				'data' => [
-					'taskType' => 'checkCoreChecksum',
-				]
-			));
-
-		}
-
-		$this->bg_process->save()->dispatch();
-	}
-
-	public function check_all_plugin_checksum_api() {
-
-		$args = array(
-			'post_type'  => 'wpjugglersites',
-			'post_status' => 'publish',
-			'meta_key'   => 'wp_juggler_site_activation',
-			'meta_value' => 'on',
-			'fields'     => 'ids',
-			'numberposts' => -1
-		);
-
-		$site_ids = get_posts($args);
-
-		foreach ($site_ids as $site_id) {
-
-			$this->bg_process->push_to_queue(array(
-				'siteId' => $site_id,
-				'endpoint' => 'initiateTask',
-				'data' => [
-					'taskType' => 'checkPluginChecksum',
-				]
-			));
-
-		}
-
-		$this->bg_process->save()->dispatch();
-	}
-
 	public function check_all_health_api() {
 
 		$args = array(
@@ -261,7 +241,7 @@ class WPJS_Cron
 		$this->bg_process->save()->dispatch();
 	}
 
-	public function check_all_notices_api() {
+	public function check_all_debug_api() {
 
 		$args = array(
 			'post_type'  => 'wpjugglersites',
@@ -280,7 +260,35 @@ class WPJS_Cron
 				'siteId' => $site_id,
 				'endpoint' => 'initiateTask',
 				'data' => [
-					'taskType' => 'checkNotices',
+					'taskType' => 'checkDebug',
+				]
+			));
+
+		}
+
+		$this->bg_process->save()->dispatch();
+	}
+
+	public function check_all_core_checksum_api() {
+
+		$args = array(
+			'post_type'  => 'wpjugglersites',
+			'post_status' => 'publish',
+			'meta_key'   => 'wp_juggler_site_activation',
+			'meta_value' => 'on',
+			'fields'     => 'ids',
+			'numberposts' => -1
+		);
+
+		$site_ids = get_posts($args);
+
+		foreach ($site_ids as $site_id) {
+
+			$this->bg_process->push_to_queue(array(
+				'siteId' => $site_id,
+				'endpoint' => 'initiateTask',
+				'data' => [
+					'taskType' => 'checkCoreChecksum',
 				]
 			));
 
@@ -317,7 +325,7 @@ class WPJS_Cron
 		$this->bg_process->save()->dispatch();
 	}
 
-	public function check_all_themes_api() {
+	public function check_all_plugins_checksum_api() {
 
 		$args = array(
 			'post_type'  => 'wpjugglersites',
@@ -336,7 +344,35 @@ class WPJS_Cron
 				'siteId' => $site_id,
 				'endpoint' => 'initiateTask',
 				'data' => [
-					'taskType' => 'checkThemes',
+					'taskType' => 'checkPluginChecksum',
+				]
+			));
+
+		}
+
+		$this->bg_process->save()->dispatch();
+	}
+
+	public function check_all_notices_api() {
+
+		$args = array(
+			'post_type'  => 'wpjugglersites',
+			'post_status' => 'publish',
+			'meta_key'   => 'wp_juggler_site_activation',
+			'meta_value' => 'on',
+			'fields'     => 'ids',
+			'numberposts' => -1
+		);
+
+		$site_ids = get_posts($args);
+
+		foreach ($site_ids as $site_id) {
+
+			$this->bg_process->push_to_queue(array(
+				'siteId' => $site_id,
+				'endpoint' => 'initiateTask',
+				'data' => [
+					'taskType' => 'checkNotices',
 				]
 			));
 

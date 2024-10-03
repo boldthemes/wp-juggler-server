@@ -38,7 +38,7 @@ class WPJSPluginChecksum
 
 			try {
 				$checksum = $wp_org_api->get_plugin_checksums($plugin_slug, $plugin_version);
-				set_transient($cache_key, $checksum, 2 * DAY_IN_SECONDS);
+				set_transient($cache_key, $checksum, 5 * DAY_IN_SECONDS);
 
 			} catch (Exception $exception) {
 				$checksum = false;
@@ -120,14 +120,6 @@ class WPJSPluginChecksum
 			'successes' => $successes
 		]);
 
-		/* Utils\report_batch_operation_results(
-			'plugin',
-			'verify',
-			$total,
-			$successes,
-			$failures,
-			$skips
-		); */
 	}
 
 	private function compare_hash($real_hash, $wporg_hash)

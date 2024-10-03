@@ -25,7 +25,10 @@ const long_schedules = {
 
 const wpjs_uptime_cron_interval = ref('')
 const wpjs_health_cron_interval = ref('')
+const wpjs_debug_cron_interval = ref('')
+const wpjs_core_checksum_cron_interval = ref('')
 const wpjs_plugins_cron_interval = ref('')
+const wpjs_plugins_checksum_cron_interval = ref('')
 const wpjs_notices_cron_interval = ref('')
 
 const save_loading = ref(false)
@@ -89,7 +92,10 @@ async function getSettings() {
 
   wpjs_uptime_cron_interval.value = response.data.wpjs_uptime_cron_interval
   wpjs_health_cron_interval.value = response.data.wpjs_health_cron_interval
+  wpjs_debug_cron_interval.value = response.data.wpjs_debug_cron_interval
+  wpjs_core_checksum_cron_interval.value = response.data.wpjs_core_checksum_cron_interval
   wpjs_plugins_cron_interval.value = response.data.wpjs_plugins_cron_interval
+  wpjs_plugins_checksum_cron_interval.value = response.data.wpjs_plugins_checksum_cron_interval 
   wpjs_notices_cron_interval.value = response.data.wpjs_notices_cron_interval
 
   return ret
@@ -100,7 +106,10 @@ function clickSaveSettings() {
   mutation.mutate({
     wpjs_uptime_cron_interval: wpjs_uptime_cron_interval.value,
     wpjs_health_cron_interval: wpjs_health_cron_interval.value,
+    wpjs_debug_cron_interval: wpjs_debug_cron_interval.value,
+    wpjs_core_checksum_cron_interval: wpjs_core_checksum_cron_interval.value,
     wpjs_plugins_cron_interval: wpjs_plugins_cron_interval.value,
+    wpjs_plugins_checksum_cron_interval: wpjs_plugins_checksum_cron_interval.value,
     wpjs_notices_cron_interval: wpjs_notices_cron_interval.value
   })
 
@@ -144,9 +153,36 @@ async function saveSettings(obj) {
         </tr>
 
         <tr>
+          <th scope="row"><label for="wpjs_debug_cron_interval">Debug Info Cron Interval</label></th>
+          <td>
+            <select name="wpjs_debug_cron_interval" id="wpjs_debug_cron_interval" v-model="wpjs_debug_cron_interval" >
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row"><label for="wpjs_core_checksum_cron_interval">Core Checksum Cron Interval</label></th>
+          <td>
+            <select name="wpjs_core_checksum_cron_interval" id="wpjs_core_checksum_cron_interval" v-model="wpjs_core_checksum_cron_interval" >
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
           <th scope="row"><label for="wpjs_plugins_cron_interval">Plugins and Themes Cron Interval</label></th>
           <td>
             <select name="wpjs_plugins_cron_interval" id="wpjs_plugins_cron_interval" v-model="wpjs_plugins_cron_interval" >
+              <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row"><label for="wpjs_plugins_checksum_cron_interval">Plugins and Themes Checksum Cron Interval</label></th>
+          <td>
+            <select name="wpjs_plugins_checksum_cron_interval" id="wpjs_plugins_checksum_cron_interval" v-model="wpjs_plugins_checksum_cron_interval" >
               <option v-for=" item, slug in long_schedules" :value="slug">{{ item }}</option>
             </select>
           </td>

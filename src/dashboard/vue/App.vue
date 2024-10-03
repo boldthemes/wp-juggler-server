@@ -127,7 +127,7 @@ const cron_data = computed(() => {
 
     const copiedArray = data.value
       .filter(item => {
-        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_notices_api') {
+        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_debug_api' || item.hook_slug === 'wpjs_check_core_checksum_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_plugins_checksum_api' || item.hook_slug === 'wpjs_check_notices_api' ) {
           return true
         } else {
           return false
@@ -136,9 +136,15 @@ const cron_data = computed(() => {
       .map(item => {
         let eventName;
         if (item.hook_slug === 'wpjs_check_health_api') {
-          eventName = 'Check Health and WP Core Data' // Example: new property based on condition
+          eventName = 'Check Health Data' // Example: new property based on condition
+        } else if (item.hook_slug === 'wpjs_check_debug_api') {
+          eventName = 'Check Debug Data'
+        } else if (item.hook_slug === 'wpjs_check_core_checksum_api') {
+          eventName = 'Check Core Checksum Data'
         } else if (item.hook_slug === 'wpjs_check_plugins_api') {
           eventName = 'Check Plugin and Theme Data'
+        } else if (item.hook_slug === 'wpjs_check_plugins_checksum_api') {
+          eventName = 'Check Plugin Checksum Data'
         } else if (item.hook_slug === 'wpjs_check_notices_api') {
           eventName = 'Check Notices Data'
         }
@@ -162,9 +168,15 @@ const cron_history = computed(() => {
       .map(item => {
         let eventName;
         if (item.log_type === 'checkHealth') {
-          eventName = 'Check Health and WP Core Data' // Example: new property based on condition
+          eventName = 'Check Health Data' // Example: new property based on condition
+        } else if (item.log_type === 'checkDebug') {
+          eventName = 'Check Debug Data'
+        } else if (item.log_type === 'checkCoreChecksum') {
+          eventName = 'Check Core Checksum Data'
         } else if (item.log_type === 'checkPlugins') {
           eventName = 'Check Plugin and Theme Data'
+        } else if (item.log_type === 'checkPluginChecksum') {
+          eventName = 'Check Plugin Checksum Data'
         } else if (item.log_type === 'checkNotices') {
           eventName = 'Check Notices Data'
         }
