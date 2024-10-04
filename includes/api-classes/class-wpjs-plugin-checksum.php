@@ -13,10 +13,6 @@ include_once(ABSPATH . 'wp-admin/includes/plugin-install.php');
 class WPJSPluginChecksum
 {
 
-	// https://github.com/wp-cli/checksum-command/blob/main/src/Checksum_Plugin_Command.php
-
-	private $url_template = 'https://downloads.wordpress.org/plugin-checksums/{slug}/{version}.json';
-
 	private $plugins_data;
 
 	private $errors = array();
@@ -64,6 +60,7 @@ class WPJSPluginChecksum
 		foreach ($plugins as $plugin => $plugin_info) {
 
 			$files = $plugin_info['ChecksumFiles'];
+			$slug = WPJS_Service::get_plugin_name($plugin);
 
 			if ($files) {
 
@@ -71,7 +68,7 @@ class WPJSPluginChecksum
 
 				$wp_org_api = new WPJSWpOrgApi();
 
-				$checksums = $this->get_original_checksum($plugin_info['Slug'], $version);
+				$checksums = $this->get_original_checksum($slug, $version);
 				
 				if (false === $checksums) {
 					continue;
@@ -79,13 +76,13 @@ class WPJSPluginChecksum
 
 				foreach ($checksums as $file => $checksum_array) {
 					if (! array_key_exists($file, $files)) {
-						$this->add_error($plugin_info['Slug'], $file, 'File is missing');
+						$this->add_error($slug, $file, 'File is missing');
 					}
 				}
 
 				foreach ($files as $file => $signatures) {
 					if (! array_key_exists($file, $checksums)) {
-						$this->add_error($plugin_info['Slug'], $file, 'File was added');
+						$this->add_error($slug, $file, 'File was added');
 						continue;
 					}
 
@@ -94,19 +91,11 @@ class WPJSPluginChecksum
 					}
 					$result = $this->compare_hash($signatures, $checksums[$file]);
 					if (true !== $result) {
-						$this->add_error($plugin_info['Slug'], $file, is_string($result) ? $result : 'Checksum does not match');
+						$this->add_error($slug, $file, is_string($result) ? $result : 'Checksum does not match');
 					}
 				}
 			}
 		}
-
-		/* if ( ! empty( $this->errors ) ) {
-			$formatter = new Formatter(
-				$assoc_args,
-				array( 'plugin_name', 'file', 'message' )
-			);
-			$formatter->display_items( $this->errors );
-		} */
 
 		$total     = count($plugins);
 		$failures  = count(array_unique(array_column($this->errors, 'plugin_name')));
@@ -138,19 +127,10 @@ class WPJSPluginChecksum
 
 		$fetcher     = new UnfilteredPlugin();
 
-		// $all         = (bool) Utils\get_flag_value( $assoc_args, 'all', false );
-		// $strict      = (bool) Utils\get_flag_value( $assoc_args, 'strict', false );
 		$strict = false;
-		// $insecure    = (bool) Utils\get_flag_value( $assoc_args, 'insecure', false );
 
 		$plugins     = $fetcher->get_many($this->get_all_plugin_names());
 		$exclude = '';
-		//$exclude     = Utils\get_flag_value( $assoc_args, 'exclude', '' );
-		//$version_arg = isset( $assoc_args['version'] ) ? $assoc_args['version'] : '';
-
-		if (empty($plugins) && ! $all) {
-			//WP_CLI::error( 'You need to specify either one or more plugin slugs to check or use the --all flag to check all plugins.' );
-		}
 
 		$exclude_list = explode(',', $exclude);
 
@@ -172,7 +152,6 @@ class WPJSPluginChecksum
 			}
 
 			if (false === $version) {
-				//WP_CLI::warning( "Could not retrieve the version for plugin {$plugin->name}, skipping." );
 				++$skips;
 				continue;
 			}
@@ -217,14 +196,6 @@ class WPJSPluginChecksum
 			}
 		}
 
-		/* if ( ! empty( $this->errors ) ) {
-			$formatter = new Formatter(
-				$assoc_args,
-				array( 'plugin_name', 'file', 'message' )
-			);
-			$formatter->display_items( $this->errors );
-		} */
-
 		$total     = count($plugins);
 		$failures  = count(array_unique(array_column($this->errors, 'plugin_name')));
 		$successes = $total - $failures - $skips;
@@ -235,15 +206,6 @@ class WPJSPluginChecksum
 			'failures_list' => array_unique(array_column($this->errors, 'plugin_name')),
 			'successes' => $successes
 		]);
-
-		/* Utils\report_batch_operation_results(
-			'plugin',
-			'verify',
-			$total,
-			$successes,
-			$failures,
-			$skips
-		); */
 	}
 
 	private function verify_hello_dolly_from_core($assoc_args)

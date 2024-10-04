@@ -216,94 +216,6 @@ class WPJS_Service
 		return true;
 	}
 
-	static function check_core_checksum_api($site_id)
-	{
-
-		$log_entry = array(
-			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkCoreChecksum',
-			'log_result' => 'init'
-		);
-
-		$task_id = WPJS_Cron_Log::insert_log($log_entry);
-
-		$data = [
-			'taskType' => 'checkCoreChecksum',
-			'taskId' => $task_id
-		];
-
-		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
-
-		if (is_wp_error($response)) {
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
-			);
-
-			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
-
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
-			);
-
-			WPJS_Cron_Log::update_log($log_entry);
-		}
-
-		return $response;
-	}
-
-	static function check_plugin_checksum_api($site_id)
-	{
-
-		$log_entry = array(
-			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkPluginChecksum',
-			'log_result' => 'init'
-		);
-
-		$task_id = WPJS_Cron_Log::insert_log($log_entry);
-
-		$data = [
-			'taskType' => 'checkPluginChecksum',
-			'taskId' => $task_id
-		];
-
-		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
-
-		if (is_wp_error($response)) {
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
-			);
-
-			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
-
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
-			);
-
-			WPJS_Cron_Log::update_log($log_entry);
-		}
-
-		return $response;
-	}
-
 	static function check_health_api($site_id)
 	{
 
@@ -335,7 +247,7 @@ class WPJS_Service
 
 			$body = json_decode(wp_remote_retrieve_body($response), true);
 
-			if( $body['data']['update_version'] ){
+			if ($body['data']['update_version']) {
 				update_post_meta($site_id, 'wp_juggler_wordpress_update_version', sanitize_text_field($body['data']['update_version']));
 			} else {
 				delete_post_meta($site_id, 'wp_juggler_wordpress_update_version');
@@ -351,25 +263,68 @@ class WPJS_Service
 			);
 
 			WPJS_Cron_Log::update_log($log_entry);
-			
 		}
 
 		return $response;
 	}
 
-	static function check_notices_api($site_id)
+	static function check_debug_api($site_id)
 	{
 
 		$log_entry = array(
 			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkNotices',
+			'log_type' => 'checkDebug',
 			'log_result' => 'init'
 		);
 
 		$task_id = WPJS_Cron_Log::insert_log($log_entry);
 
 		$data = [
-			'taskType' => 'checkNotices',
+			'taskType' => 'checkDebug',
+			'taskId' => $task_id
+		];
+
+		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
+
+		if (is_wp_error($response)) {
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+		} else {
+
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'succ',
+				'log_value' =>  null,
+				'log_data' => json_encode($body['data'])
+			);
+
+			WPJS_Cron_Log::update_log($log_entry);
+		}
+
+		return $response;
+	}
+
+	static function check_core_checksum_api($site_id)
+	{
+
+		$log_entry = array(
+			'wpjugglersites_id' => $site_id,
+			'log_type' => 'checkCoreChecksum',
+			'log_result' => 'init'
+		);
+
+		$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+		$data = [
+			'taskType' => 'checkCoreChecksum',
 			'taskId' => $task_id
 		];
 
@@ -436,39 +391,6 @@ class WPJS_Service
 			$plugins = $body['data']['plugins_data'];
 			$themes = $body['data']['themes_data'];
 
-			// Added to calculate stuff
-
-			foreach ($plugins as $plugin => $plugininfo) {
-				if ($plugininfo['ChecksumFiles']) {
-					$cf = base64_decode($plugininfo['ChecksumFiles']);
-					$unzipped = gzuncompress($cf);
-					$plugins[$plugin]['ChecksumFiles'] = json_decode($unzipped, true);
-				} else {
-					$plugins[$plugin]['ChecksumFiles'] = false;
-				}
-			}
-
-			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum($plugins);
-
-			foreach ($plugins as $plugin => $plugininfo) {
-				$plugins[$plugin]['ChecksumDetails'] = [];
-				unset($plugins[$plugin]['ChecksumFiles']);
-				if (in_array($plugininfo['Slug'], $data_checksum['failures_list'])) {
-					$plugins[$plugin]['Checksum'] = false;
-				} else {
-					$plugins[$plugin]['Checksum'] = true;
-				}
-			}
-
-			foreach ($data_checksum['failures_details'] as $failure) {
-				$plugin_file = WPJS_Service::findElementByAttribute($plugins, 'Slug', $failure['plugin_name']);
-				$plugins[$plugin_file]['ChecksumDetails'][] = $failure;
-			}
-
-
-
-			// finished
-
 			foreach ($plugins as $plugin => $plugininfo) {
 				$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities($plugininfo['Slug'], $plugininfo['Version']);
 				$plugins[$plugin]['Vulnerabilities'] = $plugin_vulnerabilities;
@@ -492,29 +414,103 @@ class WPJS_Service
 		return $response;
 	}
 
-	static function findElementByAttribute($array, $attribute, $value)
-	{
-		foreach ($array as $key => $element) {
-			if (isset($element[$attribute]) && $element[$attribute] == $value) {
-				return $key;
-			}
-		}
-		return null;
-	}
-
-	static function check_themes_api($site_id)
+	static function check_plugins_checksum_api($site_id)
 	{
 
 		$log_entry = array(
 			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkThemes',
+			'log_type' => 'checkPluginChecksum',
 			'log_result' => 'init'
 		);
 
 		$task_id = WPJS_Cron_Log::insert_log($log_entry);
 
 		$data = [
-			'taskType' => 'checkThemes',
+			'taskType' => 'checkPluginChecksum',
+			'taskId' => $task_id
+		];
+
+		$response = WPJS_Service::call_client_api($site_id, 'initiateTask', $data);
+
+		if (is_wp_error($response)) {
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'fail',
+				'log_value' =>  $response->get_error_message()
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+		} else {
+
+			$body = json_decode(wp_remote_retrieve_body($response), true);
+
+			$plugins = $body['data'];
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				if ($plugininfo['ChecksumFiles']) {
+					$cf = base64_decode($plugininfo['ChecksumFiles']);
+					$unzipped = gzuncompress($cf);
+					$plugins[$plugin]['ChecksumFiles'] = json_decode($unzipped, true);
+				} else {
+					$plugins[$plugin]['ChecksumFiles'] = false;
+				}
+			}
+
+			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum($plugins);
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				$slug = WPJS_Service::get_plugin_name($plugin);
+				$plugins[$plugin]['ChecksumDetails'] = [];
+				$plugins[$plugin]['Slug'] = $slug;
+				if (in_array($slug, $data_checksum['failures_list'])) {
+					$plugins[$plugin]['Checksum'] = false;
+				} else {
+					$plugins[$plugin]['Checksum'] = true;
+				}
+			}
+
+			foreach ($data_checksum['failures_details'] as $failure) {
+				$plugin_file = WPJS_Service::findElementByAttribute($plugins, 'Slug', $failure['plugin_name']);
+				$plugins[$plugin_file]['ChecksumDetails'][] = $failure;
+			}
+
+			foreach ($plugins as $plugin => $plugininfo) {
+				unset($plugins[$plugin]['ChecksumFiles']);
+				unset($plugins[$plugin]['Version']);
+				unset($plugins[$plugin]['Slug']);
+			}
+
+			$log_entry = array(
+				'ID' => $task_id,
+				'log_result' => 'succ',
+				'log_value' =>  null,
+				'log_data' => json_encode(
+					array(
+						'plugins_data' => $plugins
+					)
+				)
+			);
+
+			WPJS_Cron_Log::update_log($log_entry);
+		}
+
+		return $response;
+	}
+
+	static function check_notices_api($site_id)
+	{
+
+		$log_entry = array(
+			'wpjugglersites_id' => $site_id,
+			'log_type' => 'checkNotices',
+			'log_result' => 'init'
+		);
+
+		$task_id = WPJS_Cron_Log::insert_log($log_entry);
+
+		$data = [
+			'taskType' => 'checkNotices',
 			'taskId' => $task_id
 		];
 
@@ -544,6 +540,16 @@ class WPJS_Service
 		}
 
 		return $response;
+	}
+
+	static function findElementByAttribute($array, $attribute, $value)
+	{
+		foreach ($array as $key => $element) {
+			if (isset($element[$attribute]) && $element[$attribute] == $value) {
+				return $key;
+			}
+		}
+		return null;
 	}
 
 	static function update_plugin($site_id, $plugin_slug)
@@ -749,7 +755,7 @@ class WPJS_Service
 			foreach ($vulnerabilities as $vulnerability) {
 				$max_version = $vulnerability['operator']['max_version'] ?? null;
 				$max_operator = $vulnerability['operator']['max_operator'] ?? null;
-	
+
 				if ($max_version && version_compare($plugin_version, $max_version, $max_operator)) {
 					$relevant_vulnerabilities[] = $vulnerability;
 				}
@@ -759,4 +765,14 @@ class WPJS_Service
 		return $relevant_vulnerabilities;
 	}
 
+	static function get_plugin_name($basename)
+	{
+		if (false === strpos($basename, '/')) {
+			$name = basename($basename, '.php');
+		} else {
+			$name = dirname($basename);
+		}
+
+		return $name;
+	}
 }

@@ -372,15 +372,38 @@ class WPJS_AJAX
 			ARRAY_A
 		);
 
+		$result_checksum = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkPluginChecksum' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
 		if (!$result) {
 			return false;
 		}
 
 		$log_data_array = json_decode($result['log_data'], true);
 
+		if(!$result_checksum) {
+			$log_data_checksum_array = [];
+		} else {
+			$log_data_checksum_array = json_decode($result_checksum['log_data'], true);
+		}
+
 		return [
-			'data' => $log_data_array['plugins_data'],
-			'timestamp' => strtotime($result['log_time'])
+			'data' => array_merge_recursive($log_data_array['plugins_data'], $log_data_checksum_array['plugins_data']),
+			'timestamp' => strtotime($result['log_time']),
+			'timestamp_checksum' => $result_checksum? strtotime($result_checksum['log_time']): false
 		];
 	}
 
@@ -501,15 +524,61 @@ class WPJS_AJAX
 			ARRAY_A
 		);
 
+		$result_debug = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkDebug' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
+		$result_core_checksum = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkCoreChecksum' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
 		if (!$result) {
 			return false;
 		}
 
 		$log_data_array = json_decode($result['log_data'], true);
 
+		if(!$result_debug) {
+			$log_data_debug_array = [];
+		} else {
+			$log_data_debug_array = json_decode($result_debug['log_data'], true);
+		}
+
+		if(!$result_core_checksum) {
+			$log_data_core_checksum = [];
+		} else {
+			$log_data_core_checksum = json_decode($result_core_checksum['log_data'], true);
+		}
+
 		return [
-			'data' => $log_data_array,
-			'timestamp' => strtotime($result['log_time'])
+			'data' => array_merge_recursive(array_merge_recursive($log_data_array, $log_data_debug_array), $log_data_core_checksum),
+			'timestamp' => strtotime($result['log_time']),
+			'timestamp_debug' => $result_debug? strtotime($result_debug['log_time']) : false,
+			'timestamp_core_checksum' => $result_core_checksum? strtotime($result_core_checksum['log_time']): false
 		];
 	}
 
@@ -542,6 +611,28 @@ class WPJS_AJAX
 			ARRAY_A
 		);
 
+		$result_checksum = $wpdb->get_row(
+			$wpdb->prepare(
+				"
+				SELECT * 
+				FROM wp_wpjs_cron_log 
+				WHERE wpjugglersites_id = %s 
+					AND log_type = 'checkPluginChecksum' 
+					AND log_result = 'succ' 
+				ORDER BY log_time DESC 
+				LIMIT 1
+				",
+				$site_id
+			),
+			ARRAY_A
+		);
+
+		if(!$result_checksum) {
+			$log_data_checksum_array = [];
+		} else {
+			$log_data_checksum_array = json_decode($result_checksum['log_data'], true);
+		}
+
 		$automatic_logon = get_post_meta($site_id, 'wp_juggler_automatic_login', true) == "on" ? true : false;
 		$access_user = get_post_meta($site_id, 'wp_juggler_login_username', true);
 		$api_key = get_post_meta($site_id, 'wp_juggler_api_key', true);
@@ -566,7 +657,12 @@ class WPJS_AJAX
 			$data['wp_juggler_login_plugin_url'] = $wp_juggler_login_plugin_url;
 			$data['wp_juggler_login_themes_url'] = $wp_juggler_login_themes_url;
 		} else {
-			$data = json_decode($result['log_data'], true);
+
+			$log_data = json_decode($result['log_data'], true);		
+			$log_data1 = array_merge_recursive($log_data, $log_data_checksum_array);
+			$log_data = $log_data1;
+
+			$data = $log_data;
 			$data['wp_juggler_plugins_timestamp'] = $this->get_time_ago(strtotime($result['log_time']));
 			$data['wp_juggler_login_plugin_url'] = $wp_juggler_login_plugin_url;
 			$data['wp_juggler_login_themes_url'] = $wp_juggler_login_themes_url;
@@ -733,6 +829,31 @@ class WPJS_AJAX
 					merge_info($installed_themes, $theme['Name'], $theme['Slug'], $site_info);
 				}
 			}
+
+			$result_checksum = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPluginChecksum' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$entry->wpjugglersites_id
+				),
+				ARRAY_A
+			);
+
+			if(!$result_checksum) {
+				$log_data_checksum_array = [];
+			} else {
+				$log_data_checksum_array = json_decode($result_checksum['log_data'], true);
+			}
+			
+			$log_data1 = array_merge_recursive($log_data, $log_data_checksum_array);
+			$log_data = $log_data1;
 
 			// Process plugins data
 			if (isset($log_data['plugins_data'])) {
@@ -1397,7 +1518,6 @@ class WPJS_AJAX
 				if (!$plugins_data) {
 					$plugins_checksum = false;
 				} else {
-
 					$plugins_checksum = 0;
 					foreach ($plugins_data['data'] as $plugin) {
 						if (isset($plugin['Checksum']) && !$plugin['Checksum']) {
@@ -1406,6 +1526,7 @@ class WPJS_AJAX
 					}
 				}
 
+				// Check
 				$health_data = $this->get_health_data($site->ID);
 
 				if (!$health_data) {

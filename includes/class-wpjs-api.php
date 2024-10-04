@@ -159,12 +159,12 @@ class WPJS_Api
 
 		$site_id = $this->get_site_id_by_api_key($api_key);
 
-		//$response = WPJS_Service::check_core_checksum_api(5);
-		//$response = WPJS_Service::check_plugin_checksum_api(37);
-		//$response = WPJS_Service::check_health_api(5);
-		//$response = WPJS_Service::check_notices_api(37);
-		$response = WPJS_Service::check_plugins_api(5);
-		//$response = WPJS_Service::check_themes_api(37);
+		//$response = WPJS_Service::check_health_api(37);
+		//$response = WPJS_Service::check_debug_api(37);
+		//$response = WPJS_Service::check_core_checksum_api(37);
+		//$response = WPJS_Service::check_plugins_api(37);
+		//$response = WPJS_Service::check_plugins_checksum_api(37);
+		$response = WPJS_Service::check_notices_api(37);
 
 		//mac 5
 		//firma 37
@@ -190,12 +190,13 @@ class WPJS_Api
 	public function api_trigger_multi_cron(WP_REST_Request $request)
 	{
 
-		//$this->cron->check_all_core_checksum_api();
-		//$this->cron->check_all_plugin_checksum_api();
+		
 		//$this->cron->check_all_health_api();
-		//$this->cron->check_all_notices_api();
-		$this->cron->check_all_plugins_api();
-		//$this->cron->check_all_themes_api();
+		//$this->cron->check_all_debug_api();
+		//$this->cron->check_all_core_checksum_api();
+		//$this->cron->check_all_plugins_api();
+		//$this->cron->check_all_plugins_checksum_api();
+		$this->cron->check_all_notices_api();
 
 		$data = [];
 		wp_send_json_success($data, 200);
