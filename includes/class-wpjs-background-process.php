@@ -254,7 +254,6 @@ class WPJS_Background_Process extends WP_Background_Process
 
 					foreach ($plugins as $plugin => $plugininfo) {
 						unset($plugins[$plugin]['ChecksumFiles']);
-						unset($plugins[$plugin]['Version']);
 						unset($plugins[$plugin]['Slug']);
 					}
 

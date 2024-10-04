@@ -64,7 +64,7 @@ class WPJSPluginChecksum
 
 			if ($files) {
 
-				$version = $plugin_info['Version'];
+				$version = $plugin_info['ChecksumVersion'];
 
 				$wp_org_api = new WPJSWpOrgApi();
 

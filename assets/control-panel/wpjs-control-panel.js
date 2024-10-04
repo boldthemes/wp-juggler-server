@@ -14829,6 +14829,39 @@ exports.default = {
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
         const refreshAllActive = (0, _vue.ref)(false);
+        // Refresh Dialog Params
+        const dialogRefreshTabs = (0, _vue.ref)(false);
+        const refreshTabsInProgress = (0, _vue.ref)(false);
+        const refreshTabsFinished = (0, _vue.ref)(false);
+        const refreshProgressIndicator = (0, _vue.ref)(0);
+        const currentProgressIndex = (0, _vue.ref)(0);
+        const currentRefreshAction = (0, _vue.ref)("");
+        const refreshArr = [
+            {
+                text: "Refreshing Health Status",
+                ajaxParam: "wpjs-refresh-health"
+            },
+            {
+                text: "Refreshing Health Info",
+                ajaxParam: "wpjs-refresh-debug"
+            },
+            {
+                text: "Refreshing Core Checksum Info",
+                ajaxParam: "wpjs-refresh-core-checksum"
+            },
+            {
+                text: "Refreshing Plugins and Themes",
+                ajaxParam: "wpjs-refresh-plugins"
+            },
+            {
+                text: "Refreshing Plugin Checksums",
+                ajaxParam: "wpjs-refresh-plugins-checksum"
+            },
+            {
+                text: "Refreshing Notices",
+                ajaxParam: "wpjs-refresh-notices"
+            }
+        ];
         function selectUptimePeriod(ind) {
             selectedUptimePeriod.value = ind;
         }
@@ -14918,16 +14951,33 @@ exports.default = {
             }
         }
         async function refreshAll() {
-            refreshAllActive.value = true;
-            await refreshHealth();
-            await refreshPlugins();
-            await refreshNotices();
+            currentProgressIndex.value = 0;
+            refreshTabsFinished.value = false;
+            dialogRefreshTabs.value = true;
+            refreshTabsInProgress.value = true;
+            for (const elem of refreshArr){
+                currentRefreshAction.value = elem.text;
+                console.log();
+                refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100);
+                try {
+                    const response = await doAjax({
+                        action: elem.ajaxParam,
+                        siteId: store.activatedSite.id
+                    });
+                    if (!response.success) throw new Error(`${response.data.code} - ${response.data.message}`);
+                    currentProgressIndex.value++;
+                } catch (error) {
+                    ajaxError.value = true;
+                    ajaxErrorText.value = error.message;
+                }
+            }
             queryClient.invalidateQueries({
                 queryKey: [
                     "wpjs-control-panel"
                 ]
             });
-            refreshAllActive.value = false;
+            refreshTabsFinished.value = true;
+            dialogRefreshTabs.value = false;
         }
         const __returned__ = {
             store,
@@ -14937,6 +14987,13 @@ exports.default = {
             ajaxError,
             ajaxErrorText,
             refreshAllActive,
+            dialogRefreshTabs,
+            refreshTabsInProgress,
+            refreshTabsFinished,
+            refreshProgressIndicator,
+            currentProgressIndex,
+            currentRefreshAction,
+            refreshArr,
             selectUptimePeriod,
             openThemesPlugins,
             openHealth,
@@ -15064,6 +15121,15 @@ const _hoisted_32 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
 }, [
     /*#__PURE__*/ (0, _vue.createElementVNode)("div", null, "\xa0")
 ], -1 /* HOISTED */ );
+const _hoisted_33 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Refresh in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_34 = {
+    class: "my-8"
+};
+const _hoisted_35 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Refresh finished", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
@@ -15079,6 +15145,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_list_item = (0, _vue.resolveComponent)("v-list-item");
     const _component_v_list = (0, _vue.resolveComponent)("v-list");
     const _component_v_menu = (0, _vue.resolveComponent)("v-menu");
+    const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
+    const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
         (0, _vue.createElementVNode)("tr", null, [
@@ -15103,7 +15173,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             variant: "outlined"
                                         }, {
                                             default: (0, _vue.withCtx)(()=>[
-                                                    (0, _vue.createTextVNode)("Refresh All ")
+                                                    (0, _vue.createTextVNode)("Refresh All Site Data ")
                                                 ]),
                                             _: 1 /* STABLE */ 
                                         }, 8 /* PROPS */ , [
@@ -15675,16 +15745,89 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 })
             ], 8 /* PROPS */ , _hoisted_1)
         ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogRefreshTabs,
+            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.dialogRefreshTabs = $event),
+            width: "800",
+            persistent: true
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            !($setup.refreshTabsInProgress && !$setup.refreshTabsFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
+                                                icon: "mdi-close",
+                                                onClick: _cache[4] || (_cache[4] = ($event)=>$setup.dialogRefreshTabs = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("Site Data")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.refreshTabsInProgress && !$setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_33,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_34, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentRefreshAction), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.refreshProgressIndicator,
+                                                            striped: ""
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentProgressIndex + 1) + "/" + (0, _vue.toDisplayString)($setup.refreshArr.length), 1 /* TEXT */ )
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.refreshTabsInProgress && $setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_35
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
         (0, _vue.createVNode)(_component_v_snackbar, {
             modelValue: $setup.ajaxError,
-            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.ajaxError = $event),
+            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.ajaxError = $event),
             color: "red-lighten-2"
         }, {
             actions: (0, _vue.withCtx)(()=>[
                     (0, _vue.createVNode)(_component_v_btn, {
                         color: "red-lighten-4",
                         variant: "text",
-                        onClick: _cache[4] || (_cache[4] = ($event)=>$setup.ajaxError = false)
+                        onClick: _cache[6] || (_cache[6] = ($event)=>$setup.ajaxError = false)
                     }, {
                         default: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createTextVNode)(" Close ")
@@ -15893,6 +16036,23 @@ exports.default = {
         const tab = (0, _vue.ref)(0);
         const selectedActionPlugins = (0, _vue.ref)(null);
         const selectedActionThemes = (0, _vue.ref)(null);
+        // Refresh Dialog Params
+        const dialogRefreshTabs = (0, _vue.ref)(false);
+        const refreshTabsInProgress = (0, _vue.ref)(false);
+        const refreshTabsFinished = (0, _vue.ref)(false);
+        const refreshProgressIndicator = (0, _vue.ref)(0);
+        const currentProgressIndex = (0, _vue.ref)(0);
+        const currentRefreshAction = (0, _vue.ref)("");
+        const refreshArr = [
+            {
+                text: "Refreshing Plugins and Themes",
+                ajaxParam: "wpjs-refresh-plugins"
+            },
+            {
+                text: "Refreshing Plugin Checksums",
+                ajaxParam: "wpjs-refresh-plugins-checksum"
+            }
+        ];
         const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
@@ -15941,6 +16101,41 @@ exports.default = {
         function openChecksum(item) {
             checksumItem.value = item;
             dialogChecksum.value = true;
+        }
+        async function refreshAll() {
+            currentProgressIndex.value = 0;
+            refreshTabsFinished.value = false;
+            dialogRefreshTabs.value = true;
+            refreshTabsInProgress.value = true;
+            for (const elem of refreshArr){
+                currentRefreshAction.value = elem.text;
+                console.log();
+                refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100);
+                try {
+                    const response = await doAjax({
+                        action: elem.ajaxParam,
+                        siteId: store.activatedSite.id
+                    });
+                    if (!response.success) throw new Error(`${response.data.code} - ${response.data.message}`);
+                    currentProgressIndex.value++;
+                } catch (error) {
+                    ajaxError.value = true;
+                    ajaxErrorText.value = error.message;
+                }
+            }
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-plugins-panel",
+                    store.activatedSite.id
+                ]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-control-panel"
+                ]
+            });
+            refreshTabsFinished.value = true;
+            dialogRefreshTabs.value = false;
         }
         async function refreshPlugins(e, withoutIndicator = false) {
             refreshActive.value = !withoutIndicator;
@@ -16242,6 +16437,13 @@ exports.default = {
             tab,
             selectedActionPlugins,
             selectedActionThemes,
+            dialogRefreshTabs,
+            refreshTabsInProgress,
+            refreshTabsFinished,
+            refreshProgressIndicator,
+            currentProgressIndex,
+            currentRefreshAction,
+            refreshArr,
             queryClient,
             isLoading,
             isError,
@@ -16255,6 +16457,7 @@ exports.default = {
             themes_data,
             openVulnerabilities,
             openChecksum,
+            refreshAll,
             refreshPlugins,
             updatePlugin,
             updateTheme,
@@ -16299,10 +16502,12 @@ const _hoisted_1 = {
     class: "text-center pa-4"
 };
 const _hoisted_2 = {
-    key: 0
+    key: 0,
+    class: "wpjs-timestamp"
 };
 const _hoisted_3 = {
-    key: 1
+    key: 1,
+    class: "wpjs-timestamp"
 };
 const _hoisted_4 = {
     key: 0
@@ -16399,6 +16604,15 @@ const _hoisted_34 = {
 const _hoisted_35 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "my-8"
 }, "Bulk action finished", -1 /* HOISTED */ );
+const _hoisted_36 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Refresh in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_37 = {
+    class: "my-8"
+};
+const _hoisted_38 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Refresh finished", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -16423,739 +16637,975 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
     const _component_v_col = (0, _vue.resolveComponent)("v-col");
     const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
-    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
-        (0, _vue.createVNode)(_component_v_dialog, {
-            modelValue: $setup.store.activatedThemes,
-            "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event)=>$setup.store.activatedThemes = $event),
-            transition: "dialog-bottom-transition",
-            fullscreen: ""
-        }, {
-            default: (0, _vue.withCtx)(()=>[
-                    (0, _vue.createVNode)(_component_v_card, null, {
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_toolbar, null, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                icon: "mdi-close",
-                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedThemes = false)
-                                            }),
-                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            }),
-                                            (0, _vue.createVNode)(_component_v_spacer),
-                                            (0, _vue.createVNode)(_component_v_toolbar_items)
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                }),
-                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
-                                    key: 0
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_sheet, {
-                                                class: "pa-4 text-right mx-auto",
-                                                elevation: "0",
-                                                width: "100%",
-                                                rounded: "lg"
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        $setup.data.wp_juggler_plugins_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
-                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                class: "me-1 pb-1",
-                                                                icon: "mdi-refresh",
-                                                                size: "18"
-                                                            }),
-                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_plugins_timestamp) + " ", 1 /* TEXT */ ),
-                                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption",
-                                                                loading: $setup.refreshActive,
-                                                                onClick: $setup.refreshPlugins,
-                                                                variant: "outlined"
-                                                            }, {
-                                                                default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createTextVNode)("Refresh ")
-                                                                    ]),
-                                                                _: 1 /* STABLE */ 
-                                                            }, 8 /* PROPS */ , [
-                                                                "loading"
-                                                            ])
-                                                        ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
-                                                            (0, _vue.createVNode)(_component_v_icon, {
-                                                                class: "me-1 pb-1",
-                                                                icon: "mdi-refresh",
-                                                                size: "18"
-                                                            }),
-                                                            (0, _vue.createTextVNode)(" Never "),
-                                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                                class: "ml-3 text-none text-caption",
-                                                                loading: $setup.refreshActive,
-                                                                onClick: $setup.refreshPlugins,
-                                                                variant: "outlined"
-                                                            }, {
-                                                                default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createTextVNode)("Refresh ")
-                                                                    ]),
-                                                                _: 1 /* STABLE */ 
-                                                            }, 8 /* PROPS */ , [
-                                                                "loading"
-                                                            ])
-                                                        ]))
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            }),
-                                            (0, _vue.createVNode)(_component_v_card, null, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createVNode)(_component_v_tabs, {
-                                                            modelValue: $setup.tab,
-                                                            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.tab = $event),
-                                                            "bg-color": "surface"
-                                                        }, {
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_tab, {
-                                                                        value: "plugins"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createTextVNode)("Plugins")
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    }),
-                                                                    (0, _vue.createVNode)(_component_v_tab, {
-                                                                        value: "themes"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createTextVNode)("Themes")
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ]),
-                                                            _: 1 /* STABLE */ 
-                                                        }, 8 /* PROPS */ , [
-                                                            "modelValue"
-                                                        ]),
-                                                        (0, _vue.createVNode)(_component_v_card_text, {
-                                                            class: "mt-4"
-                                                        }, {
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_tabs_window, {
-                                                                        modelValue: $setup.tab,
-                                                                        "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event)=>$setup.tab = $event)
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                (0, _vue.createVNode)(_component_v_tabs_window_item, {
-                                                                                    value: "plugins",
-                                                                                    transition: "false",
-                                                                                    "reverse-transition": "false"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_divider),
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, null, {
-                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                        (0, _vue.createVNode)(_component_v_row, {
-                                                                                                            align: "center",
-                                                                                                            justify: "center",
-                                                                                                            alignContent: "center",
-                                                                                                            class: "px-4"
-                                                                                                        }, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_select, {
-                                                                                                                        modelValue: $setup.selectedActionPlugins,
-                                                                                                                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.selectedActionPlugins = $event),
-                                                                                                                        items: $setup.bulkActionsPlugins,
-                                                                                                                        "item-title": "text",
-                                                                                                                        "item-value": "value",
-                                                                                                                        "return-object": "",
-                                                                                                                        "single-line": "",
-                                                                                                                        density: "compact",
-                                                                                                                        label: "Bulk Actions",
-                                                                                                                        "max-width": "300",
-                                                                                                                        variant: "outlined",
-                                                                                                                        class: "mt-6"
-                                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                                        "modelValue"
-                                                                                                                    ]),
-                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                        class: "ml-3 text-none text-caption",
-                                                                                                                        onClick: _cache[3] || (_cache[3] = ($event)=>$setup.doBulkAction()),
-                                                                                                                        variant: "outlined"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)("Apply ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_spacer),
-                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                        class: "ml-3 text-none text-caption mr-3",
-                                                                                                                        onClick: _cache[4] || (_cache[4] = ($event)=>$setup.gotoUrl($setup.data.wp_juggler_login_plugin_url)),
-                                                                                                                        variant: "outlined"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)("wp-admin ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_text_field, {
-                                                                                                                        modelValue: $setup.search,
-                                                                                                                        "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.search = $event),
-                                                                                                                        density: "compact",
-                                                                                                                        label: "Search",
-                                                                                                                        "prepend-inner-icon": "mdi-magnify",
-                                                                                                                        variant: "outlined",
-                                                                                                                        flat: "",
-                                                                                                                        "hide-details": "",
-                                                                                                                        "single-line": "",
-                                                                                                                        "max-width": "800"
-                                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                                        "modelValue"
-                                                                                                                    ])
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        }),
-                                                                                                        (0, _vue.createVNode)(_component_v_row, null, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_data_table, {
-                                                                                                                        search: $setup.search,
-                                                                                                                        "onUpdate:search": _cache[6] || (_cache[6] = ($event)=>$setup.search = $event),
-                                                                                                                        items: $setup.plugins_data,
-                                                                                                                        headers: $setup.plugin_headers,
-                                                                                                                        "item-value": "File",
-                                                                                                                        "items-per-page": "50",
-                                                                                                                        "show-select": "",
-                                                                                                                        modelValue: $setup.selectedPlugins,
-                                                                                                                        "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.selectedPlugins = $event),
-                                                                                                                        class: "pb-4"
-                                                                                                                    }, {
-                                                                                                                        "item.active": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Active && !item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-network-outline",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.update": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    }),
-                                                                                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.vulnerabilities": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Vulnerabilities.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "error",
-                                                                                                                                        icon: "mdi-bug-check-outline",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "mr-1"
-                                                                                                                                    }),
-                                                                                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.Vulnerabilities.length) + " ", 1 /* TEXT */ ),
-                                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                                        class: "ml-3 text-none text-caption",
-                                                                                                                                        onClick: ($event)=>$setup.openVulnerabilities(item),
-                                                                                                                                        variant: "outlined"
-                                                                                                                                    }, {
-                                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                (0, _vue.createTextVNode)("Details ")
-                                                                                                                                            ]),
-                                                                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                        "onClick"
-                                                                                                                                    ])
-                                                                                                                                ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "blue-lighten-5",
-                                                                                                                                        icon: "mdi-help",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.checksum": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                !item.Checksum && !item.WpJuggler && item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "error",
-                                                                                                                                        icon: "mdi-alert-outline",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "mr-1"
-                                                                                                                                    }),
-                                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                                        class: "ml-3 text-none text-caption",
-                                                                                                                                        onClick: ($event)=>$setup.openChecksum(item),
-                                                                                                                                        variant: "outlined"
-                                                                                                                                    }, {
-                                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                (0, _vue.createTextVNode)("Details ")
-                                                                                                                                            ]),
-                                                                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                        "onClick"
-                                                                                                                                    ])
-                                                                                                                                ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "blue-lighten-5",
-                                                                                                                                        icon: "mdi-help",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ]))
-                                                                                                                            ]),
-                                                                                                                        "item.source": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Tgmpa ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "grey-lighten-1",
-                                                                                                                                        icon: "mdi-package-variant-closed",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "grey-lighten-1",
-                                                                                                                                        icon: "mdi-lan",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "grey-lighten-1",
-                                                                                                                                        icon: "mdi-wordpress",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "mr-1"
-                                                                                                                                    })
-                                                                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "blue-lighten-5",
-                                                                                                                                        icon: "mdi-help",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ]))
-                                                                                                                            ]),
-                                                                                                                        "item.actions": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 0,
-                                                                                                                                    loading: item.Slug == $setup.deactivateActive,
-                                                                                                                                    onClick: ($event)=>$setup.deactivatePlugin(item.Slug),
-                                                                                                                                    class: "ml-3 text-none text-caption",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Deactivate ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 1,
-                                                                                                                                    loading: item.Slug == $setup.activateActive,
-                                                                                                                                    onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
-                                                                                                                                    class: "ml-3 text-none text-caption",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Activate ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 2,
-                                                                                                                                    loading: item.Slug == $setup.activateActive,
-                                                                                                                                    onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
-                                                                                                                                    class: "ml-3 text-none text-caption",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Activate ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 3,
-                                                                                                                                    loading: item.Slug == $setup.activateNetworkActive,
-                                                                                                                                    onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
-                                                                                                                                    class: "ml-3 text-none text-caption",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Network Activate ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 4,
-                                                                                                                                    loading: item.Slug == $setup.activateNetworkActive,
-                                                                                                                                    onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
-                                                                                                                                    class: "ml-3 text-none text-caption",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Network Activate ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 5,
-                                                                                                                                    loading: item.Slug == $setup.updateActive,
-                                                                                                                                    onClick: ($event)=>$setup.updatePlugin(item.Slug),
-                                                                                                                                    color: "#2196f3",
-                                                                                                                                    class: "text-none text-caption ml-3",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Update ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }, 8 /* PROPS */ , [
-                                                                                                                        "search",
-                                                                                                                        "items",
-                                                                                                                        "modelValue"
-                                                                                                                    ])
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        })
-                                                                                                    ]),
-                                                                                                _: 1 /* STABLE */ 
-                                                                                            })
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }),
-                                                                                (0, _vue.createVNode)(_component_v_tabs_window_item, {
-                                                                                    value: "themes",
-                                                                                    transition: "false",
-                                                                                    "reverse-transition": "false"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_divider),
-                                                                                            (0, _vue.createVNode)(_component_v_sheet, null, {
-                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                        (0, _vue.createVNode)(_component_v_row, {
-                                                                                                            align: "center",
-                                                                                                            justify: "center",
-                                                                                                            alignContent: "center",
-                                                                                                            class: "px-4"
-                                                                                                        }, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_select, {
-                                                                                                                        modelValue: $setup.selectedActionThemes,
-                                                                                                                        "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.selectedActionThemes = $event),
-                                                                                                                        items: $setup.bulkActionsThemes,
-                                                                                                                        "item-title": "text",
-                                                                                                                        "item-value": "value",
-                                                                                                                        "return-object": "",
-                                                                                                                        "single-line": "",
-                                                                                                                        density: "compact",
-                                                                                                                        label: "Bulk Actions",
-                                                                                                                        "max-width": "300",
-                                                                                                                        variant: "outlined",
-                                                                                                                        class: "mt-6"
-                                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                                        "modelValue"
-                                                                                                                    ]),
-                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                        class: "ml-3 text-none text-caption",
-                                                                                                                        onClick: _cache[9] || (_cache[9] = ($event)=>$setup.doBulkActionThemes()),
-                                                                                                                        variant: "outlined"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)("Apply ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_spacer),
-                                                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                                                        class: "ml-3 text-none text-caption mr-3",
-                                                                                                                        onClick: _cache[10] || (_cache[10] = ($event)=>$setup.gotoUrl($setup.data.wp_juggler_login_themes_url)),
-                                                                                                                        variant: "outlined"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                (0, _vue.createTextVNode)("wp-admin ")
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_text_field, {
-                                                                                                                        modelValue: $setup.search,
-                                                                                                                        "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event)=>$setup.search = $event),
-                                                                                                                        density: "compact",
-                                                                                                                        label: "Search",
-                                                                                                                        "prepend-inner-icon": "mdi-magnify",
-                                                                                                                        variant: "outlined",
-                                                                                                                        flat: "",
-                                                                                                                        "hide-details": "",
-                                                                                                                        "single-line": "",
-                                                                                                                        "max-width": "800"
-                                                                                                                    }, null, 8 /* PROPS */ , [
-                                                                                                                        "modelValue"
-                                                                                                                    ])
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        }),
-                                                                                                        (0, _vue.createVNode)(_component_v_row, null, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createVNode)(_component_v_data_table, {
-                                                                                                                        search: $setup.search,
-                                                                                                                        "onUpdate:search": _cache[12] || (_cache[12] = ($event)=>$setup.search = $event),
-                                                                                                                        items: $setup.themes_data,
-                                                                                                                        headers: $setup.theme_headers,
-                                                                                                                        "item-value": "Slug",
-                                                                                                                        "show-select": "",
-                                                                                                                        "items-per-page": "50",
-                                                                                                                        class: "pb-4",
-                                                                                                                        modelValue: $setup.selectedThemes,
-                                                                                                                        "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event)=>$setup.selectedThemes = $event)
-                                                                                                                    }, {
-                                                                                                                        "item.active": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Active && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-network-outline",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.child": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.IsChildTheme ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    })
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.update": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
-                                                                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                                                                        color: "success",
-                                                                                                                                        icon: "mdi-check-bold",
-                                                                                                                                        size: "large",
-                                                                                                                                        class: "rm-4"
-                                                                                                                                    }),
-                                                                                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        "item.actions": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                                                                                                    key: 0,
-                                                                                                                                    loading: item.Slug == $setup.updateThemeActive,
-                                                                                                                                    onClick: ($event)=>$setup.updateTheme(item.Slug),
-                                                                                                                                    color: "#2196f3",
-                                                                                                                                    class: "text-none text-caption ml-3",
-                                                                                                                                    variant: "outlined"
-                                                                                                                                }, {
-                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                            (0, _vue.createTextVNode)("Update ")
-                                                                                                                                        ]),
-                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
-                                                                                                                                    "loading",
-                                                                                                                                    "onClick"
-                                                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                                                            ]),
-                                                                                                                        _: 1 /* STABLE */ 
-                                                                                                                    }, 8 /* PROPS */ , [
-                                                                                                                        "search",
-                                                                                                                        "items",
-                                                                                                                        "modelValue"
-                                                                                                                    ])
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        })
-                                                                                                    ]),
-                                                                                                _: 1 /* STABLE */ 
-                                                                                            })
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    }, 8 /* PROPS */ , [
-                                                                        "modelValue"
-                                                                    ])
-                                                                ]),
-                                                            _: 1 /* STABLE */ 
-                                                        })
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
-                                    key: 1
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
-                                                type: "table",
-                                                class: "mt-15"
-                                            })
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                }))
-                            ]),
-                        _: 1 /* STABLE */ 
-                    }),
-                    (0, _vue.createVNode)(_component_v_snackbar, {
-                        modelValue: $setup.ajaxError,
-                        "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event)=>$setup.ajaxError = $event),
-                        color: "red-lighten-2"
-                    }, {
-                        actions: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_btn, {
-                                    color: "red-lighten-4",
-                                    variant: "text",
-                                    onClick: _cache[15] || (_cache[15] = ($event)=>$setup.ajaxError = false)
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createTextVNode)(" Close ")
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })
-                            ]),
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
-                            ]),
-                        _: 1 /* STABLE */ 
-                    }, 8 /* PROPS */ , [
-                        "modelValue"
-                    ])
-                ]),
-            _: 1 /* STABLE */ 
-        }, 8 /* PROPS */ , [
-            "modelValue"
-        ]),
-        (0, _vue.createVNode)(_component_v_dialog, {
-            modelValue: $setup.dialogInner,
-            "onUpdate:modelValue": _cache[19] || (_cache[19] = ($event)=>$setup.dialogInner = $event),
-            "min-width": "600"
-        }, {
-            default: (0, _vue.withCtx)(()=>[
-                    (0, _vue.createVNode)(_component_v_card, null, {
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_toolbar, null, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_btn, {
-                                                icon: "mdi-close",
-                                                onClick: _cache[18] || (_cache[18] = ($event)=>$setup.dialogInner = false)
-                                            }),
-                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)("List of vulnerabilities - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Name) + " - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Version), 1 /* TEXT */ )
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
-                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createElementVNode)("div", _hoisted_1, [
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.store.activatedThemes,
+                "onUpdate:modelValue": _cache[17] || (_cache[17] = ($event)=>$setup.store.activatedThemes = $event),
+                transition: "dialog-bottom-transition",
+                fullscreen: ""
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedThemes = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
                                                     default: (0, _vue.withCtx)(()=>[
-                                                            (0, _vue.createElementVNode)("div", _hoisted_20, [
-                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
-                                                            ]),
-                                                            "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
-                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
-                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
-                                                            ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                            _hoisted_22,
-                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
-                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, [
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_24, [
-                                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
-                                                                        (0, _vue.createElementVNode)("a", {
-                                                                            href: src.link,
-                                                                            target: "_blank"
-                                                                        }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_25)
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_spacer),
+                                                (0, _vue.createVNode)(_component_v_toolbar_items)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                        key: 0
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                    class: "pa-4 text-right mx-auto",
+                                                    elevation: "0",
+                                                    width: "100%",
+                                                    rounded: "lg"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            $setup.data.wp_juggler_plugins_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                    class: "me-1 pb-1",
+                                                                    icon: "mdi-refresh",
+                                                                    size: "18"
+                                                                }),
+                                                                (0, _vue.createTextVNode)(" Plugins and Themes Data: "),
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_plugins_timestamp), 1 /* TEXT */ ),
+                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                    class: "me-1 pb-1 ml-2",
+                                                                    icon: "mdi-circle-medium",
+                                                                    size: "18"
+                                                                }),
+                                                                (0, _vue.createTextVNode)(" Checksum Data: "),
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_plugins_checksum_timestamp), 1 /* TEXT */ ),
+                                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                                    class: "ml-3 text-none text-caption",
+                                                                    loading: $setup.refreshActive,
+                                                                    onClick: $setup.refreshAll,
+                                                                    variant: "outlined"
+                                                                }, {
+                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                            (0, _vue.createTextVNode)("Refresh Data ")
+                                                                        ]),
+                                                                    _: 1 /* STABLE */ 
+                                                                }, 8 /* PROPS */ , [
+                                                                    "loading"
+                                                                ])
+                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                    class: "me-1 pb-1",
+                                                                    icon: "mdi-refresh",
+                                                                    size: "18"
+                                                                }),
+                                                                (0, _vue.createTextVNode)(" Never "),
+                                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                                    class: "ml-3 text-none text-caption",
+                                                                    loading: $setup.refreshActive,
+                                                                    onClick: $setup.refreshAll,
+                                                                    variant: "outlined"
+                                                                }, {
+                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                            (0, _vue.createTextVNode)("Refresh Data ")
+                                                                        ]),
+                                                                    _: 1 /* STABLE */ 
+                                                                }, 8 /* PROPS */ , [
+                                                                    "loading"
+                                                                ])
+                                                            ]))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_card, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_tabs, {
+                                                                modelValue: $setup.tab,
+                                                                "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.tab = $event),
+                                                                "bg-color": "surface"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_tab, {
+                                                                            value: "plugins"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createTextVNode)("Plugins")
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }),
+                                                                        (0, _vue.createVNode)(_component_v_tab, {
+                                                                            value: "themes"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createTextVNode)("Themes")
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
                                                                     ]),
-                                                                    (0, _vue.createElementVNode)("div", _hoisted_26, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
-                                                                ]);
-                                                            }), 256 /* UNKEYED_FRAGMENT */ )),
-                                                            (0, _vue.createVNode)(_component_v_divider, {
-                                                                class: "mt-4 mb-4"
+                                                                _: 1 /* STABLE */ 
+                                                            }, 8 /* PROPS */ , [
+                                                                "modelValue"
+                                                            ]),
+                                                            (0, _vue.createVNode)(_component_v_card_text, {
+                                                                class: "mt-4"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_tabs_window, {
+                                                                            modelValue: $setup.tab,
+                                                                            "onUpdate:modelValue": _cache[14] || (_cache[14] = ($event)=>$setup.tab = $event)
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createVNode)(_component_v_tabs_window_item, {
+                                                                                        value: "plugins",
+                                                                                        transition: "false",
+                                                                                        "reverse-transition": "false"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createVNode)(_component_v_divider),
+                                                                                                (0, _vue.createVNode)(_component_v_sheet, null, {
+                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                align: "center",
+                                                                                                                justify: "center",
+                                                                                                                alignContent: "center",
+                                                                                                                class: "px-4"
+                                                                                                            }, {
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_select, {
+                                                                                                                            modelValue: $setup.selectedActionPlugins,
+                                                                                                                            "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.selectedActionPlugins = $event),
+                                                                                                                            items: $setup.bulkActionsPlugins,
+                                                                                                                            "item-title": "text",
+                                                                                                                            "item-value": "value",
+                                                                                                                            "return-object": "",
+                                                                                                                            "single-line": "",
+                                                                                                                            density: "compact",
+                                                                                                                            label: "Bulk Actions",
+                                                                                                                            "max-width": "300",
+                                                                                                                            variant: "outlined",
+                                                                                                                            class: "mt-6"
+                                                                                                                        }, null, 8 /* PROPS */ , [
+                                                                                                                            "modelValue"
+                                                                                                                        ]),
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                            class: "ml-3 text-none text-caption",
+                                                                                                                            onClick: _cache[3] || (_cache[3] = ($event)=>$setup.doBulkAction()),
+                                                                                                                            variant: "outlined"
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)("Apply ")
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createVNode)(_component_v_spacer),
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                            class: "ml-3 text-none text-caption mr-3",
+                                                                                                                            onClick: _cache[4] || (_cache[4] = ($event)=>$setup.gotoUrl($setup.data.wp_juggler_login_plugin_url)),
+                                                                                                                            variant: "outlined"
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)("wp-admin ")
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                                                                                                            modelValue: $setup.search,
+                                                                                                                            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.search = $event),
+                                                                                                                            density: "compact",
+                                                                                                                            label: "Search",
+                                                                                                                            "prepend-inner-icon": "mdi-magnify",
+                                                                                                                            variant: "outlined",
+                                                                                                                            flat: "",
+                                                                                                                            "hide-details": "",
+                                                                                                                            "single-line": "",
+                                                                                                                            "max-width": "800"
+                                                                                                                        }, null, 8 /* PROPS */ , [
+                                                                                                                            "modelValue"
+                                                                                                                        ])
+                                                                                                                    ]),
+                                                                                                                _: 1 /* STABLE */ 
+                                                                                                            }),
+                                                                                                            (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_data_table, {
+                                                                                                                            search: $setup.search,
+                                                                                                                            "onUpdate:search": _cache[6] || (_cache[6] = ($event)=>$setup.search = $event),
+                                                                                                                            items: $setup.plugins_data,
+                                                                                                                            headers: $setup.plugin_headers,
+                                                                                                                            "item-value": "File",
+                                                                                                                            "items-per-page": "50",
+                                                                                                                            "show-select": "",
+                                                                                                                            modelValue: $setup.selectedPlugins,
+                                                                                                                            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.selectedPlugins = $event),
+                                                                                                                            class: "pb-4"
+                                                                                                                        }, {
+                                                                                                                            "item.active": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Active && !item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-network-outline",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.update": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        }),
+                                                                                                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.vulnerabilities": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Vulnerabilities.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "error",
+                                                                                                                                            icon: "mdi-bug-check-outline",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "mr-1"
+                                                                                                                                        }),
+                                                                                                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.Vulnerabilities.length) + " ", 1 /* TEXT */ ),
+                                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                                            class: "ml-3 text-none text-caption",
+                                                                                                                                            onClick: ($event)=>$setup.openVulnerabilities(item),
+                                                                                                                                            variant: "outlined"
+                                                                                                                                        }, {
+                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                    (0, _vue.createTextVNode)("Details ")
+                                                                                                                                                ]),
+                                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                            "onClick"
+                                                                                                                                        ])
+                                                                                                                                    ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "blue-lighten-5",
+                                                                                                                                            icon: "mdi-help",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.checksum": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    !item.Checksum && !item.WpJuggler && item.Wporg && item.ChecksumVersion == item.Version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "error",
+                                                                                                                                            icon: "mdi-alert-outline",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "mr-1"
+                                                                                                                                        }),
+                                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                                            class: "ml-3 text-none text-caption",
+                                                                                                                                            onClick: ($event)=>$setup.openChecksum(item),
+                                                                                                                                            variant: "outlined"
+                                                                                                                                        }, {
+                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                    (0, _vue.createTextVNode)("Details ")
+                                                                                                                                                ]),
+                                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                                        }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                            "onClick"
+                                                                                                                                        ])
+                                                                                                                                    ])) : !item.Wporg || item.WpJuggler || item.ChecksumVersion != item.Version ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "blue-lighten-5",
+                                                                                                                                            icon: "mdi-help",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ]))
+                                                                                                                                ]),
+                                                                                                                            "item.source": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Tgmpa ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "grey-lighten-1",
+                                                                                                                                            icon: "mdi-package-variant-closed",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "grey-lighten-1",
+                                                                                                                                            icon: "mdi-lan",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "grey-lighten-1",
+                                                                                                                                            icon: "mdi-wordpress",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "mr-1"
+                                                                                                                                        })
+                                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "blue-lighten-5",
+                                                                                                                                            icon: "mdi-help",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ]))
+                                                                                                                                ]),
+                                                                                                                            "item.actions": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 0,
+                                                                                                                                        loading: item.Slug == $setup.deactivateActive,
+                                                                                                                                        onClick: ($event)=>$setup.deactivatePlugin(item.Slug),
+                                                                                                                                        class: "ml-3 text-none text-caption",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Deactivate ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 1,
+                                                                                                                                        loading: item.Slug == $setup.activateActive,
+                                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
+                                                                                                                                        class: "ml-3 text-none text-caption",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Activate ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 2,
+                                                                                                                                        loading: item.Slug == $setup.activateActive,
+                                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
+                                                                                                                                        class: "ml-3 text-none text-caption",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Activate ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 3,
+                                                                                                                                        loading: item.Slug == $setup.activateNetworkActive,
+                                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
+                                                                                                                                        class: "ml-3 text-none text-caption",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 4,
+                                                                                                                                        loading: item.Slug == $setup.activateNetworkActive,
+                                                                                                                                        onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
+                                                                                                                                        class: "ml-3 text-none text-caption",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Network Activate ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 5,
+                                                                                                                                        loading: item.Slug == $setup.updateActive,
+                                                                                                                                        onClick: ($event)=>$setup.updatePlugin(item.Slug),
+                                                                                                                                        color: "#2196f3",
+                                                                                                                                        class: "text-none text-caption ml-3",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Update ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }, 8 /* PROPS */ , [
+                                                                                                                            "search",
+                                                                                                                            "items",
+                                                                                                                            "modelValue"
+                                                                                                                        ])
+                                                                                                                    ]),
+                                                                                                                _: 1 /* STABLE */ 
+                                                                                                            })
+                                                                                                        ]),
+                                                                                                    _: 1 /* STABLE */ 
+                                                                                                })
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }),
+                                                                                    (0, _vue.createVNode)(_component_v_tabs_window_item, {
+                                                                                        value: "themes",
+                                                                                        transition: "false",
+                                                                                        "reverse-transition": "false"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createVNode)(_component_v_divider),
+                                                                                                (0, _vue.createVNode)(_component_v_sheet, null, {
+                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                                                                align: "center",
+                                                                                                                justify: "center",
+                                                                                                                alignContent: "center",
+                                                                                                                class: "px-4"
+                                                                                                            }, {
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_select, {
+                                                                                                                            modelValue: $setup.selectedActionThemes,
+                                                                                                                            "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.selectedActionThemes = $event),
+                                                                                                                            items: $setup.bulkActionsThemes,
+                                                                                                                            "item-title": "text",
+                                                                                                                            "item-value": "value",
+                                                                                                                            "return-object": "",
+                                                                                                                            "single-line": "",
+                                                                                                                            density: "compact",
+                                                                                                                            label: "Bulk Actions",
+                                                                                                                            "max-width": "300",
+                                                                                                                            variant: "outlined",
+                                                                                                                            class: "mt-6"
+                                                                                                                        }, null, 8 /* PROPS */ , [
+                                                                                                                            "modelValue"
+                                                                                                                        ]),
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                            class: "ml-3 text-none text-caption",
+                                                                                                                            onClick: _cache[9] || (_cache[9] = ($event)=>$setup.doBulkActionThemes()),
+                                                                                                                            variant: "outlined"
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)("Apply ")
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createVNode)(_component_v_spacer),
+                                                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                                                            class: "ml-3 text-none text-caption mr-3",
+                                                                                                                            onClick: _cache[10] || (_cache[10] = ($event)=>$setup.gotoUrl($setup.data.wp_juggler_login_themes_url)),
+                                                                                                                            variant: "outlined"
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    (0, _vue.createTextVNode)("wp-admin ")
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                                                                                                            modelValue: $setup.search,
+                                                                                                                            "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event)=>$setup.search = $event),
+                                                                                                                            density: "compact",
+                                                                                                                            label: "Search",
+                                                                                                                            "prepend-inner-icon": "mdi-magnify",
+                                                                                                                            variant: "outlined",
+                                                                                                                            flat: "",
+                                                                                                                            "hide-details": "",
+                                                                                                                            "single-line": "",
+                                                                                                                            "max-width": "800"
+                                                                                                                        }, null, 8 /* PROPS */ , [
+                                                                                                                            "modelValue"
+                                                                                                                        ])
+                                                                                                                    ]),
+                                                                                                                _: 1 /* STABLE */ 
+                                                                                                            }),
+                                                                                                            (0, _vue.createVNode)(_component_v_row, null, {
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createVNode)(_component_v_data_table, {
+                                                                                                                            search: $setup.search,
+                                                                                                                            "onUpdate:search": _cache[12] || (_cache[12] = ($event)=>$setup.search = $event),
+                                                                                                                            items: $setup.themes_data,
+                                                                                                                            headers: $setup.theme_headers,
+                                                                                                                            "item-value": "Slug",
+                                                                                                                            "show-select": "",
+                                                                                                                            "items-per-page": "50",
+                                                                                                                            class: "pb-4",
+                                                                                                                            modelValue: $setup.selectedThemes,
+                                                                                                                            "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event)=>$setup.selectedThemes = $event)
+                                                                                                                        }, {
+                                                                                                                            "item.active": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Active && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                                                                                    item.Active && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-network-outline",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.child": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.IsChildTheme ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        })
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.update": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
+                                                                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                                                                            color: "success",
+                                                                                                                                            icon: "mdi-check-bold",
+                                                                                                                                            size: "large",
+                                                                                                                                            class: "rm-4"
+                                                                                                                                        }),
+                                                                                                                                        (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)(item.UpdateVersion), 1 /* TEXT */ )
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            "item.actions": (0, _vue.withCtx)(({ item })=>[
+                                                                                                                                    item.Update ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                        key: 0,
+                                                                                                                                        loading: item.Slug == $setup.updateThemeActive,
+                                                                                                                                        onClick: ($event)=>$setup.updateTheme(item.Slug),
+                                                                                                                                        color: "#2196f3",
+                                                                                                                                        class: "text-none text-caption ml-3",
+                                                                                                                                        variant: "outlined"
+                                                                                                                                    }, {
+                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                (0, _vue.createTextVNode)("Update ")
+                                                                                                                                            ]),
+                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                    }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                                                                        "loading",
+                                                                                                                                        "onClick"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
+                                                                                                                            _: 1 /* STABLE */ 
+                                                                                                                        }, 8 /* PROPS */ , [
+                                                                                                                            "search",
+                                                                                                                            "items",
+                                                                                                                            "modelValue"
+                                                                                                                        ])
+                                                                                                                    ]),
+                                                                                                                _: 1 /* STABLE */ 
+                                                                                                            })
+                                                                                                        ]),
+                                                                                                    _: 1 /* STABLE */ 
+                                                                                                })
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }, 8 /* PROPS */ , [
+                                                                            "modelValue"
+                                                                        ])
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
                                                             })
                                                         ]),
-                                                    _: 2 /* DYNAMIC */ 
-                                                }, 1024 /* DYNAMIC_SLOTS */ );
-                                            }), 256 /* UNKEYED_FRAGMENT */ ))
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })
-                            ]),
-                        _: 1 /* STABLE */ 
-                    })
-                ]),
-            _: 1 /* STABLE */ 
-        }, 8 /* PROPS */ , [
-            "modelValue"
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                        key: 1
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                    type: "table",
+                                                    class: "mt-15"
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }))
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }),
+                        (0, _vue.createVNode)(_component_v_snackbar, {
+                            modelValue: $setup.ajaxError,
+                            "onUpdate:modelValue": _cache[16] || (_cache[16] = ($event)=>$setup.ajaxError = $event),
+                            color: "red-lighten-2"
+                        }, {
+                            actions: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_btn, {
+                                        color: "red-lighten-4",
+                                        variant: "text",
+                                        onClick: _cache[15] || (_cache[15] = ($event)=>$setup.ajaxError = false)
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createTextVNode)(" Close ")
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }, 8 /* PROPS */ , [
+                            "modelValue"
+                        ])
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ]),
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.dialogInner,
+                "onUpdate:modelValue": _cache[19] || (_cache[19] = ($event)=>$setup.dialogInner = $event),
+                "min-width": "600"
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[18] || (_cache[18] = ($event)=>$setup.dialogInner = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("List of vulnerabilities - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Name) + " - " + (0, _vue.toDisplayString)($setup.vulnerabilitiesItem.Version), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
+                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_20, [
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
+                                                                ]),
+                                                                "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_21, [
+                                                                    (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
+                                                                    (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
+                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                _hoisted_22,
+                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
+                                                                    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_23, [
+                                                                        (0, _vue.createElementVNode)("div", _hoisted_24, [
+                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
+                                                                            (0, _vue.createElementVNode)("a", {
+                                                                                href: src.link,
+                                                                                target: "_blank"
+                                                                            }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_25)
+                                                                        ]),
+                                                                        (0, _vue.createElementVNode)("div", _hoisted_26, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                    ]);
+                                                                }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                                (0, _vue.createVNode)(_component_v_divider, {
+                                                                    class: "mt-4 mb-4"
+                                                                })
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        })
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ]),
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.dialogChecksum,
+                "onUpdate:modelValue": _cache[21] || (_cache[21] = ($event)=>$setup.dialogChecksum = $event),
+                "min-width": "600"
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[20] || (_cache[20] = ($event)=>$setup.dialogChecksum = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("List of Checksum Errors - " + (0, _vue.toDisplayString)($setup.checksumItem.Name) + " - " + (0, _vue.toDisplayString)($setup.checksumItem.Version), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                $setup.checksumItem.ChecksumDetails.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 0
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_row, {
+                                                                class: "wpjs-debug-table-row pl-5"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    _hoisted_27
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }),
+                                                                        (0, _vue.createVNode)(_component_v_col, {
+                                                                            class: "text-left"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    _hoisted_28
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }),
+                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.checksumItem.ChecksumDetails, (item)=>{
+                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                    class: "wpjs-debug-table-row pl-5"
+                                                                }, {
+                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                class: "text-left"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createElementVNode)("div", _hoisted_29, (0, _vue.toDisplayString)(item.file), 1 /* TEXT */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                class: "text-left"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createElementVNode)("div", _hoisted_30, (0, _vue.toDisplayString)(item.message), 1 /* TEXT */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                        ]),
+                                                                    _: 2 /* DYNAMIC */ 
+                                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        })
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ]),
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.dialogBulkAction,
+                "onUpdate:modelValue": _cache[24] || (_cache[24] = ($event)=>$setup.dialogBulkAction = $event),
+                width: "800",
+                persistent: $setup.persistDialog
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                !($setup.bulkActionInProgress && !$setup.bulkActionFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    key: 0,
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[22] || (_cache[22] = ($event)=>$setup.dialogBulkAction = false)
+                                                })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                    key: 1
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("Bulk Action")
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.dialogBulkType == "plugins" ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                    key: 2
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionPlugins.text), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.dialogBulkType == "themes" ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                    key: 3
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionThemes.text), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 0
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : !$setup.bulkActionInProgress ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 1,
+                                                    class: "mb-4"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createElementVNode)("div", _hoisted_31, (0, _vue.toDisplayString)($setup.bulkActionText), 1 /* TEXT */ ),
+                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.actionArrayFiltered, (item)=>{
+                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                    class: "wpjs-debug-table-row pl-5"
+                                                                }, {
+                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                class: "text-left"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createElementVNode)("div", _hoisted_32, (0, _vue.toDisplayString)(item.Name), 1 /* TEXT */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                        ]),
+                                                                    _: 2 /* DYNAMIC */ 
+                                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                                            }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                            $setup.actionArrayFiltered.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                class: "ml-3 mt-10 text-none text-caption",
+                                                                onClick: _cache[23] || (_cache[23] = ($event)=>$setup.InitiateAction()),
+                                                                variant: "outlined"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createTextVNode)("Confirm ")
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.bulkActionInProgress && !$setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 2,
+                                                    class: "mb-4",
+                                                    height: "200"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            _hoisted_33,
+                                                            (0, _vue.createElementVNode)("div", _hoisted_34, [
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.Name), 1 /* TEXT */ )
+                                                            ]),
+                                                            (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                                color: "light-blue",
+                                                                height: "30",
+                                                                "model-value": $setup.progressIndicator,
+                                                                striped: ""
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.bulkActionsNumber - $setup.actionArrayFiltered.length) + "/" + (0, _vue.toDisplayString)($setup.bulkActionsNumber), 1 /* TEXT */ )
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }, 8 /* PROPS */ , [
+                                                                "model-value"
+                                                            ])
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.bulkActionInProgress && $setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 3,
+                                                    class: "mb-4",
+                                                    height: "200"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            _hoisted_35
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        })
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue",
+                "persistent"
+            ])
         ]),
         (0, _vue.createVNode)(_component_v_dialog, {
-            modelValue: $setup.dialogChecksum,
-            "onUpdate:modelValue": _cache[21] || (_cache[21] = ($event)=>$setup.dialogChecksum = $event),
-            "min-width": "600"
+            modelValue: $setup.dialogRefreshTabs,
+            "onUpdate:modelValue": _cache[26] || (_cache[26] = ($event)=>$setup.dialogRefreshTabs = $event),
+            width: "800",
+            persistent: true
         }, {
             default: (0, _vue.withCtx)(()=>[
                     (0, _vue.createVNode)(_component_v_card, null, {
                         default: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createVNode)(_component_v_toolbar, null, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_btn, {
+                                            !($setup.refreshTabsInProgress && !$setup.refreshTabsFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
                                                 icon: "mdi-close",
-                                                onClick: _cache[20] || (_cache[20] = ($event)=>$setup.dialogChecksum = false)
-                                            }),
+                                                onClick: _cache[25] || (_cache[25] = ($event)=>$setup.dialogRefreshTabs = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
                                             (0, _vue.createVNode)(_component_v_toolbar_title, null, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)("List of Checksum Errors - " + (0, _vue.toDisplayString)($setup.checksumItem.Name) + " - " + (0, _vue.toDisplayString)($setup.checksumItem.Version), 1 /* TEXT */ )
+                                                        (0, _vue.createTextVNode)("Plugins and Themes Data")
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             })
@@ -17164,176 +17614,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }),
                                 (0, _vue.createVNode)(_component_v_card_text, null, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            $setup.checksumItem.ChecksumDetails.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                key: 0
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createVNode)(_component_v_row, {
-                                                            class: "wpjs-debug-table-row pl-5"
-                                                        }, {
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                        class: "text-left"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                _hoisted_27
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    }),
-                                                                    (0, _vue.createVNode)(_component_v_col, {
-                                                                        class: "text-left"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                _hoisted_28
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
-                                                                ]),
-                                                            _: 1 /* STABLE */ 
-                                                        }),
-                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.checksumItem.ChecksumDetails, (item)=>{
-                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
-                                                                class: "wpjs-debug-table-row pl-5"
-                                                            }, {
-                                                                default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createVNode)(_component_v_col, {
-                                                                            class: "text-left"
-                                                                        }, {
-                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                    (0, _vue.createElementVNode)("div", _hoisted_29, (0, _vue.toDisplayString)(item.file), 1 /* TEXT */ )
-                                                                                ]),
-                                                                            _: 2 /* DYNAMIC */ 
-                                                                        }, 1024 /* DYNAMIC_SLOTS */ ),
-                                                                        (0, _vue.createVNode)(_component_v_col, {
-                                                                            class: "text-left"
-                                                                        }, {
-                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                    (0, _vue.createElementVNode)("div", _hoisted_30, (0, _vue.toDisplayString)(item.message), 1 /* TEXT */ )
-                                                                                ]),
-                                                                            _: 2 /* DYNAMIC */ 
-                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                    ]),
-                                                                _: 2 /* DYNAMIC */ 
-                                                            }, 1024 /* DYNAMIC_SLOTS */ );
-                                                        }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : (0, _vue.createCommentVNode)("v-if", true)
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })
-                            ]),
-                        _: 1 /* STABLE */ 
-                    })
-                ]),
-            _: 1 /* STABLE */ 
-        }, 8 /* PROPS */ , [
-            "modelValue"
-        ]),
-        (0, _vue.createVNode)(_component_v_dialog, {
-            modelValue: $setup.dialogBulkAction,
-            "onUpdate:modelValue": _cache[24] || (_cache[24] = ($event)=>$setup.dialogBulkAction = $event),
-            width: "800",
-            persistent: $setup.persistDialog
-        }, {
-            default: (0, _vue.withCtx)(()=>[
-                    (0, _vue.createVNode)(_component_v_card, null, {
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_toolbar, null, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            !($setup.bulkActionInProgress && !$setup.bulkActionFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                            $setup.refreshTabsInProgress && !$setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
                                                 key: 0,
-                                                icon: "mdi-close",
-                                                onClick: _cache[22] || (_cache[22] = ($event)=>$setup.dialogBulkAction = false)
-                                            })) : (0, _vue.createCommentVNode)("v-if", true),
-                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
-                                                key: 1
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)("Bulk Action")
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : $setup.dialogBulkType == "plugins" ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
-                                                key: 2
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionPlugins.text), 1 /* TEXT */ )
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : $setup.dialogBulkType == "themes" ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
-                                                key: 3
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.selectedActionThemes.text), 1 /* TEXT */ )
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : (0, _vue.createCommentVNode)("v-if", true)
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                }),
-                                (0, _vue.createVNode)(_component_v_card_text, null, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                key: 0
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : !$setup.bulkActionInProgress ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                key: 1,
-                                                class: "mb-4"
-                                            }, {
-                                                default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createElementVNode)("div", _hoisted_31, (0, _vue.toDisplayString)($setup.bulkActionText), 1 /* TEXT */ ),
-                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.actionArrayFiltered, (item)=>{
-                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
-                                                                class: "wpjs-debug-table-row pl-5"
-                                                            }, {
-                                                                default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createVNode)(_component_v_col, {
-                                                                            class: "text-left"
-                                                                        }, {
-                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                    (0, _vue.createElementVNode)("div", _hoisted_32, (0, _vue.toDisplayString)(item.Name), 1 /* TEXT */ )
-                                                                                ]),
-                                                                            _: 2 /* DYNAMIC */ 
-                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                    ]),
-                                                                _: 2 /* DYNAMIC */ 
-                                                            }, 1024 /* DYNAMIC_SLOTS */ );
-                                                        }), 256 /* UNKEYED_FRAGMENT */ )),
-                                                        $setup.actionArrayFiltered.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
-                                                            key: 0,
-                                                            class: "ml-3 mt-10 text-none text-caption",
-                                                            onClick: _cache[23] || (_cache[23] = ($event)=>$setup.InitiateAction()),
-                                                            variant: "outlined"
-                                                        }, {
-                                                            default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createTextVNode)("Confirm ")
-                                                                ]),
-                                                            _: 1 /* STABLE */ 
-                                                        })) : (0, _vue.createCommentVNode)("v-if", true)
-                                                    ]),
-                                                _: 1 /* STABLE */ 
-                                            })) : $setup.bulkActionInProgress && !$setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                key: 2,
                                                 class: "mb-4",
                                                 height: "200"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        _hoisted_33,
-                                                        (0, _vue.createElementVNode)("div", _hoisted_34, [
-                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.Name), 1 /* TEXT */ )
+                                                        _hoisted_36,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_37, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentRefreshAction), 1 /* TEXT */ )
                                                         ]),
                                                         (0, _vue.createVNode)(_component_v_progress_linear, {
                                                             color: "light-blue",
                                                             height: "30",
-                                                            "model-value": $setup.progressIndicator,
+                                                            "model-value": $setup.refreshProgressIndicator,
                                                             striped: ""
                                                         }, {
                                                             default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.bulkActionsNumber - $setup.actionArrayFiltered.length) + "/" + (0, _vue.toDisplayString)($setup.bulkActionsNumber), 1 /* TEXT */ )
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentProgressIndex + 1) + "/" + (0, _vue.toDisplayString)($setup.refreshArr.length), 1 /* TEXT */ )
                                                                 ]),
                                                             _: 1 /* STABLE */ 
                                                         }, 8 /* PROPS */ , [
@@ -17341,13 +17639,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         ])
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })) : $setup.bulkActionInProgress && $setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                key: 3,
+                                            })) : $setup.refreshTabsInProgress && $setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
                                                 class: "mb-4",
                                                 height: "200"
                                             }, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        _hoisted_35
+                                                        _hoisted_38
                                                     ]),
                                                 _: 1 /* STABLE */ 
                                             })) : (0, _vue.createCommentVNode)("v-if", true)
@@ -17360,10 +17658,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
-            "modelValue",
-            "persistent"
+            "modelValue"
         ])
-    ]);
+    ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("f6f7e2-hmr", render);
@@ -17415,9 +17712,33 @@ exports.default = {
         const search = (0, _vue.ref)("");
         const dialogInner = (0, _vue.ref)(false);
         const vulnerabilitiesItem = (0, _vue.ref)(null);
-        const refreshActive = (0, _vue.ref)(false);
+        const refreshAllActive = (0, _vue.ref)(false);
+        const refreshHealthActive = (0, _vue.ref)(false);
+        const refreshDebugActive = (0, _vue.ref)(false);
+        const refreshCoreChecksumActive = (0, _vue.ref)(false);
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
+        // Refresh Dialog Params
+        const dialogRefreshTabs = (0, _vue.ref)(false);
+        const refreshTabsInProgress = (0, _vue.ref)(false);
+        const refreshTabsFinished = (0, _vue.ref)(false);
+        const refreshProgressIndicator = (0, _vue.ref)(0);
+        const currentProgressIndex = (0, _vue.ref)(0);
+        const currentRefreshAction = (0, _vue.ref)("");
+        const refreshArr = [
+            {
+                text: "Refreshing Health Status",
+                ajaxParam: "wpjs-refresh-health"
+            },
+            {
+                text: "Refreshing Health Info",
+                ajaxParam: "wpjs-refresh-debug"
+            },
+            {
+                text: "Refreshing Core Checksum Info",
+                ajaxParam: "wpjs-refresh-core-checksum"
+            }
+        ];
         const tab = (0, _vue.ref)(0);
         const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
@@ -17474,8 +17795,43 @@ exports.default = {
             const newWindow = window.open(url, "_blank", "noopener,noreferrer");
             if (newWindow) newWindow.opener = null;
         };
+        async function refreshAll() {
+            currentProgressIndex.value = 0;
+            refreshTabsFinished.value = false;
+            dialogRefreshTabs.value = true;
+            refreshTabsInProgress.value = true;
+            for (const elem of refreshArr){
+                currentRefreshAction.value = elem.text;
+                console.log();
+                refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100);
+                try {
+                    const response = await doAjax({
+                        action: elem.ajaxParam,
+                        siteId: store.activatedSite.id
+                    });
+                    if (!response.success) throw new Error(`${response.data.code} - ${response.data.message}`);
+                    currentProgressIndex.value++;
+                } catch (error) {
+                    ajaxError.value = true;
+                    ajaxErrorText.value = error.message;
+                }
+            }
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-health-panel",
+                    store.activatedSite.id
+                ]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-control-panel"
+                ]
+            });
+            refreshTabsFinished.value = true;
+            dialogRefreshTabs.value = false;
+        }
         async function refreshHealth() {
-            refreshActive.value = true;
+            refreshHealthActive.value = true;
             let ret = {};
             try {
                 const response = await doAjax({
@@ -17495,12 +17851,70 @@ exports.default = {
                             "wpjs-control-panel"
                         ]
                     });
-                    refreshActive.value = false;
+                    refreshHealthActive.value = false;
                 } else throw new Error(`${response.data.code} - ${response.data.message}`);
             } catch (error) {
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
-                refreshActive.value = false;
+                refreshHealthActive.value = false;
+            }
+        }
+        async function refreshDebug() {
+            refreshDebugActive.value = true;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-debug",
+                    siteId: store.activatedSite.id
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-health-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshDebugActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshDebugActive.value = false;
+            }
+        }
+        async function refreshCoreChecksum() {
+            refreshCoreChecksumActive.value = true;
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-refresh-core-checksum",
+                    siteId: store.activatedSite.id
+                });
+                if (response.success) {
+                    ret = response.data;
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-health-panel",
+                            store.activatedSite.id
+                        ]
+                    });
+                    queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    refreshCoreChecksumActive.value = false;
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                refreshCoreChecksumActive.value = false;
             }
         }
         const __returned__ = {
@@ -17509,9 +17923,19 @@ exports.default = {
             search,
             dialogInner,
             vulnerabilitiesItem,
-            refreshActive,
+            refreshAllActive,
+            refreshHealthActive,
+            refreshDebugActive,
+            refreshCoreChecksumActive,
             ajaxError,
             ajaxErrorText,
+            dialogRefreshTabs,
+            refreshTabsInProgress,
+            refreshTabsFinished,
+            refreshProgressIndicator,
+            currentProgressIndex,
+            currentRefreshAction,
+            refreshArr,
             tab,
             queryClient,
             isLoading,
@@ -17528,7 +17952,10 @@ exports.default = {
             openIcon,
             debugFields,
             gotoUrl,
+            refreshAll,
             refreshHealth,
+            refreshDebug,
+            refreshCoreChecksum,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
             },
@@ -17562,10 +17989,12 @@ const _hoisted_1 = {
     class: "text-center pa-4"
 };
 const _hoisted_2 = {
-    key: 0
+    key: 0,
+    class: "wpjs-timestamp"
 };
 const _hoisted_3 = {
-    key: 1
+    key: 1,
+    class: "wpjs-timestamp"
 };
 const _hoisted_4 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
@@ -17646,6 +18075,15 @@ const _hoisted_26 = {
 const _hoisted_27 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6"
 }, "No Recorded Core Files Report", -1 /* HOISTED */ );
+const _hoisted_28 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Refresh in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_29 = {
+    class: "my-8"
+};
+const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Refresh finished", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -17671,6 +18109,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
     return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
         (0, _vue.createVNode)(_component_v_dialog, {
             modelValue: $setup.store.activatedHealth,
@@ -17715,15 +18154,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                 icon: "mdi-refresh",
                                                                 size: "18"
                                                             }),
-                                                            (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_health_data_timestamp) + " ", 1 /* TEXT */ ),
+                                                            (0, _vue.createTextVNode)(" Health Status Data: "),
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_health_data_timestamp), 1 /* TEXT */ ),
+                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                class: "me-1 pb-1 ml-2",
+                                                                icon: "mdi-circle-medium",
+                                                                size: "18"
+                                                            }),
+                                                            (0, _vue.createTextVNode)(" Health Info Data: "),
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_debug_data_timestamp), 1 /* TEXT */ ),
+                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                class: "me-1 pb-1 ml-2",
+                                                                icon: "mdi-circle-medium",
+                                                                size: "18"
+                                                            }),
+                                                            (0, _vue.createTextVNode)(" Core Checksum Data: "),
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_core_checksum_data_timestamp), 1 /* TEXT */ ),
                                                             (0, _vue.createVNode)(_component_v_btn, {
                                                                 class: "ml-3 text-none text-caption",
-                                                                loading: $setup.refreshActive,
-                                                                onClick: $setup.refreshHealth,
+                                                                loading: $setup.refreshAllActive,
+                                                                onClick: $setup.refreshAll,
                                                                 variant: "outlined"
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createTextVNode)("Refresh ")
+                                                                        (0, _vue.createTextVNode)("Refresh Data ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
                                                             }, 8 /* PROPS */ , [
@@ -17738,12 +18192,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             (0, _vue.createTextVNode)(" Never "),
                                                             (0, _vue.createVNode)(_component_v_btn, {
                                                                 class: "ml-3 text-none text-caption",
-                                                                loading: $setup.refreshActive,
-                                                                onClick: $setup.refreshHealth,
+                                                                loading: $setup.refreshAllActive,
+                                                                onClick: $setup.refreshAll,
                                                                 variant: "outlined"
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
-                                                                        (0, _vue.createTextVNode)("Refresh ")
+                                                                        (0, _vue.createTextVNode)("Refresh Data ")
                                                                     ]),
                                                                 _: 1 /* STABLE */ 
                                                             }, 8 /* PROPS */ , [
@@ -18289,6 +18743,79 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     }, 8 /* PROPS */ , [
                         "modelValue"
                     ])
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogRefreshTabs,
+            "onUpdate:modelValue": _cache[9] || (_cache[9] = ($event)=>$setup.dialogRefreshTabs = $event),
+            width: "800",
+            persistent: true
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            !($setup.refreshTabsInProgress && !$setup.refreshTabsFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
+                                                icon: "mdi-close",
+                                                onClick: _cache[8] || (_cache[8] = ($event)=>$setup.dialogRefreshTabs = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("Site Health Data")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.refreshTabsInProgress && !$setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_28,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_29, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentRefreshAction), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.refreshProgressIndicator,
+                                                            striped: ""
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentProgressIndex + 1) + "/" + (0, _vue.toDisplayString)($setup.refreshArr.length), 1 /* TEXT */ )
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.refreshTabsInProgress && $setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_30
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
@@ -19059,6 +19586,19 @@ exports.default = {
         const ajaxError = (0, _vue.ref)(false);
         const ajaxErrorText = (0, _vue.ref)("");
         let infiniteScrollEvents;
+        // Refresh Dialog Params
+        const dialogRefreshTabs = (0, _vue.ref)(false);
+        const refreshTabsInProgress = (0, _vue.ref)(false);
+        const refreshTabsFinished = (0, _vue.ref)(false);
+        const refreshProgressIndicator = (0, _vue.ref)(0);
+        const currentProgressIndex = (0, _vue.ref)(0);
+        const currentRefreshAction = (0, _vue.ref)("");
+        const refreshArr = [
+            {
+                text: "Refreshing Notices",
+                ajaxParam: "wpjs-refresh-notices"
+            }
+        ];
         const queryClient = (0, _vueQuery.useQueryClient)();
         const { isLoading, isError, isFetching, data, error, refetch } = (0, _vueQuery.useQuery)({
             queryKey: [
@@ -19111,6 +19651,46 @@ exports.default = {
                 noticePage.value = noticeHistoryItems.value[noticeHistoryItems.value.length - 1].ID;
                 done("ok");
             }
+        }
+        async function refreshAll() {
+            currentProgressIndex.value = 0;
+            refreshTabsFinished.value = false;
+            dialogRefreshTabs.value = true;
+            refreshTabsInProgress.value = true;
+            for (const elem of refreshArr){
+                currentRefreshAction.value = elem.text;
+                console.log();
+                refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100);
+                try {
+                    const response = await doAjax({
+                        action: elem.ajaxParam,
+                        siteId: store.activatedSite.id
+                    });
+                    if (!response.success) throw new Error(`${response.data.code} - ${response.data.message}`);
+                    currentProgressIndex.value++;
+                } catch (error) {
+                    ajaxError.value = true;
+                    ajaxErrorText.value = error.message;
+                }
+            }
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-notices-panel",
+                    store.activatedSite.id
+                ]
+            });
+            queryClient.invalidateQueries({
+                queryKey: [
+                    "wpjs-control-panel"
+                ]
+            });
+            refreshNeeded.value = false;
+            noticeHistoryItems.value = [];
+            noticePage.value = 0;
+            refreshTabsFinished.value = true;
+            dialogRefreshTabs.value = false;
+            refreshNeeded.value = true;
+            if (infiniteScrollEvents) infiniteScrollEvents("ok");
         }
         async function refreshNotices() {
             refreshActive.value = true;
@@ -19196,6 +19776,13 @@ exports.default = {
             set infiniteScrollEvents (v){
                 infiniteScrollEvents = v;
             },
+            dialogRefreshTabs,
+            refreshTabsInProgress,
+            refreshTabsFinished,
+            refreshProgressIndicator,
+            currentProgressIndex,
+            currentRefreshAction,
+            refreshArr,
             queryClient,
             isLoading,
             isError,
@@ -19207,6 +19794,7 @@ exports.default = {
             getNoticeHistory,
             doAjax,
             loadNoticeHistory,
+            refreshAll,
             refreshNotices,
             organizeByMonth,
             get useWpjsStore () {
@@ -19242,7 +19830,8 @@ const _hoisted_1 = {
     class: "text-center pa-4"
 };
 const _hoisted_2 = {
-    key: 0
+    key: 0,
+    class: "wpjs-timestamp"
 };
 const _hoisted_3 = {
     key: 1
@@ -19270,6 +19859,15 @@ const _hoisted_9 = {
 const _hoisted_10 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
     class: "text-h6 mt-15"
 }, "No Recorded Notices History", -1 /* HOISTED */ );
+const _hoisted_11 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Refresh in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_12 = {
+    class: "my-8"
+};
+const _hoisted_13 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Refresh finished", -1 /* HOISTED */ );
 function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
     const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
@@ -19291,297 +19889,374 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_skeleton_loader = (0, _vue.resolveComponent)("v-skeleton-loader");
     const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
     const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
-    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_1, [
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createElementVNode)("div", _hoisted_1, [
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.store.activatedNotices,
+                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.store.activatedNotices = $event),
+                transition: "dialog-bottom-transition",
+                fullscreen: ""
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedNotices = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_spacer),
+                                                (0, _vue.createVNode)(_component_v_toolbar_items)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                        key: 0
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_card, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                            class: "pa-4 text-right mx-auto",
+                                                                            elevation: "0",
+                                                                            width: "100%",
+                                                                            rounded: "lg"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    $setup.data.wp_juggler_notices_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                            class: "me-1 pb-1",
+                                                                                            icon: "mdi-refresh",
+                                                                                            size: "18"
+                                                                                        }),
+                                                                                        (0, _vue.createTextVNode)(" Notices Data: "),
+                                                                                        (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.data.wp_juggler_notices_timestamp), 1 /* TEXT */ ),
+                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                            class: "ml-3 text-none text-caption",
+                                                                                            loading: $setup.refreshActive,
+                                                                                            onClick: _cache[1] || (_cache[1] = ($event)=>$setup.refreshAll()),
+                                                                                            variant: "outlined"
+                                                                                        }, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createTextVNode)("Refresh Data ")
+                                                                                                ]),
+                                                                                            _: 1 /* STABLE */ 
+                                                                                        }, 8 /* PROPS */ , [
+                                                                                            "loading"
+                                                                                        ])
+                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
+                                                                                        (0, _vue.createVNode)(_component_v_icon, {
+                                                                                            class: "me-1 pb-1",
+                                                                                            icon: "mdi-refresh",
+                                                                                            size: "18"
+                                                                                        }),
+                                                                                        (0, _vue.createTextVNode)(" Never "),
+                                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                                            class: "ml-3 text-none text-caption",
+                                                                                            loading: $setup.refreshActive,
+                                                                                            onClick: _cache[2] || (_cache[2] = ($event)=>$setup.refreshAll()),
+                                                                                            variant: "outlined"
+                                                                                        }, {
+                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                    (0, _vue.createTextVNode)("Refresh Data ")
+                                                                                                ]),
+                                                                                            _: 1 /* STABLE */ 
+                                                                                        }, 8 /* PROPS */ , [
+                                                                                            "loading"
+                                                                                        ])
+                                                                                    ]))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }),
+                                                                        (0, _vue.createVNode)(_component_v_sheet, {
+                                                                            "max-width": "1200",
+                                                                            class: "align-left justify-left text-left mx-auto px-4 pb-4 mb-10"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    _hoisted_4,
+                                                                                    (0, _vue.createVNode)(_component_v_divider, {
+                                                                                        class: "mb-10"
+                                                                                    }),
+                                                                                    $setup.data.wp_juggler_notices.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                        key: 0
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data.wp_juggler_notices, (notice)=>{
+                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                        class: "wpjs-debug-table-row"
+                                                                                                    }, {
+                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                    class: "text-left",
+                                                                                                                    innerHTML: notice.NoticeHTML
+                                                                                                                }, null, 8 /* PROPS */ , [
+                                                                                                                    "innerHTML"
+                                                                                                                ])
+                                                                                                            ]),
+                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                        key: 1
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                (0, _vue.createVNode)(_component_v_row, {
+                                                                                                    class: "wpjs-debug-table-row"
+                                                                                                }, {
+                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                class: "text-left"
+                                                                                                            }, {
+                                                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                                                        (0, _vue.createTextVNode)(" No active notices ")
+                                                                                                                    ]),
+                                                                                                                _: 1 /* STABLE */ 
+                                                                                                            })
+                                                                                                        ]),
+                                                                                                    _: 1 /* STABLE */ 
+                                                                                                })
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })),
+                                                                                    $setup.data.wp_juggler_history_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                        key: 2,
+                                                                                        class: "align-left justify-left text-left px-5 mb-15"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                _hoisted_5,
+                                                                                                $setup.refreshNeeded ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_infinite_scroll, {
+                                                                                                    key: 0,
+                                                                                                    height: 600,
+                                                                                                    items: $setup.organizeByMonth,
+                                                                                                    onLoad: $setup.loadNoticeHistory
+                                                                                                }, {
+                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.organizeByMonth, (item, name)=>{
+                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), {
+                                                                                                                    key: item.ID
+                                                                                                                }, [
+                                                                                                                    item.length == 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_7, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
+                                                                                                                        (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                            class: "mb-4"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createTextVNode)(" No incidents reported ")
+                                                                                                                    ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                                                                                        (0, _vue.createElementVNode)("div", _hoisted_9, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
+                                                                                                                        (0, _vue.createVNode)(_component_v_divider, {
+                                                                                                                            class: "mb-4"
+                                                                                                                        }),
+                                                                                                                        (0, _vue.createVNode)(_component_v_expansion_panels, {
+                                                                                                                            class: "mt-8",
+                                                                                                                            variant: "accordion"
+                                                                                                                        }, {
+                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                    ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item, (notice)=>{
+                                                                                                                                        return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_expansion_panel, null, {
+                                                                                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panel_title, null, {
+                                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)(notice.log_time) + " ", 1 /* TEXT */ ),
+                                                                                                                                                                (0, _vue.createVNode)(_component_v_spacer),
+                                                                                                                                                                (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(notice.notices.length) + " Notices", 1 /* TEXT */ )
+                                                                                                                                                            ]),
+                                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ ),
+                                                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panel_text, null, {
+                                                                                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                (0, _vue.createVNode)(_component_v_sheet, {
+                                                                                                                                                                    class: "mt-2"
+                                                                                                                                                                }, {
+                                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(notice.notices, (single_item)=>{
+                                                                                                                                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                                                                                                                                    class: "wpjs-debug-table-row"
+                                                                                                                                                                                }, {
+                                                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                                                                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                                                                                                                                class: "text-left px-5",
+                                                                                                                                                                                                innerHTML: single_item.NoticeHTML
+                                                                                                                                                                                            }, null, 8 /* PROPS */ , [
+                                                                                                                                                                                                "innerHTML"
+                                                                                                                                                                                            ])
+                                                                                                                                                                                        ]),
+                                                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                                                                                                        ]),
+                                                                                                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                                            ]),
+                                                                                                                                                        _: 2 /* DYNAMIC */ 
+                                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                                                ]),
+                                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ );
+                                                                                                                                    }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                                                                                ]),
+                                                                                                                            _: 2 /* DYNAMIC */ 
+                                                                                                                        }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                                                                    ]))
+                                                                                                                ], 64 /* STABLE_FRAGMENT */ );
+                                                                                                            }), 128 /* KEYED_FRAGMENT */ ))
+                                                                                                        ]),
+                                                                                                    _: 1 /* STABLE */ 
+                                                                                                }, 8 /* PROPS */ , [
+                                                                                                    "items"
+                                                                                                ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                                                        key: 3,
+                                                                                        class: "align-left justify-left text-left px-5 mb-15"
+                                                                                    }, {
+                                                                                        default: (0, _vue.withCtx)(()=>[
+                                                                                                _hoisted_10
+                                                                                            ]),
+                                                                                        _: 1 /* STABLE */ 
+                                                                                    }))
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        })
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
+                                        key: 1
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_skeleton_loader, {
+                                                    type: "heading, table-row-divider, list-item-two-line@6, table-tfoot",
+                                                    class: "mt-15 mx-auto",
+                                                    "max-width": "1200"
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }))
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }),
+                        (0, _vue.createVNode)(_component_v_snackbar, {
+                            modelValue: $setup.ajaxError,
+                            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.ajaxError = $event),
+                            color: "red-lighten-2"
+                        }, {
+                            actions: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_btn, {
+                                        color: "red-lighten-4",
+                                        variant: "text",
+                                        onClick: _cache[3] || (_cache[3] = ($event)=>$setup.ajaxError = false)
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createTextVNode)(" Close ")
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }, 8 /* PROPS */ , [
+                            "modelValue"
+                        ])
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ])
+        ]),
         (0, _vue.createVNode)(_component_v_dialog, {
-            modelValue: $setup.store.activatedNotices,
-            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.store.activatedNotices = $event),
-            transition: "dialog-bottom-transition",
-            fullscreen: ""
+            modelValue: $setup.dialogRefreshTabs,
+            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.dialogRefreshTabs = $event),
+            width: "800",
+            persistent: true
         }, {
             default: (0, _vue.withCtx)(()=>[
                     (0, _vue.createVNode)(_component_v_card, null, {
                         default: (0, _vue.withCtx)(()=>[
                                 (0, _vue.createVNode)(_component_v_toolbar, null, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_btn, {
+                                            !($setup.refreshTabsInProgress && !$setup.refreshTabsFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
                                                 icon: "mdi-close",
-                                                onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedNotices = false)
-                                            }),
+                                                onClick: _cache[6] || (_cache[6] = ($event)=>$setup.dialogRefreshTabs = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
                                             (0, _vue.createVNode)(_component_v_toolbar_title, null, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.store.activatedSite.title), 1 /* TEXT */ )
+                                                        (0, _vue.createTextVNode)("Notices and Events Data")
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            }),
-                                            (0, _vue.createVNode)(_component_v_spacer),
-                                            (0, _vue.createVNode)(_component_v_toolbar_items)
+                                            })
                                         ]),
                                     _: 1 /* STABLE */ 
                                 }),
-                                $setup.data ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
-                                    key: 0
-                                }, {
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
                                     default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_card, null, {
+                                            $setup.refreshTabsInProgress && !$setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
                                                 default: (0, _vue.withCtx)(()=>[
-                                                        (0, _vue.createVNode)(_component_v_card_text, null, {
+                                                        _hoisted_11,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_12, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentRefreshAction), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.refreshProgressIndicator,
+                                                            striped: ""
+                                                        }, {
                                                             default: (0, _vue.withCtx)(()=>[
-                                                                    (0, _vue.createVNode)(_component_v_sheet, {
-                                                                        class: "pa-4 text-right mx-auto",
-                                                                        elevation: "0",
-                                                                        width: "100%",
-                                                                        rounded: "lg"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                $setup.data.wp_juggler_notices_timestamp ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
-                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                        class: "me-1 pb-1",
-                                                                                        icon: "mdi-refresh",
-                                                                                        size: "18"
-                                                                                    }),
-                                                                                    (0, _vue.createTextVNode)(" " + (0, _vue.toDisplayString)($setup.data.wp_juggler_notices_timestamp) + " ", 1 /* TEXT */ ),
-                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                        class: "ml-3 text-none text-caption",
-                                                                                        loading: $setup.refreshActive,
-                                                                                        onClick: $setup.refreshNotices,
-                                                                                        variant: "outlined"
-                                                                                    }, {
-                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                (0, _vue.createTextVNode)("Refresh ")
-                                                                                            ]),
-                                                                                        _: 1 /* STABLE */ 
-                                                                                    }, 8 /* PROPS */ , [
-                                                                                        "loading"
-                                                                                    ])
-                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_3, [
-                                                                                    (0, _vue.createVNode)(_component_v_icon, {
-                                                                                        class: "me-1 pb-1",
-                                                                                        icon: "mdi-refresh",
-                                                                                        size: "18"
-                                                                                    }),
-                                                                                    (0, _vue.createTextVNode)(" Never "),
-                                                                                    (0, _vue.createVNode)(_component_v_btn, {
-                                                                                        class: "ml-3 text-none text-caption",
-                                                                                        loading: $setup.refreshActive,
-                                                                                        onClick: $setup.refreshNotices,
-                                                                                        variant: "outlined"
-                                                                                    }, {
-                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                (0, _vue.createTextVNode)("Refresh ")
-                                                                                            ]),
-                                                                                        _: 1 /* STABLE */ 
-                                                                                    }, 8 /* PROPS */ , [
-                                                                                        "loading"
-                                                                                    ])
-                                                                                ]))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    }),
-                                                                    (0, _vue.createVNode)(_component_v_sheet, {
-                                                                        "max-width": "1200",
-                                                                        class: "align-left justify-left text-left mx-auto px-4 pb-4 mb-10"
-                                                                    }, {
-                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                _hoisted_4,
-                                                                                (0, _vue.createVNode)(_component_v_divider, {
-                                                                                    class: "mb-10"
-                                                                                }),
-                                                                                $setup.data.wp_juggler_notices.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                                                    key: 0
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.data.wp_juggler_notices, (notice)=>{
-                                                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
-                                                                                                    class: "wpjs-debug-table-row"
-                                                                                                }, {
-                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                            (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                class: "text-left",
-                                                                                                                innerHTML: notice.NoticeHTML
-                                                                                                            }, null, 8 /* PROPS */ , [
-                                                                                                                "innerHTML"
-                                                                                                            ])
-                                                                                                        ]),
-                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                }, 1024 /* DYNAMIC_SLOTS */ );
-                                                                                            }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                                                    key: 1
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            (0, _vue.createVNode)(_component_v_row, {
-                                                                                                class: "wpjs-debug-table-row"
-                                                                                            }, {
-                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                        (0, _vue.createVNode)(_component_v_col, {
-                                                                                                            class: "text-left"
-                                                                                                        }, {
-                                                                                                            default: (0, _vue.withCtx)(()=>[
-                                                                                                                    (0, _vue.createTextVNode)(" No active notices ")
-                                                                                                                ]),
-                                                                                                            _: 1 /* STABLE */ 
-                                                                                                        })
-                                                                                                    ]),
-                                                                                                _: 1 /* STABLE */ 
-                                                                                            })
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })),
-                                                                                $setup.data.wp_juggler_history_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                                                    key: 2,
-                                                                                    class: "align-left justify-left text-left px-5 mb-15"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            _hoisted_5,
-                                                                                            $setup.refreshNeeded ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_infinite_scroll, {
-                                                                                                key: 0,
-                                                                                                height: 600,
-                                                                                                items: $setup.organizeByMonth,
-                                                                                                onLoad: $setup.loadNoticeHistory
-                                                                                            }, {
-                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.organizeByMonth, (item, name)=>{
-                                                                                                            return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), {
-                                                                                                                key: item.ID
-                                                                                                            }, [
-                                                                                                                item.length == 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_7, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
-                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
-                                                                                                                        class: "mb-4"
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createTextVNode)(" No incidents reported ")
-                                                                                                                ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
-                                                                                                                    (0, _vue.createElementVNode)("div", _hoisted_9, (0, _vue.toDisplayString)(name), 1 /* TEXT */ ),
-                                                                                                                    (0, _vue.createVNode)(_component_v_divider, {
-                                                                                                                        class: "mb-4"
-                                                                                                                    }),
-                                                                                                                    (0, _vue.createVNode)(_component_v_expansion_panels, {
-                                                                                                                        class: "mt-8",
-                                                                                                                        variant: "accordion"
-                                                                                                                    }, {
-                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item, (notice)=>{
-                                                                                                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_expansion_panel, null, {
-                                                                                                                                        default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                (0, _vue.createVNode)(_component_v_expansion_panel_title, null, {
-                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(notice.log_time) + " ", 1 /* TEXT */ ),
-                                                                                                                                                            (0, _vue.createVNode)(_component_v_spacer),
-                                                                                                                                                            (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(notice.notices.length) + " Notices", 1 /* TEXT */ )
-                                                                                                                                                        ]),
-                                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ ),
-                                                                                                                                                (0, _vue.createVNode)(_component_v_expansion_panel_text, null, {
-                                                                                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                            (0, _vue.createVNode)(_component_v_sheet, {
-                                                                                                                                                                class: "mt-2"
-                                                                                                                                                            }, {
-                                                                                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                                        ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(notice.notices, (single_item)=>{
-                                                                                                                                                                            return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
-                                                                                                                                                                                class: "wpjs-debug-table-row"
-                                                                                                                                                                            }, {
-                                                                                                                                                                                default: (0, _vue.withCtx)(()=>[
-                                                                                                                                                                                        (0, _vue.createVNode)(_component_v_col, {
-                                                                                                                                                                                            class: "text-left px-5",
-                                                                                                                                                                                            innerHTML: single_item.NoticeHTML
-                                                                                                                                                                                        }, null, 8 /* PROPS */ , [
-                                                                                                                                                                                            "innerHTML"
-                                                                                                                                                                                        ])
-                                                                                                                                                                                    ]),
-                                                                                                                                                                                _: 2 /* DYNAMIC */ 
-                                                                                                                                                                            }, 1024 /* DYNAMIC_SLOTS */ );
-                                                                                                                                                                        }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                                                                                                                                    ]),
-                                                                                                                                                                _: 2 /* DYNAMIC */ 
-                                                                                                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                                                                                                        ]),
-                                                                                                                                                    _: 2 /* DYNAMIC */ 
-                                                                                                                                                }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                                                                                            ]),
-                                                                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ );
-                                                                                                                                }), 256 /* UNKEYED_FRAGMENT */ ))
-                                                                                                                            ]),
-                                                                                                                        _: 2 /* DYNAMIC */ 
-                                                                                                                    }, 1024 /* DYNAMIC_SLOTS */ )
-                                                                                                                ]))
-                                                                                                            ], 64 /* STABLE_FRAGMENT */ );
-                                                                                                        }), 128 /* KEYED_FRAGMENT */ ))
-                                                                                                    ]),
-                                                                                                _: 1 /* STABLE */ 
-                                                                                            }, 8 /* PROPS */ , [
-                                                                                                "items"
-                                                                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
-                                                                                    key: 3,
-                                                                                    class: "align-left justify-left text-left px-5 mb-15"
-                                                                                }, {
-                                                                                    default: (0, _vue.withCtx)(()=>[
-                                                                                            _hoisted_10
-                                                                                        ]),
-                                                                                    _: 1 /* STABLE */ 
-                                                                                }))
-                                                                            ]),
-                                                                        _: 1 /* STABLE */ 
-                                                                    })
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentProgressIndex + 1) + "/" + (0, _vue.toDisplayString)($setup.refreshArr.length), 1 /* TEXT */ )
                                                                 ]),
                                                             _: 1 /* STABLE */ 
-                                                        })
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
                                                     ]),
                                                 _: 1 /* STABLE */ 
-                                            })
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_card_text, {
-                                    key: 1
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createVNode)(_component_v_skeleton_loader, {
-                                                type: "heading, table-row-divider, list-item-two-line@6, table-tfoot",
-                                                class: "mt-15 mx-auto",
-                                                "max-width": "1200"
-                                            })
-                                        ]),
-                                    _: 1 /* STABLE */ 
-                                }))
-                            ]),
-                        _: 1 /* STABLE */ 
-                    }),
-                    (0, _vue.createVNode)(_component_v_snackbar, {
-                        modelValue: $setup.ajaxError,
-                        "onUpdate:modelValue": _cache[2] || (_cache[2] = ($event)=>$setup.ajaxError = $event),
-                        color: "red-lighten-2"
-                    }, {
-                        actions: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createVNode)(_component_v_btn, {
-                                    color: "red-lighten-4",
-                                    variant: "text",
-                                    onClick: _cache[1] || (_cache[1] = ($event)=>$setup.ajaxError = false)
-                                }, {
-                                    default: (0, _vue.withCtx)(()=>[
-                                            (0, _vue.createTextVNode)(" Close ")
+                                            })) : $setup.refreshTabsInProgress && $setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_13
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
                                         ]),
                                     _: 1 /* STABLE */ 
                                 })
                             ]),
-                        default: (0, _vue.withCtx)(()=>[
-                                (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
-                            ]),
                         _: 1 /* STABLE */ 
-                    }, 8 /* PROPS */ , [
-                        "modelValue"
-                    ])
+                    })
                 ]),
             _: 1 /* STABLE */ 
         }, 8 /* PROPS */ , [
             "modelValue"
         ])
-    ]);
+    ], 64 /* STABLE_FRAGMENT */ );
 }
 if (module.hot) module.hot.accept(()=>{
     __VUE_HMR_RUNTIME__.rerender("67c374-hmr", render);
@@ -20279,7 +20954,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true)
                                                 ]),
                                             "item.checksum": (0, _vue.withCtx)(({ item })=>[
-                                                    !item.Checksum && !item.WpJuggler && item.Wporg ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                    !item.Checksum && !item.WpJuggler && item.Wporg && item.Version == item.ChecksumVersion ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "error",
                                                             icon: "mdi-alert-outline",
@@ -20298,7 +20973,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
                                                             "onClick"
                                                         ])
-                                                    ])) : !item.Wporg || item.WpJuggler ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                    ])) : !item.Wporg || item.WpJuggler || item.Version != item.ChecksumVersion ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
                                                         (0, _vue.createVNode)(_component_v_icon, {
                                                             color: "blue-lighten-5",
                                                             icon: "mdi-help",

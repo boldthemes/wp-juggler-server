@@ -11,9 +11,34 @@ const search = ref("");
 const dialogInner = ref(false);
 const vulnerabilitiesItem = ref(null);
 
-const refreshActive = ref(false);
+const refreshAllActive = ref(false);
+const refreshHealthActive = ref(false);
+const refreshDebugActive = ref(false);
+const refreshCoreChecksumActive = ref(false);
 const ajaxError = ref(false);
 const ajaxErrorText = ref("");
+
+// Refresh Dialog Params
+const dialogRefreshTabs = ref(false)
+const refreshTabsInProgress = ref(false)
+const refreshTabsFinished = ref(false)
+const refreshProgressIndicator = ref(0)
+const currentProgressIndex = ref(0)
+const currentRefreshAction = ref('')
+const refreshArr = [
+  {
+    text: 'Refreshing Health Status',
+    ajaxParam: 'wpjs-refresh-health'
+  },
+  {
+    text: 'Refreshing Health Info',
+    ajaxParam: 'wpjs-refresh-debug'
+  },
+  {
+    text: 'Refreshing Core Checksum Info',
+    ajaxParam: 'wpjs-refresh-core-checksum'
+  },
+]
 
 const tab = ref(0);
 
@@ -97,8 +122,49 @@ const gotoUrl = (url) => {
   if (newWindow) newWindow.opener = null;
 };
 
+async function refreshAll() {
+  
+  currentProgressIndex.value = 0
+  refreshTabsFinished.value = false;
+  dialogRefreshTabs.value = true;
+  refreshTabsInProgress.value = true;
+
+  for (const elem of refreshArr) {
+    currentRefreshAction.value = elem.text;
+    console.log()
+    refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100)
+    try {
+      const response = await doAjax({
+        action: elem.ajaxParam, // the action to fire in the server
+        siteId: store.activatedSite.id,
+      });
+
+      if (!response.success) {
+        throw new Error(`${response.data.code} - ${response.data.message}`);
+      }
+
+      currentProgressIndex.value++
+
+    } catch (error) {
+      ajaxError.value = true;
+      ajaxErrorText.value = error.message;
+    }
+  }
+
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-health-panel", store.activatedSite.id],
+  });
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-control-panel"],
+  });
+
+  refreshTabsFinished.value = true;
+  dialogRefreshTabs.value = false;
+
+}
+
 async function refreshHealth() {
-  refreshActive.value = true;
+  refreshHealthActive.value = true;
 
   let ret = {};
 
@@ -118,31 +184,88 @@ async function refreshHealth() {
         queryKey: ["wpjs-control-panel"],
       });
 
-      refreshActive.value = false;
+      refreshHealthActive.value = false;
     } else {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
-    refreshActive.value = false;
+    refreshHealthActive.value = false;
+  }
+}
+
+async function refreshDebug() {
+  refreshDebugActive.value = true;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-debug", // the action to fire in the server
+      siteId: store.activatedSite.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-health-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      refreshDebugActive.value = false;
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+    refreshDebugActive.value = false;
+  }
+}
+
+async function refreshCoreChecksum() {
+  refreshCoreChecksumActive.value = true;
+
+  let ret = {};
+
+  try {
+    const response = await doAjax({
+      action: "wpjs-refresh-core-checksum", // the action to fire in the server
+      siteId: store.activatedSite.id,
+    });
+
+    if (response.success) {
+      ret = response.data;
+
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-health-panel", store.activatedSite.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["wpjs-control-panel"],
+      });
+
+      refreshCoreChecksumActive.value = false;
+    } else {
+      throw new Error(`${response.data.code} - ${response.data.message}`);
+    }
+  } catch (error) {
+    ajaxError.value = true;
+    ajaxErrorText.value = error.message;
+    refreshCoreChecksumActive.value = false;
   }
 }
 </script>
 
 <template>
   <div class="text-center pa-4">
-    <v-dialog
-      v-model="store.activatedHealth"
-      transition="dialog-bottom-transition"
-      fullscreen
-    >
+    <v-dialog v-model="store.activatedHealth" transition="dialog-bottom-transition" fullscreen>
       <v-card>
         <v-toolbar>
-          <v-btn
-            icon="mdi-close"
-            @click="store.activatedHealth = false"
-          ></v-btn>
+          <v-btn icon="mdi-close" @click="store.activatedHealth = false"></v-btn>
 
           <v-toolbar-title>{{ store.activatedSite.title }} </v-toolbar-title>
 
@@ -152,33 +275,32 @@ async function refreshHealth() {
         </v-toolbar>
 
         <v-card-text v-if="data">
-          <v-sheet
-            class="pa-4 text-right mx-auto"
-            elevation="0"
-            width="100%"
-            rounded="lg"
-          >
-            <div v-if="data.wp_juggler_health_data_timestamp">
+          <v-sheet class="pa-4 text-right mx-auto" elevation="0" width="100%" rounded="lg">
+            <div v-if="data.wp_juggler_health_data_timestamp" class="wpjs-timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-              {{ data.wp_juggler_health_data_timestamp }}
+              Health Status Data: <strong>{{ data.wp_juggler_health_data_timestamp }}</strong>
+              <v-icon class="me-1 pb-1 ml-2" icon="mdi-circle-medium" size="18"></v-icon>
+              Health Info Data: <strong>{{ data.wp_juggler_debug_data_timestamp }}</strong>
+              <v-icon class="me-1 pb-1 ml-2" icon="mdi-circle-medium" size="18"></v-icon>
+              Core Checksum Data: <strong>{{ data.wp_juggler_core_checksum_data_timestamp }}</strong>
               <v-btn
                 class="ml-3 text-none text-caption"
-                :loading="refreshActive"
-                @click="refreshHealth"
+                :loading="refreshAllActive"
+                @click="refreshAll"
                 variant="outlined"
-                >Refresh
+                >Refresh Data
               </v-btn>
             </div>
 
-            <div v-else>
+            <div v-else class="wpjs-timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
               <v-btn
                 class="ml-3 text-none text-caption"
-                :loading="refreshActive"
-                @click="refreshHealth"
+                :loading="refreshAllActive"
+                @click="refreshAll"
                 variant="outlined"
-                >Refresh
+                >Refresh Data
               </v-btn>
             </div>
           </v-sheet>
@@ -192,16 +314,9 @@ async function refreshHealth() {
 
             <v-card-text class="mt-10">
               <v-tabs-window v-model="tab">
-                <v-tabs-window-item
-                  value="status"
-                  transition="false"
-                  reverse-transition="false"
-                >
-                  <v-sheet
-                    max-width="1200"
-                    v-if="goods.length > 0"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                <v-tabs-window-item value="status" transition="false" reverse-transition="false">
+                  <v-sheet max-width="1200" v-if="goods.length > 0"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Status</div>
                       <div class="mt-3 mb-4">
@@ -219,33 +334,21 @@ async function refreshHealth() {
                         issues should be prioritized.
                       </div>
 
-                      <v-expansion-panels
-                        v-if="criticals.length > 0"
-                        class="mt-8 mb-10"
-                        variant="accordion"
-                      >
+                      <v-expansion-panels v-if="criticals.length > 0" class="mt-8 mb-10" variant="accordion">
                         <v-expansion-panel v-for="critical in criticals">
                           <v-expansion-panel-title>
                             {{ critical.label }}
                             <v-spacer></v-spacer>
-                            <div
-                              :class="[
-                                'mr-3 pa-2 wpjs-health-badge-label',
-                                critical.badge.color,
-                              ]"
-                            >
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              critical.badge.color,
+                            ]">
                               {{ critical.badge.label }}
                             </div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div
-                              class="wpjs-health-panel-description"
-                              v-html="critical.description"
-                            ></div>
-                            <div
-                              class="wpjs-health-panel-actions"
-                              v-html="critical.actions"
-                            ></div>
+                            <div class="wpjs-health-panel-description" v-html="critical.description"></div>
+                            <div class="wpjs-health-panel-actions" v-html="critical.actions"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
@@ -260,52 +363,30 @@ async function refreshHealth() {
                         such as; Performance, user experience, and more.
                       </div>
 
-                      <v-expansion-panels
-                        v-if="recommendations.length > 0"
-                        class="mt-8"
-                        variant="accordion"
-                      >
-                        <v-expansion-panel
-                          v-for="recommendation in recommendations"
-                        >
+                      <v-expansion-panels v-if="recommendations.length > 0" class="mt-8" variant="accordion">
+                        <v-expansion-panel v-for="recommendation in recommendations">
                           <v-expansion-panel-title>
                             {{ recommendation.label }}
                             <v-spacer></v-spacer>
-                            <div
-                              :class="[
-                                'mr-3 pa-2 wpjs-health-badge-label',
-                                recommendation.badge.color,
-                              ]"
-                            >
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              recommendation.badge.color,
+                            ]">
                               {{ recommendation.badge.label }}
                             </div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div
-                              class="wpjs-health-panel-description"
-                              v-html="recommendation.description"
-                            ></div>
-                            <div
-                              class="wpjs-health-panel-actions"
-                              v-html="recommendation.actions"
-                            ></div>
+                            <div class="wpjs-health-panel-description" v-html="recommendation.description"></div>
+                            <div class="wpjs-health-panel-actions" v-html="recommendation.actions"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
                     </v-sheet>
 
-                    <v-btn
-                      class="ml-3 text-none text-caption"
-                      :append-icon="openIcon"
-                      @click="passedOpen = !passedOpen"
-                      variant="outlined"
-                      >Passed tests</v-btn
-                    >
+                    <v-btn class="ml-3 text-none text-caption" :append-icon="openIcon" @click="passedOpen = !passedOpen"
+                      variant="outlined">Passed tests</v-btn>
 
-                    <v-sheet
-                      v-if="passedOpen"
-                      class="align-left justify-left text-left my-10"
-                    >
+                    <v-sheet v-if="passedOpen" class="align-left justify-left text-left my-10">
                       <div class="text-h6">
                         {{ goods.length }} items with no issues detected
                       </div>
@@ -315,71 +396,46 @@ async function refreshHealth() {
                           <v-expansion-panel-title>
                             {{ good.label }}
                             <v-spacer></v-spacer>
-                            <div
-                              :class="[
-                                'mr-3 pa-2 wpjs-health-badge-label',
-                                good.badge.color,
-                              ]"
-                            >
+                            <div :class="[
+                              'mr-3 pa-2 wpjs-health-badge-label',
+                              good.badge.color,
+                            ]">
                               {{ good.badge.label }}
                             </div>
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
-                            <div
-                              class="wpjs-health-panel-description"
-                              v-html="good.description"
-                            ></div>
+                            <div class="wpjs-health-panel-description" v-html="good.description"></div>
                           </v-expansion-panel-text>
                         </v-expansion-panel>
                       </v-expansion-panels>
                     </v-sheet>
                   </v-sheet>
 
-                  <v-sheet
-                    v-else
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">No Recorded Site Health Status</div>
                     </v-sheet>
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item
-                  value="info"
-                  transition="false"
-                  reverse-transition="false"
-                >
-                  <v-sheet
-                    v-if="data.wp_juggler_health_data_info"
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                <v-tabs-window-item value="info" transition="false" reverse-transition="false">
+                  <v-sheet v-if="data.wp_juggler_health_data_info" max-width="1200"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">Site Health Info</div>
 
                       <v-expansion-panels class="mt-8" variant="accordion">
-                        <v-expansion-panel
-                          v-for="debug in data.wp_juggler_health_data_info"
-                        >
-                          <v-expansion-panel-title
-                            v-if="debug.fields.length > 0 && debug.show_count"
-                          >
+                        <v-expansion-panel v-for="debug in data.wp_juggler_health_data_info">
+                          <v-expansion-panel-title v-if="debug.fields.length > 0 && debug.show_count">
                             {{ debug.label }} ({{ debug.fields.length }})
                           </v-expansion-panel-title>
-                          <v-expansion-panel-title
-                            v-else-if="debug.fields.length > 0"
-                          >
+                          <v-expansion-panel-title v-else-if="debug.fields.length > 0">
                             {{ debug.label }}
                           </v-expansion-panel-title>
                           <v-expansion-panel-text>
                             <v-table density="compact">
                               <tbody>
-                                <tr
-                                  v-for="field in debugFields(debug.fields)"
-                                  class="wpjs-debug-table-row"
-                                >
+                                <tr v-for="field in debugFields(debug.fields)" class="wpjs-debug-table-row">
                                   <td>{{ field.label }}</td>
                                   <td>{{ field.value }}</td>
                                 </tr>
@@ -391,133 +447,75 @@ async function refreshHealth() {
                     </v-sheet>
                   </v-sheet>
 
-                  <v-sheet
-                    v-else
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">No Recorded Site Health Info</div>
                     </v-sheet>
                   </v-sheet>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item
-                  value="core"
-                  transition="false"
-                  reverse-transition="false"
-                >
-                  <v-sheet
-                    v-if="data.wp_juggler_health_data_core"
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                <v-tabs-window-item value="core" transition="false" reverse-transition="false">
+                  <v-sheet v-if="data.wp_juggler_health_data_core" max-width="1200"
+                    class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">WordPress Core Files</div>
 
-                      <v-sheet
-                        class="pa-4 text-left mx-auto"
-                        elevation="0"
-                        width="100%"
-                        rounded="lg"
-                        v-if="data.wp_juggler_health_data_upgrade"
-                      >
+                      <v-sheet class="pa-4 text-left mx-auto" elevation="0" width="100%" rounded="lg"
+                        v-if="data.wp_juggler_health_data_upgrade">
                         <div>
                           Core Update Available - version {{ data.wp_juggler_health_data_upgrade }}
-                          <v-btn
-                            class="ml-3 text-none text-caption"
-                            @click="gotoUrl(data.wp_juggler_health_data_upgrade_url)"
-                            variant="outlined"
-                            >Go to Core Update Panel
+                          <v-btn class="ml-3 text-none text-caption"
+                            @click="gotoUrl(data.wp_juggler_health_data_upgrade_url)" variant="outlined">Go to Core
+                            Update Panel
                           </v-btn>
                         </div>
                       </v-sheet>
 
-                      <div
-                        v-if="!data.wp_juggler_health_data_core.errors"
-                        class="text-h7 mb-4 mt-10"
-                      >
-                        <v-icon
-                          color="success"
-                          icon="mdi-check-bold"
-                          size="large"
-                          class="mr-1"
-                        ></v-icon>
+                      <div v-if="!data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-10">
+                        <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"></v-icon>
                         WordPress installation verifies against checksums
                       </div>
                       <div v-else class="text-h7 mb-4 mt-10">
-                        <v-icon
-                          color="error"
-                          icon="mdi-alert-outline"
-                          size="large"
-                          class="mr-1"
-                        ></v-icon>
+                        <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
                         WordPress installation does not verify against checksums
                       </div>
                       <v-divider class="mb-4"></v-divider>
 
-                      <div
-                        v-if="data.wp_juggler_health_data_core.errors"
-                        class="text-h7 mb-4 mt-4"
-                      >
+                      <div v-if="data.wp_juggler_health_data_core.errors" class="text-h7 mb-4 mt-4">
                         These core files don't verify against checksum:
                       </div>
                       <v-sheet v-if="data.wp_juggler_health_data_core.errors">
-                        <v-row
-                          class="wpjs-debug-table-row pl-5"
-                          v-for="item in data.wp_juggler_health_data_core
-                            .error_files"
-                        >
+                        <v-row class="wpjs-debug-table-row pl-5" v-for="item in data.wp_juggler_health_data_core
+                          .error_files">
                           <v-col class="text-left">
                             {{ item }}
                           </v-col>
                         </v-row>
                       </v-sheet>
 
-                      <div
-                        v-if="
-                          !data.wp_juggler_health_data_core.additional.length >
-                          0
-                        "
-                        class="text-h7 mb-4 mt-10"
-                      >
-                        <v-icon
-                          color="success"
-                          icon="mdi-check-bold"
-                          size="large"
-                          class="mr-1"
-                        ></v-icon>
+                      <div v-if="
+                        !data.wp_juggler_health_data_core.additional.length >
+                        0
+                      " class="text-h7 mb-4 mt-10">
+                        <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"></v-icon>
                         WordPress installation does not contain additional files
                       </div>
                       <div v-else class="text-h7 mb-4 mt-10">
-                        <v-icon
-                          color="error"
-                          icon="mdi-alert-outline"
-                          size="large"
-                          class="mr-1"
-                        ></v-icon>
+                        <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"></v-icon>
                         WordPress installation contains additional files
                       </div>
                       <v-divider class="mb-4"></v-divider>
 
-                      <div
-                        v-if="
-                          data.wp_juggler_health_data_core.additional.length > 0
-                        "
-                        class="text-h7 mb-4 mt-4"
-                      >
+                      <div v-if="
+                        data.wp_juggler_health_data_core.additional.length > 0
+                      " class="text-h7 mb-4 mt-4">
                         These files should not exist:
                       </div>
-                      <v-sheet
-                        v-if="
-                          data.wp_juggler_health_data_core.additional.length > 0
-                        "
-                      >
-                        <v-row
-                          class="wpjs-debug-table-row pl-5"
-                          v-for="item in data.wp_juggler_health_data_core
-                            .additional"
-                        >
+                      <v-sheet v-if="
+                        data.wp_juggler_health_data_core.additional.length > 0
+                      ">
+                        <v-row class="wpjs-debug-table-row pl-5" v-for="item in data.wp_juggler_health_data_core
+                          .additional">
                           <v-col class="text-left">
                             {{ item }}
                           </v-col>
@@ -526,11 +524,7 @@ async function refreshHealth() {
                     </v-sheet>
                   </v-sheet>
 
-                  <v-sheet
-                    v-else
-                    max-width="1200"
-                    class="align-center justify-center text-center mx-auto px-4 pb-4"
-                  >
+                  <v-sheet v-else max-width="1200" class="align-center justify-center text-center mx-auto px-4 pb-4">
                     <v-sheet class="align-left justify-left text-left mb-10">
                       <div class="text-h6">No Recorded Core Files Report</div>
                     </v-sheet>
@@ -542,11 +536,8 @@ async function refreshHealth() {
         </v-card-text>
 
         <v-card-text v-else>
-          <v-skeleton-loader
-            type="heading, table-row-divider, list-item-two-line@6, table-tfoot"
-            class="mt-15 mx-auto"
-            max-width="1200"
-          >
+          <v-skeleton-loader type="heading, table-row-divider, list-item-two-line@6, table-tfoot" class="mt-15 mx-auto"
+            max-width="1200">
           </v-skeleton-loader>
         </v-card-text>
       </v-card>
@@ -555,15 +546,42 @@ async function refreshHealth() {
         {{ ajaxErrorText }}
 
         <template v-slot:actions>
-          <v-btn
-            color="red-lighten-4"
-            variant="text"
-            @click="ajaxError = false"
-          >
+          <v-btn color="red-lighten-4" variant="text" @click="ajaxError = false">
             Close
           </v-btn>
         </template>
       </v-snackbar>
+    </v-dialog>
+
+    <v-dialog v-model="dialogRefreshTabs" width="800" :persistent="true">
+      <v-card>
+        <v-toolbar>
+          <v-btn v-if="!(refreshTabsInProgress && !refreshTabsFinished)" icon="mdi-close"
+            @click="dialogRefreshTabs = false"></v-btn>
+          <v-toolbar-title>Site Health Data</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-sheet v-if="refreshTabsInProgress && !refreshTabsFinished" class="mb-4" height="200">
+            <div class="my-8">
+              Refresh in progress - do not close the window, you will
+              interrupt the progress:
+            </div>
+            <div class="my-8">
+              <strong>{{ currentRefreshAction }}</strong>
+            </div>
+            <v-progress-linear color="light-blue" height="30" :model-value="refreshProgressIndicator" striped>
+              <strong>{{ currentProgressIndex + 1 }}/{{
+                refreshArr.length
+              }}</strong>
+            </v-progress-linear>
+          </v-sheet>
+
+          <v-sheet v-else-if="refreshTabsInProgress && refreshTabsFinished" class="mb-4" height="200">
+            <div class="my-8">Refresh finished</div>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
     </v-dialog>
   </div>
 </template>

@@ -570,7 +570,7 @@ const gotoUrl = (url) => {
             </template>
 
             <template v-slot:item.checksum="{ item }">
-              <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg">
+              <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg && (item.Version == item.ChecksumVersion)">
                 <v-icon
                   color="error"
                   icon="mdi-alert-outline"
@@ -584,7 +584,7 @@ const gotoUrl = (url) => {
                   >Details
                 </v-btn>
               </div>
-              <div v-else-if="!item.Wporg || item.WpJuggler">
+              <div v-else-if="!item.Wporg || item.WpJuggler || (item.Version != item.ChecksumVersion)">
                 <v-icon
                   color="blue-lighten-5"
                   icon="mdi-help"

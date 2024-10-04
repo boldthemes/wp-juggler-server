@@ -177,7 +177,10 @@ class WP_Juggler_Server {
 		$this->loader->add_action( 'wp_ajax_wpjs-get-uptime-history', $plugin_ajax, 'ajax_get_uptime_history' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-refresh-health', $plugin_ajax, 'ajax_refresh_health' );
+		$this->loader->add_action( 'wp_ajax_wpjs-refresh-debug', $plugin_ajax, 'ajax_refresh_debug' );
+		$this->loader->add_action( 'wp_ajax_wpjs-refresh-core-checksum', $plugin_ajax, 'ajax_refresh_core_checksum' );
 		$this->loader->add_action( 'wp_ajax_wpjs-refresh-plugins', $plugin_ajax, 'ajax_refresh_plugins' );
+		$this->loader->add_action( 'wp_ajax_wpjs-refresh-plugins-checksum', $plugin_ajax, 'ajax_refresh_plugins_checksum' );
 		$this->loader->add_action( 'wp_ajax_wpjs-refresh-notices', $plugin_ajax, 'ajax_refresh_notices' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs-update-plugin', $plugin_ajax, 'ajax_update_plugin' );

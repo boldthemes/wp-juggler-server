@@ -140,6 +140,24 @@ const tab = ref(0);
 const selectedActionPlugins = ref(null);
 const selectedActionThemes = ref(null);
 
+// Refresh Dialog Params
+const dialogRefreshTabs = ref(false)
+const refreshTabsInProgress = ref(false)
+const refreshTabsFinished = ref(false)
+const refreshProgressIndicator = ref(0)
+const currentProgressIndex = ref(0)
+const currentRefreshAction = ref('')
+const refreshArr = [
+  {
+    text: 'Refreshing Plugins and Themes',
+    ajaxParam: 'wpjs-refresh-plugins'
+  },
+  {
+    text: 'Refreshing Plugin Checksums',
+    ajaxParam: 'wpjs-refresh-plugins-checksum'
+  },
+]
+
 const queryClient = useQueryClient();
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
   queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
@@ -201,6 +219,47 @@ function openVulnerabilities(item) {
 function openChecksum(item) {
   checksumItem.value = item;
   dialogChecksum.value = true;
+}
+
+async function refreshAll() {
+  
+  currentProgressIndex.value = 0
+  refreshTabsFinished.value = false;
+  dialogRefreshTabs.value = true;
+  refreshTabsInProgress.value = true;
+
+  for (const elem of refreshArr) {
+    currentRefreshAction.value = elem.text;
+    console.log()
+    refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100)
+    try {
+      const response = await doAjax({
+        action: elem.ajaxParam, // the action to fire in the server
+        siteId: store.activatedSite.id,
+      });
+
+      if (!response.success) {
+        throw new Error(`${response.data.code} - ${response.data.message}`);
+      }
+
+      currentProgressIndex.value++
+
+    } catch (error) {
+      ajaxError.value = true;
+      ajaxErrorText.value = error.message;
+    }
+  }
+
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-plugins-panel", store.activatedSite.id],
+  });
+  queryClient.invalidateQueries({
+    queryKey: ["wpjs-control-panel"],
+  });
+
+  refreshTabsFinished.value = true;
+  dialogRefreshTabs.value = false;
+
 }
 
 async function refreshPlugins(e, withoutIndicator = false) {
@@ -612,27 +671,29 @@ const gotoUrl = (url) => {
             width="100%"
             rounded="lg"
           >
-            <div v-if="data.wp_juggler_plugins_timestamp">
+            <div v-if="data.wp_juggler_plugins_timestamp" class="wpjs-timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
-              {{ data.wp_juggler_plugins_timestamp }}
+              Plugins and Themes Data: <strong>{{ data.wp_juggler_plugins_timestamp }}</strong>
+              <v-icon class="me-1 pb-1 ml-2" icon="mdi-circle-medium" size="18"></v-icon>
+              Checksum Data: <strong>{{ data.wp_juggler_plugins_checksum_timestamp }}</strong>
               <v-btn
                 class="ml-3 text-none text-caption"
                 :loading="refreshActive"
-                @click="refreshPlugins"
+                @click="refreshAll"
                 variant="outlined"
-                >Refresh
+                >Refresh Data
               </v-btn>
             </div>
 
-            <div v-else>
+            <div v-else class="wpjs-timestamp">
               <v-icon class="me-1 pb-1" icon="mdi-refresh" size="18"></v-icon>
               Never
               <v-btn
                 class="ml-3 text-none text-caption"
                 :loading="refreshActive"
-                @click="refreshPlugins"
+                @click="refreshAll"
                 variant="outlined"
-                >Refresh
+                >Refresh Data
               </v-btn>
             </div>
           </v-sheet>
@@ -775,7 +836,7 @@ const gotoUrl = (url) => {
                         <template v-slot:item.checksum="{ item }">
                           <div
                             v-if="
-                              !item.Checksum && !item.WpJuggler && item.Wporg
+                              (!item.Checksum && !item.WpJuggler && item.Wporg) && (item.ChecksumVersion == item.Version)
                             "
                           >
                             <v-icon
@@ -791,7 +852,7 @@ const gotoUrl = (url) => {
                               >Details
                             </v-btn>
                           </div>
-                          <div v-else-if="!item.Wporg || item.WpJuggler">
+                          <div v-else-if="!item.Wporg || item.WpJuggler || (item.ChecksumVersion != item.Version)">
                             <v-icon
                               color="blue-lighten-5"
                               icon="mdi-help"
@@ -1225,10 +1286,46 @@ const gotoUrl = (url) => {
       </v-card>
     </v-dialog>
   </div>
+
+  <v-dialog v-model="dialogRefreshTabs" width="800" :persistent="true">
+      <v-card>
+        <v-toolbar>
+          <v-btn v-if="!(refreshTabsInProgress && !refreshTabsFinished)" icon="mdi-close"
+            @click="dialogRefreshTabs = false"></v-btn>
+          <v-toolbar-title>Plugins and Themes Data</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text>
+          <v-sheet v-if="refreshTabsInProgress && !refreshTabsFinished" class="mb-4" height="200">
+            <div class="my-8">
+              Refresh in progress - do not close the window, you will
+              interrupt the progress:
+            </div>
+            <div class="my-8">
+              <strong>{{ currentRefreshAction }}</strong>
+            </div>
+            <v-progress-linear color="light-blue" height="30" :model-value="refreshProgressIndicator" striped>
+              <strong>{{ currentProgressIndex + 1 }}/{{
+                refreshArr.length
+              }}</strong>
+            </v-progress-linear>
+          </v-sheet>
+
+          <v-sheet v-else-if="refreshTabsInProgress && refreshTabsFinished" class="mb-4" height="200">
+            <div class="my-8">Refresh finished</div>
+          </v-sheet>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
 </template>
 
 <style>
 .wpjs-plugin-vul {
+  font-size: 14px;
+}
+
+.wpjs-timestamp {
   font-size: 14px;
 }
 </style>

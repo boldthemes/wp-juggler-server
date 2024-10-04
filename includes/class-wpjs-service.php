@@ -477,7 +477,6 @@ class WPJS_Service
 
 			foreach ($plugins as $plugin => $plugininfo) {
 				unset($plugins[$plugin]['ChecksumFiles']);
-				unset($plugins[$plugin]['Version']);
 				unset($plugins[$plugin]['Slug']);
 			}
 

@@ -21,6 +21,40 @@ const ajaxErrorText = ref("");
 
 const refreshAllActive = ref(false);
 
+// Refresh Dialog Params
+const dialogRefreshTabs = ref(false)
+const refreshTabsInProgress = ref(false)
+const refreshTabsFinished = ref(false)
+const refreshProgressIndicator = ref(0)
+const currentProgressIndex = ref(0)
+const currentRefreshAction = ref('')
+const refreshArr = [
+  {
+    text: 'Refreshing Health Status',
+    ajaxParam: 'wpjs-refresh-health'
+  },
+  {
+    text: 'Refreshing Health Info',
+    ajaxParam: 'wpjs-refresh-debug'
+  },
+  {
+    text: 'Refreshing Core Checksum Info',
+    ajaxParam: 'wpjs-refresh-core-checksum'
+  },
+  {
+    text: 'Refreshing Plugins and Themes',
+    ajaxParam: 'wpjs-refresh-plugins'
+  },
+  {
+    text: 'Refreshing Plugin Checksums',
+    ajaxParam: 'wpjs-refresh-plugins-checksum'
+  },
+  {
+    text: 'Refreshing Notices',
+    ajaxParam: 'wpjs-refresh-notices'
+  }
+]
+
 function selectUptimePeriod(ind) {
   selectedUptimePeriod.value = ind;
 }
@@ -141,14 +175,41 @@ async function refreshNotices() {
 }
 
 async function refreshAll() {
-  refreshAllActive.value = true;
-  await refreshHealth();
-  await refreshPlugins();
-  await refreshNotices();
+
+  currentProgressIndex.value = 0
+  refreshTabsFinished.value = false;
+  dialogRefreshTabs.value = true;
+  refreshTabsInProgress.value = true;
+
+  for (const elem of refreshArr) {
+    currentRefreshAction.value = elem.text;
+    console.log()
+    refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100)
+    try {
+      const response = await doAjax({
+        action: elem.ajaxParam, // the action to fire in the server
+        siteId: store.activatedSite.id,
+      });
+
+      if (!response.success) {
+        throw new Error(`${response.data.code} - ${response.data.message}`);
+      }
+
+      currentProgressIndex.value++
+
+    } catch (error) {
+      ajaxError.value = true;
+      ajaxErrorText.value = error.message;
+    }
+  }
+
   queryClient.invalidateQueries({
     queryKey: ["wpjs-control-panel"],
   });
-  refreshAllActive.value = false;
+
+  refreshTabsFinished.value = true;
+  dialogRefreshTabs.value = false;
+
 }
 </script>
 
@@ -164,13 +225,14 @@ async function refreshAll() {
           <v-spacer></v-spacer>
 
           <v-btn class="ml-3 text-none text-caption" :loading="refreshAllActive" @click="refreshAll"
-            variant="outlined">Refresh All
+            variant="outlined">Refresh All Site Data
           </v-btn>
         </v-row>
         <div class="text-h6 text-medium-emphasis font-weight-regular mb-5">
           <v-icon v-if="props.item.wp_juggler_multisite" color="#2196f3" icon="mdi-checkbox-multiple-blank-outline"
             size="large" class="rm-4 mr-4"></v-icon>
-          <a :href="props.item.wp_juggler_server_site_url" target="_blank">{{ props.item.wp_juggler_server_site_url }}</a>
+          <a :href="props.item.wp_juggler_server_site_url" target="_blank">{{ props.item.wp_juggler_server_site_url
+            }}</a>
         </div>
 
         <v-row class="mb-4">
@@ -427,6 +489,37 @@ async function refreshAll() {
       </v-sheet>
     </td>
   </tr>
+  <v-dialog v-model="dialogRefreshTabs" width="800" :persistent="true">
+    <v-card>
+      <v-toolbar>
+        <v-btn v-if="!(refreshTabsInProgress && !refreshTabsFinished)" icon="mdi-close"
+          @click="dialogRefreshTabs = false"></v-btn>
+        <v-toolbar-title>Site Data</v-toolbar-title>
+      </v-toolbar>
+
+      <v-card-text>
+        <v-sheet v-if="refreshTabsInProgress && !refreshTabsFinished" class="mb-4" height="200">
+          <div class="my-8">
+            Refresh in progress - do not close the window, you will
+            interrupt the progress:
+          </div>
+          <div class="my-8">
+            <strong>{{ currentRefreshAction }}</strong>
+          </div>
+          <v-progress-linear color="light-blue" height="30" :model-value="refreshProgressIndicator" striped>
+            <strong>{{ currentProgressIndex + 1 }}/{{
+              refreshArr.length
+            }}</strong>
+          </v-progress-linear>
+        </v-sheet>
+
+        <v-sheet v-else-if="refreshTabsInProgress && refreshTabsFinished" class="mb-4" height="200">
+          <div class="my-8">Refresh finished</div>
+        </v-sheet>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+
   <v-snackbar v-model="ajaxError" color="red-lighten-2">
     {{ ajaxErrorText }}
 
