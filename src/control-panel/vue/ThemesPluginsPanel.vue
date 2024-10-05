@@ -348,7 +348,6 @@ async function updateTheme(themeSlug, withoutRefresh = false) {
       action: "wpjs-update-theme", // the action to fire in the server
       siteId: store.activatedSite.id,
       themeSlug: themeSlug,
-      withoutRefresh: withoutRefresh,
     });
 
     if (response.success) {
@@ -624,6 +623,7 @@ async function processAction() {
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
     });
+    
     bulkActionFinished.value = true;
     dialogBulkType.value = "";
     dialogBulkAction.value = false

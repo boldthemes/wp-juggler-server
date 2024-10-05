@@ -143,9 +143,11 @@ async function updateTheme(themeSlug, siteId, withoutRefresh = false) {
     if (response.success) {
       ret = response.data;
 
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
+      if (!withoutRefresh) {
+        queryClient.invalidateQueries({
+          queryKey: ["wpjs-control-panel"],
+        });
+      }
 
       updateThemeActive.value = "";
     } else {
@@ -154,8 +156,6 @@ async function updateTheme(themeSlug, siteId, withoutRefresh = false) {
   } catch (error) {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
 
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
@@ -230,7 +230,13 @@ async function processAction() {
 
     processAction();
   } else {
+    queryClient.invalidateQueries({
+      queryKey: ["wpjs-control-panel"],
+    });
+
     bulkActionFinished.value = true;
+    dialogBulkType.value = "";
+    dialogBulkAction.value = false;
   }
 }
 
@@ -242,7 +248,6 @@ const gotoUrl = (url) => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
 };
-
 </script>
 
 <template>

@@ -16060,7 +16060,7 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
+                    if (!withoutRefresh) queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
                         ]
@@ -16090,7 +16090,7 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
+                    if (!withoutRefresh) queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
                         ]
@@ -16125,7 +16125,7 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
+                    if (!withoutRefresh) queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
                         ]
@@ -16195,6 +16195,11 @@ exports.default = {
                 if (selectedActionPlugins.value.value == "deactivate") await deactivatePlugin(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
                 processAction();
             } else {
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
                 bulkActionFinished.value = true;
                 dialogBulkAction.value = false;
             }
@@ -17231,7 +17236,7 @@ exports.default = {
                 });
                 if (response.success) {
                     ret = response.data;
-                    queryClient.invalidateQueries({
+                    if (!withoutRefresh) queryClient.invalidateQueries({
                         queryKey: [
                             "wpjs-control-panel"
                         ]
@@ -17241,7 +17246,6 @@ exports.default = {
             } catch (error) {
                 ajaxError.value = true;
                 ajaxErrorText.value = error.message;
-                await refreshPlugins(siteId);
                 queryClient.invalidateQueries({
                     queryKey: [
                         "wpjs-control-panel"
@@ -17284,7 +17288,16 @@ exports.default = {
                 progressIndicator.value = Math.ceil((bulkActionsNumber.value - actionArrayFiltered.value.length) / bulkActionsNumber.value * 100);
                 if (selectedActionThemes.value.value == "update") await updateTheme(currentAction.value.Slug, currentAction.value.wpjugglersites_id, true);
                 processAction();
-            } else bulkActionFinished.value = true;
+            } else {
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                bulkActionFinished.value = true;
+                dialogBulkType.value = "";
+                dialogBulkAction.value = false;
+            }
         }
         const persistDialog = (0, _vue.computed)(()=>{
             return bulkActionInProgress.value && !bulkActionFinished.value;
@@ -18206,8 +18219,7 @@ exports.default = {
                 const response = await doAjax({
                     action: "wpjs-update-theme",
                     siteId: store.activatedSite.id,
-                    themeSlug: themeSlug,
-                    withoutRefresh: withoutRefresh
+                    themeSlug: themeSlug
                 });
                 if (response.success) {
                     ret = response.data;

@@ -178,15 +178,17 @@ async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
     const response = await doAjax({
       action: "wpjs-update-plugin", // the action to fire in the server
       siteId: siteId,
-      pluginSlug: pluginSlug
+      pluginSlug: pluginSlug,
     });
 
     if (response.success) {
       ret = response.data;
 
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
+      if (!withoutRefresh) {
+        queryClient.invalidateQueries({
+          queryKey: ["wpjs-control-panel"],
+        });
+      }
 
       updateActive.value = "";
     } else {
@@ -217,15 +219,17 @@ async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
     const response = await doAjax({
       action: "wpjs-deactivate-plugin", // the action to fire in the server
       siteId: siteId,
-      pluginSlug: pluginSlug
+      pluginSlug: pluginSlug,
     });
 
     if (response.success) {
       ret = response.data;
 
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
+      if (!withoutRefresh) {
+        queryClient.invalidateQueries({
+          queryKey: ["wpjs-control-panel"],
+        });
+      }
 
       deactivateActive.value = "";
     } else {
@@ -273,9 +277,11 @@ async function activatePlugin(
     if (response.success) {
       ret = response.data;
 
-      queryClient.invalidateQueries({
-        queryKey: ["wpjs-control-panel"],
-      });
+      if (!withoutRefresh) {
+        queryClient.invalidateQueries({
+          queryKey: ["wpjs-control-panel"],
+        });
+      }
 
       activateActive.value = "";
       activateNetworkActive.value = "";
@@ -420,8 +426,12 @@ async function processAction() {
 
     processAction();
   } else {
+    queryClient.invalidateQueries({
+      queryKey: ["wpjs-control-panel"],
+    });
+
     bulkActionFinished.value = true;
-    dialogBulkAction.value = false
+    dialogBulkAction.value = false;
   }
 }
 
@@ -435,7 +445,6 @@ const gotoUrl = (url) => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
 };
-
 </script>
 
 <template>
@@ -532,11 +541,7 @@ const gotoUrl = (url) => {
             </template>
 
             <template v-slot:item.vulnerabilities="{ item }">
-              <div
-                v-if="
-                  item.Vulnerabilities.length > 0
-                "
-              >
+              <div v-if="item.Vulnerabilities.length > 0">
                 <v-icon
                   color="error"
                   icon="mdi-bug-check-outline"
@@ -562,7 +567,14 @@ const gotoUrl = (url) => {
             </template>
 
             <template v-slot:item.checksum="{ item }">
-              <div v-if="!item.Checksum && !item.WpJuggler && item.Wporg && (item.Version == item.ChecksumVersion)">
+              <div
+                v-if="
+                  !item.Checksum &&
+                  !item.WpJuggler &&
+                  item.Wporg &&
+                  item.Version == item.ChecksumVersion
+                "
+              >
                 <v-icon
                   color="error"
                   icon="mdi-alert-outline"
@@ -576,7 +588,13 @@ const gotoUrl = (url) => {
                   >Details
                 </v-btn>
               </div>
-              <div v-else-if="!item.Wporg || item.WpJuggler || (item.Version != item.ChecksumVersion)">
+              <div
+                v-else-if="
+                  !item.Wporg ||
+                  item.WpJuggler ||
+                  item.Version != item.ChecksumVersion
+                "
+              >
                 <v-icon
                   color="blue-lighten-5"
                   icon="mdi-help"

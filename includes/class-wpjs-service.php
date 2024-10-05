@@ -688,42 +688,50 @@ class WPJS_Service
 	static function update_theme($site_id, $theme_slug)
 	{
 
-		/* $log_entry = array(
-			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkThemes',
-			'log_result' => 'init'
-		); 
-
-		$task_id = WPJS_Cron_Log::insert_log($log_entry); */
-
 		$data = [
 			'themeSlug' => $theme_slug
 		];
 
 		$response = WPJS_Service::call_client_api($site_id, 'updateTheme', $data);
 
-		/* if (is_wp_error($response)) {
+		$body = json_decode(wp_remote_retrieve_body($response), true);
+
+		if (!is_wp_error($response)) {
+			
+			$themes = $body['data'];
+
+			global $wpdb;
+
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPlugins' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+
+			$theme_key = array_key_first($themes['themes_data']);
+
+			$log_data = json_decode($result['log_data'], true);
+
+			$log_data['themes_data'][$theme_key] = $themes['themes_data'][$theme_key];
 
 			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
+				'ID' => $result['ID'],
+				'log_data' =>  json_encode($log_data)
 			);
 
 			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
 
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
-			);
-
-			WPJS_Cron_Log::update_log($log_entry);
-		} */
+		}
 
 		return $response;
 	}
