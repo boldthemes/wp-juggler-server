@@ -568,28 +568,119 @@ class WPJS_Service
 
 		$response = WPJS_Service::call_client_api($site_id, 'updatePlugin', $data);
 
-		/* if (is_wp_error($response)) {
+		$body = json_decode(wp_remote_retrieve_body($response), true);
+
+		if (!is_wp_error($response)) {
+			
+			$plugins = $body['data'];
+			$checksum = false;
+
+			global $wpdb;
+
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPlugins' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+
+			$plugin_key = array_key_first($plugins['plugins_data']);
+		
+			$checksum_array[$plugin_key] = array(
+				'Slug' => $plugins['plugins_data'][$plugin_key]['Slug'],
+				'ChecksumFiles' => $plugins['plugins_data'][$plugin_key]['ChecksumFiles'],
+				'ChecksumVersion' => $plugins['plugins_data'][$plugin_key]['ChecksumVersion']
+			);
+
+			unset($plugins['plugins_data'][$plugin_key]['ChecksumFiles']);
+
+			$log_data = json_decode($result['log_data'], true);
+
+			$plugin_vulnerabilities = WPJS_Service::get_plugin_vulnerabilities($plugins['plugins_data'][$plugin_key]['Slug'], $plugins['plugins_data'][$plugin_key]['Version']);
+			$plugins['plugins_data'][$plugin_key]['Vulnerabilities'] = $plugin_vulnerabilities;
+
+			$log_data['plugins_data'][$plugin_key] = $plugins['plugins_data'][$plugin_key];
 
 			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
+				'ID' => $result['ID'],
+				'log_data' =>  json_encode($log_data)
 			);
 
 			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
 
-			$body = json_decode(wp_remote_retrieve_body($response), true);
+			if( $checksum_array[$plugin_key]['ChecksumFiles'] ){
+				$cf = base64_decode($checksum_array[$plugin_key]['ChecksumFiles']);
+				$unzipped = gzuncompress($cf);
+				$checksum_array[$plugin_key]['ChecksumFiles'] = json_decode( $unzipped, true );
+			} else {
+				$checksum_array[$plugin_key]['ChecksumFiles'] = false;
+			}
 
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
+			$data_checksum = WPJS_Service::$plugin_checksum->wpjs_plugin_checksum( $checksum_array );
+
+			foreach ($checksum_array as $plugin => $plugininfo) {
+				$slug = WPJS_Service::get_plugin_name($plugin);
+				$checksum_array[$plugin]['ChecksumDetails'] = [];
+				$checksum_array[$plugin]['Slug'] = $slug;
+				if( in_array( $slug, $data_checksum['failures_list'] )){
+					$checksum_array[$plugin]['Checksum'] = false;
+				} else {
+					$checksum_array[$plugin]['Checksum'] = true;
+				}
+			}
+
+			foreach ($data_checksum['failures_details'] as $failure){
+				$plugin_file = WPJS_Service::findElementByAttribute($checksum_array, 'Slug', $failure['plugin_name']);
+				$checksum_array[$plugin_file]['ChecksumDetails'][] = $failure;
+			}
+
+			foreach ($checksum_array as $plugin => $plugininfo) {
+				unset($checksum_array[$plugin]['ChecksumFiles']);
+				unset($checksum_array[$plugin]['Slug']);
+			}
+
+			$result_checksum = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPluginChecksum' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
 			);
 
-			WPJS_Cron_Log::update_log($log_entry);
-		} */
+			if(!$result_checksum) {
+				$log_data_checksum_array = [];
+			} else {
+				$log_data_checksum_array = json_decode($result_checksum['log_data'], true);
+			}
+			
+			$log_data_checksum_array['plugins_data'][$plugin_key] = $checksum_array[$plugin_key];
+
+
+			$log_entry = array(
+				'ID' => $result_checksum['ID'],
+				'log_data' =>  json_encode($log_data_checksum_array)
+			);
+
+			$task_id = WPJS_Cron_Log::update_log($log_entry);
+
+		}
 
 		return $response;
 	}
@@ -640,56 +731,53 @@ class WPJS_Service
 	static function deactivate_plugin($site_id, $plugin_slug)
 	{
 
-		/* $log_entry = array(
-			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkThemes',
-			'log_result' => 'init'
-		); 
-
-		$task_id = WPJS_Cron_Log::insert_log($log_entry); */
-
 		$data = [
 			'pluginSlug' => $plugin_slug
 		];
 
 		$response = WPJS_Service::call_client_api($site_id, 'deactivatePlugin', $data);
 
-		/* if (is_wp_error($response)) {
+		$body = json_decode(wp_remote_retrieve_body($response), true);
+
+		if (!is_wp_error($response)) {
+			
+			$plugins = $body['data'];
+
+			global $wpdb;
+
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPlugins' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+
+			$log_data = json_decode($result['log_data'], true);
+			$final_log_data = array_replace_recursive($log_data, $plugins);
 
 			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
+				'ID' => $result['ID'],
+				'log_data' =>  json_encode($final_log_data)
 			);
 
 			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
 
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
-			);
-
-			WPJS_Cron_Log::update_log($log_entry);
-		} */
+		}
 
 		return $response;
 	}
 
 	static function activate_plugin($site_id, $plugin_slug, $network_wide = false)
 	{
-
-		/* $log_entry = array(
-			'wpjugglersites_id' => $site_id,
-			'log_type' => 'checkThemes',
-			'log_result' => 'init'
-		); 
-
-		$task_id = WPJS_Cron_Log::insert_log($log_entry); */
 
 		$data = [
 			'pluginSlug' => $plugin_slug,
@@ -698,28 +786,41 @@ class WPJS_Service
 
 		$response = WPJS_Service::call_client_api($site_id, 'activatePlugin', $data);
 
-		/* if (is_wp_error($response)) {
+		$body = json_decode(wp_remote_retrieve_body($response), true);
+
+		if (!is_wp_error($response)) {
+			
+			$plugins = $body['data'];
+
+			global $wpdb;
+
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"
+					SELECT * 
+					FROM wp_wpjs_cron_log 
+					WHERE wpjugglersites_id = %s 
+						AND log_type = 'checkPlugins' 
+						AND log_result = 'succ' 
+					ORDER BY log_time DESC 
+					LIMIT 1
+					",
+					$site_id
+				),
+				ARRAY_A
+			);
+
+			$log_data = json_decode($result['log_data'], true);
+			$final_log_data = array_replace_recursive($log_data, $plugins);
 
 			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'fail',
-				'log_value' =>  $response->get_error_message()
+				'ID' => $result['ID'],
+				'log_data' =>  json_encode($final_log_data)
 			);
 
 			$task_id = WPJS_Cron_Log::update_log($log_entry);
-		} else {
 
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-
-			$log_entry = array(
-				'ID' => $task_id,
-				'log_result' => 'succ',
-				'log_value' =>  null,
-				'log_data' => json_encode($body['data'])
-			);
-
-			WPJS_Cron_Log::update_log($log_entry);
-		} */
+		}
 
 		return $response;
 	}

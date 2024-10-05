@@ -181,14 +181,14 @@ async function refreshAll() {
   dialogRefreshTabs.value = true;
   refreshTabsInProgress.value = true;
 
+
   for (const elem of refreshArr) {
     currentRefreshAction.value = elem.text;
-    console.log()
     refreshProgressIndicator.value = Math.ceil((currentProgressIndex.value + 1) / refreshArr.length * 100)
     try {
       const response = await doAjax({
         action: elem.ajaxParam, // the action to fire in the server
-        siteId: store.activatedSite.id,
+        siteId: props.item.id,
       });
 
       if (!response.success) {

@@ -1991,12 +1991,6 @@ class WPJS_AJAX
 			$plugin_slug = sanitize_text_field($_POST['pluginSlug']);
 		}
 
-		if (isset($_POST['withoutRefresh'])) {
-			$withoutRefresh = filter_var( sanitize_text_field($_POST['withoutRefresh']) , FILTER_VALIDATE_BOOLEAN);
-		} else {
-			$withoutRefresh = false;
-		}
-
 		$response_api = WPJS_Service::deactivate_plugin($site_id, $plugin_slug);
 
 		if (is_wp_error($response_api)) {
@@ -2010,20 +2004,6 @@ class WPJS_AJAX
 			wp_send_json_error($response);
 		} else {
 
-			if( !$withoutRefresh ){
-				$response_api = WPJS_Service::check_plugins_api($site_id);
-
-				if (is_wp_error($response_api)) {
-
-					$response = [
-						'code' => $response_api->get_error_code(),
-						'message' => 'No valid response from client WP Juggler Instance',
-						'data' => $response_api->get_error_data(),
-					];
-
-					wp_send_json_error($response);
-				}
-			}
 			$data = [];
 			wp_send_json_success($data, 200);
 		}
@@ -2049,12 +2029,6 @@ class WPJS_AJAX
 			$network_wide = filter_var($_POST['networkWide'], FILTER_VALIDATE_BOOLEAN);
 		}
 
-		if (isset($_POST['withoutRefresh'])) {
-			$withoutRefresh = filter_var( sanitize_text_field($_POST['withoutRefresh']) , FILTER_VALIDATE_BOOLEAN);
-		} else {
-			$withoutRefresh = false;
-		}
-
 		$response_api = WPJS_Service::activate_plugin($site_id, $plugin_slug, $network_wide);
 
 		if (is_wp_error($response_api)) {
@@ -2067,21 +2041,6 @@ class WPJS_AJAX
 
 			wp_send_json_error($response);
 		} else {
-
-			if( !$withoutRefresh ){
-				$response_api = WPJS_Service::check_plugins_api($site_id);
-
-				if (is_wp_error($response_api)) {
-
-					$response = [
-						'code' => $response_api->get_error_code(),
-						'message' => 'No valid response from client WP Juggler Instance',
-						'data' => $response_api->get_error_data(),
-					];
-
-					wp_send_json_error($response);
-				}
-			}
 
 			$data = [];
 			wp_send_json_success($data, 200);

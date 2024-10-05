@@ -178,8 +178,7 @@ async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
     const response = await doAjax({
       action: "wpjs-update-plugin", // the action to fire in the server
       siteId: siteId,
-      pluginSlug: pluginSlug,
-      withoutRefresh: false,
+      pluginSlug: pluginSlug
     });
 
     if (response.success) {
@@ -196,8 +195,6 @@ async function updatePlugin(pluginSlug, siteId, withoutRefresh = false) {
   } catch (error) {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
 
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
@@ -220,8 +217,7 @@ async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
     const response = await doAjax({
       action: "wpjs-deactivate-plugin", // the action to fire in the server
       siteId: siteId,
-      pluginSlug: pluginSlug,
-      withoutRefresh: false,
+      pluginSlug: pluginSlug
     });
 
     if (response.success) {
@@ -238,8 +234,6 @@ async function deactivatePlugin(pluginSlug, siteId, withoutRefresh = false) {
   } catch (error) {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
 
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
@@ -274,7 +268,6 @@ async function activatePlugin(
       siteId: siteId,
       pluginSlug: pluginSlug,
       networkWide: networkWide,
-      withoutRefresh: false,
     });
 
     if (response.success) {
@@ -292,8 +285,6 @@ async function activatePlugin(
   } catch (error) {
     ajaxError.value = true;
     ajaxErrorText.value = error.message;
-
-    await refreshPlugins(siteId);
 
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
@@ -430,6 +421,7 @@ async function processAction() {
     processAction();
   } else {
     bulkActionFinished.value = true;
+    dialogBulkAction.value = false
   }
 }
 
