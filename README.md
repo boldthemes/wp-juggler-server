@@ -23,9 +23,9 @@ With WP Juggler you can:
 - Seamlessly login into wp-admin panels of your sites with a single click
 - Set up uptime monitor and receive alerts when your sites stop responding
 - Manage your WordPress plugins - update, activate and deactivate them in bulk actions from a central point
-- Host your own plugins in your network and update them as they are from WordPress.org
-- For additional security, track checksums of installed plugins, themes and WP Core and receive alerts on all failed checks
-- Track known vulnerabilities of current versions of your plugins and themes and avoid being hacked
+- Host your own plugins in your network and update them as if they were hosted on wordpress.org
+- For additional security, [verify checksums](https://developer.wordpress.org/cli/commands/plugin/verify-checksums/) of installed plugins, themes and WP Core and receive alerts on all failed checks
+- Track [known vulnerabilities](https://www.wpvulnerability.com/) of current versions of your plugins and themes and avoid being hacked
 - Manage and update themes from a central point
 - Track WordPress wp-admin dashboard notices for all your WordPress sites
 - Set granular user rights to control who sees what within your network
