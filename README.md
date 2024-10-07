@@ -20,36 +20,38 @@ There are more than few reasons to consider WP Juggler over existing commercial 
 With WP Juggler you can:
 
 - Track WP Health and WP Debug info for all your WordPress sites
-- Seamlessly login into wp-admin's on your sites with one click of a button
-- Set uptime monitor for all your sites and receive alerts when site goes down
-- Manage, Update, Activate and Deactivate WordPress Plugins
-- Host your own plugins fully integrated with WordPress update mechanism
-- Track checksums of installed Plugins, Themes and WP Core and receive alerts on all failed checks for additional security
-- Track known vulnerabilities of current versions of Plugins and Themes on your sites to avoid being hacked
-- Manage and Update themes on your sites
-- Track WordPress wp-admin dashboard notices for all your WordPress sites from a cntral point
-- Set granular user rights to control who sees what within the network
+- Seamlessly login into wp-admin panels of your sites with a single click
+- Set up uptime monitor and receive alerts when your sites stop responding
+- Manage your WordPress plugins - update, activate and deactivate them in bulk actions from a central point
+- Host your own plugins in your network and update them as they are from WordPress.org
+- For additional security, track checksums of installed plugins, themes and WP Core and receive alerts on all failed checks
+- Track known vulnerabilities of current versions of your plugins and themes and avoid being hacked
+- Manage and update themes from a central point
+- Track WordPress wp-admin dashboard notices for all your WordPress sites
+- Set granular user rights to control who sees what within your network
 
 WP Juggler is fully compatible with WordPress multisite setups. 
-It also makes TGMPA plugins fully integreted into WordPress update mechanism. This is important if you have premium themes (such as ones coming from ThemeForest) installed on your sites. Their packaged plugins will be treated the same way as all other plugins in your WordPress installations.
+It also makes TGMPA plugins fully integreted into WordPress update mechanism. 
+This is important if you have premium themes (such as ones coming from ThemeForest) installed on your sites. Their packaged plugins will be treated the same way as all other plugins in your WordPress installations.
 
 ## How does it work - Main concepts ##
 
 WP Juggler has two components:
 
-- WP Juggler Server plugin
+- [WP Juggler Server plugin](https://github.com/boldthemes/wp-juggler-server)
 - [WP Juggler Client plugin](https://github.com/boldthemes/wp-juggler-client)
 
 WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of sites within your network.
-When you install the Server plugin you are ready to go - no additional installations, configurations and setups are required. This means that the data governance is entirely under your control.
+When you install the Server plugin you are ready to go - no additional installations, configurations and setups are required. 
+This also means that the data governance within your network is entirely under your control.
 
-## Network setup - as easy as 1, 2, 3 ##
+## Network setup - as easy as one, two, three ##
 
 You can setup your WP Juggler Network in three simple steps:
 
-1. Install WP Juggler Server Plugin on one of your WordPress sites
-2. Install WP Juggler Client plugins on sites you want to manage
-3. Register your sites to the server in a single click of a button
+1. Kickstart the process by installing the WP Juggler Server Plugin on one of your WordPress sites
+2. Next, install WP Juggler Client plugins on sites you want to control and manage
+3. Lastly, register your sites on your server with a single mouse click 
 
 ## Getting Started Guide ##
 
