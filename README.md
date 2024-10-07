@@ -49,3 +49,13 @@ You can setup your WP Juggler Network in three simple steps:
 1. Create WP Site and install WP Juggler Server Plugin
 2. Install WP Juggler Client plugins on sites you want to manage
 3. Register your sites to the server in a single click of a button
+
+## ToDo List ##
+
+1. Alert email templates
+2. Plugin installation (both locally hosted and from WordPress.org)
+3. Vulnerability check of installed themes and WP Core
+4. Checksum of themes from WordPress.org
+5. Client Reports on Activities
+
+If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
