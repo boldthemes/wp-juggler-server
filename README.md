@@ -19,7 +19,7 @@ So we have created WP Juggler
 There are more than few reasons to consider WP Juggler over existing commercial products.
 With WP Juggler you can:
 
-- Track WP Health and WP Debug info for all your WordPress sites
+- Track [WP Health and WP Debug](https://wordpress.org/documentation/article/site-health-screen/) info for all your WordPress sites
 - Seamlessly login into wp-admin panels of your sites with a single click
 - Set up uptime monitor and receive alerts when your sites stop responding
 - Manage your WordPress plugins - update, activate and deactivate them in bulk actions from a central point
