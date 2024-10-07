@@ -8,7 +8,7 @@ WP Juggler is free and opensource.
 
 ## The idea behind it ##
 
-WP Juggler is a product of [BoldThemes](https://bold-themes.com/) need to efficiently manage more than 100 demo sites showcasing our premium WordPress themes and more than 200 websites coming from our agency work.
+WP Juggler is a product of [BoldThemes](https://bold-themes.com/) need to efficiently manage more than [100 demo sites](https://themeforest.net/user/boldthemes/portfolio) showcasing our premium WordPress themes and more than 200 websites coming from our agency work.
 
 We urgently needed to say goodbye to the havoc of website chaos and reduce the everlasting maintenance headache. The existing solutions were either inadquate, too expensive or not good enough. 
 
