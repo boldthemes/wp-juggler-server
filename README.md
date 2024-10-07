@@ -61,10 +61,17 @@ You can setup your WP Juggler Network in three simple steps:
 3. Download **wp-juggler-client.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-client/releases/latest) of **WP Juggler Client** plugin.
 4. Install and Activate WP Juggler Client plugin on WordPress sites you want to control remotely.
 
-### Add site and register it ###
-5. Navigate to 
+### Add new site ###
+1. Navigate to **WP Juggler > Sites** in your server's wp-admin and click **Add New**
+2. Enter the site name as title, and enter site url. Click **Save** and copy API Key to clipboard
+
+### Activate new site ###
+1. Navigate to **WP Juggler** screen in your client site's wp-admin and enter API Key and server's url
+2. Click **Save Settings** and you will get the message that your site is successfully activated 
 
 ### Fetch your first data ###
+1. Navigate to  **WP Juggler > Control Panel** in your server's wp-admin and your newly activated site should be in the list.
+2. Click the arrow at the end of the row to expand the panel and click **Refresh All Site Data**
 
 ### Enable remote login ###
 
