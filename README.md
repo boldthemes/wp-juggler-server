@@ -72,10 +72,10 @@ You can setup your WP Juggler Network in three simple steps:
 
 ## ToDo List ##
 
-- [] Alert email templates
-- [] Plugin installation (both locally hosted and from WordPress.org)
-- [] Vulnerability check of installed themes and WP Core
-- [] Checksum of themes from WordPress.org
-- [] Client Reports on Activities
+- [ ] Alert email templates
+- [ ] Plugin installation (both locally hosted and from WordPress.org)
+- [ ] Vulnerability check of installed themes and WP Core
+- [ ] Checksum of themes from WordPress.org
+- [ ] Client Reports on Activities
 
 If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
