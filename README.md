@@ -43,19 +43,17 @@ WP Juggler has two components:
 - [WP Juggler Server plugin](https://github.com/boldthemes/wp-juggler-server)
 - [WP Juggler Client plugin](https://github.com/boldthemes/wp-juggler-client)
 
-WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of sites within your network.
+WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of your sites.
 
-When you install the Server plugin you are ready to go - no additional installations, configurations and setups are required. 
-
-This also means that the data governance within your network is entirely under your control.
+This means that the data governance within your network is entirely under your control.
 
 ## Network setup - as easy as one, two, three ##
 
 You can setup your WP Juggler Network in three simple steps:
 
 1. Kickstart the process by installing the WP Juggler Server Plugin on one of your WordPress sites
-2. Next, install WP Juggler Client plugins on sites you want to control and manage
-3. Lastly, register and activate your sites on your server with a single mouse click 
+2. Install WP Juggler Client plugins on sites you want to control and manage
+3. Register and activate your sites on your server with a single mouse click 
 
 ## Getting Started Guide ##
 
