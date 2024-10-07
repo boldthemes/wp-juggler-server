@@ -90,7 +90,7 @@ Please note - The WordPress cron system is activated automatically based on a pa
 
 Depending on your hosting environment, there is more than one way to do this. 
 Here is the general explanation on how to this from WordPress plugin handbook: [Hooking WP-Cron Into the System Task Scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/)
-On most hostings you can have this enabled through control panel or hosting dashboard. Here is example from [Site Ground](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). Please contact the support of your hotsing provider if needed.
+On most hostings you can have this enabled through control panel or hosting dashboard. Here is example from [SiteGround](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). Please contact the support of your hotsing provider if needed.
 
 ## ToDo List ##
 
