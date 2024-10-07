@@ -54,8 +54,9 @@ You can setup your WP Juggler Network in three simple steps:
 ## Getting Started Guide ##
 
 1. Download **wp-juggler-server.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-server/releases/latest) of WP Juggler Server plugin.
-2. Install WP Juggler Server plugin into your WordPress instance which will hold the control panel for management of all other sites in your network
+2. Install WP Juggler Server plugin into your WordPress instance which will hold the control panel for management of all other sites in your network and Activate the plugin.
 3. Download **wp-juggler-client.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-client/releases/latest) of WP Juggler Client plugin.
+4. Install WP Juggler Client plugin into WordPress instance you want to control from the control panel and Activate the plugin.
 
 
 ## ToDo List ##
