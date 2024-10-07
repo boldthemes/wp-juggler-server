@@ -101,7 +101,9 @@ Depending on your hosting environment, there is more than one way to do this.
 
 Here is the general explanation from WordPress plugin handbook on how to this: [Hooking WP-Cron Into the System Task Scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/)
 
-On most hostings you can do this on your hosting control panel or hosting dashboard. Here is the explanation from [SiteGround](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). Contact the your hosting support if needed.
+On most hostings you can do this on your hosting control panel or hosting dashboard. Here is the explanation from [SiteGround](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). 
+
+Contact your hosting support if needed.
 
 ## ToDo List ##
 
