@@ -63,7 +63,9 @@ You can setup your WP Juggler Network in three simple steps:
 
 ### Add new site ###
 1. Navigate to **WP Juggler > Sites** in your server's wp-admin and click **Add New**
-2. Enter the site name as title, and enter site url. Click **Save** and copy API Key to clipboard
+2. Enter the site name as title, and enter site url. 
+3. At the bottom of the screen click **Assign Users** and add the users who will see the added sites in their control panel when they are logged in - add your user for start. 
+4. Click **Save** and copy API Key to clipboard
 
 ### Activate new site ###
 1. Navigate to **WP Juggler** screen in your client site's wp-admin and enter API Key and server's url
@@ -72,17 +74,21 @@ You can setup your WP Juggler Network in three simple steps:
 ### Fetch your first data ###
 1. Navigate to  **WP Juggler > Control Panel** in your server's wp-admin and your newly activated site should be in the list.
 2. Click the arrow at the end of the row to expand the panel and click **Refresh All Site Data**
+3. Once the refresh finishes you will be able to see the summary of the data from your site. 
+4. Explore the available info by clicking buttons in the expansion panel
 
-### Enable remote login ###
+### Enable one-click login to wp-admin ###
 
 ### Setup your crons ###
 
 ## ToDo List ##
 
-- [ ] Alert email templates
-- [ ] Plugin installation (both locally hosted and from WordPress.org)
-- [ ] Vulnerability check of installed themes and WP Core
-- [ ] Checksum of themes from WordPress.org
-- [ ] Client Reports on Activities
-
 If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
+
+Currenty opened development tasks:
+
+- [ ] Alert email templates
+- [ ] Remote plugin installation (both locally hosted and from WordPress.org)
+- [ ] Vulnerability check of installed themes and WP Core
+- [ ] Checksum verification of themes from WordPress.org
+- [ ] PDF Reports on activites per site within a given time period
