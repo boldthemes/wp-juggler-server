@@ -51,15 +51,15 @@ You can setup your WP Juggler Network in three simple steps:
 
 1. Kickstart the process by installing the WP Juggler Server Plugin on one of your WordPress sites
 2. Next, install WP Juggler Client plugins on sites you want to control and manage
-3. Lastly, register your sites on your server with a single mouse click 
+3. Lastly, register and activate your sites on your server with a single mouse click 
 
 ## Getting Started Guide ##
 
 ### Install plugins ###
 1. Download **wp-juggler-server.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-server/releases/latest) of WP Juggler Server plugin.
-2. Install and Activate WP Juggler Server plugin in your WordPress instance which will hold the control panel for management of all other sites in your network.
+2. Install and Activate WP Juggler Server plugin on one of your WordPress sites. This site will serve as the primary control panel.
 3. Download **wp-juggler-client.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-client/releases/latest) of WP Juggler Client plugin.
-4. Install and Activate WP Juggler Client plugin in WordPress instance you want to control remotely.
+4. Install and Activate WP Juggler Client plugin on WordPress sites you want to control remotely.
 
 ### Add site and register it ###
 5. Navigate to 
@@ -72,10 +72,10 @@ You can setup your WP Juggler Network in three simple steps:
 
 ## ToDo List ##
 
-1. Alert email templates
-2. Plugin installation (both locally hosted and from WordPress.org)
-3. Vulnerability check of installed themes and WP Core
-4. Checksum of themes from WordPress.org
-5. Client Reports on Activities
+- [] Alert email templates
+- [] Plugin installation (both locally hosted and from WordPress.org)
+- [] Vulnerability check of installed themes and WP Core
+- [] Checksum of themes from WordPress.org
+- [] Client Reports on Activities
 
 If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
