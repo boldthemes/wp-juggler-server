@@ -59,40 +59,49 @@ You can setup your WP Juggler Network in three simple steps:
 
 ### Install plugins ###
 1. Download **wp-juggler-server.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-server/releases/latest) of **WP Juggler Server** plugin.
-2. Install and Activate WP Juggler Server plugin on one of your WordPress sites. This site will serve as the primary control panel.
+2. Install and Activate WP Juggler Server plugin on one of your WordPress sites. This site will serve as your control panel.
 3. Download **wp-juggler-client.zip** file from the [latest release](https://github.com/boldthemes/wp-juggler-client/releases/latest) of **WP Juggler Client** plugin.
-4. Install and Activate WP Juggler Client plugin on WordPress sites you want to control remotely.
+4. Install and Activate WP Juggler Client plugin on WordPress sites you want to monitor and manage remotely.
 
 ### Add new site ###
 1. Navigate to **WP Juggler > Sites** in your server's wp-admin and click **Add New**
-2. Enter the site name as title, and enter site url. 
-3. At the bottom of the screen click **Assign Users** and add the users who will see the added sites in their control panel when they are logged in - add your user for start. 
+2. Enter the site name as title, enter the site url. 
+3. Click **Assign Users** and add the users who will be able to manage the added site (add your user for start). 
 4. Click **Save** and copy API Key to clipboard
 
 ### Activate new site ###
-1. Navigate to **WP Juggler** screen in your client site's wp-admin and enter API Key and server's url
-2. Click **Save Settings** and you will get the message that your site is successfully activated 
+1. Navigate to **WP Juggler** screen in your client site's wp-admin and enter bith API Key and server's url
+2. Click **Save Settings**. You will should see the message that your site is successfully activated 
 
 ### Fetch your first data ###
-1. Navigate to  **WP Juggler > Control Panel** in your server's wp-admin and your newly activated site should be in the list.
-2. Click the arrow at the end of the row to expand the panel and click **Refresh All Site Data**
-3. Once the refresh finishes you will be able to see the summary of the data from your site. 
+1. Navigate to  **WP Juggler > Control Panel** in your server's wp-admin and your newly activated site should appear in the list.
+2. Click the arrow at the end of its row to expand the panel and click **Refresh All Site Data**
+3. Once the refresh finishes you will be able to see the summary of the data retrieved from your site. 
 4. Explore the available info by clicking buttons in the expansion panel
 
 ### Enable one-click login to wp-admin ###
 1. Navigate to **WP Juggler > Sites** in your server's wp-admin and edit the desired site.
-2. Check **Automatic Login**, enter **Remote Login Username** (username of the user you are loging in on the target site) and click **Save**
-3. Edit that User's profile in your client site's wp-admin and check **Enable auto login for this user**. Logout of the client site's wp-admin  
-4. Go to your control panel and click **wp-admin** button in your client site's row. You should be automatically logged in as admin user.
+2. Check **Automatic Login**, enter **Remote Login Username** (username of the user you are going to log in on the target site) and click **Save**
+3. On your client site, edit the User's profile and check **Enable auto login for this user**. 
+4. We are all set. You can test the login by first logging out of the client site's wp-admin.  
+4. Lastly, go to your control panel and click **wp-admin** button in your site's row. You should be automatically logged in as chosen user.
 
 ### Setup your crons ###
-1. WP Juggler uses WP Cron to automatically refresh remote site data. You can set the refresh frequency by navigating to **WP Juggler > Settings** in your server's wp-admin.
+WP Juggler uses WP Cron system to automatically refresh remote site data. 
 
-Please note - The WordPress cron system is activated automatically based on a page view / init action. This means that if you do not have visits on your server site, the WP Cron will not fire. Therefore it is best to set up a cronjob to call the wp-cron.php file in the root of your WordPress install every 5 minutes, otherwise your scheduled tasks may not run correctly. 
+You can set the refresh frequency by navigating to **WP Juggler > Settings** in your server's wp-admin.
 
-Depending on your hosting environment, there is more than one way to do this. 
-Here is the general explanation on how to this from WordPress plugin handbook: [Hooking WP-Cron Into the System Task Scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/)
-On most hostings you can have this enabled through control panel or hosting dashboard. Here is example from [SiteGround](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). Please contact the support of your hotsing provider if needed.
+**Important note!!!** The WordPress cron system is activated automatically based on a page view / init action. 
+
+This means that if you do not have visits on your server site, the WP Cron will not fire and no data will be automatically retreived. This includes uptime crons.
+
+Therefore it is best to set up a cronjob to call the wp-cron.php file in the root of your server WordPress install every 5 minutes, otherwise your scheduled tasks may not run correctly. 
+
+Depending on your hosting environment, there is more than one way to do this.
+
+Here is the general explanation from WordPress plugin handbook on how to this: [Hooking WP-Cron Into the System Task Scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/)
+
+On most hostings you can do this on your hosting control panel or hosting dashboard. Here is the explanation from [SiteGround](https://eu.siteground.com/tutorials/wordpress/real-cron-job/). Contact the your hosting support if needed.
 
 ## ToDo List ##
 
