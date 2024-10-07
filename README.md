@@ -78,8 +78,13 @@ You can setup your WP Juggler Network in three simple steps:
 4. Explore the available info by clicking buttons in the expansion panel
 
 ### Enable one-click login to wp-admin ###
+1. Navigate to **WP Juggler > Sites** in your server's wp-admin and edit the desired site.
+2. Check **Automatic Login**, enter **Remote Login Username** (username of the user you are loging in on the target site) and click **Save**
+3. Edit that User's profile in your client site's wp-admin and check **Enable auto login for this user**. Logout of the client site's wp-admin  
+4. Go to your control panel and click **wp-admin** button in your client site's row. You should be automatically logged in as admin user.
 
 ### Setup your crons ###
+
 
 ## ToDo List ##
 
