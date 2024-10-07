@@ -14,8 +14,9 @@ We urgently needed to say goodbye to the havoc of website chaos and reduce the e
 
 So we have created WP Juggler
 
-## Manage everything ##
+## Why choose WP Juggler? ##
 
+There are more than few reasons to consider WP Juggler over existing commercial products.
 With WP Juggler you can:
 
 - Track WP Health and WP Debug info for all your WordPress sites
@@ -37,7 +38,7 @@ It also makes TGMPA plugins fully integreted into WordPress update mechanism. Th
 WP Juggler has two components:
 
 - WP Juggler Server plugin
-- WP Juggler Client plugin
+- [WP Juggler Client plugin](https://github.com/boldthemes/wp-juggler-client)
 
 WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of sites within your network.
 When you install the Server plugin you are ready to go - no additional installations, configurations and setups are required. This means that the data governance is entirely under your control.
@@ -46,9 +47,16 @@ When you install the Server plugin you are ready to go - no additional installat
 
 You can setup your WP Juggler Network in three simple steps:
 
-1. Create WP Site and install WP Juggler Server Plugin
+1. Install WP Juggler Server Plugin on one of your WordPress sites
 2. Install WP Juggler Client plugins on sites you want to manage
 3. Register your sites to the server in a single click of a button
+
+## Getting Started Guide ##
+
+1. Download WP Juggler Server plugin from the latest [Release](https://github.com/boldthemes/wp-juggler-server/releases/latest) - Download wp-juggler-server.zip file.
+2. Install WP Juggler Server plugin into one WordPress instance which will hold the control panel for management of all other WP Sites
+3. Download WP Juggler Client plugin from the latest [Release](https://github.com/boldthemes/wp-juggler-client/releases/latest) - Download wp-juggler-server.zip file.
+
 
 ## ToDo List ##
 
