@@ -275,6 +275,10 @@ class WPJSPluginChecksum
 			$name = dirname($basename);
 		}
 
+		if ('hello' === $name) {
+			$name = 'hello-dolly';
+		}
+
 		return $name;
 	}
 

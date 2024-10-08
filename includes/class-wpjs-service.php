@@ -881,6 +881,10 @@ class WPJS_Service
 			$name = dirname($basename);
 		}
 
+		if ('hello' === $name) {
+			$name = 'hello-dolly';
+		}
+
 		return $name;
 	}
 }
