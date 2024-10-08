@@ -113,6 +113,8 @@ On most hostings you can do this on your hosting control panel or hosting dashbo
 
 Contact your hosting support if needed.
 
+![Screenshot of WP Juggler Dashboard Screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-crons.png)
+
 ## ToDo List ##
 
 If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
