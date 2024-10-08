@@ -91,10 +91,11 @@ WP Juggler uses WP Cron system to automatically refresh remote site data.
 
 You can set the refresh frequency by navigating to **WP Juggler > Settings** in your server's wp-admin.
 
-**Important note!!!** The WordPress cron system is activated automatically based on a page view / init action. 
+> [!IMPORTANT]
+> The WordPress cron system is activated automatically based on a page view / init action. 
+> This means that if you do not have visits on your server site, the WP Cron will not fire and no data will be automatically retreived. This includes uptime crons.
 
-This means that if you do not have visits on your server site, the WP Cron will not fire and no data will be automatically retreived. This includes uptime crons.
-
+### Solution for crons ###
 Therefore it is best to set up a cronjob to call the wp-cron.php file in the root of your server WordPress install every 5 minutes, otherwise your scheduled tasks may not run correctly. 
 
 Depending on your hosting environment, there is more than one way to do this.
