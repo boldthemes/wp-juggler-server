@@ -14,7 +14,7 @@ Before the creation of WP Juggler, managing multiple sites was a chaotic, time-c
 
 So we have created WP Juggler
 
-![Screenshot of WP Juggler Control Panel](https://bold-themes.com/wp-content/wp-juggler-assets/wp_juggler_1.jpg)
+![Screenshot of WP Juggler Control Panel](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-control-panel.png)
 
 ## Why choose WP Juggler? ##
 
