@@ -38,6 +38,8 @@ It also makes TGMPA plugins fully integreted into WordPress update mechanism.
 
 This is important if you have premium themes (such as ones coming from ThemeForest) installed on your sites. Their packaged plugins will be treated the same way as all other plugins in your WordPress installations.
 
+![Screenshot of WP Juggler Site Health Info](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-health.png)
+
 ## How does it work - Main concepts ##
 
 WP Juggler has two components:
