@@ -602,6 +602,7 @@ class WPJS_Service
 			);
 
 			unset($plugins['plugins_data'][$plugin_key]['ChecksumFiles']);
+			unset($plugins['plugins_data'][$plugin_key]['ChecksumVersion']);
 
 			$log_data = json_decode($result['log_data'], true);
 
