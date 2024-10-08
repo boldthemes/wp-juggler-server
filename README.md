@@ -32,6 +32,8 @@ With WP Juggler you can:
 - Track WordPress wp-admin dashboard notices for all your WordPress sites
 - Set granular user rights to control who sees what within your network
 
+![Screenshot of WP Juggler Plugins screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-plugins.png)
+
 WP Juggler is fully compatible with WordPress multisite setups.
 
 It also makes TGMPA plugins fully integreted into WordPress update mechanism. 
@@ -101,6 +103,8 @@ You can set the refresh frequency by navigating to **WP Juggler > Settings** in 
 > [!IMPORTANT]
 > The WordPress cron system is activated automatically based on a page view / init action. 
 > This means that if you do not have visits on your server site, the WP Cron will not fire and no data will be automatically retreived. This includes uptime crons.
+
+![Screenshot of WP Juggler Uptime screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-uptime.png)
 
 ### Solution for crons ###
 Therefore it is best to set up a cronjob to call the wp-cron.php file in the root of your server WordPress install every 5 minutes, otherwise your scheduled tasks may not run correctly. 
