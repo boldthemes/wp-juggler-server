@@ -46,8 +46,9 @@ This is important if you have premium themes (such as ones coming from ThemeFore
 
 WP Juggler has two components:
 
-- [WP Juggler Server plugin](https://github.com/boldthemes/wp-juggler-server)
+- WP Juggler Server plugin - this repository
 - [WP Juggler Client plugin](https://github.com/boldthemes/wp-juggler-client)
+
 
 > [!NOTE]
 > WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of your sites.
