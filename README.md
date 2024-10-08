@@ -43,9 +43,9 @@ WP Juggler has two components:
 - [WP Juggler Server plugin](https://github.com/boldthemes/wp-juggler-server)
 - [WP Juggler Client plugin](https://github.com/boldthemes/wp-juggler-client)
 
-WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of your sites.
-
-This means that the data governance within your network is entirely under your control.
+> [!NOTE]
+> WP Juggler Server is a self-hosted WordPress plugin which features control panel for centralized WordPress management of your sites.
+> This means that the data governance within your network is entirely under your control.
 
 ## Network setup - as easy as one, two, three ##
 
