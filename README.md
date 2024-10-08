@@ -121,7 +121,7 @@ Contact your hosting support if needed.
 
 ## ToDo List ##
 
-If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and to the list.
+If you have a feature proposal or and idea on how to make WP Juggler better and more useful, please use [Issues section](https://github.com/boldthemes/wp-juggler-server/issues). We will be glad to review them and add them to the list.
 
 Currenty opened development tasks:
 
