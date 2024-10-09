@@ -356,11 +356,13 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
@@ -376,7 +378,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPluginChecksum' 
 					AND log_result = 'succ' 
@@ -412,11 +414,13 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
@@ -444,11 +448,13 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
@@ -477,11 +483,13 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkCoreChecksum' 
 					AND log_result = 'succ' 
@@ -509,11 +517,13 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkHealth' 
 					AND log_result = 'succ' 
@@ -529,7 +539,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkDebug' 
 					AND log_result = 'succ' 
@@ -545,7 +555,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkCoreChecksum' 
 					AND log_result = 'succ' 
@@ -596,11 +606,13 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPlugins' 
 					AND log_result = 'succ' 
@@ -616,7 +628,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkPluginChecksum' 
 					AND log_result = 'succ' 
@@ -685,11 +697,13 @@ class WPJS_AJAX
 
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$result = $wpdb->get_row(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
 					AND log_result = 'succ' 
@@ -705,7 +719,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT COUNT(ID) AS log_count
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
 					AND log_result = 'succ' 
@@ -757,14 +771,16 @@ class WPJS_AJAX
 	{
 		global $wpdb;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$log_entries = $wpdb->get_results(
 			$wpdb->prepare(
 				"
 					SELECT t1.*
-					FROM wp_wpjs_cron_log t1
+					FROM $table_name t1
 					INNER JOIN (
 						SELECT wpjugglersites_id, MAX(log_time) as latest_log_time
-						FROM wp_wpjs_cron_log
+						FROM $table_name
 						WHERE log_type = %s 
 						GROUP BY wpjugglersites_id
 					) t2
@@ -842,7 +858,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPluginChecksum' 
 						AND log_result = 'succ' 
@@ -909,11 +925,13 @@ class WPJS_AJAX
 			$site_id = sanitize_text_field($_POST['siteId']);
 		}
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'confirmClientApi' 
 					AND log_result IN (%s, %s)
@@ -939,7 +957,7 @@ class WPJS_AJAX
 			$wpdb->prepare(
 				"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'confirmFrontEnd' 
 					AND log_result IN (%s, %s)
@@ -983,13 +1001,15 @@ class WPJS_AJAX
 		$site_id = (isset($_POST['siteId'])) ? sanitize_text_field($_POST['siteId']) : false;;
 		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		if (intval($page) == 0) {
 
 			$results = $wpdb->get_results(
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
 					AND log_result = 'succ'
@@ -1006,7 +1026,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type = 'checkNotices' 
 					AND log_result = 'succ'
@@ -1054,6 +1074,8 @@ class WPJS_AJAX
 			return;
 		}
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
 
 		if (intval($page) == 0) {
@@ -1062,7 +1084,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE log_type IN (%s, %s, %s, %s, %s, %s) 
 					AND log_result IN (%s, %s)
 				ORDER BY ID DESC 
@@ -1084,7 +1106,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE log_type IN (%s, %s, %s) 
 					AND log_result IN (%s, %s)
 					AND ID < %s 
@@ -1137,6 +1159,8 @@ class WPJS_AJAX
 			return;
 		}
 
+		$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 		$site_id = (isset($_POST['siteId'])) ? sanitize_text_field($_POST['siteId']) : false;;
 		$page = (isset($_POST['page'])) ? sanitize_text_field($_POST['page']) : false;
 
@@ -1146,7 +1170,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type IN (%s, %s) 
 					AND log_result IN (%s, %s)
@@ -1166,7 +1190,7 @@ class WPJS_AJAX
 				$wpdb->prepare(
 					"
 				SELECT * 
-				FROM wp_wpjs_cron_log 
+				FROM $table_name 
 				WHERE wpjugglersites_id = %s 
 					AND log_type IN (%s, %s) 
 					AND log_result IN (%s, %s)

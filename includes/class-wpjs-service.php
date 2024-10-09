@@ -577,11 +577,13 @@ class WPJS_Service
 
 			global $wpdb;
 
+			$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPlugins' 
 						AND log_result = 'succ' 
@@ -653,7 +655,7 @@ class WPJS_Service
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPluginChecksum' 
 						AND log_result = 'succ' 
@@ -703,11 +705,13 @@ class WPJS_Service
 
 			global $wpdb;
 
+			$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPlugins' 
 						AND log_result = 'succ' 
@@ -754,11 +758,13 @@ class WPJS_Service
 
 			global $wpdb;
 
+			$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPlugins' 
 						AND log_result = 'succ' 
@@ -803,11 +809,13 @@ class WPJS_Service
 
 			global $wpdb;
 
+			$table_name = $wpdb->prefix . 'wpjs_cron_log';
+
 			$result = $wpdb->get_row(
 				$wpdb->prepare(
 					"
 					SELECT * 
-					FROM wp_wpjs_cron_log 
+					FROM $table_name 
 					WHERE wpjugglersites_id = %s 
 						AND log_type = 'checkPlugins' 
 						AND log_result = 'succ' 
