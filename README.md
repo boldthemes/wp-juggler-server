@@ -134,9 +134,12 @@ Most shared hosts have disabled the HTTP Authorization Header by default.
 To enable this option you'll need to edit your .htaccess file by adding the following:
 
 ```
-RewriteEngine on
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+```
+just after
+```
+RewriteEngine on
 ```
 
 #### WPEngine ####
