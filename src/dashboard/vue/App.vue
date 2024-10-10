@@ -15,10 +15,12 @@ const activation_status = ref(false)
 const dashboardHistoryItems = ref([]);
 const dashboardPage = ref(0);
 
-const runCronActive = ref('') 
+const runCronActive = ref('')
 
-const ajaxError = ref(false);
-const ajaxErrorText = ref('');
+const snackbar = ref(false)
+const snackbar_color = ref('success')
+const snackbar_text = ref(snack_succ_text)
+const snack_succ_text = 'WP Juggler Cron Strated in the Background'
 
 const { __, _x, _n, sprintf } = wp.i18n;
 
@@ -33,7 +35,7 @@ const dashboard_headers = [
   { title: "Event Name", value: "event_name", align: "start", sortable: true },
   { title: "Next Run", value: "next_run", align: "start", sortable: true },
   { title: "Schedule", value: "frequency", align: "start", sortable: true },
-  { title: "Actions", key:"actions", align: "center", sortable: false}
+  { title: "Actions", key: "actions", align: "center", sortable: false }
 ];
 
 async function getDashboard() {
@@ -62,15 +64,21 @@ async function startCron(hookSlug) {
     if (response.success) {
       ret = response.data;
 
-      //Ovde ispisati succ
-
       runCronActive.value = false;
+
+      snackbar_color.value = 'success'
+      snackbar_text.value = snack_succ_text
+      snackbar.value = true
+
     } else {
       throw new Error(`${response.data.code} - ${response.data.message}`);
     }
   } catch (error) {
-    ajaxError.value = true;
-    ajaxErrorText.value = error.message;
+
+    snackbar_color.value = 'error'
+    snackbar_text.value = 'Failed to start cron - ' + error.message
+    snackbar.value = true
+
     runCronActive.value = false;
   }
 }
@@ -127,7 +135,7 @@ const cron_data = computed(() => {
 
     const copiedArray = data.value
       .filter(item => {
-        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_debug_api' || item.hook_slug === 'wpjs_check_core_checksum_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_plugins_checksum_api' || item.hook_slug === 'wpjs_check_notices_api' ) {
+        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_debug_api' || item.hook_slug === 'wpjs_check_core_checksum_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_plugins_checksum_api' || item.hook_slug === 'wpjs_check_notices_api') {
           return true
         } else {
           return false
@@ -206,22 +214,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ __( 'WP Juggler Server Dashboard', 'wp-juggler-server' ) }}</h1>
+  <h1>{{ __('WP Juggler Server Dashboard', 'wp-juggler-server') }}</h1>
 
   <v-card class="pa-4 mr-4" v-if="data">
 
     <v-sheet class="align-left justify-left text-left mx-auto mt-4 px-4 pb-4 mb-10">
-      <div class="text-h6">{{ __( 'WP Juggler Cron Events', 'wp-juggler-server' ) }}</div>
+      <div class="text-h6">{{ __('WP Juggler Cron Events', 'wp-juggler-server') }}</div>
       <v-divider class="mb-10"></v-divider>
 
       <v-sheet>
         <v-spacer></v-spacer>
 
         <v-data-table :items="cron_data" :headers="dashboard_headers" item-key="index" hide-default-footer>
-          
+
           <template v-slot:item.actions="{ item }">
-            <v-btn :loading="item.hook_slug == runCronActive"
-              @click="startCron(item.hook_slug)" class="ml-3 text-none text-caption" variant="outlined">{{ __( 'Run Cron', 'wp-juggler-server' ) }}
+            <v-btn :loading="item.hook_slug == runCronActive" @click="startCron(item.hook_slug)"
+              class="ml-3 text-none text-caption" variant="outlined">{{ __('Run Cron', 'wp-juggler-server') }}
 
             </v-btn>
           </template>
@@ -229,29 +237,30 @@ onMounted(() => {
       </v-sheet>
 
       <v-sheet v-if="true" class="align-left justify-left text-left mb-15">
-        <div class="text-h6 mt-15">{{ __( 'Failed Cron Events History:', 'wp-juggler-server' ) }}</div>
+        <div class="text-h6 mt-15">{{ __('Failed Cron Events History:', 'wp-juggler-server') }}</div>
         <v-divider class="mb-10"></v-divider>
 
         <v-row class="wpjs-debug-table-row">
-              <v-col class="text-left pl-5" cols="2">
-                <strong>Time</strong>
-              </v-col>
-              <v-col class="text-left" cols="2">
-                <strong>Site Name</strong>
-              </v-col>
-              <v-col class="text-left" cols="2">
-                <strong>Site url</strong>
-              </v-col>
-              <v-col class="text-left" cols="2">
-                <strong>Cron Type</strong>
-              </v-col>
-              <v-col class="text-left" cols="4">
-                <strong>Error Message</strong>
-              </v-col>
-            </v-row>
+          <v-col class="text-left pl-5" cols="2">
+            <strong>Time</strong>
+          </v-col>
+          <v-col class="text-left" cols="2">
+            <strong>Site Name</strong>
+          </v-col>
+          <v-col class="text-left" cols="2">
+            <strong>Site url</strong>
+          </v-col>
+          <v-col class="text-left" cols="2">
+            <strong>Cron Type</strong>
+          </v-col>
+          <v-col class="text-left" cols="4">
+            <strong>Error Message</strong>
+          </v-col>
+        </v-row>
 
-        <v-infinite-scroll :height="600" :items="cron_history" :onLoad="loadDashboardHistory" style="overflow-x: hidden;">
-         
+        <v-infinite-scroll :height="600" :items="cron_history" :onLoad="loadDashboardHistory"
+          style="overflow-x: hidden;">
+
           <template v-for="( item ) in cron_history" :key="item.ID">
 
             <v-row class="wpjs-debug-table-row align-center">
@@ -291,29 +300,23 @@ onMounted(() => {
     <v-skeleton-loader type="table-tbody"> </v-skeleton-loader>
   </v-card>
 
-  <v-snackbar v-model="ajaxError" color="red-lighten-2">
-        {{ ajaxErrorText }}
+  <v-snackbar v-model="snackbar" :timeout="3000" :color="snackbar_color">
+    {{ snackbar_text }}
+    <template v-slot:actions>
+      <v-btn variant="text" @click="snackbar = false">
+        X
+      </v-btn>
+    </template>
+  </v-snackbar>
 
-        <template v-slot:actions>
-          <v-btn
-            color="red-lighten-4"
-            variant="text"
-            @click="ajaxError = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
 </template>
 
 <style>
-
 .wpjs-debug-table-row {
 
-&:nth-child(odd) {
-  background-color: #f7f7f7;
-}
+  &:nth-child(odd) {
+    background-color: #f7f7f7;
+  }
 
 }
-
 </style>
