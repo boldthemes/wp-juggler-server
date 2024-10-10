@@ -123,25 +123,28 @@ Contact your hosting support if needed.
 
 ![Screenshot of WP Juggler Dashboard Screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-crons.png)
 
-## Enable PHP HTTP Authorization Header ##
+### Enable PHP HTTP Authorization Header ###
 
 > [!Note]
 > This section describes the actions that need to be taken if the Auth Header Test says Failed either on Server or Client side
 
-### Shared Hosts ###
+#### Shared Hosts ####
 Most shared hosts have disabled the HTTP Authorization Header by default.
 
 To enable this option you'll need to edit your .htaccess file by adding the following:
 
+```
 RewriteEngine on
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+```
 
-### WPEngine ###
+#### WPEngine ####
 To enable this option you'll need to edit your .htaccess file by adding the following (see #1):
 
+```
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-
+```
 
 
 ## ToDo List ##
