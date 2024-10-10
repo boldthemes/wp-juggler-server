@@ -79,7 +79,10 @@ You can setup your WP Juggler Network in three simple steps:
 
 ### Activate new site ###
 1. Navigate to **WP Juggler** screen in your client site's wp-admin and enter bith API Key and server's url
-2. Click **Save Settings**. You will should see the message that your site is successfully activated 
+2. Click **Save Settings**. You will should see the message that your site is successfully activated
+3. If the Auth Header Test Row says Failed, please do as instructed in the section and :
+
+
 
 ![Screenshot of WP Juggler Site Edit Screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-site-edit.png)
 
@@ -119,6 +122,27 @@ On most hostings you can do this on your hosting control panel or hosting dashbo
 Contact your hosting support if needed.
 
 ![Screenshot of WP Juggler Dashboard Screen](https://bold-themes.com/wp-content/wp-juggler-assets/wp-juggler-crons.png)
+
+## Enable PHP HTTP Authorization Header ##
+
+> [!Note]
+> This section describes the actions that need to be taken if the Auth Header Test says Failed either on Server or Client side
+
+### Shared Hosts ###
+Most shared hosts have disabled the HTTP Authorization Header by default.
+
+To enable this option you'll need to edit your .htaccess file by adding the following:
+
+RewriteEngine on
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+
+### WPEngine ###
+To enable this option you'll need to edit your .htaccess file by adding the following (see #1):
+
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+
 
 ## ToDo List ##
 

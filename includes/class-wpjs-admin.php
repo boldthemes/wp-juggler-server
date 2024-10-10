@@ -124,8 +124,10 @@ class WPJS_Admin
 				$this->plugin_name . '_settings_object',
 				array(
 					'ajaxurl' => admin_url('admin-ajax.php'),
+					'resturl' => rest_url(),
 					'nonce' => $nonce,
-					'adminurl' => admin_url()
+					'adminurl' => admin_url(),
+					'checktoken' => wp_hash('checktoken'),
 				)
 			);
 		}

@@ -1,7 +1,7 @@
 <script setup>
 
 import { useWpjsStore } from './store.js'
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import { useQueryClient, useQuery, useMutation } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
@@ -37,6 +37,8 @@ const snackbar = ref(false)
 const snackbar_color = ref('success')
 const snackbar_text = ref(snack_succ_text)
 const snack_succ_text = 'WP Juggler Settings Saved'
+
+const wpjc_authorization = ref('Checking...');
 
 
 const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
@@ -123,6 +125,40 @@ async function saveSettings(obj) {
   const response = await doAjax(obj)
 }
 
+async function checkHeaders(url, api_key) {
+
+let result;
+try {
+  result = await jQuery.ajax({
+    url: url,
+    type: 'POST',
+    data: [],
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader('Authorization', 'Bearer ' + api_key);
+    }
+  })
+
+  if (result.data.headers_passed) {
+    wpjc_authorization.value = 'Passed'
+  } else {
+    wpjc_authorization.value = 'Failed'
+  }
+
+} catch (error) {
+  wpjc_authorization.value = 'Failed'
+}
+}
+
+watch(data, async (newData, oldData) => {
+  wpjc_authorization.value = 'Checking...'
+  await (checkHeaders(wpjs_settings_object.resturl + 'juggler/v1/checkHeaders', wpjs_settings_object.checktoken))
+})
+
+onMounted(() => {
+  console.log(wpjs_settings_object.nonce)
+})
+
+
 </script>
 
 <template>
@@ -197,6 +233,17 @@ async function saveSettings(obj) {
           </td>
         </tr>
 
+        <tr>
+          <th scope="row"><label for="server url">Auth Header Test</label></th>
+          <td>
+            {{ wpjc_authorization }}
+            <v-icon color="success" icon="mdi-check-bold" size="large" class="mr-1"
+              v-if="wpjc_authorization == 'Passed'"></v-icon>
+            <v-icon color="error" icon="mdi-alert-outline" size="large" class="mr-1"
+              v-if="wpjc_authorization == 'Failed'"></v-icon>
+          </td>
+        </tr>
+
       </tbody>
     </table>
     <p></p>
@@ -228,6 +275,10 @@ async function saveSettings(obj) {
 
 select {
   border-style: solid !important;
+}
+
+#app .form-table th {
+  width: 350px !important;
 }
 
 </style>

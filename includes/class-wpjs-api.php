@@ -82,6 +82,20 @@ class WPJS_Api
 			'args' => array(),
 			'permission_callback' => array($this, 'api_validate_api_key')
 		));
+
+		register_rest_route('juggler/v1', '/checkHeaders/', array(
+			'methods' => 'POST',
+			'callback' => array($this, 'check_headers'),
+			'args' => array(),
+			'permission_callback' => array($this, 'api_validate_nonce')
+		));
+	}
+
+	public function api_validate_nonce()
+	{
+		$token = $this->get_api_key();
+		$validation = $token == wp_hash('checktoken')? true : false;
+		return $validation;
 	}
 
 
@@ -264,6 +278,14 @@ class WPJS_Api
 			wp_send_json_error(new WP_Error('Missing param', 'Site url is not correct '), 400);
 		}
 
+	}
+
+	public function check_headers(WP_REST_Request $request)
+	{
+		$data = array(
+			'headers_passed' => true
+		);
+		wp_send_json_success($data, 200);
 	}
 
 }
