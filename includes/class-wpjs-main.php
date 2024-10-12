@@ -157,6 +157,7 @@ class WP_Juggler_Server {
 
 		//Ajax actions
 		$this->loader->add_action( 'wp_ajax_juggler_user_search', $plugin_ajax, 'wpjs_user_search' );
+		$this->loader->add_action( 'wp_ajax_juggler_reset_api_key', $plugin_ajax, 'wpjs_reset_api_key' );
 
 		$this->loader->add_action( 'wp_ajax_wpjs_get_dashboard', $plugin_ajax, 'ajax_get_dashboard' );
 		$this->loader->add_action( 'wp_ajax_wpjs-get-dashboard-history', $plugin_ajax, 'ajax_get_dashboard_history' );

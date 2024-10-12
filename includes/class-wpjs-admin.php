@@ -520,6 +520,7 @@ class WPJS_Admin
 			<label for="wp_juggler_api_key">API Key</label><br>
 			<?php if (!empty($api_key)): ?>
 				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo esc_attr($api_key); ?>" size="60" readonly />
+				<button type="button" class="button reset-api-key" id="reset-api-key">Reset API Key</button>
 			<?php else: ?>
 				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo wp_generate_uuid4(); ?>" size="60" readonly />
 			<?php endif; ?>
@@ -860,6 +861,23 @@ class WPJS_Admin
 
 				$(document).on('click', '.juggler-remove-user', function() {
 					$(this).closest('.juggler-user-field').remove();
+				});
+
+				$(document).on('click', '.reset-api-key', function() {
+					console.log('Reset API Key-a')
+					$.ajax({
+								url: ajaxurl,
+								data: {
+									action: 'juggler_reset_api_key',
+									post_id: $('#post_ID').val(),
+									wp_juggler_server_nonce: $('#wp_juggler_server_nonce').val()
+								},
+								method: 'POST',
+								success: function(data) {
+									console.log('Cakma')
+									$('#wp_juggler_api_key').val(data['data']['api_key'])
+								}
+							});
 				});
 			});
 		</script>

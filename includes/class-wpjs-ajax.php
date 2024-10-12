@@ -1701,6 +1701,36 @@ class WPJS_AJAX
 		wp_send_json($results);
 	}
 
+	public function wpjs_reset_api_key()
+	{
+		$nonce = sanitize_text_field($_POST['wp_juggler_server_nonce']);
+
+		wp_verify_nonce($this->plugin_name, '-site', $nonce);
+
+		// Check for user capabilities
+		if (!current_user_can('edit_posts')) {
+			wp_send_json_error('You do not have permission to perform this action.');
+			wp_die();
+		}
+
+		if (isset($_POST['post_id'])) {
+			$post_id = sanitize_text_field($_POST['post_id']);
+		} else {
+			wp_send_json_error('Post ID is missing');
+			wp_die();
+		}
+
+		$api_key = wp_generate_uuid4();
+
+		update_post_meta($post_id, 'wp_juggler_api_key', $api_key);
+
+		$data = array(
+			'api_key' => $api_key
+		);
+
+		wp_send_json_success($data, 200);
+	}
+
 	private function get_wpjs_cron_schedules()
 	{
 		$schedules = wp_get_schedules();
