@@ -47,6 +47,9 @@ class WPJS_Background_Process extends WP_Background_Process
 					'log_result' => 'fail',
 					'log_value' =>  $response->get_error_message()
 				);
+
+				WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
+
 			} else {
 
 				// TODO Will never be called because it gets converted to WP Error in WPJS Service Class
@@ -63,6 +66,8 @@ class WPJS_Background_Process extends WP_Background_Process
 							'log_value' =>  'Remote client is unresponsive'
 						);
 
+						WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
+
 						break;
 					case 401:
 
@@ -72,6 +77,8 @@ class WPJS_Background_Process extends WP_Background_Process
 							'log_result' => 'fail',
 							'log_value' =>  '401 - You should check API key'
 						);
+
+						WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
 
 						break;
 					case 500:
@@ -83,6 +90,8 @@ class WPJS_Background_Process extends WP_Background_Process
 							'log_value' =>  '500 - Internal Server Error on remote client'
 						);
 
+						WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
+
 						break;
 					default:
 						if ($response_code >= 400) {
@@ -93,6 +102,9 @@ class WPJS_Background_Process extends WP_Background_Process
 								'log_result' => 'fail',
 								'log_value' =>  $response_code . ' - Client error occurred'
 							);
+
+							WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
+
 						} elseif ($response_code >= 500) {
 
 							$log_entry = array(
@@ -101,6 +113,9 @@ class WPJS_Background_Process extends WP_Background_Process
 								'log_result' => 'fail',
 								'log_value' =>  $response_code . ' - Server error occurred'
 							);
+
+							WPJS_Mailer::wpjs_send_api_alert_start( $site_id );
+
 						} else {
 							
 							$body = json_decode(wp_remote_retrieve_body($response), true);
@@ -119,6 +134,8 @@ class WPJS_Background_Process extends WP_Background_Process
 								'log_result' => 'succ',
 								'log_data' => json_encode($body['data'])
 							); */
+
+							WPJS_Mailer::wpjs_send_api_alert_end( $site_id );
 							
 							$log_entry = false;
 
