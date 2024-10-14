@@ -69,3 +69,4 @@ dist/
 /js/
 
 .vscode/*
+/assets
