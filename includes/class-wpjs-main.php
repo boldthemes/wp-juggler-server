@@ -83,6 +83,7 @@ class WP_Juggler_Server {
 		require_once WPJS_PATH . 'includes/class-wpjs-front-end.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-ajax.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-service.php';
+		require_once WPJS_PATH . 'includes/class-wpjs-mailer.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-cron.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-api.php';
 		require_once WPJS_PATH . 'includes/class-wpjs-background-process.php';
@@ -121,6 +122,7 @@ class WP_Juggler_Server {
 		$plugin_ajax  = new WPJS_AJAX( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
 		$plugin_fe  = new WPJS_Front_End( $this->get_plugin_name(), $this->get_version() );
 		$plugin_service  = new WPJS_Service( $this->get_plugin_name(), $this->get_version() );
+		$plugin_mailer  = new WPJS_Mailer( $this->get_plugin_name(), $this->get_version() );
 		$plugin_api  = new WPJS_Api( $this->get_plugin_name(), $this->get_version(), $plugin_cron );
 		$plugin_plugins  = new WPJS_Plugins( $this->get_plugin_name(), $this->get_version() );
 		$plugin_github_updater  = new WPJS_Github_Updater( $this->get_plugin_name(), $this->get_version() );

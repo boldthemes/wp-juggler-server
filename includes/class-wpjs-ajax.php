@@ -2089,6 +2089,10 @@ class WPJS_AJAX
 			$this->cron->check_all_core_checksum_api();
 		}
 
+		if ( $hookSlug == "wpjs_check_client_api"){
+			$this->cron->check_client_api();
+		}
+
 		if ( $hookSlug == "wpjs_check_plugins_api"){
 			$this->cron->check_all_plugins_api();
 		}

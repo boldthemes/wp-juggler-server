@@ -166,6 +166,8 @@ class WPJS_Background_Process extends WP_Background_Process
 				);
 			}
 
+			WPJS_Mailer::wpjs_send_fe_alert_start( $site_id );
+
 			WPJS_Cron_Log::insert_log($log_entry);
 		}
 

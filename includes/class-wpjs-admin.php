@@ -427,6 +427,15 @@ class WPJS_Admin
 			'normal', // Context
 			'low' // Priority
 		);
+
+		add_meta_box(
+			'wpjs_email_alerts', // ID
+			__('Email Alert Recipients', 'wp-juggler-server'), // Title
+			array($this, 'render_juggler_email_alerts_meta_box'),
+			'wpjugglersites', // Post type
+			'normal', // Context
+			'low' // Priority
+		);
 	}
 
 	public function wpjs_plugins_metaboxes()
@@ -525,6 +534,27 @@ class WPJS_Admin
 				<input type="text" name="wp_juggler_api_key" id="wp_juggler_api_key" value="<?php echo wp_generate_uuid4(); ?>" size="60" readonly />
 			<?php endif; ?>
 		</p>
+
+		<script>
+			jQuery(document).ready(function($) {
+				$(document).on('click', '.reset-api-key', function() {
+					$.ajax({
+								url: ajaxurl,
+								data: {
+									action: 'juggler_reset_api_key',
+									post_id: $('#post_ID').val(),
+									wp_juggler_server_nonce: $('#wp_juggler_server_nonce').val()
+								},
+								method: 'POST',
+								success: function(data) {
+									$('#wp_juggler_api_key').val(data['data']['api_key'])
+								}
+							});
+				});
+			});
+		</script>
+
+		
 		<p>
 			<label for="wp_juggler_automatic_login">Automatic Login</label><br>
 			<input type="checkbox" name="wp_juggler_automatic_login" id="wp_juggler_automatic_login" <?php checked($automatic_login, 'on'); ?> />
@@ -862,23 +892,55 @@ class WPJS_Admin
 				$(document).on('click', '.juggler-remove-user', function() {
 					$(this).closest('.juggler-user-field').remove();
 				});
+			});
+		</script>
+	<?php
+	}
 
-				$(document).on('click', '.reset-api-key', function() {
-					console.log('Reset API Key-a')
-					$.ajax({
-								url: ajaxurl,
-								data: {
-									action: 'juggler_reset_api_key',
-									post_id: $('#post_ID').val(),
-									wp_juggler_server_nonce: $('#wp_juggler_server_nonce').val()
-								},
-								method: 'POST',
-								success: function(data) {
-									console.log('Cakma')
-									$('#wp_juggler_api_key').val(data['data']['api_key'])
-								}
-							});
+	public function render_juggler_email_alerts_meta_box($post)
+	{
+		$saved_email_alerts = get_post_meta($post->ID, 'wp_juggler_email_alerts', true);
+
+	?>
+		<div id="juggler-email-alerts-container">
+			<?php
+			if (is_array($saved_email_alerts) && !empty($saved_email_alerts)) {
+				foreach ($saved_email_alerts as $email_alert) {
+					echo '<div class="juggler-email-alert-field">';
+					echo '<input type="text" class="regular-text juggler-email-alerts" name="juggler_email_alerts[]" value="' . esc_attr($email_alert) . '" />';
+					echo '<button type="button" class="button juggler-remove-email-alert">Remove</button>';
+					echo '</div>';
+				}
+			}
+			?>
+		</div>
+		<button type="button" class="button juggler-add-email-alert" id="juggler-add-email-alert">Add Email</button>
+
+		<style>
+			.juggler-email-alerts,
+			.juggler-remove-email-alert,
+			.juggler-add-email-alert {
+				margin: 4px !important;
+			}
+		</style>
+
+		<script>
+			jQuery(document).ready(function($) {
+
+				$('#juggler-add-email-alert').click(function() {
+					$('#juggler-email-alerts-container').append(
+						'<div class="juggler-email-alert-field">' +
+						'<input type="text" class="regular-text juggler-email-alerts" name="juggler_email_alerts[]" value="" />' +
+						'<button type="button" class="button juggler-remove-email-alert">Remove</button>' +
+						'</div>'
+					);
+					bindAutocomplete();
 				});
+
+				$(document).on('click', '.juggler-remove-email-alert', function() {
+					$(this).closest('.juggler-email-alert-field').remove();
+				});
+				
 			});
 		</script>
 	<?php
@@ -989,6 +1051,16 @@ class WPJS_Admin
 		}
 
 		update_post_meta($post_id, 'wp_juggler_login_users', $users);
+
+		$email_alerts = array();
+		if (isset($_POST['juggler_email_alerts'])) {
+			foreach ($_POST['juggler_email_alerts'] as $email_alert) {
+				$email_alerts[] = sanitize_text_field($email_alert);
+			}
+			update_post_meta($post_id, 'wp_juggler_email_alerts', $email_alerts);
+		}
+
+		
 	}
 
 	public function wpjs_save_plugins_meta_boxes($post_id)

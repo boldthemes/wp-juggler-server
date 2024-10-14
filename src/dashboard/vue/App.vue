@@ -135,7 +135,7 @@ const cron_data = computed(() => {
 
     const copiedArray = data.value
       .filter(item => {
-        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_debug_api' || item.hook_slug === 'wpjs_check_core_checksum_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_plugins_checksum_api' || item.hook_slug === 'wpjs_check_notices_api') {
+        if (item.hook_slug === 'wpjs_check_health_api' || item.hook_slug === 'wpjs_check_debug_api' || item.hook_slug === 'wpjs_check_core_checksum_api' || item.hook_slug === 'wpjs_check_client_api' || item.hook_slug === 'wpjs_check_plugins_api' || item.hook_slug === 'wpjs_check_plugins_checksum_api' || item.hook_slug === 'wpjs_check_notices_api') {
           return true
         } else {
           return false
@@ -149,6 +149,8 @@ const cron_data = computed(() => {
           eventName = 'Check Debug Data'
         } else if (item.hook_slug === 'wpjs_check_core_checksum_api') {
           eventName = 'Check Core Checksum Data'
+        } else if (item.hook_slug === 'wpjs_check_client_api') {
+          eventName = 'Check Front End and Back End Response'
         } else if (item.hook_slug === 'wpjs_check_plugins_api') {
           eventName = 'Check Plugin and Theme Data'
         } else if (item.hook_slug === 'wpjs_check_plugins_checksum_api') {
