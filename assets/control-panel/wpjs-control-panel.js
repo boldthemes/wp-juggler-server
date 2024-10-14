@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"90Nsp":[function(require,module,exports) {
+})({"1H7xV":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = 64992;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "916932b22e4085ab";
 var HMR_USE_SSE = false;
@@ -16321,15 +16321,15 @@ exports.default = {
                     bulkActionText.value = "update";
                 }
                 if (selectedActionPlugins.value.value == "activate") {
-                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.Multisite != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true);
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Slug !== "wp-juggler-client" && (element.Active != true && element.Multisite != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true));
                     bulkActionText.value = "activate";
                 }
                 if (selectedActionPlugins.value.value == "network_activate") {
-                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true);
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Slug !== "wp-juggler-client" && (element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network != true || element.Active != true && element.NetworkActive != true && element.Multisite == true && element.Network == true));
                     bulkActionText.value = "network activate";
                 }
                 if (selectedActionPlugins.value.value == "deactivate") {
-                    actionArrayFiltered.value = actionArray.filter((element)=>element.Active == true || element.NetworkActive == true);
+                    actionArrayFiltered.value = actionArray.filter((element)=>element.Slug !== "wp-juggler-client" && (element.Active == true || element.NetworkActive == true));
                     bulkActionText.value = "deactivate";
                 }
             }
@@ -16630,6 +16630,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_v_select = (0, _vue.resolveComponent)("v-select");
     const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
     const _component_v_row = (0, _vue.resolveComponent)("v-row");
+    const _component_v_checkbox_btn = (0, _vue.resolveComponent)("v-checkbox-btn");
     const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
     const _component_v_tabs_window_item = (0, _vue.resolveComponent)("v-tabs-window-item");
     const _component_v_tabs_window = (0, _vue.resolveComponent)("v-tabs-window");
@@ -16853,6 +16854,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                             "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.selectedPlugins = $event),
                                                                                                                             class: "pb-4"
                                                                                                                         }, {
+                                                                                                                            "item.data-table-select": (0, _vue.withCtx)(({ internalItem, isSelected, toggleSelect, item })=>[
+                                                                                                                                    item.Slug !== "wp-juggler-client" || $setup.selectedActionPlugins?.value === "update" ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_checkbox_btn, {
+                                                                                                                                        key: 0,
+                                                                                                                                        "model-value": isSelected(internalItem),
+                                                                                                                                        "onUpdate:modelValue": ($event)=>toggleSelect(internalItem)
+                                                                                                                                    }, null, 8 /* PROPS */ , [
+                                                                                                                                        "model-value",
+                                                                                                                                        "onUpdate:modelValue"
+                                                                                                                                    ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                                                                                ]),
                                                                                                                             "item.active": (0, _vue.withCtx)(({ item })=>[
                                                                                                                                     item.Active && !item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
                                                                                                                                         (0, _vue.createVNode)(_component_v_icon, {
@@ -16980,7 +16991,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                     ]))
                                                                                                                                 ]),
                                                                                                                             "item.actions": (0, _vue.withCtx)(({ item })=>[
-                                                                                                                                    item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                    item.Slug !== "wp-juggler-client" && (item.Active || item.NetworkActive) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                                         key: 0,
                                                                                                                                         loading: item.Slug == $setup.deactivateActive,
                                                                                                                                         onClick: ($event)=>$setup.deactivatePlugin(item.Slug),
@@ -16995,7 +17006,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         "loading",
                                                                                                                                         "onClick"
                                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                    !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                    item.Slug !== "wp-juggler-client" && !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                                         key: 1,
                                                                                                                                         loading: item.Slug == $setup.activateActive,
                                                                                                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
@@ -17010,7 +17021,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         "loading",
                                                                                                                                         "onClick"
                                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                    item.Slug !== "wp-juggler-client" && !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                                         key: 2,
                                                                                                                                         loading: item.Slug == $setup.activateActive,
                                                                                                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, false),
@@ -17025,7 +17036,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         "loading",
                                                                                                                                         "onClick"
                                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                    item.Slug !== "wp-juggler-client" && !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                                         key: 3,
                                                                                                                                         loading: item.Slug == $setup.activateNetworkActive,
                                                                                                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
@@ -17040,7 +17051,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                                                                                         "loading",
                                                                                                                                         "onClick"
                                                                                                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                                                                                                    !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                                                                    item.Slug !== "wp-juggler-client" && !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                                                                                                         key: 4,
                                                                                                                                         loading: item.Slug == $setup.activateNetworkActive,
                                                                                                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, true),
@@ -20393,24 +20404,7 @@ exports.default = {
                 sortable: false
             }
         ];
-        const bulkActionsPlugins = [
-            {
-                text: "Update Plugins",
-                value: "update"
-            },
-            {
-                text: "Activate Plugins",
-                value: "activate"
-            },
-            {
-                text: "Network Activate Plugins",
-                value: "network_activate"
-            },
-            {
-                text: "Deactivate Plugins",
-                value: "deactivate"
-            }
-        ];
+        let bulkActionsPlugins = [];
         const selectedActionPlugins = (0, _vue.ref)(null);
         async function doAjax(args) {
             let result;
@@ -20625,10 +20619,39 @@ exports.default = {
         const persistDialog = (0, _vue.computed)(()=>{
             return bulkActionInProgress.value && !bulkActionFinished.value;
         });
+        const isJugglerClient = (0, _vue.computed)(()=>{
+            return props.items[0]?.Slug === "wp-juggler-client";
+        });
         const gotoUrl = (url)=>{
             const newWindow = window.open(url, "_blank", "noopener,noreferrer");
             if (newWindow) newWindow.opener = null;
         };
+        (0, _vue.onMounted)(()=>{
+            if (!isJugglerClient.value) bulkActionsPlugins = [
+                {
+                    text: "Update Plugins",
+                    value: "update"
+                },
+                {
+                    text: "Activate Plugins",
+                    value: "activate"
+                },
+                {
+                    text: "Network Activate Plugins",
+                    value: "network_activate"
+                },
+                {
+                    text: "Deactivate Plugins",
+                    value: "deactivate"
+                }
+            ];
+            else bulkActionsPlugins = [
+                {
+                    text: "Update Plugins",
+                    value: "update"
+                }
+            ];
+        });
         const __returned__ = {
             store,
             props,
@@ -20657,7 +20680,12 @@ exports.default = {
             queryClient,
             tab,
             plugin_headers,
-            bulkActionsPlugins,
+            get bulkActionsPlugins () {
+                return bulkActionsPlugins;
+            },
+            set bulkActionsPlugins (v){
+                bulkActionsPlugins = v;
+            },
             selectedActionPlugins,
             doAjax,
             openVulnerabilities,
@@ -20670,6 +20698,7 @@ exports.default = {
             InitiateAction,
             processAction,
             persistDialog,
+            isJugglerClient,
             gotoUrl,
             get useWpjsStore () {
                 return 0, _storeJs.useWpjsStore;
@@ -20849,7 +20878,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                             variant: "outlined",
                                             class: "mt-6"
                                         }, null, 8 /* PROPS */ , [
-                                            "modelValue"
+                                            "modelValue",
+                                            "items"
                                         ]),
                                         (0, _vue.createVNode)(_component_v_btn, {
                                             class: "ml-3 text-none text-caption",
@@ -21026,7 +21056,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     ]))
                                                 ]),
                                             "item.actions": (0, _vue.withCtx)(({ item })=>[
-                                                    item.Active || item.NetworkActive ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    !$setup.isJugglerClient && (item.Active || item.NetworkActive) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 0,
                                                         loading: item.wpjugglersites_id == $setup.deactivateActive,
                                                         onClick: ($event)=>$setup.deactivatePlugin(item.Slug, item.wpjugglersites_id),
@@ -21041,7 +21071,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "loading",
                                                         "onClick"
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                    !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    !$setup.isJugglerClient && !item.Active && !item.Multisite ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 1,
                                                         loading: item.wpjugglersites_id == $setup.activateActive,
                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
@@ -21056,7 +21086,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "loading",
                                                         "onClick"
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    !$setup.isJugglerClient && !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 2,
                                                         loading: item.wpjugglersites_id == $setup.activateActive,
                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, false),
@@ -21071,7 +21101,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "loading",
                                                         "onClick"
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                    !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    !$setup.isJugglerClient && !item.Active && !item.NetworkActive && item.Multisite && !item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 3,
                                                         loading: item.wpjugglersites_id == $setup.activateNetworkActive,
                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
@@ -21086,7 +21116,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                         "loading",
                                                         "onClick"
                                                     ])) : (0, _vue.createCommentVNode)("v-if", true),
-                                                    !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    !$setup.isJugglerClient && !item.Active && !item.NetworkActive && item.Multisite && item.Network ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
                                                         key: 4,
                                                         loading: item.wpjugglersites_id == $setup.activateNetworkActive,
                                                         onClick: ($event)=>$setup.activatePlugin(item.Slug, item.wpjugglersites_id, true),
@@ -55524,6 +55554,6 @@ function findComponentParent(vnode, root) {
     return root;
 }
 
-},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["90Nsp","4XJl0"], "4XJl0", "parcelRequire94c2")
+},{"vue":"gCTam","../util/index.mjs":"ivUh8","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"4aEO8":[function() {},{}],"6KE1a":[function() {},{}]},["1H7xV","4XJl0"], "4XJl0", "parcelRequire94c2")
 
 //# sourceMappingURL=wpjs-control-panel.js.map

@@ -874,7 +874,12 @@ class WPJS_AJAX
 				$log_data1 = $log_data;
 			} else {
 				$log_data_checksum_array = json_decode($result_checksum['log_data'], true);
-				$log_data1 = array_merge_recursive($log_data, $log_data_checksum_array);
+				if(is_array($log_data)){
+					$log_data1 = array_merge_recursive($log_data, $log_data_checksum_array);
+				} else {
+					$log_data1 = array();
+				}
+				
 			}
 			
 			$log_data = $log_data1;
