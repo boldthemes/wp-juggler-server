@@ -154,6 +154,8 @@ class WPJS_Background_Process extends WP_Background_Process
 					'log_result' => 'succ',
 				);*/
 
+				WPJS_Mailer::wpjs_send_fe_alert_end( $site_id );
+
 				$log_entry = false;
 
 			} else {
@@ -164,9 +166,9 @@ class WPJS_Background_Process extends WP_Background_Process
 					'log_result' => 'error',
 					'log_value' =>  $front_end_check->get_error_message()
 				);
-			}
 
-			WPJS_Mailer::wpjs_send_fe_alert_start( $site_id );
+				WPJS_Mailer::wpjs_send_fe_alert_start( $site_id );
+			}
 
 			WPJS_Cron_Log::insert_log($log_entry);
 		}
