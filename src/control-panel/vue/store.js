@@ -4,6 +4,7 @@ import { ref, watch, computed } from "vue";
 export const useWpjsStore = defineStore("wpjsstore", () => {
   const initial = ref("Dashboard");
   
+  const activatedPluginInstall = ref(false)
   const activatedThemes = ref(false)
   const activatedHealth = ref(false)
   const activatedUptime = ref(false)
@@ -27,6 +28,7 @@ export const useWpjsStore = defineStore("wpjsstore", () => {
     nonce,
     ajaxUrl,
     activatedSite,
+    activatedPluginInstall,
     activatedThemes,
     activatedHealth,
     activatedUptime,

@@ -9,6 +9,7 @@ import ThemesPluginsPanel from "./ThemesPluginsPanel.vue";
 import HealthPanel from "./HealthPanel.vue";
 import UptimePanel from "./UptimePanel.vue";
 import NoticesPanel from "./NoticesPanel.vue";
+import PluginInstallPanel from "./PluginInstallPanel.vue";
 
 const queryClient = useQueryClient();
 
@@ -25,7 +26,6 @@ const expandedPlugins = ref([]);
 const expandedThemes = ref([]);
 
 const headersSites = [
-  { title: "", key: "network", align: "center", sortable: false },
   { title: "Title", value: "title", align: "start", sortable: true },
   {
     title: "Url",
@@ -33,6 +33,7 @@ const headersSites = [
     align: "start",
     sortable: true,
   },
+  { title: "Multisite", key: "network", align: "center", sortable: false },
   {
     title: "Messages",
     key: "events",
@@ -49,7 +50,7 @@ const headersSites = [
       if (a.wp_juggler_notices_count > b.wp_juggler_notices_count) return 1;
 
       return 1;
-    }
+    },
   },
   {
     title: "Downtime incidents",
@@ -408,6 +409,13 @@ onMounted(() => {
             <v-card-title class="d-flex align-center pe-2 mb-6">
               <v-spacer></v-spacer>
 
+              <v-btn
+                class="ml-3 text-none text-caption mr-3"
+                @click="store.activatedPluginInstall = true"
+                variant="outlined"
+                >Install Plugin
+              </v-btn>
+
               <v-text-field
                 v-model="searchPlugins"
                 density="compact"
@@ -533,6 +541,7 @@ onMounted(() => {
       >
     </v-row>
   </div>
+  <PluginInstallPanel v-if="store.activatedPluginInstall" :items="data.sites_view"></PluginInstallPanel>
   <ThemesPluginsPanel v-if="store.activatedThemes"></ThemesPluginsPanel>
   <HealthPanel v-if="store.activatedHealth"></HealthPanel>
   <UptimePanel v-if="store.activatedUptime"></UptimePanel>

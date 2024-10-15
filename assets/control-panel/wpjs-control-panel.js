@@ -9107,6 +9107,8 @@ var _uptimePanelVue = require("./UptimePanel.vue");
 var _uptimePanelVueDefault = parcelHelpers.interopDefault(_uptimePanelVue);
 var _noticesPanelVue = require("./NoticesPanel.vue");
 var _noticesPanelVueDefault = parcelHelpers.interopDefault(_noticesPanelVue);
+var _pluginInstallPanelVue = require("./PluginInstallPanel.vue");
+var _pluginInstallPanelVueDefault = parcelHelpers.interopDefault(_pluginInstallPanelVue);
 exports.default = {
     __name: "App",
     setup (__props, { expose: __expose }) {
@@ -9122,12 +9124,6 @@ exports.default = {
         const expandedThemes = (0, _vue.ref)([]);
         const headersSites = [
             {
-                title: "",
-                key: "network",
-                align: "center",
-                sortable: false
-            },
-            {
                 title: "Title",
                 value: "title",
                 align: "start",
@@ -9138,6 +9134,12 @@ exports.default = {
                 key: "wp_juggler_server_site_url",
                 align: "start",
                 sortable: true
+            },
+            {
+                title: "Multisite",
+                key: "network",
+                align: "center",
+                sortable: false
             },
             {
                 title: "Messages",
@@ -9319,7 +9321,8 @@ exports.default = {
             ThemesPluginsPanel: (0, _themesPluginsPanelVueDefault.default),
             HealthPanel: (0, _healthPanelVueDefault.default),
             UptimePanel: (0, _uptimePanelVueDefault.default),
-            NoticesPanel: (0, _noticesPanelVueDefault.default)
+            NoticesPanel: (0, _noticesPanelVueDefault.default),
+            PluginInstallPanel: (0, _pluginInstallPanelVueDefault.default)
         };
         Object.defineProperty(__returned__, "__isScriptSetup", {
             enumerable: false,
@@ -9329,7 +9332,7 @@ exports.default = {
     }
 };
 
-},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ExpandedRowPlugins.vue":"cDWef","./ExpandedRowThemes.vue":"7lpdT","./ThemesPluginsPanel.vue":"9DdWS","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4","./NoticesPanel.vue":"3sk65","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"7kZ8m":[function(require,module,exports) {
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","./ExpandedRow.vue":"2IIHS","./ExpandedRowPlugins.vue":"cDWef","./ExpandedRowThemes.vue":"7lpdT","./ThemesPluginsPanel.vue":"9DdWS","./HealthPanel.vue":"jr9wA","./UptimePanel.vue":"hwbx4","./NoticesPanel.vue":"3sk65","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU","./PluginInstallPanel.vue":"a4lzx"}],"7kZ8m":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "useWpjsStore", ()=>useWpjsStore);
@@ -9337,6 +9340,7 @@ var _pinia = require("pinia");
 var _vue = require("vue");
 const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
     const initial = (0, _vue.ref)("Dashboard");
+    const activatedPluginInstall = (0, _vue.ref)(false);
     const activatedThemes = (0, _vue.ref)(false);
     const activatedHealth = (0, _vue.ref)(false);
     const activatedUptime = (0, _vue.ref)(false);
@@ -9354,6 +9358,7 @@ const useWpjsStore = (0, _pinia.defineStore)("wpjsstore", ()=>{
         nonce,
         ajaxUrl,
         activatedSite,
+        activatedPluginInstall,
         activatedThemes,
         activatedHealth,
         activatedUptime,
@@ -22314,6 +22319,963 @@ parcelHelpers.defineInteropFlag(exports);
 let NOOP = ()=>{};
 exports.default = (script)=>{};
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"a4lzx":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let script;
+let initialize = ()=>{
+    script = require("2c44d93d808582fc");
+    if (script.__esModule) script = script.default;
+    script.render = require("863d063cde0a3b3e").render;
+    script.__cssModules = require("84352fd81ca7e6b9").default;
+    require("43a16cc2a5af5116").default(script);
+    script.__scopeId = "data-v-0ed4a9";
+    script.__file = "/Users/rm/Local Sites/wp-juggler-server/app/public/wp-content/plugins/wp-juggler-server/src/control-panel/vue/PluginInstallPanel.vue";
+};
+initialize();
+if (module.hot) {
+    script.__hmrId = "0ed4a9-hmr";
+    module.hot.accept(()=>{
+        setTimeout(()=>{
+            initialize();
+            if (!__VUE_HMR_RUNTIME__.createRecord("0ed4a9-hmr", script)) __VUE_HMR_RUNTIME__.reload("0ed4a9-hmr", script);
+        }, 0);
+    });
+}
+exports.default = script;
+
+},{"2c44d93d808582fc":"9AO9D","863d063cde0a3b3e":"crATQ","84352fd81ca7e6b9":"2Dpqv","43a16cc2a5af5116":"8Gewt","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"9AO9D":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _storeJs = require("./store.js");
+var _vue = require("vue");
+var _vueQuery = require("@tanstack/vue-query");
+exports.default = {
+    __name: "PluginInstallPanel",
+    props: [
+        "items"
+    ],
+    setup (__props, { expose: __expose }) {
+        __expose();
+        const queryClient = (0, _vueQuery.useQueryClient)();
+        const store = (0, _storeJs.useWpjsStore)();
+        const props = __props;
+        const searchSites = (0, _vue.ref)("");
+        const pluginUrl = (0, _vue.ref)("");
+        const dialogInner = (0, _vue.ref)(false);
+        const dialogInstallPlugin = (0, _vue.ref)(false);
+        const dialogBulkType = (0, _vue.ref)("");
+        const updateActive = (0, _vue.ref)("");
+        const ajaxError = (0, _vue.ref)(false);
+        const ajaxErrorText = (0, _vue.ref)("");
+        const bulkActionError = (0, _vue.ref)(false);
+        const bulkActionText = (0, _vue.ref)(false);
+        const actionArray = (0, _vue.ref)([]);
+        const bulkActionInProgress = (0, _vue.ref)(false);
+        const bulkActionFinished = (0, _vue.ref)(false);
+        const bulkActionsNumber = (0, _vue.ref)(0);
+        const currentAction = (0, _vue.ref)(null);
+        const progressIndicator = (0, _vue.ref)(0);
+        const selectedSites = (0, _vue.ref)([]);
+        const headersSites = [
+            {
+                title: "Title",
+                value: "title",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Url",
+                key: "wp_juggler_server_site_url",
+                align: "start",
+                sortable: true
+            },
+            {
+                title: "Multisite",
+                key: "network",
+                align: "center",
+                sortable: false
+            }
+        ];
+        const tab = (0, _vue.ref)(0);
+        const selectedActionPlugins = (0, _vue.ref)(null);
+        const selectedActionThemes = (0, _vue.ref)(null);
+        // Refresh Dialog Params
+        const dialogRefreshTabs = (0, _vue.ref)(false);
+        const refreshTabsInProgress = (0, _vue.ref)(false);
+        const refreshTabsFinished = (0, _vue.ref)(false);
+        const refreshProgressIndicator = (0, _vue.ref)(0);
+        const currentProgressIndex = (0, _vue.ref)(0);
+        const currentRefreshAction = (0, _vue.ref)("");
+        async function doAjax(args) {
+            let result;
+            try {
+                const response = await fetch(store.ajaxUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams(args)
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                throw new Error("No response from the WP Juggler Server");
+            }
+        }
+        function sanitizeUrl(url) {
+            // Trim whitespace from both ends
+            url = url.trim();
+            // Remove any additional unwanted characters using a regular expression
+            url = url.replace(/\/+$/, "");
+            return url;
+        }
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (err) {
+                return false;
+            }
+        }
+        async function checkFileExists(url) {
+            const sanitizedUrl = sanitizeUrl(url);
+            if (sanitizedUrl === "") return false;
+            if (!isValidUrl(url)) return false;
+            if (!sanitizedUrl.toLowerCase().endsWith(".zip")) return false;
+            try {
+                const response = await fetch(url, {
+                    method: "HEAD"
+                });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+        const persistDialog = (0, _vue.computed)(()=>{
+            return bulkActionInProgress.value && !bulkActionFinished.value;
+        });
+        const activeSites = (0, _vue.computed)(()=>{
+            return props.items.filter((site)=>site.wp_juggler_site_activation === true);
+        //return props.items;
+        });
+        async function startInstallPlugin() {
+            bulkActionError.value = false;
+            bulkActionText.value = false;
+            actionArray.value = [];
+            const fileExist = await checkFileExists(pluginUrl.value);
+            if (!fileExist) bulkActionError.value = "Plugin URL is not valid";
+            else {
+                selectedSites.value.forEach((plugin)=>{
+                    const maybePlugin = activeSites.value.find((element)=>element.id === plugin);
+                    if (maybePlugin !== undefined) actionArray.value.push(maybePlugin);
+                });
+                bulkActionText.value = "install plugin";
+            }
+            if (actionArray.value.length == 0) bulkActionText.value = `There are no sites to ${bulkActionText.value} in your selection`;
+            else bulkActionText.value = `You are going to ${bulkActionText.value} from ${pluginUrl.value} on these sites:`;
+            bulkActionInProgress.value = false;
+            dialogInstallPlugin.value = true;
+        }
+        async function InitiateAction() {
+            bulkActionsNumber.value = actionArray.value.length;
+            bulkActionInProgress.value = true;
+            bulkActionFinished.value = false;
+            processAction();
+        }
+        async function processAction() {
+            if (actionArray.value.length > 0) {
+                currentAction.value = actionArray.value.shift();
+                progressIndicator.value = Math.ceil((bulkActionsNumber.value - actionArray.value.length) / bulkActionsNumber.value * 100);
+                await installPlugin(pluginUrl.value, currentAction.value.id, true);
+                processAction();
+            } else {
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                bulkActionFinished.value = true;
+                dialogInstallPlugin.value = false;
+            }
+        }
+        async function installPlugin(pluginUrl, siteId, withoutRefresh = false) {
+            updateActive.value = siteId;
+            if (withoutRefresh) updateActive.value = "";
+            let ret = {};
+            try {
+                const response = await doAjax({
+                    action: "wpjs-install-plugin",
+                    siteId: siteId,
+                    pluginUrl: pluginUrl
+                });
+                if (response.success) {
+                    ret = response.data;
+                    if (!withoutRefresh) queryClient.invalidateQueries({
+                        queryKey: [
+                            "wpjs-control-panel"
+                        ]
+                    });
+                    updateActive.value = "";
+                } else throw new Error(`${response.data.code} - ${response.data.message}`);
+            } catch (error) {
+                ajaxError.value = true;
+                ajaxErrorText.value = error.message;
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        "wpjs-control-panel"
+                    ]
+                });
+                updateActive.value = "";
+            }
+        }
+        const __returned__ = {
+            queryClient,
+            store,
+            props,
+            searchSites,
+            pluginUrl,
+            dialogInner,
+            dialogInstallPlugin,
+            dialogBulkType,
+            updateActive,
+            ajaxError,
+            ajaxErrorText,
+            bulkActionError,
+            bulkActionText,
+            actionArray,
+            bulkActionInProgress,
+            bulkActionFinished,
+            bulkActionsNumber,
+            currentAction,
+            progressIndicator,
+            selectedSites,
+            headersSites,
+            tab,
+            selectedActionPlugins,
+            selectedActionThemes,
+            dialogRefreshTabs,
+            refreshTabsInProgress,
+            refreshTabsFinished,
+            refreshProgressIndicator,
+            currentProgressIndex,
+            currentRefreshAction,
+            doAjax,
+            sanitizeUrl,
+            isValidUrl,
+            checkFileExists,
+            persistDialog,
+            activeSites,
+            startInstallPlugin,
+            InitiateAction,
+            processAction,
+            installPlugin,
+            get useWpjsStore () {
+                return 0, _storeJs.useWpjsStore;
+            },
+            onMounted: (0, _vue.onMounted),
+            computed: (0, _vue.computed),
+            ref: (0, _vue.ref),
+            get useQueryClient () {
+                return 0, _vueQuery.useQueryClient;
+            },
+            get useQuery () {
+                return 0, _vueQuery.useQuery;
+            },
+            get useMutation () {
+                return 0, _vueQuery.useMutation;
+            }
+        };
+        Object.defineProperty(__returned__, "__isScriptSetup", {
+            enumerable: false,
+            value: true
+        });
+        return __returned__;
+    }
+};
+
+},{"./store.js":"7kZ8m","vue":"gCTam","@tanstack/vue-query":"aI0Kc","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"crATQ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "render", ()=>render);
+var _vue = require("vue");
+const _hoisted_1 = {
+    class: "text-center pa-4"
+};
+const _hoisted_2 = {
+    key: 0
+};
+const _hoisted_3 = [
+    "href"
+];
+const _hoisted_4 = {
+    key: 0
+};
+const _hoisted_5 = {
+    key: 0
+};
+const _hoisted_6 = {
+    key: 1
+};
+const _hoisted_7 = {
+    key: 1
+};
+const _hoisted_8 = {
+    key: 0
+};
+const _hoisted_9 = {
+    key: 0
+};
+const _hoisted_10 = {
+    key: 1
+};
+const _hoisted_11 = {
+    key: 1
+};
+const _hoisted_12 = {
+    key: 0
+};
+const _hoisted_13 = {
+    key: 0
+};
+const _hoisted_14 = {
+    key: 1
+};
+const _hoisted_15 = {
+    key: 1
+};
+const _hoisted_16 = {
+    key: 0
+};
+const _hoisted_17 = {
+    key: 1
+};
+const _hoisted_18 = {
+    key: 0
+};
+const _hoisted_19 = {
+    key: 1
+};
+const _hoisted_20 = {
+    key: 2
+};
+const _hoisted_21 = {
+    class: "text-h7"
+};
+const _hoisted_22 = {
+    key: 0,
+    class: "ml-6 mt-2 wpjs-plugin-vul"
+};
+const _hoisted_23 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "mt-4 ml-6"
+}, [
+    /*#__PURE__*/ (0, _vue.createElementVNode)("strong", null, "Sources:")
+], -1 /* HOISTED */ );
+const _hoisted_24 = {
+    class: "mt-2 ml-6 wpjs-plugin-vul"
+};
+const _hoisted_25 = {
+    class: "ml-4"
+};
+const _hoisted_26 = [
+    "href"
+];
+const _hoisted_27 = {
+    class: "ml-4"
+};
+const _hoisted_28 = {
+    class: "my-8"
+};
+const _hoisted_29 = {
+    class: "wpjs-plugin-vul"
+};
+const _hoisted_30 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Bulk action in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_31 = {
+    class: "my-8"
+};
+const _hoisted_32 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Bulk action finished", -1 /* HOISTED */ );
+const _hoisted_33 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, " Refresh in progress - do not close the window, you will interrupt the progress: ", -1 /* HOISTED */ );
+const _hoisted_34 = {
+    class: "my-8"
+};
+const _hoisted_35 = /*#__PURE__*/ (0, _vue.createElementVNode)("div", {
+    class: "my-8"
+}, "Refresh finished", -1 /* HOISTED */ );
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+    const _component_v_btn = (0, _vue.resolveComponent)("v-btn");
+    const _component_v_toolbar_title = (0, _vue.resolveComponent)("v-toolbar-title");
+    const _component_v_spacer = (0, _vue.resolveComponent)("v-spacer");
+    const _component_v_toolbar_items = (0, _vue.resolveComponent)("v-toolbar-items");
+    const _component_v_toolbar = (0, _vue.resolveComponent)("v-toolbar");
+    const _component_v_text_field = (0, _vue.resolveComponent)("v-text-field");
+    const _component_v_card_title = (0, _vue.resolveComponent)("v-card-title");
+    const _component_v_divider = (0, _vue.resolveComponent)("v-divider");
+    const _component_v_icon = (0, _vue.resolveComponent)("v-icon");
+    const _component_v_data_table = (0, _vue.resolveComponent)("v-data-table");
+    const _component_v_card = (0, _vue.resolveComponent)("v-card");
+    const _component_v_card_text = (0, _vue.resolveComponent)("v-card-text");
+    const _component_v_snackbar = (0, _vue.resolveComponent)("v-snackbar");
+    const _component_v_dialog = (0, _vue.resolveComponent)("v-dialog");
+    const _component_v_sheet = (0, _vue.resolveComponent)("v-sheet");
+    const _component_v_col = (0, _vue.resolveComponent)("v-col");
+    const _component_v_row = (0, _vue.resolveComponent)("v-row");
+    const _component_v_progress_linear = (0, _vue.resolveComponent)("v-progress-linear");
+    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)((0, _vue.Fragment), null, [
+        (0, _vue.createElementVNode)("div", _hoisted_1, [
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.store.activatedPluginInstall,
+                "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.store.activatedPluginInstall = $event),
+                transition: "dialog-bottom-transition",
+                fullscreen: ""
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[0] || (_cache[0] = ($event)=>$setup.store.activatedPluginInstall = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("Install Plugin")
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_spacer),
+                                                (0, _vue.createVNode)(_component_v_toolbar_items)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_card, {
+                                                    flat: ""
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createVNode)(_component_v_card_title, {
+                                                                class: "d-flex align-center pe-2 mb-6"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                                                            modelValue: $setup.pluginUrl,
+                                                                            "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event)=>$setup.pluginUrl = $event),
+                                                                            density: "compact",
+                                                                            label: "Plugin URL",
+                                                                            variant: "outlined",
+                                                                            flat: "",
+                                                                            "hide-details": "",
+                                                                            "single-line": "",
+                                                                            "max-width": "800"
+                                                                        }, null, 8 /* PROPS */ , [
+                                                                            "modelValue"
+                                                                        ]),
+                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                            class: "ml-3 text-none text-caption",
+                                                                            onClick: _cache[2] || (_cache[2] = ($event)=>$setup.startInstallPlugin()),
+                                                                            variant: "outlined"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createTextVNode)("Install ")
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }),
+                                                                        (0, _vue.createVNode)(_component_v_spacer),
+                                                                        (0, _vue.createVNode)(_component_v_text_field, {
+                                                                            modelValue: $setup.searchSites,
+                                                                            "onUpdate:modelValue": _cache[3] || (_cache[3] = ($event)=>$setup.searchSites = $event),
+                                                                            density: "compact",
+                                                                            label: "Search",
+                                                                            "prepend-inner-icon": "mdi-magnify",
+                                                                            variant: "outlined",
+                                                                            flat: "",
+                                                                            "hide-details": "",
+                                                                            "single-line": "",
+                                                                            "max-width": "800"
+                                                                        }, null, 8 /* PROPS */ , [
+                                                                            "modelValue"
+                                                                        ])
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }),
+                                                            (0, _vue.createVNode)(_component_v_divider),
+                                                            (0, _vue.createVNode)(_component_v_data_table, {
+                                                                search: $setup.searchSites,
+                                                                "onUpdate:search": _cache[4] || (_cache[4] = ($event)=>$setup.searchSites = $event),
+                                                                items: $setup.activeSites,
+                                                                headers: $setup.headersSites,
+                                                                "item-value": "id",
+                                                                "items-per-page": "50",
+                                                                "show-select": "",
+                                                                modelValue: $setup.selectedSites,
+                                                                "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.selectedSites = $event)
+                                                            }, {
+                                                                "item.network": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_multisite ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_2, [
+                                                                            (0, _vue.createVNode)(_component_v_icon, {
+                                                                                color: "#2196f3",
+                                                                                icon: "mdi-checkbox-multiple-blank-outline",
+                                                                                size: "large",
+                                                                                class: "rm-4"
+                                                                            })
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                "item.wp_juggler_server_site_url": (0, _vue.withCtx)(({ item })=>[
+                                                                        (0, _vue.createElementVNode)("a", {
+                                                                            href: item.wp_juggler_server_site_url,
+                                                                            target: "_blank"
+                                                                        }, (0, _vue.toDisplayString)(item.wp_juggler_server_site_url), 9 /* TEXT, PROPS */ , _hoisted_3)
+                                                                    ]),
+                                                                "item.events": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_4, [
+                                                                            item.wp_juggler_notices_count === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_5, [
+                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                    color: "blue-lighten-5",
+                                                                                    icon: "mdi-help",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })
+                                                                            ])) : item.wp_juggler_notices_count > 0 ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_6, [
+                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                    color: "#2196f3",
+                                                                                    icon: "mdi-email-alert-outline",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })
+                                                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_7, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                "item.updates": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_8, [
+                                                                            item.wp_juggler_plugins_summary ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_9, [
+                                                                                item.wp_juggler_plugins_summary.vulnerabilities_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                                    key: 0,
+                                                                                    color: "error",
+                                                                                    icon: "mdi-bug-check-outline",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })) : item.wp_juggler_plugins_summary.updates_num > 0 || item.wp_juggler_themes_summary.updates_num > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_icon, {
+                                                                                    key: 1,
+                                                                                    color: "error",
+                                                                                    icon: "mdi-check-bold",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                            ])) : ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_10, [
+                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                    color: "blue-lighten-5",
+                                                                                    icon: "mdi-help",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })
+                                                                            ]))
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_11, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                "item.checksum": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_12, [
+                                                                            item.wp_juggler_plugins_checksum && item.wp_juggler_plugins_checksum > 0 || item.wp_juggler_core_checksum && item.wp_juggler_core_checksum.errors === true ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_13, [
+                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                    color: "error",
+                                                                                    icon: "mdi-alert-outline",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })
+                                                                            ])) : item.wp_juggler_plugins_checksum === false || item.wp_juggler_core_checksum === false ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_14, [
+                                                                                (0, _vue.createVNode)(_component_v_icon, {
+                                                                                    color: "blue-lighten-5",
+                                                                                    icon: "mdi-help",
+                                                                                    size: "large",
+                                                                                    class: "rm-4"
+                                                                                })
+                                                                            ])) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_15, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                "item.links": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_16, [
+                                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(item.wp_juggler_login_tools, (button)=>{
+                                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                                    variant: "outlined",
+                                                                                    onClick: ($event)=>_ctx.gotoUrl(button.wp_juggler_tool_url),
+                                                                                    class: "text-none text-caption mr-1 ml-1"
+                                                                                }, {
+                                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(button.wp_juggler_tool_label), 1 /* TEXT */ )
+                                                                                        ]),
+                                                                                    _: 2 /* DYNAMIC */ 
+                                                                                }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                    "onClick"
+                                                                                ]);
+                                                                            }), 256 /* UNKEYED_FRAGMENT */ ))
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_17, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                "item.wp_admin": (0, _vue.withCtx)(({ item })=>[
+                                                                        item.wp_juggler_site_activation && item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_18, [
+                                                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                                                color: "#2196f3",
+                                                                                variant: "outlined",
+                                                                                class: "text-none text-caption",
+                                                                                "prepend-icon": "mdi-login",
+                                                                                onClick: ($event)=>_ctx.gotoUrl(item.wp_juggler_login_url)
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createTextVNode)("wp-admin")
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                "onClick"
+                                                                            ])
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        item.wp_juggler_site_activation && !item.wp_juggler_automatic_login ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_19, [
+                                                                            (0, _vue.createVNode)(_component_v_btn, {
+                                                                                color: "#2196f3",
+                                                                                variant: "outlined",
+                                                                                class: "text-none text-caption",
+                                                                                "prepend-icon": "mdi-account-remove",
+                                                                                onClick: ($event)=>_ctx.gotoUrl(item.wp_juggler_login_url)
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createTextVNode)("wp-admin")
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1032 /* PROPS, DYNAMIC_SLOTS */ , [
+                                                                                "onClick"
+                                                                            ])
+                                                                        ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                        !item.wp_juggler_site_activation ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_20, "Inactive")) : (0, _vue.createCommentVNode)("v-if", true)
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }, 8 /* PROPS */ , [
+                                                                "search",
+                                                                "items",
+                                                                "modelValue"
+                                                            ])
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }),
+                        (0, _vue.createVNode)(_component_v_snackbar, {
+                            modelValue: $setup.ajaxError,
+                            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.ajaxError = $event),
+                            color: "red-lighten-2"
+                        }, {
+                            actions: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_btn, {
+                                        color: "red-lighten-4",
+                                        variant: "text",
+                                        onClick: _cache[6] || (_cache[6] = ($event)=>$setup.ajaxError = false)
+                                    }, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createTextVNode)(" Close ")
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.ajaxErrorText) + " ", 1 /* TEXT */ )
+                                ]),
+                            _: 1 /* STABLE */ 
+                        }, 8 /* PROPS */ , [
+                            "modelValue"
+                        ])
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ]),
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.dialogInner,
+                "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event)=>$setup.dialogInner = $event),
+                "min-width": "600"
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                (0, _vue.createVNode)(_component_v_btn, {
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[9] || (_cache[9] = ($event)=>$setup.dialogInner = false)
+                                                }),
+                                                (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("List of vulnerabilities - " + (0, _vue.toDisplayString)(_ctx.vulnerabilitiesItem.Name) + " - " + (0, _vue.toDisplayString)(_ctx.vulnerabilitiesItem.Version), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(_ctx.vulnerabilitiesItem.Vulnerabilities, (vul)=>{
+                                                    return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, null, {
+                                                        default: (0, _vue.withCtx)(()=>[
+                                                                (0, _vue.createElementVNode)("div", _hoisted_21, [
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)(vul.name), 1 /* TEXT */ )
+                                                                ]),
+                                                                "cwe" in vul.impact ? ((0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_22, [
+                                                                    (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].name), 1 /* TEXT */ ),
+                                                                    (0, _vue.createElementVNode)("div", null, (0, _vue.toDisplayString)(vul.impact.cwe[0].description), 1 /* TEXT */ )
+                                                                ])) : (0, _vue.createCommentVNode)("v-if", true),
+                                                                _hoisted_23,
+                                                                ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)(vul.source, (src)=>{
+                                                                    return (0, _vue.openBlock)(), (0, _vue.createElementBlock)("div", _hoisted_24, [
+                                                                        (0, _vue.createElementVNode)("div", _hoisted_25, [
+                                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)(src.date) + " - ", 1 /* TEXT */ ),
+                                                                            (0, _vue.createElementVNode)("a", {
+                                                                                href: src.link,
+                                                                                target: "_blank"
+                                                                            }, (0, _vue.toDisplayString)(src.name), 9 /* TEXT, PROPS */ , _hoisted_26)
+                                                                        ]),
+                                                                        (0, _vue.createElementVNode)("div", _hoisted_27, (0, _vue.toDisplayString)(src.description), 1 /* TEXT */ )
+                                                                    ]);
+                                                                }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                                (0, _vue.createVNode)(_component_v_divider, {
+                                                                    class: "mt-4 mb-4"
+                                                                })
+                                                            ]),
+                                                        _: 2 /* DYNAMIC */ 
+                                                    }, 1024 /* DYNAMIC_SLOTS */ );
+                                                }), 256 /* UNKEYED_FRAGMENT */ ))
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        })
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue"
+            ]),
+            (0, _vue.createVNode)(_component_v_dialog, {
+                modelValue: $setup.dialogInstallPlugin,
+                "onUpdate:modelValue": _cache[13] || (_cache[13] = ($event)=>$setup.dialogInstallPlugin = $event),
+                width: "800",
+                persistent: $setup.persistDialog
+            }, {
+                default: (0, _vue.withCtx)(()=>[
+                        (0, _vue.createVNode)(_component_v_card, null, {
+                            default: (0, _vue.withCtx)(()=>[
+                                    (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                !($setup.bulkActionInProgress && !$setup.bulkActionFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                    key: 0,
+                                                    icon: "mdi-close",
+                                                    onClick: _cache[11] || (_cache[11] = ($event)=>$setup.dialogInstallPlugin = false)
+                                                })) : (0, _vue.createCommentVNode)("v-if", true),
+                                                $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                    key: 1
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("Install plugin")
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_toolbar_title, {
+                                                    key: 2
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)("Install plugin")
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                }))
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    }),
+                                    (0, _vue.createVNode)(_component_v_card_text, null, {
+                                        default: (0, _vue.withCtx)(()=>[
+                                                $setup.bulkActionError ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 0
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createTextVNode)((0, _vue.toDisplayString)($setup.bulkActionError), 1 /* TEXT */ )
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : !$setup.bulkActionInProgress ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 1,
+                                                    class: "mb-4"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            (0, _vue.createElementVNode)("div", _hoisted_28, (0, _vue.toDisplayString)($setup.bulkActionText), 1 /* TEXT */ ),
+                                                            ((0, _vue.openBlock)(true), (0, _vue.createElementBlock)((0, _vue.Fragment), null, (0, _vue.renderList)($setup.actionArray, (item)=>{
+                                                                return (0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_row, {
+                                                                    class: "wpjs-debug-table-row pl-5"
+                                                                }, {
+                                                                    default: (0, _vue.withCtx)(()=>[
+                                                                            (0, _vue.createVNode)(_component_v_col, {
+                                                                                class: "text-left"
+                                                                            }, {
+                                                                                default: (0, _vue.withCtx)(()=>[
+                                                                                        (0, _vue.createElementVNode)("div", _hoisted_29, (0, _vue.toDisplayString)(item.title), 1 /* TEXT */ )
+                                                                                    ]),
+                                                                                _: 2 /* DYNAMIC */ 
+                                                                            }, 1024 /* DYNAMIC_SLOTS */ )
+                                                                        ]),
+                                                                    _: 2 /* DYNAMIC */ 
+                                                                }, 1024 /* DYNAMIC_SLOTS */ );
+                                                            }), 256 /* UNKEYED_FRAGMENT */ )),
+                                                            $setup.actionArray.length > 0 ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                                key: 0,
+                                                                class: "ml-3 mt-10 text-none text-caption",
+                                                                onClick: _cache[12] || (_cache[12] = ($event)=>$setup.InitiateAction()),
+                                                                variant: "outlined"
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createTextVNode)("Confirm ")
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.bulkActionInProgress && !$setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 2,
+                                                    class: "mb-4",
+                                                    height: "200"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            _hoisted_30,
+                                                            (0, _vue.createElementVNode)("div", _hoisted_31, [
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.Name), 1 /* TEXT */ )
+                                                            ]),
+                                                            (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                                color: "light-blue",
+                                                                height: "30",
+                                                                "model-value": $setup.progressIndicator,
+                                                                striped: ""
+                                                            }, {
+                                                                default: (0, _vue.withCtx)(()=>[
+                                                                        (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.bulkActionsNumber - $setup.actionArray.length) + "/" + (0, _vue.toDisplayString)($setup.bulkActionsNumber), 1 /* TEXT */ )
+                                                                    ]),
+                                                                _: 1 /* STABLE */ 
+                                                            }, 8 /* PROPS */ , [
+                                                                "model-value"
+                                                            ])
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : $setup.bulkActionInProgress && $setup.bulkActionFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                    key: 3,
+                                                    class: "mb-4",
+                                                    height: "200"
+                                                }, {
+                                                    default: (0, _vue.withCtx)(()=>[
+                                                            _hoisted_32
+                                                        ]),
+                                                    _: 1 /* STABLE */ 
+                                                })) : (0, _vue.createCommentVNode)("v-if", true)
+                                            ]),
+                                        _: 1 /* STABLE */ 
+                                    })
+                                ]),
+                            _: 1 /* STABLE */ 
+                        })
+                    ]),
+                _: 1 /* STABLE */ 
+            }, 8 /* PROPS */ , [
+                "modelValue",
+                "persistent"
+            ])
+        ]),
+        (0, _vue.createVNode)(_component_v_dialog, {
+            modelValue: $setup.dialogRefreshTabs,
+            "onUpdate:modelValue": _cache[15] || (_cache[15] = ($event)=>$setup.dialogRefreshTabs = $event),
+            width: "800",
+            persistent: true
+        }, {
+            default: (0, _vue.withCtx)(()=>[
+                    (0, _vue.createVNode)(_component_v_card, null, {
+                        default: (0, _vue.withCtx)(()=>[
+                                (0, _vue.createVNode)(_component_v_toolbar, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            !($setup.refreshTabsInProgress && !$setup.refreshTabsFinished) ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_btn, {
+                                                key: 0,
+                                                icon: "mdi-close",
+                                                onClick: _cache[14] || (_cache[14] = ($event)=>$setup.dialogRefreshTabs = false)
+                                            })) : (0, _vue.createCommentVNode)("v-if", true),
+                                            (0, _vue.createVNode)(_component_v_toolbar_title, null, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        (0, _vue.createTextVNode)("Plugins and Themes Data")
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                }),
+                                (0, _vue.createVNode)(_component_v_card_text, null, {
+                                    default: (0, _vue.withCtx)(()=>[
+                                            $setup.refreshTabsInProgress && !$setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 0,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_33,
+                                                        (0, _vue.createElementVNode)("div", _hoisted_34, [
+                                                            (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentRefreshAction), 1 /* TEXT */ )
+                                                        ]),
+                                                        (0, _vue.createVNode)(_component_v_progress_linear, {
+                                                            color: "light-blue",
+                                                            height: "30",
+                                                            "model-value": $setup.refreshProgressIndicator,
+                                                            striped: ""
+                                                        }, {
+                                                            default: (0, _vue.withCtx)(()=>[
+                                                                    (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentProgressIndex + 1) + "/" + (0, _vue.toDisplayString)(_ctx.refreshArr.length), 1 /* TEXT */ )
+                                                                ]),
+                                                            _: 1 /* STABLE */ 
+                                                        }, 8 /* PROPS */ , [
+                                                            "model-value"
+                                                        ])
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : $setup.refreshTabsInProgress && $setup.refreshTabsFinished ? ((0, _vue.openBlock)(), (0, _vue.createBlock)(_component_v_sheet, {
+                                                key: 1,
+                                                class: "mb-4",
+                                                height: "200"
+                                            }, {
+                                                default: (0, _vue.withCtx)(()=>[
+                                                        _hoisted_35
+                                                    ]),
+                                                _: 1 /* STABLE */ 
+                                            })) : (0, _vue.createCommentVNode)("v-if", true)
+                                        ]),
+                                    _: 1 /* STABLE */ 
+                                })
+                            ]),
+                        _: 1 /* STABLE */ 
+                    })
+                ]),
+            _: 1 /* STABLE */ 
+        }, 8 /* PROPS */ , [
+            "modelValue"
+        ])
+    ], 64 /* STABLE_FRAGMENT */ );
+}
+if (module.hot) module.hot.accept(()=>{
+    __VUE_HMR_RUNTIME__.rerender("0ed4a9-hmr", render);
+});
+
+},{"vue":"gCTam","@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"2Dpqv":[function() {},{}],"8Gewt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+let NOOP = ()=>{};
+exports.default = (script)=>{};
+
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5oERU"}],"e7mfF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -22477,7 +23439,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         ]),
                         (0, _vue.createVNode)(_component_v_tabs_window, {
                             modelValue: $setup.tab,
-                            "onUpdate:modelValue": _cache[10] || (_cache[10] = ($event)=>$setup.tab = $event)
+                            "onUpdate:modelValue": _cache[11] || (_cache[11] = ($event)=>$setup.tab = $event)
                         }, {
                             default: (0, _vue.withCtx)(()=>[
                                     (0, _vue.createVNode)(_component_v_tabs_window_item, {
@@ -22747,9 +23709,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             }, {
                                                                 default: (0, _vue.withCtx)(()=>[
                                                                         (0, _vue.createVNode)(_component_v_spacer),
+                                                                        (0, _vue.createVNode)(_component_v_btn, {
+                                                                            class: "ml-3 text-none text-caption mr-3",
+                                                                            onClick: _cache[4] || (_cache[4] = ($event)=>$setup.store.activatedPluginInstall = true),
+                                                                            variant: "outlined"
+                                                                        }, {
+                                                                            default: (0, _vue.withCtx)(()=>[
+                                                                                    (0, _vue.createTextVNode)("Install Plugin ")
+                                                                                ]),
+                                                                            _: 1 /* STABLE */ 
+                                                                        }),
                                                                         (0, _vue.createVNode)(_component_v_text_field, {
                                                                             modelValue: $setup.searchPlugins,
-                                                                            "onUpdate:modelValue": _cache[4] || (_cache[4] = ($event)=>$setup.searchPlugins = $event),
+                                                                            "onUpdate:modelValue": _cache[5] || (_cache[5] = ($event)=>$setup.searchPlugins = $event),
                                                                             density: "compact",
                                                                             label: "Search",
                                                                             "prepend-inner-icon": "mdi-magnify",
@@ -22767,12 +23739,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             (0, _vue.createVNode)(_component_v_divider),
                                                             (0, _vue.createVNode)(_component_v_data_table, {
                                                                 search: $setup.searchPlugins,
-                                                                "onUpdate:search": _cache[5] || (_cache[5] = ($event)=>$setup.searchPlugins = $event),
+                                                                "onUpdate:search": _cache[6] || (_cache[6] = ($event)=>$setup.searchPlugins = $event),
                                                                 items: $setup.data.plugins_view.plugins,
                                                                 headers: $setup.headersPlugins,
                                                                 "item-value": "Name",
                                                                 expanded: $setup.expandedPlugins,
-                                                                "onUpdate:expanded": _cache[6] || (_cache[6] = ($event)=>$setup.expandedPlugins = $event),
+                                                                "onUpdate:expanded": _cache[7] || (_cache[7] = ($event)=>$setup.expandedPlugins = $event),
                                                                 "show-expand": "",
                                                                 "items-per-page": "50"
                                                             }, {
@@ -22840,7 +23812,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                                         (0, _vue.createVNode)(_component_v_spacer),
                                                                         (0, _vue.createVNode)(_component_v_text_field, {
                                                                             modelValue: $setup.searchThemes,
-                                                                            "onUpdate:modelValue": _cache[7] || (_cache[7] = ($event)=>$setup.searchThemes = $event),
+                                                                            "onUpdate:modelValue": _cache[8] || (_cache[8] = ($event)=>$setup.searchThemes = $event),
                                                                             density: "compact",
                                                                             label: "Search",
                                                                             "prepend-inner-icon": "mdi-magnify",
@@ -22858,12 +23830,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                             (0, _vue.createVNode)(_component_v_divider),
                                                             (0, _vue.createVNode)(_component_v_data_table, {
                                                                 search: $setup.searchThemes,
-                                                                "onUpdate:search": _cache[8] || (_cache[8] = ($event)=>$setup.searchThemes = $event),
+                                                                "onUpdate:search": _cache[9] || (_cache[9] = ($event)=>$setup.searchThemes = $event),
                                                                 items: $setup.data.plugins_view.themes,
                                                                 headers: $setup.headersThemes,
                                                                 "item-value": "Name",
                                                                 expanded: $setup.expandedThemes,
-                                                                "onUpdate:expanded": _cache[9] || (_cache[9] = ($event)=>$setup.expandedThemes = $event),
+                                                                "onUpdate:expanded": _cache[10] || (_cache[10] = ($event)=>$setup.expandedThemes = $event),
                                                                 "show-expand": "",
                                                                 "items-per-page": "50"
                                                             }, {
@@ -22941,17 +23913,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 1 /* STABLE */ 
             })
         ]),
+        $setup.store.activatedPluginInstall ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["PluginInstallPanel"], {
+            key: 0,
+            items: $setup.data.sites_view
+        }, null, 8 /* PROPS */ , [
+            "items"
+        ])) : (0, _vue.createCommentVNode)("v-if", true),
         $setup.store.activatedThemes ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["ThemesPluginsPanel"], {
-            key: 0
-        })) : (0, _vue.createCommentVNode)("v-if", true),
-        $setup.store.activatedHealth ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["HealthPanel"], {
             key: 1
         })) : (0, _vue.createCommentVNode)("v-if", true),
-        $setup.store.activatedUptime ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["UptimePanel"], {
+        $setup.store.activatedHealth ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["HealthPanel"], {
             key: 2
         })) : (0, _vue.createCommentVNode)("v-if", true),
-        $setup.store.activatedNotices ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["NoticesPanel"], {
+        $setup.store.activatedUptime ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["UptimePanel"], {
             key: 3
+        })) : (0, _vue.createCommentVNode)("v-if", true),
+        $setup.store.activatedNotices ? ((0, _vue.openBlock)(), (0, _vue.createBlock)($setup["NoticesPanel"], {
+            key: 4
         })) : (0, _vue.createCommentVNode)("v-if", true)
     ], 64 /* STABLE_FRAGMENT */ );
 }

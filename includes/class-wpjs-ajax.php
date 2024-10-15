@@ -1965,6 +1965,39 @@ class WPJS_AJAX
 		}
 	}
 
+	public function ajax_install_plugin()
+	{
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(new WP_Error('Unauthorized', 'Access to API is unauthorized.'), 401);
+			return;
+		}
+
+		if (isset($_POST['siteId'])) {
+			$site_id = sanitize_text_field($_POST['siteId']);
+		}
+
+		if (isset($_POST['pluginUrl'])) {
+			$plugin_url = sanitize_text_field($_POST['pluginUrl']);
+		}
+
+		$response_api = WPJS_Service::install_plugin($site_id, $plugin_url);
+
+		if (is_wp_error($response_api)) {
+
+			$response = [
+				'code' => $response_api->get_error_code(),
+				'message' => 'No valid response from client WP Juggler Instance',
+				'data' => $response_api->get_error_data(),
+			];
+
+			wp_send_json_error($response);
+		} else {
+			$data = [];
+			wp_send_json_success($data, 200);
+		}
+	}
+
 	public function ajax_update_theme()
 	{
 
