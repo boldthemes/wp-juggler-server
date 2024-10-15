@@ -160,4 +160,3 @@ Currenty opened development tasks:
 - [ ] Retrieve and set Site Option values
 - [ ] Vulnerability check of installed themes and WP Core
 - [ ] Checksum verification of themes from WordPress.org
-- [ ] PDF Reports on activites per site within a given time period
