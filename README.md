@@ -157,6 +157,7 @@ Currenty opened development tasks:
 
 - [x] Alert emails when front end or API is down
 - [x] Remote plugin installation
+- [ ] Retrieve and set Site Option values
 - [ ] Vulnerability check of installed themes and WP Core
 - [ ] Checksum verification of themes from WordPress.org
 - [ ] PDF Reports on activites per site within a given time period
