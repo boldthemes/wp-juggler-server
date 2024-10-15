@@ -173,6 +173,7 @@ async function processAction() {
       );
 
     processAction();
+    
   } else {
     queryClient.invalidateQueries({
       queryKey: ["wpjs-control-panel"],
@@ -561,7 +562,7 @@ async function installPlugin(pluginUrl, siteId, withoutRefresh = false) {
               interrupt the progress:
             </div>
             <div class="my-8">
-              <strong>{{ currentAction.Name }}</strong>
+              <strong>{{ currentAction.title }}</strong>
             </div>
             <v-progress-linear
               color="light-blue"

@@ -23151,7 +23151,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                                     default: (0, _vue.withCtx)(()=>[
                                                             _hoisted_30,
                                                             (0, _vue.createElementVNode)("div", _hoisted_31, [
-                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.Name), 1 /* TEXT */ )
+                                                                (0, _vue.createElementVNode)("strong", null, (0, _vue.toDisplayString)($setup.currentAction.title), 1 /* TEXT */ )
                                                             ]),
                                                             (0, _vue.createVNode)(_component_v_progress_linear, {
                                                                 color: "light-blue",
