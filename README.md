@@ -155,8 +155,8 @@ If you have a feature proposal or an idea on how to make WP Juggler better and m
 
 Currenty opened development tasks:
 
-- [ ] Alert email templates
-- [ ] Remote plugin installation (both locally hosted and from WordPress.org)
+- [x] Alert emails when front end or API is down
+- [x] Remote plugin installation
 - [ ] Vulnerability check of installed themes and WP Core
 - [ ] Checksum verification of themes from WordPress.org
 - [ ] PDF Reports on activites per site within a given time period
