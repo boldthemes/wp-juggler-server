@@ -172,10 +172,6 @@ class WPJS_Github_Updater
             $name = dirname($basename);
         }
 
-        if ('hello' === $name) {
-			$name = 'hello-dolly';
-		}
-
         return $name;
     }
 }

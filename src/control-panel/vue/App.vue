@@ -66,6 +66,7 @@ const headersSites = [
 
 const headersPlugins = [
   { title: "Plugin Name", value: "Name", align: "start", sortable: true },
+  { title: "Slug", value: "Slug", align: "start", sortable: true },
   { title: "Updates", key: "updates", align: "center", sortable: false },
   {
     title: "Number of Installations",
@@ -434,7 +435,7 @@ onMounted(() => {
               v-model:search="searchPlugins"
               :items="data.plugins_view.plugins"
               :headers="headersPlugins"
-              item-value="Name"
+              item-value="Slug"
               v-model:expanded="expandedPlugins"
               show-expand
               items-per-page="50"

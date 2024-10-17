@@ -66,6 +66,7 @@ const bulkActionsThemes = [
 
 const plugin_headers = [
   { title: "Plugin Name", value: "Name", align: "start", sortable: true },
+  { title: "Slug", value: "Slug", align: "start", sortable: true },
   {
     title: "Active",
     key: "active",
