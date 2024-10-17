@@ -63,6 +63,10 @@ You can setup your WP Juggler Network in three simple steps:
 2. Install [WP Juggler Client plugins](https://github.com/boldthemes/wp-juggler-client) on sites you want to control and manage
 3. Register and activate your sites on your server with a single mouse click 
 
+### Complete User Documentation ###
+
+You can find the complete User Documentation on this link: [https://documentation.bold-themes.com/wp-juggler/](https://documentation.bold-themes.com/wp-juggler/) but, if you wish to jump right into it, read on
+
 ## Getting Started Guide ##
 
 ### Install plugins ###
