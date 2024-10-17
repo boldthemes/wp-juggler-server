@@ -834,11 +834,11 @@ class WPJS_AJAX
 				$wp_juggler_login_themes_url = rtrim($site_url, '/') . '/wp-admin/themes.php';
 			}
 
-
+			$site_post = get_post($entry->wpjugglersites_id);
 
 			$site_info = [
 				'wpjugglersites_id' => $entry->wpjugglersites_id,
-				'site_name' => get_the_title($entry->wpjugglersites_id),
+				'site_name' => $site_post->post_title,
 				'site_url' => get_post_meta($entry->wpjugglersites_id, 'wp_juggler_server_site_url', true),
 				'wp_juggler_automatic_login' => get_post_meta($entry->wpjugglersites_id, 'wp_juggler_automatic_login', true) == "on" ? true : false,
 				'wp_juggler_login_plugin_url' => $wp_juggler_login_plugin_url,
@@ -1133,7 +1133,9 @@ class WPJS_AJAX
 
 			if (isset($item['log_time'])) {
 
-				$site_title = get_the_title($item['wpjugglersites_id']);
+				$site_post = get_post($item['wpjugglersites_id']);
+
+				$site_title = $site_post->post_title;
 				$site_url = get_post_meta($item['wpjugglersites_id'], 'wp_juggler_server_site_url', true);
 
 				$unix_timestamp = strtotime($item['log_time']);
@@ -1609,7 +1611,7 @@ class WPJS_AJAX
 
 				$newsite = array(
 					'id' => $site->ID,
-					'title' => get_the_title($site->ID),
+					'title' => $site->post_title,
 					'wp_juggler_server_site_url' => $site_url,
 					'wp_juggler_multisite' => $multisite,
 					'wp_juggler_wordpress_version' => $wp_version,
