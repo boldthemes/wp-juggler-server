@@ -65,7 +65,7 @@ You can setup your WP Juggler Network in three simple steps:
 
 ### Complete User Documentation ###
 
-You can find the complete User Documentation on this link: [https://documentation.bold-themes.com/wp-juggler/](https://documentation.bold-themes.com/wp-juggler/) but, if you wish to jump right into it, read on
+You can find the complete User Documentation on this link: [https://documentation.bold-themes.com/wp-juggler/](https://documentation.bold-themes.com/wp-juggler/) but you can also find the Getting Started intructions below.
 
 ## Getting Started Guide ##
 
